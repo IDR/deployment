@@ -1,7 +1,0 @@
-# Install RPMs from a yum repo, compile and install kernel module
-# See roles/gpfs/README.md if you only have the original IBM Spectrum packages
-
-- hosts: idr-gpfs-client
-  roles:
-  - role: yum-excludes
-  - role: gpfs

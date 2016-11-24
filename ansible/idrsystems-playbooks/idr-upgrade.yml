@@ -1,6 +1,0 @@
-# Update system packages
-
-- hosts: idr
-  roles:
-  - role: upgrade-distpackages
-    upgrade_distpackages_reboot_kernel: True

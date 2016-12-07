@@ -194,6 +194,22 @@ def is_ssh_proxy_host_required(server):
     return False
 
 
+def get_network_names(server):
+    # If the network_order metadata property is set try networks in
+    # this order, since if the server hasn't been fully initialised only
+    # the first NIC may be active
+    # The metadata might be incorrect, so ignore unknown networks
+    try:
+        network_order = server['openstack']['metadata'][
+            'network_order'].split(',')
+    except Exception:
+        network_order = []
+    all_networks = set(server['openstack']['addresses'].keys())
+    networks = [n for n in network_order if n in all_networks]
+    networks += list(all_networks.difference(network_order))
+    return networks
+
+
 def update_ssh_proxy_host(hostvars):
     # If the server metadata has `ssh_proxy_host=required` then
     # look for a host in the same network which has property
@@ -204,7 +220,8 @@ def update_ssh_proxy_host(hostvars):
     ssh_proxy_fmt = '-o ProxyCommand="ssh -W %%h:%%p -q %%r@%s"'
 
     for (h, server) in hostvars.iteritems():
-        for network in server['openstack']['addresses']:
+        networks = get_network_names(server)
+        for network in networks:
             try:
                 network_hosts[network].append(server)
             except KeyError:
@@ -220,7 +237,8 @@ def update_ssh_proxy_host(hostvars):
         if not is_ssh_proxy_host_required(server):
             continue
 
-        for network in server['openstack']['addresses']:
+        networks = get_network_names(server)
+        for network in networks:
             if (network in network_ssh_proxy and
                     'ansible_ssh_common_args' not in server):
                 server['ansible_ssh_common_args'] = (

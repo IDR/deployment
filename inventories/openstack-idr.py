@@ -166,8 +166,12 @@ def append_hostvars(hostvars, groups, key, server, namegroup=False):
 
 def is_ssh_proxy_host(server, network):
     """
-    Checks the metadata to see if this is an SSH proxy host.
-    If it also has a floating IP then return this, otherwise return None.
+    Checks whether this is an SSH proxy host by checking these criteria:
+    - The metadata indicates this is an SSH proxy host
+    - The server is attached to the specified network
+    - The server has a floating IP on any of its attached networks
+
+    Returns the IP of the proxy server if so
     """
     try:
         if server['openstack']['metadata']['ssh_proxy_host'] != 'proxy':
@@ -175,9 +179,11 @@ def is_ssh_proxy_host(server, network):
     except KeyError:
         return
 
-    for port in server['openstack']['addresses'][network]:
-        if port['OS-EXT-IPS:type'] == 'floating':
-            return port['addr']
+    networks = get_network_names(server)
+    for net in networks:
+        for port in server['openstack']['addresses'][net]:
+            if port['OS-EXT-IPS:type'] == 'floating':
+                return port['addr']
 
 
 def is_ssh_proxy_host_required(server):

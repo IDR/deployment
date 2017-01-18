@@ -5,7 +5,7 @@
     {{ idr_environment | default('idr') }}-hosts
     {{ idr_environment | default('idr') }}-a-hosts
   roles:
-  - role: upgrade-distpackages
+  - role: openmicroscopy.upgrade-distpackages
   # Ideally we should auto-reboot, but if the SSH proxy host is rebooted
   # this breaks connections to all the backend servers and ansible may hang.
   # Instead all nodes must be rebooted manually after a kernel upgrade (be

@@ -6,7 +6,7 @@
     {{ idr_environment | default('idr') }}-hosts
     {{ idr_environment | default('idr') }}-a-hosts
   roles:
-  - role: sudoers
+  - role: openmicroscopy.sudoers
 #    sudoers_individual_commands:
-  - role: local-accounts
+  - role: openmicroscopy.local-accounts
 #    local_accounts_create:

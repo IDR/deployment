@@ -17,7 +17,7 @@
     {{ idr_environment | default('idr') }}-a-database-hosts
 
   roles:
-  - role: postgresql
+  - role: openmicroscopy.postgresql
     postgresql_server_listen: "'*'"
     postgresql_server_auth:
     - database: all
@@ -63,19 +63,19 @@
     become: yes
 
   roles:
-  - role: basedeps
+  - role: openmicroscopy.basedeps
     tags: "basedeps"
-  - role: cli-utils
+  - role: openmicroscopy.cli-utils
     tags: "cli-utils"
-  - role: versioncontrol-utils
+  - role: openmicroscopy.versioncontrol-utils
     tags: "versioncontrol-utils"
-  - role: omero-server
+  - role: openmicroscopy.omero-server
     tags: "omero-server"
-  - role: python-pydata
+  - role: openmicroscopy.python-pydata
     tags: "python-pydata"
   - role: omero-web-apps
     tags: "omero-web-apps"
-  - role: analysis-tools
+  - role: openmicroscopy.analysis-tools
 
   vars:
     omero_dbhost: "{{ omero_db_host_ansible }}"

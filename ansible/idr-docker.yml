@@ -26,9 +26,9 @@
 
   roles:
 
-  - role: docker
+  - role: openmicroscopy.docker
     docker_use_ipv4_nic_mtu: True
-  - role: docker-tools
+  - role: openmicroscopy.docker-tools
 
   tasks:
 
@@ -88,7 +88,7 @@
 
   roles:
 
-  - role: nfs-share
+  - role: openmicroscopy.nfs-share
     nfs_shares: "{{ {'/data': docker_nfs_clients } }}"
     when: docker_swarm_enabled
 
@@ -144,8 +144,8 @@
 - hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
 
   roles:
-  - role: versioncontrol-utils
-  - role: idr-jupyter
+  - role: openmicroscopy.versioncontrol-utils
+  - role: IDR.idr-jupyter
 
   tasks:
 

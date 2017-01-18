@@ -40,14 +40,14 @@
   roles:
   # Default to a self-signed certificate, set `idr_nginx_ssl_production: True`
   # to use production certificates
-  - role: nginx-ssl-selfsigned
+  - role: openmicroscopy.nginx-ssl-selfsigned
     nginx_ssl_certificate: "{{ nginx_proxy_ssl_certificate }}"
     nginx_ssl_certificate_key: "{{ nginx_proxy_ssl_certificate_key }}"
     when: "{{ not idr_nginx_ssl_production | default(True) | bool }}"
-  - role: nginx-proxy
+  - role: openmicroscopy.nginx-proxy
 
 
 # Playbook for setting up the IDR static website pages
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
   roles:
-  - role: jekyll-build
+  - role: openmicroscopy.jekyll-build

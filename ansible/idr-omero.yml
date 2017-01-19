@@ -52,8 +52,10 @@
 
   pre_tasks:
 
-  # Increase open files and processes (alternatively use the pam_limits module)
-  - copy:
+  # TODO: This shouldn't be needed any more since it's set in the omero
+  # systemd service file
+  - name: Increase open files and processes
+    copy:
       content: |
         omero hard nofile 16384
         omero soft nofile 16384

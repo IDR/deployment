@@ -94,7 +94,8 @@
 
   tasks:
 
-  - set_fact:
+  - name: docker swarm | manager address
+    set_fact:
       docker_swarm_manager_ip: "{{ hostvars[groups[idr_environment | default('idr') + '-a-dockermanager-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
   - name: docker swarm | initialise
@@ -108,8 +109,8 @@
     register: docker_swarm_worker_token_out
     when: docker_swarm_enabled
 
-
-  - set_fact:
+  - name: docker swarm | worker token
+    set_fact:
       docker_swarm_worker_token: "{{ docker_swarm_worker_token_out.stdout }}"
     when: docker_swarm_enabled
 

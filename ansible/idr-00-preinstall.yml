@@ -7,4 +7,3 @@
 - include: os-idr-volumes.yml
 - include: idr-dundee-nfs.yml
 - include: idr-ebi-nfs.yml
-

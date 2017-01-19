@@ -1,0 +1,45 @@
+---
+
+# Check the networking is setup as expected
+- hosts: all
+  tasks:
+
+  - debug:
+      msg: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
+
+  - debug:
+      msg: "{{ hostvars[groups[idr_environment | default('idr') + '-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
+
+  - debug:
+      msg: "{{ hostvars[groups[idr_environment | default('idr') + '-proxy-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
+
+
+# This shouldn't be necessary, but there is a bug in some CentOS 7 cloud
+# releases (2017-01-19)
+# https://bugzilla.redhat.com/show_bug.cgi?id=1327000
+- hosts: openstack-hosts
+  tasks:
+  - name: Update selinux packages
+    yum:
+      pkg: "{{ item }}"
+      state: latest
+    with_items:
+    - checkpolicy
+    - setools
+    - policycoreutils
+    - libsemanage
+    - libselinux
+    - libsepol
+    tags:
+    - skip_ansible_lint
+
+
+# The tests requires netstat which isn't included in the vagrant box
+- hosts: vagrant-hosts
+  tasks:
+  - name: Install netstat
+    yum:
+      pkg: net-tools
+      state: present
+
+- include: idr-01-install-idr.yml

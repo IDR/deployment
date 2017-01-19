@@ -1,0 +1,132 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: requirements.yml
+
+driver:
+#  name: vagrant
+  name: openstack
+
+vagrant:
+  platforms:
+    - name: centos7
+      box: centos/7
+  providers:
+  - name: virtualbox
+    type: virtualbox
+    options:
+      memory: 2048
+      cpus: 2
+
+  instances:
+
+    - name: idr-database-vagrant
+      interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+      ansible_groups:
+      - idr-database-hosts
+      - database-hosts
+      - idr-hosts
+      - vagrant-hosts
+
+    - name: idr-omero-vagrant
+      interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+      ansible_groups:
+      - idr-omero-hosts
+      - omero-hosts
+      - idr-hosts
+      - vagrant-hosts
+
+    - name: idr-proxy-vagrant
+      interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+      ansible_groups:
+      - idr-proxy-hosts
+      - proxy-hosts
+      - idr-hosts
+      - vagrant-hosts
+
+# Openstack prerequisites:
+# - A project network called "test"
+# - A security group called "all" that at a minimum allows SSH access
+# - An SSH key (~/.ssh/id_rsa, ~/.ssh/id_rsa.pnb)
+openstack:
+  keyfile: ~/.ssh/id_rsa
+  #keypair: molecule-idr-keypair
+
+  instances:
+
+  - name: idr-database
+    image: 'CentOS 7'
+    flavor: m1.medium
+    sshuser: centos
+    ansible_groups:
+    - idr-database-hosts
+    - database-hosts
+    - idr-hosts
+    - openstack-hosts
+    networks:
+    - test
+    security_groups:
+    - all
+
+  - name: idr-omero
+    image: 'CentOS 7'
+    flavor: m1.large
+    sshuser: centos
+    ansible_groups:
+    - idr-omero-hosts
+    - omero-hosts
+    - idr-hosts
+    - openstack-hosts
+    networks:
+    - test
+    security_groups:
+    - all
+
+  - name: idr-proxy
+    image: 'CentOS 7'
+    flavor: m1.medium
+    sshuser: centos
+    ansible_groups:
+    - idr-proxy-hosts
+    - proxy-hosts
+    - idr-hosts
+    - openstack-hosts
+    networks:
+    - test
+    security_groups:
+    - all
+
+ansible:
+  playbook: molecule-playbook.yml
+
+  group_vars:
+
+    vagrant-hosts:
+    # Vagrant attaches the private network to eth1
+    - idr_net_iface: eth1
+
+    proxy-hosts:
+    # Create a self-signed HTTPS SSL certificate
+    - idr_nginx_ssl_production: False
+
+verifier:
+  name: testinfra
+
+# If the idempotence test fails (typically due to pip incorrectly showing
+# changes) you can override the sequence to skip the idempotence test
+# molecule:
+#   test:
+#     sequence:
+#       - create
+#       - converge
+#       - verify
+#       - destroy

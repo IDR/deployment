@@ -8,7 +8,7 @@
 
 
 # Testing vars. Set:
-# - `idr_nginx_ssl_self_signed=True` to generate a self-signed https cert
+# - `idr_nginx_ssl_production=False` to generate a self-signed https cert
 # - `idr_net_iface=iface` if your servers use a network interface other
 #   then eth0 for inter-machine networking
 

@@ -52,19 +52,23 @@
     #changed_when: "(docker_use_ipv4_nic_mtu | default(True)) and
     changed_when: docker_swarm_net_mtu.stdout != "{{ ansible_default_ipv4.mtu }}"
     failed_when: "(docker_swarm_net_mtu.rc != 0) and {{ not docker_swarm_net_mtu.stderr.endswith('No such network: docker_gwbridge') }}"
+    notify:
+    - docker swarm | network mtu delete docker_gwbridge
+
+  handlers:
 
   - name: docker swarm | network mtu delete docker_gwbridge
     become: yes
     command: docker network rm docker_gwbridge
     register: docker_swarm_net_rm
     failed_when: "(docker_swarm_net_rm.rc != 0) and {{ not docker_swarm_net_rm.stderr.endswith('network docker_gwbridge not found') }}"
-    when: docker_swarm_enabled and docker_swarm_net_mtu.changed
+    notify:
+    - docker swarm | network mtu create docker_gwbridge
 
   # TODO: Make subnet configurable
   - name: docker swarm | network mtu create docker_gwbridge
     become: yes
     command: docker network create --opt com.docker.network.driver.mtu={{ ansible_default_ipv4.mtu }} --subnet 172.18.0.0/16 docker_gwbridge
-    when: docker_swarm_enabled and docker_swarm_net_mtu.changed
 
 
 - hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"

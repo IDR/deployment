@@ -4,8 +4,41 @@ dependency:
   requirements_file: requirements.yml
 
 driver:
+    name: docker
 #  name: vagrant
-  name: openstack
+#  name: openstack
+
+docker:
+  containers:
+  - name: idr-database-docker
+    image: manics/centos-systemd-ip-docker
+    image_version: latest
+    privileged: True
+    ansible_groups:
+    - idr-database-hosts
+    - database-hosts
+    - idr-hosts
+    - docker-hosts
+
+  - name: idr-omero-docker
+    image: manics/centos-systemd-ip-docker
+    image_version: latest
+    privileged: True
+    ansible_groups:
+    - idr-omero-hosts
+    - omero-hosts
+    - idr-hosts
+    - docker-hosts
+
+  - name: idr-proxy-docker
+    image: manics/centos-systemd-ip-docker
+    image_version: latest
+    privileged: True
+    ansible_groups:
+    - idr-proxy-hosts
+    - proxy-hosts
+    - idr-hosts
+    - docker-hosts
 
 vagrant:
   platforms:
@@ -117,6 +150,22 @@ ansible:
     proxy-hosts:
     # Create a self-signed HTTPS SSL certificate
     - idr_nginx_ssl_production: False
+
+
+  # TODO: omero_selinux_setup should be handled automatically
+  # https://github.com/openmicroscopy/ansible-role-omero-web-runtime/issues/1
+  host_vars:
+
+    idr-omero-docker:
+    - omero_selinux_setup: False
+      omero_server_systemd_require_network: False
+
+    idr-omero-vagrant:
+    - omero_selinux_setup: True
+
+    idr-omero-openstack:
+    - omero_selinux_setup: True
+
 
 verifier:
   name: testinfra

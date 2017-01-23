@@ -34,12 +34,15 @@
     - skip_ansible_lint
 
 
-# The tests requires netstat which isn't included in the vagrant box
-- hosts: vagrant-hosts
+# The playbook to be tested
+- include: idr-01-install-idr.yml
+
+
+# The tests require netstat which isn't included in the vagrant box or
+# docker image
+- hosts: docker-hosts, vagrant-hosts
   tasks:
   - name: Install netstat
     yum:
       pkg: net-tools
       state: present
-
-- include: idr-01-install-idr.yml

@@ -3,16 +3,6 @@
     {{ idr_environment | default('idr') }}-ebi-nfs
     {{ idr_environment | default('idr') }}-a-ebi-nfs
 
-  roles:
-
-  # The NFS network
-  - role: network
-    network_basic_ifaces:
-    - device: eth1
-      bootproto: dhcp
-      mtu:
-      type: Ethernet
-
   tasks:
 
   - name: Create NFS group
@@ -46,13 +36,19 @@
       path: "{{ local_filesets_sym | dirname }}"
       state: directory
 
+  # This is needed to prevent the next file task returning an error
+  - name: Check for existing filesets object
+    stat:
+      path: "{{ local_filesets_sym }}"
+    register: local_filesets_sym_st
+
   - name: Create filesets symlink
     become: yes
     file:
-      force: yes
       path: "{{ local_filesets_sym }}"
       src: "{{ nfs_filesets_dir }}"
       state: link
+    when: "{{ not local_filesets_sym_st.stat.exists }}"
 
 
   vars:

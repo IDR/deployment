@@ -85,5 +85,6 @@
     #omero_upgrade: True
     omero_systemd_setup: True
     omero_db_create: False
+    omero_system_managedrepo_group: idr-data
 
   # Additional vars are in group_vars/omero-hosts.yml

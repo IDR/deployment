@@ -152,19 +152,10 @@ ansible:
     - idr_nginx_ssl_production: False
 
 
-  # TODO: omero_selinux_setup should be handled automatically
-  # https://github.com/openmicroscopy/ansible-role-omero-web-runtime/issues/1
   host_vars:
 
     idr-omero-docker:
-    - omero_selinux_setup: False
-      omero_server_systemd_require_network: False
-
-    idr-omero-vagrant:
-    - omero_selinux_setup: True
-
-    idr-omero-openstack:
-    - omero_selinux_setup: True
+    - omero_server_systemd_require_network: False
 
 
 verifier:

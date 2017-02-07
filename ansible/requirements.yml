@@ -32,6 +32,9 @@
 - src: openmicroscopy.local-accounts
   version: 1.0.0
 
+- src: openmicroscopy.lvm-partition
+  version: 1.0.0
+
 - src: openmicroscopy.logrotate
   version: 1.0.0
 

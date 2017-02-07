@@ -114,16 +114,20 @@
   version: 1.0.0
 
 
-- src: IDR.idr-jupyter
+- name: IDR.idr-jupyter
+  src: https://github.com/IDR/ansible-role-idr-jupyter
   version: master
 
-- src: IDR.openstack-idr-instance
+- name: IDR.openstack-idr-instance
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance
   version: master
 
-- src: IDR.openstack-idr-instance-network
+- name: IDR.openstack-idr-instance-network
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network
   version: master
 
-- src: IDR.openstack-idr-keypairs
+- name: IDR.openstack-idr-keypairs
+  src: https://github.com/IDR/ansible-role-openstack-idr-keypairs
   version: master
 
 #- src: IDR.openstack-idr-network
@@ -132,7 +136,8 @@
   src: https://github.com/manics/ansible-role-openstack-idr-network
   version: autodetect-external
 
-- src: IDR.openstack-idr-security-groups
+- name: IDR.openstack-idr-security-groups
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups
   version: master
 
 

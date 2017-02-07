@@ -1,3 +1,5 @@
+---
+
 # External Ansible roles required by this repository
 
 - src: openmicroscopy.analysis-tools
@@ -29,9 +31,6 @@
 
 - src: openmicroscopy.local-accounts
   version: 1.0.0
-
-#- src: openmicroscopy.lvm-partition
-#  version: 1.0.0
 
 - src: openmicroscopy.logrotate
   version: 1.0.0
@@ -66,12 +65,6 @@
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-#- src: openmicroscopy.omero-server
-#  version: 1.1.0
-#
-#- src: openmicroscopy.omero-web-runtime
-#  version: 1.0.0
-
 - name: openmicroscopy.omero-web-runtime
   src: https://github.com/openmicroscopy/ansible-role-omero-web-runtime
   version: master
@@ -95,9 +88,6 @@
 - src: openmicroscopy.rsync-server
   version: 1.0.0
 
-#- src: openmicroscopy.samba-client
-#  version: 1.0.0
-
 - src: openmicroscopy.selinux-utils
   version: 1.0.1
 
@@ -112,7 +102,6 @@
 
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
-
 
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter
@@ -130,8 +119,6 @@
   src: https://github.com/IDR/ansible-role-openstack-idr-keypairs
   version: master
 
-#- src: IDR.openstack-idr-network
-#  version: master
 - name: IDR.openstack-idr-network
   src: https://github.com/manics/ansible-role-openstack-idr-network
   version: autodetect-external
@@ -140,9 +127,7 @@
   src: https://github.com/IDR/ansible-role-openstack-idr-security-groups
   version: master
 
-
 # External development roles
-
 - name: omero-user
   src: https://github.com/openmicroscopy/ansible-role-omero-user
   version: master

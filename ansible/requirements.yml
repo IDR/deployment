@@ -1,3 +1,5 @@
+---
+
 # External Ansible roles required by this repository
 
 - src: openmicroscopy.analysis-tools
@@ -30,8 +32,8 @@
 - src: openmicroscopy.local-accounts
   version: 1.0.0
 
-#- src: openmicroscopy.lvm-partition
-#  version: 1.0.0
+- src: openmicroscopy.lvm-partition
+  version: 1.0.0
 
 - src: openmicroscopy.logrotate
   version: 1.0.0
@@ -66,11 +68,13 @@
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-- src: openmicroscopy.omero-server
-  version: 1.1.0
+- name: openmicroscopy.omero-web-runtime
+  src: https://github.com/openmicroscopy/ansible-role-omero-web-runtime
+  version: master
 
-- src: openmicroscopy.omero-web-runtime
-  version: 1.0.0
+- name: openmicroscopy.omero-server
+  src: https://github.com/manics/ansible-role-omero-server
+  version: managedrepo-group
 
 - src: openmicroscopy.openstack-volume-storage
   version: 1.0.0
@@ -87,11 +91,8 @@
 - src: openmicroscopy.rsync-server
   version: 1.0.0
 
-#- src: openmicroscopy.samba-client
-#  version: 1.0.0
-
 - src: openmicroscopy.selinux-utils
-  version: 1.0.0
+  version: 1.0.1
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -105,28 +106,31 @@
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
 
-
-- src: IDR.idr-jupyter
+- name: IDR.idr-jupyter
+  src: https://github.com/IDR/ansible-role-idr-jupyter
   version: master
 
-- src: IDR.openstack-idr-instance
+- name: IDR.openstack-idr-instance
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance
   version: master
 
-- src: IDR.openstack-idr-instance-network
+- name: IDR.openstack-idr-instance-network
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network
   version: master
 
-- src: IDR.openstack-idr-keypairs
+- name: IDR.openstack-idr-keypairs
+  src: https://github.com/IDR/ansible-role-openstack-idr-keypairs
   version: master
 
-- src: IDR.openstack-idr-network
-  version: master
+- name: IDR.openstack-idr-network
+  src: https://github.com/manics/ansible-role-openstack-idr-network
+  version: autodetect-external
 
-- src: IDR.openstack-idr-security-groups
+- name: IDR.openstack-idr-security-groups
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups
   version: master
-
 
 # External development roles
-
 - name: omero-user
   src: https://github.com/openmicroscopy/ansible-role-omero-user
   version: master

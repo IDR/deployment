@@ -101,7 +101,7 @@ nginx_proxy_caches:
 - name: omero
   maxsize: 1g
   keysize: 1m
-  inactive: 30d
+  inactive: 180d
   match:
   - default
 - name: omerostatic
@@ -113,31 +113,31 @@ nginx_proxy_caches:
 - name: omerothumbnail
   maxsize: 10g
   keysize: 300m
-  inactive: 30d
+  inactive: 180d
   match:
   - '"~web(client|gateway)/render_thumbnail/*"'
 - name: omerorender
   maxsize: 40g
   keysize: 35m
-  inactive: 30d
+  inactive: 180d
   match:
   - '"~web(client|gateway)/render_*/*"'
 - name: omerometadata
   maxsize: 25g
   keysize: 65m
-  inactive: 30d
+  inactive: 180d
   match:
   - '"~webclient/metadata_*"'
 - name: omeroapi
   maxsize: 10g
   keysize: 320m
-  inactive: 30d
+  inactive: 180d
   match:
   - '"~webclient/api/*"'
 - name: omeromapr
   maxsize: 5g
   keysize: 100m
-  inactive: 30d
+  inactive: 180d
   match:
   - '"~mapr/*"'
 

@@ -65,9 +65,8 @@
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-- name: openmicroscopy.omero-server
-  src: https://github.com/manics/ansible-role-omero-server
-  version: managedrepo-group
+- src: openmicroscopy.omero-server
+  version: 1.2.0
 
 - src: openmicroscopy.omero-web-runtime
   version: 1.1.0

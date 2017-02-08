@@ -66,11 +66,12 @@
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-- src: openmicroscopy.omero-server
-  version: 1.1.0
+- name: openmicroscopy.omero-server
+  src: https://github.com/manics/ansible-role-omero-server
+  version: managedrepo-group
 
 - src: openmicroscopy.omero-web-runtime
-  version: 1.0.0
+  version: 1.1.0
 
 - src: openmicroscopy.openstack-volume-storage
   version: 1.0.0
@@ -91,7 +92,7 @@
 #  version: 1.0.0
 
 - src: openmicroscopy.selinux-utils
-  version: 1.0.0
+  version: 1.0.1
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -106,23 +107,29 @@
   version: 1.0.0
 
 
-- src: IDR.idr-jupyter
-  version: master
+- name: IDR.idr-jupyter
+  src: https://github.com/IDR/ansible-role-idr-jupyter.git
+  version: 1.0.0
 
-- src: IDR.openstack-idr-instance
-  version: master
+- name: IDR.openstack-idr-instance
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance.git
+  version: 1.0.1
 
-- src: IDR.openstack-idr-instance-network
-  version: master
+- name: IDR.openstack-idr-instance-network
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network.git
+  version: 1.1.0
 
-- src: IDR.openstack-idr-keypairs
-  version: master
+- name: IDR.openstack-idr-keypairs
+  src: https://github.com/IDR/ansible-role-openstack-idr-keypairs.git
+  version: 1.0.0
 
-- src: IDR.openstack-idr-network
-  version: master
+- name: IDR.openstack-idr-network
+  src: https://github.com/IDR/ansible-role-openstack-idr-network.git
+  version: 2.0.0
 
-- src: IDR.openstack-idr-security-groups
-  version: master
+- name: IDR.openstack-idr-security-groups
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git
+  version: 1.0.0
 
 
 # External development roles

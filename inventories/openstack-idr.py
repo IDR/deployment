@@ -53,6 +53,13 @@
 #   `ansible_ssh_common_args` on the server.
 # - If the server metadata contains `network_order` these networks will be
 #   searched for a private IP in that order.
+#
+# Environment variables:
+# - OS_CLOUD: Set this to select a cloud
+# - OS_PROXY_DISCOVER: Set to '0' to disable auto-configuration of ssh
+#   proxy servers in the dynamic inventory.
+# - OS_PROXY_SSH_ARGS: Additional SSH arguments to be set in the SSH
+#   ProxyCommand. These must be double quoted.
 
 import argparse
 import collections
@@ -223,7 +230,8 @@ def update_ssh_proxy_host(hostvars):
     # ansible_ssh_common_args
     network_hosts = {}
     network_ssh_proxy = {}
-    ssh_proxy_fmt = '-o ProxyCommand="ssh -W %%h:%%p -q %%r@%s"'
+    ssh_proxy_fmt = '-o ProxyCommand="ssh %s -W %%h:%%p -q %%r@%s"'
+    ssh_proxy_ssh_args = os.getenv('OS_PROXY_SSH_ARGS', '')
 
     for (h, server) in hostvars.iteritems():
         networks = get_network_names(server)
@@ -248,7 +256,8 @@ def update_ssh_proxy_host(hostvars):
             if (network in network_ssh_proxy and
                     'ansible_ssh_common_args' not in server):
                 server['ansible_ssh_common_args'] = (
-                    ssh_proxy_fmt % network_ssh_proxy[network])
+                    ssh_proxy_fmt % (
+                        ssh_proxy_ssh_args, network_ssh_proxy[network]))
 
 
 def get_host_groups_from_cloud(inventory):

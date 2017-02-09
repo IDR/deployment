@@ -1,0 +1,12 @@
+---
+# Playbook for creating local user accounts on Openstack instances
+
+# Variables should be in a private group_vars file
+- hosts: >
+    {{ idr_environment | default('idr') }}-hosts
+    {{ idr_environment | default('idr') }}-a-hosts
+  roles:
+  - role: openmicroscopy.sudoers
+#    sudoers_individual_commands:
+  - role: openmicroscopy.local-accounts
+#    local_accounts_create:

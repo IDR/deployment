@@ -1,6 +1,0 @@
----
-# Handler for network configuration
-
-- name: restart network
-  become: yes
-  service: name=network state=restarted

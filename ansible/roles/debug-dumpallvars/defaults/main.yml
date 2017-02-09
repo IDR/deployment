@@ -1,5 +1,0 @@
----
-# defaults file for roles/debug-dumpallvars
-
-# Dump file
-debug_dumpallvars_file: /tmp/ansible-debug-dumpallvars.txt

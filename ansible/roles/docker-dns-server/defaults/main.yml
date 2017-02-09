@@ -1,7 +1,0 @@
----
-# defaults file for roles/docker-dns-server
-
-docker_dns:
-  forwarders: 8.8.8.8:53,8.8.4.4:53
-  domain: docker.internal
-  etcd: etcd1

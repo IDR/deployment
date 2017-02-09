@@ -1,8 +1,0 @@
----
-# Handlers for openstack-prepare
-
-- name: restart ssh
-  become: yes
-  service:
-    name: sshd
-    state: restarted

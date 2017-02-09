@@ -1,6 +1,0 @@
----
-dependencies:
-- { role: basedeps }
-- { role: java }
-- { role: omero-python-deps }
-- { role: ice }

@@ -2,17 +2,18 @@
 - hosts: localhost
   connection: local
 
-  # These variables should be defined in a variables file and included
+  # These variables can be defined in a variables file and included
   # on the ansible command line as -e @path/to/secret.yml
   vars:
+    # Do not change these unless you are running multiple deployments
     - idr_deployment_cloud: idr
     - idr_environment_idr: idr
     # Analysis instances must have `-a` as the suffix so that the single
     # gateway VM can proxy it
     - idr_environment_analysis: "{{ idr_environment_idr }}-a"
-    # Required: List of public SSH keys
+    # REQUIRED: List of public SSH keys
     - idr_keypair_keys:
-
+    # Change these to match the image and flavours in your OpenStack cloud
     - vm_image: CentOS 7
     - vm_flavour: m1.large
     - vm_flavour_large: m1.xlarge
@@ -20,6 +21,7 @@
 
     # Copy these volumes for the production IDR
     # The analysis instances will be copied from the current production
+    # The default is to initialise new volumes
     - idr_volume_database_db_src: "{{ omit }}"
     - idr_volume_omero_data_src: "{{ omit }}"
     - idr_volume_proxy_nginxcache_src: "{{ omit }}"

@@ -4,7 +4,7 @@ dependency:
   requirements_file: requirements.yml
 
 driver:
-    name: docker
+  name: docker
 #  name: vagrant
 #  name: openstack
 
@@ -145,17 +145,13 @@ ansible:
 
     vagrant-hosts:
     # Vagrant attaches the private network to eth1
-    - idr_net_iface: eth1
-
-    proxy-hosts:
-    # Create a self-signed HTTPS SSL certificate
-    - idr_nginx_ssl_production: False
+      idr_net_iface: eth1
 
 
   host_vars:
 
     idr-omero-docker:
-    - omero_server_systemd_require_network: False
+      omero_server_systemd_require_network: False
 
 
 verifier:

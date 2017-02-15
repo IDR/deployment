@@ -6,7 +6,7 @@ The IDR runs on CentOS 7 64 bit servers only.
 ## Overview of the playbooks
 
 The deployment steps are separated into multiple playbooks.
-Several top-level playbooks are provided which should be suitable for the majority of cases, the most important being `idr-01-install-idr.yml`.
+Several top-level playbooks are provided which should be suitable for the majority of cases, and these are described below, the most important being `idr-01-install-idr.yml`.
 You should not need to run any other playbooks individually.
 
 ### [`idr-00-preinstall.yml`](../ansible/idr-00-preinstall.yml)
@@ -28,10 +28,10 @@ You will need to provide a secret Slack token for Slack notifications.
 
 ## Ansible inventory
 
-You have three options for setting up an Ansible inventory to use with the IDR deployment playbooks, depending on how you [provisioned the servers](provisioning.md).
+You have two options for setting up an Ansible inventory to use with the IDR deployment playbooks, depending on how you provisioned the servers.
 
 ### OpenStack dynamic private inventory
-This is the recommended method if you provisioned the servers using the supplied OpenStack playbook and are familiar with [Ansible dynamic inventories](http://docs.ansible.com/ansible/intro_dynamic_inventory.html), and is the methods we use internally for managing the production IDR servers.
+This is the recommended method if you provisioned the servers using the supplied OpenStack playbook and are familiar with [Ansible dynamic inventories](http://docs.ansible.com/ansible/intro_dynamic_inventory.html), and is the method we use internally for managing the production IDR servers.
 
 [inventories/openstack-idr.py](../inventories/openstack-idr.py) is a modified version of the [default Ansible OpenStack dynamic inventory](https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/openstack.py) to make it easier to use an [Ansible SSH gateway/jump host](http://docs.ansible.com/ansible/faq.html#how-do-i-configure-a-jump-host-to-access-servers-that-i-have-no-direct-access-to), and to configure multiple networks.
 The main changes are:
@@ -42,8 +42,8 @@ This inventory will attempt to automatically route all SSH access via `idr-proxy
 
 ### Static inventory
 This is recommended if you have provisioned the servers yourself, or if you are unfamiliar with setting up an Ansible dynamic inventory.
-Modify the hosts section in the [example static inventory](../inventories/ansible-hosts).
-
+Modify the `Hosts` section in the [example static inventory](../inventories/ansible-hosts).
+You should not need to change the `Host groups` section.
 
 ## Ansible deployment example
 

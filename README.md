@@ -3,7 +3,8 @@
 [Image Data Resource (IDR)](https://idr-demo.openmicroscopy.org/) is an online, public data repository that seeks to store, integrate and serve image datasets from published scientific studies.
 The IDR is also a platform that is entirely built with open-source components and tools, and these documents describe how to build and manage your own version of the IDR.
 
-The IDR is currently hosted on OpenStack [EBI](http://www.ebi.ac.uk/), and this is the recommended platform for all deployments.
+The IDR is currently hosted on OpenStack at the [EBI](http://www.ebi.ac.uk/).
+At present OpenStack is the recommended platform for all deployments.
 It should be possible to deploy the IDR on other cloud platforms or physical hardware, but changes will be required, particularly with respect to network interfaces.
 [Ansible](https://www.ansible.com/) (an open-source configuration management system) is used extensively for managing the IDR.
 
@@ -13,7 +14,7 @@ It should be possible to deploy the IDR on other cloud platforms or physical har
 The IDR provisioning and deployment instructions are aimed at experienced system administrators familiar with using Ansible playbooks and roles for managing multiple servers.
 If you are deploying the IDR platform on OpenStack you should have a good working knowledge of instances, volumes and networking.
 
-All documents assume extensive knowledge of OMERO.
+All documents assume extensive knowledge of [OMERO](www.openmicroscopy.org/site/support/omero5/sysadmins/).
 
 
 ## Documents

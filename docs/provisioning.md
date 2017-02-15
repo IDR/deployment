@@ -2,7 +2,7 @@
 
 ## Overview of the architecture
 
-The IDR contains two primary groups of servers:
+The IDR contains two main groups of servers:
 
 The production (public-facing) IDR (3 servers):
 - Database
@@ -18,18 +18,18 @@ The virtual analysis environment (VAE) IDR (3 servers):
 ## Ansible prerequisites
 
 Almost all of the provisioning and deployment in the IDR is done using Ansible 2.1.
-All playbooks should be run from a shell in the [`ansible`](../ansible) directory.
+All ansible commands should be run from a shell in the [`ansible`](../ansible) directory.
 
 You must first install the required galaxy roles:
 
     ansible-galaxy install -r requirements.yml
 
-The `ansible.cfg` configuration file will install the roles into the `vendor` directory.
+The [`ansible.cfg`](../ansible/ansible.cfg) configuration file will install the roles into the [`vendor`](../ansible/vendor) directory.
 
 
 ## OpenStack
 
-The IDR is currently hosted on OpenStack, and we have an example Ansible playbook `ansible/openstack-create-infrastructure.yml` for provisioning compute, storage and networking.
+The IDR is currently hosted on OpenStack, and we have an [example Ansible playbook](../ansible/openstack-create-infrastructure.yml) for provisioning compute, storage and networking.
 The Ansible openstack modules require the `shade` python module.
 
 This playbook will create two networks `idr` and `idr-a` for the production and analysis servers, and multiple instances and storage volumes.
@@ -37,10 +37,12 @@ This playbook will create two networks `idr` and `idr-a` for the production and 
 
 ### Production IDR
 Network: `idr`
+
 Instances:
 - `idr-database`: PostgreSQL database server
 - `idr-omero`: OMERO.server, including OMERO.web
 - `idr-proxy`: Nginx gateway with custom caching configuration
+
 Volumes:
 - `idr-database-db`: PostgreSQL data directory
 - `idr-omero-data`: OMERO data directory
@@ -49,12 +51,14 @@ Volumes:
 
 ### Analysis IDR
 Network: `idr-a`
+
 Instances:
 - `idr-a-database`: PostgreSQL database server
 - `idr-a-omero`: OMERO.server
 - `idr-a-dockermanager`: A Docker server for running VAEs
+
 Volumes:
-- `idr-a-database-db`: PostgreSQL database server
+- `idr-a-database-db`: PostgreSQL data directory
 - `idr-a-omero-data`: OMERO data directory
 - `idr-a-dockermanager-jupyter`: Files created by the VAE
 
@@ -63,12 +67,11 @@ Note `idr-proxy` is also connected to the `idr-a` network to provide access to t
 Separate networks are used to provide segregation between the restricted public-facing IDR, and the internal analysis IDR.
 
 
-### Other
-- `idr-management`: Munin monitoring platform (attaached to `idr` and `idr-a` networks)
-- Setup security rules
-- Add Ansible hostgroup metadata to each instance.
-  This will ensure the playbooks automatically run against the correct hosts.
-- `idr-proxy` is the only instance that will have an externally accessible floating IP.
+### Additional resources
+- `idr-management`: An instance running Munin for monitoring the production IDR platform (attached to `idr` and `idr-a` networks).
+- Security rules to restrict external access.
+- Ansible hostgroup metadata is set on each instance to ensure the playbooks automatically run against the correct hosts.
+- One floating IP attached to `idr-proxy`.
   All other instances will only be accessible by using this node as a proxy.
 
 
@@ -79,7 +82,7 @@ In particular, you must define a list of SSH public key(s), for example:
 
     - idr_keypair_keys: ["ssh-rsa SSH_PUBLIC_KEY"]
 
-You must have a [CentOS 7 cloud image](https://cloud.centos.org/centos/7/images/) available.
+You must have a [CentOS 7 cloud image](https://cloud.centos.org/centos/7/images/) (or equivalent) available.
 
 Ensure you can login to OpenStack from the command line using [an OpenStack RC file](http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html) or equivalent, and run:
 

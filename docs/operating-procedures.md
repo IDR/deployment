@@ -1,17 +1,16 @@
 # IDR administration
 
-If you are used the OpenStack provisioning playbook access to your instances will be restricted.
-The only accessible external ports will be 22, 80 and 443 on `idr-proxy`.
-For all administrative OMERO operations you will first need to SSH into `idr-proxy`, and/or setup a SSH tunnel for other ports.
+If you used the OpenStack provisioning playbook the only accessible external ports will be `22`, `80` and `443` on `idr-proxy`.
+For all administrative OMERO operations you will first need to SSH into `idr-proxy` and/or setup a SSH tunnel for other ports and servers.
 
-Any changes that do not involve manipulating the data stored in OMERO (such as changes to the OMERO.server and OMERO.web configuration) should be done by modifying the deployment playbooks.
+Any changes that do not involve manipulating the data stored in OMERO (such as changes to the OMERO.server and OMERO.web configuration) should be done by modifying the deployment playbooks to ensure they are included in future deployments.
 
 
 ## Production IDR
 
 There are two ways to access the production IDR:
 - Nginx web proxy running on `idr-proxy`.
-- Backend OMERO.web and OMERO.server running on `idr-omero`
+- Backend OMERO.web and OMERO.server running on `idr-omero`.
 
 
 ### `idr-proxy`
@@ -37,7 +36,7 @@ If you need to restart OMERO.server or OMERO.web you must use `systemctl` and no
 
 External users of the VAE should connect to JupyterHub via the front-end `idr-proxy`.
 For internal administration you may need to work on:
-- `idr-a-omero`: A clone of the production OMERO to ensure complex analysis queries don't affect public users of the IDR
+- `idr-a-omero`: A clone of the production OMERO to ensure complex analysis queries don't affect public users of the IDR.
 - `idr-a-dockermanager`: The Docker server running the individual VAEs.
 
 
@@ -63,14 +62,14 @@ The following directories aren't essential but you may wish to also back them up
 If you used the OpenStack provisioning playbook these are all separate volumes that can be backed-up using the OpenStack clients.
 
 ### Restoration
-If you need to restore the IDR it is sufficient to restore these directories into a clean centOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
+If you need to restore the IDR it is sufficient to restore these directories into a clean CentOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
 The OpenStack provisioning playbook includes optional parameters to specify existing volumes to be copied.
 
 ### Upgrades
 Upgrades of the IDR are based on the restoration procedure.
 
-Ensure you have a free floating IP.
-Run the OpenStack provisioning playbook with an alternative IDR environment parameter (`idr_environment_idr`) and set the existing volumes as the source for the new volumes.
+Ensure you have an unused floating IP.
+Run the OpenStack provisioning playbook with an alternative IDR environment parameter (`idr_environment_idr=newidr`) and set the existing volumes as the source for the new volumes.
 
 When you are ready to go live disassociate the floating IPs from the production and new deployments, and associate the previous production floating IP with the new deployment.
 This should result in public users seeing very little downtime of the IDR.

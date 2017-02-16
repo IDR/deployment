@@ -1,7 +1,7 @@
 # IDR administration
 
 If you used the OpenStack provisioning playbook the only accessible external ports will be `22`, `80` and `443` on `idr-proxy`.
-For all administrative OMERO operations you will first need to SSH into `idr-proxy` and/or setup a SSH tunnel for other ports and servers.
+For all administrative OMERO operations you will first need to SSH into `idr-proxy` and/or set up a SSH tunnel for other ports and servers.
 
 Any changes that do not involve manipulating the data stored in OMERO (such as changes to the OMERO.server and OMERO.web configuration) should be done by modifying the deployment playbooks to ensure they are included in future deployments.
 
@@ -50,14 +50,14 @@ TODO: Configuration details
 
 The IDR has a well-defined separation between applications and data.
 The following directories contain data that must be backed up:
-- `idr-omero:/data`: The OMERO data directory
-- `idr-database:/var/lib/pgsql`: The PostgreSQL data directory
+- `idr-omero:/data`: The OMERO data directory.
+- `idr-database:/var/lib/pgsql`: The PostgreSQL data directory.
 
 The following directories are not essential but you may wish to also back them up:
-- `idr-proxy:/var/cache/nginx`: The front-end web cache (can be regenerated)
-- `idr-a-omero:/data`: The analysis OMERO data directory (clone of production)
-- `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production)
-- `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral)
+- `idr-proxy:/var/cache/nginx`: The front-end web cache (can be regenerated).
+- `idr-a-omero:/data`: The analysis OMERO data directory (clone of production).
+- `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production).
+- `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral).
 
 If you used the OpenStack provisioning playbook these are all separate volumes that can be backed up using the OpenStack clients.
 

@@ -1,6 +1,6 @@
 # Deploying the IDR
 
-The IDR runs on CentOS 7 64 bit servers only.
+The IDR runs on CentOS 7 64-bit servers only.
 
 
 ## Overview of the playbooks
@@ -22,7 +22,7 @@ This playbook is *not* idempotent.
 
 ### [`idr-09-monitoring.yml`](../ansible/idr-09-monitoring.yml)
 This is an optional playbook to set up monitoring of the IDR and OMERO.server.
-This includes configuring all servers with Munin, and enabling Slack notifications for OMERO.server errors.
+This includes configuring all servers with [Munin](http://munin-monitoring.org/), and enabling Slack notifications for OMERO.server errors.
 You will need to provide a secret Slack token for Slack notifications.
 
 
@@ -35,8 +35,8 @@ This is the recommended method if you provisioned the servers using the supplied
 
 [inventories/openstack-idr.py](../inventories/openstack-idr.py) is a modified version of the [default Ansible OpenStack dynamic inventory](https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/openstack.py) to make it easier to use an [Ansible SSH gateway/jump host](http://docs.ansible.com/ansible/faq.html#how-do-i-configure-a-jump-host-to-access-servers-that-i-have-no-direct-access-to), and to configure multiple networks.
 The main changes are:
-- automatic setting of SSH ProxyCommand
-- ordering of network interfaces
+- Automatic setting of SSH ProxyCommand.
+- Ordering of network interfaces.
 
 This inventory will attempt to automatically route all SSH access via `idr-proxy`, using metadata attached to the servers in the [IDR openstack-idr-instance](https://github.com/IDR/ansible-role-openstack-idr-instance) role.
 

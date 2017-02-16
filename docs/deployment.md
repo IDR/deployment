@@ -10,18 +10,18 @@ Several top-level playbooks are provided which should be suitable for the majori
 You should not need to run any other playbooks individually.
 
 ### [`idr-00-preinstall.yml`](../ansible/idr-00-preinstall.yml)
-This handles the initialisation of storage volumes which have already been attached to the server but have not been formatted or mounted, and also configures multiple network interfaces if necessary.
+This handles the initialization of storage volumes which have already been attached to the server but have not been formatted or mounted, and also configures multiple network interfaces if necessary.
 If you provisioned your servers on OpenStack with the example playbook you must run this.
 
 ### [`idr-01-install-idr.yml`](../ansible/idr-01-install-idr.yml)
 This is the main playbook that does almost all the work involved in setting up the IDR, including installing and setting up PostgreSQL, OMERO.server, OMERO.web, and the front-end caching Nginx proxy.
 
 ### [`idr-03-postinstall.yml`](../ansible/idr-03-postinstall.yml)
-This is an optional playbook to setup some OMERO users, including setting the OMERO `root` user password to a random string (stored in `/root/idr-root-ice.config`) and creating a public user for OMERO.web.
+This is an optional playbook to set up some OMERO users, including setting the OMERO `root` user password to a random string (stored in `/root/idr-root-ice.config`) and creating a public user for OMERO.web.
 This playbook is *not* idempotent.
 
 ### [`idr-09-monitoring.yml`](../ansible/idr-09-monitoring.yml)
-This is an optional playbook to setup monitoring of the IDR and OMERO.server.
+This is an optional playbook to set up monitoring of the IDR and OMERO.server.
 This includes configuring all servers with Munin, and enabling Slack notifications for OMERO.server errors.
 You will need to provide a secret Slack token for Slack notifications.
 
@@ -61,7 +61,7 @@ If this completes successfully you should be able to access a public OMERO.web a
 
 
 ### Advanced deployment options
-The `idr_environment` variable can be used to run multiple copies of the IDR alongside each other for testing purposes, and to minimise downtime between releases.
+The `idr_environment` variable can be used to run multiple copies of the IDR alongside each other for testing purposes, and to minimize downtime between releases.
 See the `hosts` section of each playbook for examples of how this is used.
 
 You should always set `idr_environment=idr` unless you know exactly what you are doing.

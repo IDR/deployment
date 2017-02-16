@@ -77,7 +77,7 @@ Separate networks are used to provide segregation between the restricted public-
 
 ### Ansible provisioning example
 
-You will need to customise the variables at the top of [`openstack-create-infrastructure.yml`](../ansible/openstack-create-infrastructure.yml) to fit with your OpenStack cloud.
+You will need to customize the variables at the top of [`openstack-create-infrastructure.yml`](../ansible/openstack-create-infrastructure.yml) to fit with your OpenStack cloud.
 In particular, you must define a list of SSH public key(s), for example:
 
     - idr_keypair_keys: ["ssh-rsa SSH_PUBLIC_KEY"]
@@ -92,7 +92,7 @@ Ensure this playbook successfully runs to completion before [deploying the IDR](
 
 Warning: At present the `nova` command may be used to [attach additional network interfaces to instances](https://github.com/IDR/ansible-role-openstack-idr-instance-network).
 `nova` does not support [`clouds.yaml`](http://docs.openstack.org/developer/os-client-config/).
-This will be fixed when the `openstack` command line client supports this feature.
+This will be fixed when the `openstack` command-line client supports this feature.
 
 
 ## Other platforms
@@ -108,4 +108,4 @@ For a minimal install you must have one host in each of:
 
 The other groups can be empty.
 
-Once you have setup your servers you can [deploy the IDR](deployment.md).
+Once you have set up your servers you can [deploy the IDR](deployment.md).

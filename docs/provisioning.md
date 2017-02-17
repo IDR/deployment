@@ -29,7 +29,7 @@ The [`ansible.cfg`](../ansible/ansible.cfg) configuration file will install the 
 
 ## OpenStack
 
-The IDR is currently hosted on OpenStack, and we have an [example Ansible playbook](../ansible/openstack-create-infrastructure.yml) for provisioning compute, storage and networking.
+The IDR is currently hosted on OpenStack, see below for an example Ansible playbook for provisioning compute, storage and networking.
 The Ansible openstack modules require the `shade` python module.
 
 This playbook will create two networks `idr` and `idr-a` for the production and analysis servers, and multiple instances and storage volumes.
@@ -39,28 +39,28 @@ This playbook will create two networks `idr` and `idr-a` for the production and 
 Network: `idr`
 
 Instances:
-- `idr-database`: PostgreSQL database server.
-- `idr-omero`: OMERO.server, including OMERO.web.
-- `idr-proxy`: Nginx gateway with custom caching configuration.
+- `idr-database`: PostgreSQL database server
+- `idr-omero`: OMERO.server, including OMERO.web
+- `idr-proxy`: Nginx gateway with custom caching configuration
 
 Volumes:
-- `idr-database-db`: PostgreSQL data directory.
-- `idr-omero-data`: OMERO data directory.
-- `idr-proxy-nginxcache`: Nginx cache directory.
+- `idr-database-db`: PostgreSQL data directory
+- `idr-omero-data`: OMERO data directory
+- `idr-proxy-nginxcache`: Nginx cache directory
 
 
 ### Analysis IDR
 Network: `idr-a`
 
 Instances:
-- `idr-a-database`: PostgreSQL database server.
-- `idr-a-omero`: OMERO.server.
-- `idr-a-dockermanager`: A Docker server for running VAEs.
+- `idr-a-database`: PostgreSQL database server
+- `idr-a-omero`: OMERO.server
+- `idr-a-dockermanager`: A Docker server for running VAEs
 
 Volumes:
-- `idr-a-database-db`: PostgreSQL data directory.
-- `idr-a-omero-data`: OMERO data directory.
-- `idr-a-dockermanager-jupyter`: Files created by the VAE.
+- `idr-a-database-db`: PostgreSQL data directory
+- `idr-a-omero-data`: OMERO data directory
+- `idr-a-dockermanager-jupyter`: Files created by the VAE
 
 Note `idr-proxy` is also connected to the `idr-a` network to provide access to the analysis platform.
 

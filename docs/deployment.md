@@ -35,8 +35,8 @@ This is the recommended method if you provisioned the servers using the supplied
 
 [inventories/openstack-idr.py](../inventories/openstack-idr.py) is a modified version of the [default Ansible OpenStack dynamic inventory](https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/openstack.py) to make it easier to use an [Ansible SSH gateway/jump host](http://docs.ansible.com/ansible/faq.html#how-do-i-configure-a-jump-host-to-access-servers-that-i-have-no-direct-access-to), and to configure multiple networks.
 The main changes are:
-- Automatic setting of SSH ProxyCommand.
-- Ordering of network interfaces.
+- automatic setting of SSH ProxyCommand
+- ordering of network interfaces
 
 This inventory will attempt to automatically route all SSH access via `idr-proxy`, using metadata attached to the servers in the [IDR openstack-idr-instance](https://github.com/IDR/ansible-role-openstack-idr-instance) role.
 

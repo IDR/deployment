@@ -9,8 +9,8 @@ Any changes that do not involve manipulating the data stored in OMERO (such as c
 ## Production IDR
 
 There are two ways to access the production IDR:
-- Nginx web proxy running on `idr-proxy`.
-- Back-end OMERO.web and OMERO.server running on `idr-omero`.
+- Nginx web proxy running on `idr-proxy`
+- Back-end OMERO.web and OMERO.server running on `idr-omero`
 
 
 ### `idr-proxy`
@@ -36,8 +36,8 @@ If you need to restart OMERO.server or OMERO.web you must use `systemctl` and no
 
 External users of the VAE should connect to JupyterHub via the front-end `idr-proxy`.
 For internal administration you may need to work on:
-- `idr-a-omero`: A clone of the production OMERO to ensure complex analysis queries do not affect public users of the IDR.
-- `idr-a-dockermanager`: The Docker server running the individual VAEs.
+- `idr-a-omero`: A clone of the production OMERO to ensure complex analysis queries do not affect public users of the IDR
+- `idr-a-dockermanager`: The Docker server running the individual VAEs
 
 
 ### `idr-a-dockermanager`
@@ -50,14 +50,14 @@ TODO: Configuration details
 
 The IDR has a well-defined separation between applications and data.
 The following directories contain data that must be backed up:
-- `idr-omero:/data`: The OMERO data directory.
-- `idr-database:/var/lib/pgsql`: The PostgreSQL data directory.
+- `idr-omero:/data`: The OMERO data directory
+- `idr-database:/var/lib/pgsql`: The PostgreSQL data directory
 
 The following directories are not essential but you may wish to also back them up:
-- `idr-proxy:/var/cache/nginx`: The front-end web cache (can be regenerated).
-- `idr-a-omero:/data`: The analysis OMERO data directory (clone of production).
-- `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production).
-- `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral).
+- `idr-proxy:/var/cache/nginx`: The front-end web cache (can be regenerated)
+- `idr-a-omero:/data`: The analysis OMERO data directory (clone of production)
+- `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production)
+- `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral)
 
 If you used the OpenStack provisioning playbook these are all separate volumes that can be backed up using the OpenStack clients.
 

@@ -1,17 +1,9 @@
-# Example playbook for installing OMERO.server into a VM
+# Example playbook for reseting Database and Data Repository
 #
-# This is initially aimed at testing a mini-IDR, so some production tuning is
-# required (limits.d).
-# In addition the samba-client and python-pydata roles are also installed
-# as they are required for some IDR related tasks.
-# For a standard production server you won't need these.
+# This is initially aimed at maintenance tasks, e.g. restoring production database
 
 
-# Testing vars. Set:
-# - `idr_net_iface=iface` if your servers use a network interface other
-#   then eth0 for inter-machine networking
-
-
+# STOP
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
 
@@ -23,68 +15,67 @@
       state: stopped
 
 
+# DB MAINTENANCE
 - hosts: >
     {{ idr_environment | default('idr') }}-database-hosts
 
   tasks:
-  - name: postgres | download from rsync
+  - name: postgres | rsync and reset db
     become: yes
-    synchronize:
-      mode: pull
-      src: "{{ rsync_host }}sql/latest/"
-      dest: "{{ rsync_dest_dbdump }}"
-    delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
-  - name: postgres | delete "{{ omero_dbname }}" database
-    become: yes
-    become_user: postgres
-    postgresql_db:
-      name: "{{ omero_dbname }}"
-      state: absent
-  - name: postgres | create "{{ omero_dbname }}" database
-    become: yes
-    become_user: postgres
-    postgresql_db:
-      encoding: UTF-8
-      name: "{{ omero_dbname }}"
-      state: present
-  - name: postgres | grant privilages to "{{ omero_dbname }}" database for "{{ omero_dbuser }}"
-    become: yes
-    become_user: postgres
-    postgresql_privs:
-      db: "{{ omero_dbname }}"
-      privs: ALL
-      type: schema
-      objs: public
-      role: "{{ omero_dbuser }}"
-  # TODO: fix when https://github.com/ansible/ansible/pull/20627
-  - name: postgres | restore with compression
-    become: yes
-    become_user: postgres
-    command: pg_restore -Fd -j8 -d {{ omero_dbname }} --exit-on-error /tmp/db_dump
+    include: idr-omero-restoredb-pg.yml
+    when: omero_dbreset
 
   vars:
+    rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
     rsync_dest_dbdump: "/tmp/db_dump"
     omero_dbname: idr
-    omero_dbuser: omero
+    omero_dbreset: True
+    omero_dbreset_user_passwords:
+      - {'uid': 0, 'password': ""}
+      - {'uid': 1, 'password': ""}
+      - {'uid': 2, 'password': ""}
+      - {'uid': 52, 'password': ""}
 
+
+# SERVER MAINTENANCE
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
 
   tasks:
-  - name: omero | restore Data Dir
+  - name: omero | restore data repository
     become: yes
-    synchronize:
-      mode: pull
-      src: "{{ rsync_host }}omero/"
-      dest: "{{ omero_datadir }}"
-    delegate_to: localhost
+    include: idr-omero-restoredb-repo.yml
+    when: omero_datareporeset
+
+  # Upgrade
+  - name: omero | upgrade
+    become: yes
+    become_user: "{{ omero_system_user }}"
+    command: >
+      {{ omero_omego_path }}
+      upgrade
+      {{ omero_omego_options }}
+      {{ omero_omego_db_options }}
+      --upgradedb
+    args:
+      chdir: "{{ omero_serverdir }}"
+    when: omero_upgrade
+
+  vars:
+    rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
+    rsync_dest_datadir: "/tmp/data_dir"
+    omero_dbname: idr
+    omero_datareporeset: True
+    omero_upgrade: True
+
+
+# START
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  tasks:
   - name: omero | start omero.server
     become: yes
     systemd:
       name: omero
       state: started
-  
-  vars:
-    rsync_dest_datadir: "/tmp/data_dir"
-    omero_dbname: idr
-  

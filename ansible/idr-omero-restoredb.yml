@@ -33,7 +33,7 @@
       mode: pull
       src: "{{ rsync_host }}sql/latest/"
       dest: "{{ rsync_dest_dbdump }}"
-    delegate_to: localhost
+    delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
   - name: postgres | delete "{{ omero_dbname }}" database
     become: yes
     become_user: postgres

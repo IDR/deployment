@@ -56,6 +56,7 @@
       type: schema
       objs: public
       role: "{{ omero_dbuser }}"
+  # TODO: fix when https://github.com/ansible/ansible/pull/20627
   - name: postgres | restore with compression
     become: yes
     become_user: postgres

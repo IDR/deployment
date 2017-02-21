@@ -1,0 +1,89 @@
+# Example playbook for installing OMERO.server into a VM
+#
+# This is initially aimed at testing a mini-IDR, so some production tuning is
+# required (limits.d).
+# In addition the samba-client and python-pydata roles are also installed
+# as they are required for some IDR related tasks.
+# For a standard production server you won't need these.
+
+
+# Testing vars. Set:
+# - `idr_net_iface=iface` if your servers use a network interface other
+#   then eth0 for inter-machine networking
+
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  tasks:
+  - name: omero | stop omero server
+    become: yes
+    systemd:
+      name: omero
+      state: stopped
+
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-database-hosts
+
+  tasks:
+  - name: postgres | download from rsync
+    become: yes
+    synchronize:
+      mode: pull
+      src: "{{ rsync_host }}sql/latest/"
+      dest: "{{ rsync_dest_dbdump }}"
+    delegate_to: localhost
+  - name: postgres | delete "{{ omero_dbname }}" database
+    become: yes
+    become_user: postgres
+    postgresql_db:
+      name: "{{ omero_dbname }}"
+      state: absent
+  - name: postgres | create "{{ omero_dbname }}" database
+    become: yes
+    become_user: postgres
+    postgresql_db:
+      encoding: UTF-8
+      name: "{{ omero_dbname }}"
+      state: present
+  - name: postgres | grant privilages to "{{ omero_dbname }}" database for "{{ omero_dbuser }}"
+    become: yes
+    become_user: postgres
+    postgresql_privs:
+      db: "{{ omero_dbname }}"
+      privs: ALL
+      type: schema
+      objs: public
+      role: "{{ omero_dbuser }}"
+  - name: postgres | restore with compression
+    become: yes
+    become_user: postgres
+    command: pg_restore -Fd -j8 -d {{ omero_dbname }} --exit-on-error /tmp/db_dump
+
+  vars:
+    rsync_dest_dbdump: "/tmp/db_dump"
+    omero_dbname: idr
+    omero_dbuser: omero
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  tasks:
+  - name: omero | restore Data Dir
+    become: yes
+    synchronize:
+      mode: pull
+      src: "{{ rsync_host }}omero/"
+      dest: "{{ omero_datadir }}"
+    delegate_to: localhost
+  - name: omero | start omero.server
+    become: yes
+    systemd:
+      name: omero
+      state: started
+  
+  vars:
+    rsync_dest_datadir: "/tmp/data_dir"
+    omero_dbname: idr
+  

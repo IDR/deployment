@@ -65,11 +65,9 @@ If you used the OpenStack provisioning playbook these are all separate volumes t
 If you need to restore the IDR it is sufficient to restore these directories into a clean CentOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
 The OpenStack provisioning playbook includes optional parameters to specify existing volumes to be copied.
 
-### Upgrades
-Upgrades of the IDR are based on the restoration procedure.
+### New releases
+The public-facing IDR is read-only and we aim to minimize any downtime, so instead of upgrading the existing system the procedure for new releases involves cloning the existing server volumes into a new system:
 
-Ensure you have an unused floating IP.
-Run the OpenStack provisioning playbook with an alternative IDR environment parameter (`idr_environment_idr=newidr`) and set the existing volumes as the source for the new volumes.
-
-When you are ready to go live disassociate the floating IPs from the production and new deployments, and associate the previous production floating IP with the new deployment.
-This should result in public users seeing very little downtime of the IDR.
+- Ensure you have an unused floating IP.
+- Run the OpenStack provisioning playbook with an alternative IDR environment parameter (`idr_environment_idr=newidr`) and set the existing volumes as the source for the new volumes.
+- When you are ready to go live disassociate the floating IPs from the production and new deployments, and associate the previous production floating IP with the new deployment.

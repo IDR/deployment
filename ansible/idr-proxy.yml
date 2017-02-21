@@ -38,12 +38,14 @@
     when: "{{ groups[idr_environment | default('idr') + '-a-dockermanager-hosts'] is defined }}"
 
   roles:
-  # Default to a self-signed certificate, set `idr_nginx_ssl_production: True`
-  # to use production certificates
+  # Default to a self-signed certificate, to use production certificates set:
+  # idr_nginx_ssl_production: True
+  # nginx_proxy_ssl_certificate_source_path: local/path/to/certificate
+  # nginx_proxy_ssl_certificate_key_source_path: local/path/to/key
   - role: openmicroscopy.nginx-ssl-selfsigned
     nginx_ssl_certificate: "{{ nginx_proxy_ssl_certificate }}"
     nginx_ssl_certificate_key: "{{ nginx_proxy_ssl_certificate_key }}"
-    when: "{{ not idr_nginx_ssl_production | default(True) | bool }}"
+    when: "{{ not idr_nginx_ssl_production | default(False) | bool }}"
   - role: openmicroscopy.nginx-proxy
 
 

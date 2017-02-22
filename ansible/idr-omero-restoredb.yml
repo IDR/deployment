@@ -29,7 +29,7 @@
     rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
     rsync_dest_dbdump: "/tmp/db_dump"
     omero_dbname: idr
-    omero_dbreset: False
+    omero_dbreset: True
     omero_dbreset_user_passwords:
       - {'uid': 0, 'password': ""}
       - {'uid': 1, 'password': ""}
@@ -48,8 +48,8 @@
     when: omero_datareporeset
 
   - name: Get database host
-      set_fact:
-        omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+    set_fact:
+      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
     # Upgrade and start
     # roles:
@@ -63,7 +63,7 @@
 
   vars:
     rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
-    omero_datareporeset: True
+    omero_datareporeset: False
 
 
 # START

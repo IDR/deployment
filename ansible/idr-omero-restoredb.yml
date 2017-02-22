@@ -29,12 +29,12 @@
     rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
     rsync_dest_dbdump: "/tmp/db_dump"
     omero_dbname: idr
-    omero_dbreset: True
+    omero_dbreset: False
     omero_dbreset_user_passwords:
       - {'uid': 0, 'password': ""}
       - {'uid': 1, 'password': ""}
       - {'uid': 2, 'password': ""}
-      - {'uid': 52, 'password': ""}
+      - {'uid': 52, 'password': "{{ omero_web_public_password }}"}
 
 
 # SERVER MAINTENANCE
@@ -48,6 +48,31 @@
     when: omero_datareporeset
 
   # Upgrade
+  - name: Get database host
+    set_fact:
+      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+  - name: omero | set omego db options
+    set_fact:
+      omero_omego_db_options: >
+        --dbhost {{ omero_dbhost | quote }}
+        --dbuser {{ omero_dbuser | quote }}
+        --dbname {{ omero_dbname | quote }}
+        --dbpass {{ omero_dbpassword | quote  }}
+  - name: omero | set omego options
+    set_fact:
+      omero_omego_options: >
+        --release {{ omero_release }}
+        --sym {{ omero_server_symlink }}
+        --prestartfile {{ omero_basedir }}/config/omero-base.config
+        --prestartfile {{ omero_basedir }}/config/omero-additional.config
+        --ice {{ ice_version }}
+        {{ omero_omego_verbosity }}
+        {{ omero_omego_additional_args }}
+        {{ omero_systemd_setup | ternary('--no-start', '') }}
+  # If systemd is enabled don't start anything, leave systemd to handle this
+  # later omego will still stop omero and omero-web outside of systemd, so you
+  # should ensure the service file contains `Restart=no` (default)
+  
   - name: omero | upgrade
     become: yes
     become_user: "{{ omero_system_user }}"
@@ -64,10 +89,17 @@
   vars:
     rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
     rsync_dest_datadir: "/tmp/data_dir"
-    omero_dbname: idr
-    omero_datareporeset: True
-    omero_upgrade: True
-
+    omero_system_user: "omero"
+    omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
+    omero_basedir: /home/omero
+    omero_serverdir: "{{ omero_basedir }}"
+    omero_server_symlink: OMERO.server
+    omero_omego_path: "{{ omero_basedir }}/omego/bin/omego"
+    omero_omego_verbosity: "-qq"
+    omero_dbhost: "{{ omero_db_host_ansible }}"
+    omero_systemd_setup: True
+    omero_datareporeset: False
+    omero_upgrade: False
 
 # START
 - hosts: >
@@ -78,4 +110,11 @@
     become: yes
     systemd:
       name: omero
+      state: started
+
+  tasks:
+  - name: omero | start omero.web
+    become: yes
+    systemd:
+      name: omero-web
       state: started

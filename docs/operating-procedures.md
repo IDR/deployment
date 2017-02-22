@@ -1,6 +1,6 @@
 # IDR administration
 
-If you used the OpenStack provisioning playbook the only accessible external ports will be `22`, `80` and `443` on `idr-proxy`.
+If you used the OpenStack provisioning playbook, the only accessible external ports will be `22`, `80` and `443` on `idr-proxy`.
 For all administrative OMERO operations you will first need to SSH into `idr-proxy` and/or set up a SSH tunnel for other ports and servers.
 
 Any changes that do not involve manipulating the data stored in OMERO (such as changes to the OMERO.server and OMERO.web configuration) should be done by modifying the deployment playbooks to ensure they are included in future deployments.
@@ -29,7 +29,7 @@ You can force a complete refresh of the cache by removing everything under `/var
 If you SSH into this server you will have full access to OMERO.server, including OMERO.web and the command-line client.
 If you need to login to OMERO you should always connect to this server.
 
-If you need to restart OMERO.server or OMERO.web you must use `systemctl` and not `omero admin` or `omero web`.
+If you need to restart OMERO.server or OMERO.web, you must use `systemctl` and not `omero admin` or `omero web`.
 
 
 ## Analysis IDR
@@ -59,10 +59,10 @@ The following directories are not essential but you may wish to also back them u
 - `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production)
 - `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral)
 
-If you used the OpenStack provisioning playbook these are all separate volumes that can be backed up using the OpenStack clients.
+If you used the OpenStack provisioning playbook, these are all separate volumes that can be backed up using the OpenStack clients.
 
 ### Restoration
-If you need to restore the IDR it is sufficient to restore these directories into a clean CentOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
+If you need to restore the IDR, it is sufficient to restore these directories into a clean CentOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
 The OpenStack provisioning playbook includes optional parameters to specify existing volumes to be copied.
 
 ### New releases

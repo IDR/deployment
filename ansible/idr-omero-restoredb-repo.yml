@@ -33,11 +33,20 @@
     - "{{ directories.files }}"
 
 
-- name: omero | restore Data Dir
+- name: omero | restore FullText
   become: yes
   synchronize:
     mode: pull
     compress: no
-    src: "{{ rsync_host }}omero/"
-    dest: "{{ omero_datadir }}"
+    src: "{{ rsync_host }}omero/FullText"
+    dest: "{{ omero_datadir }}/FullText"
+  delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+
+- name: omero | restore Thumbnails
+  become: yes
+  synchronize:
+    mode: pull
+    compress: no
+    src: "{{ rsync_host }}omero/Thumbnails"
+    dest: "{{ omero_datadir }}/Thumbnails"
   delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"

@@ -1,0 +1,14 @@
+sudo: required
+language: python
+
+services:
+  - docker
+
+install:
+  - pip install -r ansible/tests/python-requirements.txt
+
+script:
+  - cd ansible; molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

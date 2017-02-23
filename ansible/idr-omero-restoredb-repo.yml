@@ -1,45 +1,15 @@
 ---
-# restore omero database from compressed dump
-
-- name: omero | prepare files in "{{ omero_datadir }}"
-  become: yes
-  find:
-    path: "{{ omero_datadir }}"
-    file_type: file
-  register: files
-
-- name: omero | delete content from "{{ omero_datadir }}"
-  become: yes
-  file:
-    state: absent
-    path: "{{ item.path }}"
-  with_items: 
-    - "{{ files.files }}"
-
-
-- name: omero | prepare directories in "{{ omero_datadir }}"
-  become: yes
-  find:
-    path: "{{ omero_datadir }}"
-    file_type: directory
-  register: directories
-
-- name: omero | delete content from "{{ omero_datadir }}"
-  become: yes
-  file:
-    state: absent
-    path: "{{ item.path }}"
-  with_items:
-    - "{{ directories.files }}"
-
+# restore omero data repo
 
 - name: omero | restore FullText
   become: yes
   synchronize:
     mode: pull
     compress: no
+    delete: yes
+    recursive: yes
     src: "{{ rsync_host }}omero/FullText"
-    dest: "{{ omero_datadir }}/FullText"
+    dest: "{{ omero_datadir }}/"
   delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
 - name: omero | restore Thumbnails
@@ -47,6 +17,8 @@
   synchronize:
     mode: pull
     compress: no
+    delete: yes
+    recursive: yes
     src: "{{ rsync_host }}omero/Thumbnails"
-    dest: "{{ omero_datadir }}/Thumbnails"
+    dest: "{{ omero_datadir }}/"
   delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"

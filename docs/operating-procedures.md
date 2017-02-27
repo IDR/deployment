@@ -43,8 +43,6 @@ For internal administration you may need to work on:
 ### `idr-a-dockermanager`
 JupyterHub runs in a Docker container managed as a systemd service, and spawns additional Docker containers for analysis users.
 
-TODO: Configuration details
-
 
 ## Backups, restores and upgrades
 

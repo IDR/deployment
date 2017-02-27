@@ -20,6 +20,8 @@ The virtual analysis environment (VAE) IDR (3 servers):
 Almost all of the provisioning and deployment in the IDR is done using Ansible 2.1.
 All ansible commands should be run from a shell in the [`ansible`](../ansible) directory.
 
+    cd ../ansible
+
 You must first install the required galaxy roles:
 
     ansible-galaxy install -r requirements.yml

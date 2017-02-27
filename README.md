@@ -26,5 +26,3 @@ All documents assume extensive knowledge of [OMERO](https://www.openmicroscopy.o
 [idr-ansible.sh](docs/idr-ansible.sh): An example script to provision and deploy the IDR on OpenStack.
 
 [Operating procedures](docs/operating-procedures.md): Administration of the IDR
-
-[Data management](data-management.md): TODO

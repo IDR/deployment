@@ -51,11 +51,11 @@ You must run Ansible from the [`ansible`](../ansible) directory.
 
 If you are using a static inventory run:
 
-    ansible-playbook -i ../inventories/ansible-hosts --diff -e idr_environment=idr idr-01-install-idr.yml idr-03-postinstall.yml
+    ansible-playbook -i ../inventories/ansible-hosts --diff idr-01-install-idr.yml idr-03-postinstall.yml
 
 If you provisioned your servers using the OpenStack playbook and are using the IDR dynamic inventory run:
 
-    ansible-playbook -i ../inventories/openstack-idr.py --diff -u centos -e idr_environment=idr idr-00-preinstall.yml idr-01-install-idr.yml idr-03-postinstall.yml
+    ansible-playbook -i ../inventories/openstack-idr.py --diff -u centos idr-00-preinstall.yml idr-01-install-idr.yml idr-03-postinstall.yml
 
 If this completes successfully you should be able to access a public OMERO.web at the IP of the `idr-proxy` server.
 
@@ -64,4 +64,4 @@ If this completes successfully you should be able to access a public OMERO.web a
 The `idr_environment` variable can be used to run multiple copies of the IDR alongside each other for testing purposes, and to minimize downtime between releases.
 See the `hosts` section of each playbook for examples of how this is used.
 
-You should always set `idr_environment=idr` unless you know exactly what you are doing.
+Only change this to something other than the effective default `idr_environment=idr` if you know exactly what you are doing.

@@ -12,6 +12,3 @@ script:
   # we should run it on all once they're compliant
   - bash -O extglob -c 'ansible-lint -v ansible/!(idr-03-postinstall.yml|idr-reset-users-groups.yml|molecule.yml|ansible.cfg)'
   - cd ansible; molecule test
-
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/

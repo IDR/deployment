@@ -1,0 +1,3 @@
+docker-py
+ansible<2.2
+molecule==1.20

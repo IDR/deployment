@@ -26,8 +26,10 @@ nginx_proxy_websockets_enable: True
 _nginx_proxy_omero_locations:
 - /webclient/metadata_*
 - /webclient/render_*
+- /webclient/get_thumbnail*
 - /webgateway/metadata_*
 - /webgateway/render_*
+- /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
 - /mapr/*
@@ -90,6 +92,7 @@ nginx_proxy_cache_hide_headers:
 nginx_proxy_cache_match_uri:
 #- '"~webclient/api/paths_to_object*"'
 - '"~web(client|gateway)/(metadata|render)_*"'
+- '"~web(client|gateway)/get_thumbnail*"'
 - '"~webclient/api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
@@ -116,6 +119,7 @@ nginx_proxy_caches:
   inactive: 180d
   match:
   - '"~web(client|gateway)/render_thumbnail/*"'
+  - '"~web(client|gateway)/get_thumbnail*"'
 - name: omerorender
   maxsize: 40g
   keysize: 35m
@@ -183,7 +187,7 @@ nginx_proxy_redirect_map_locations:
 nginx_proxy_direct_locations:
 # TODO: change to 301 when we're happy
 - location: "= /webclient"
-  redirect302: /webclient/userdata/?experimenter=-1
+  redirect302: /webclient/?experimenter=-1
 - location: "= /"
   redirect302: /about
 - location: "^~ /about"

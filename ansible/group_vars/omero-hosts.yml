@@ -116,6 +116,7 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/gene"
       label: "Gene"
+      case_sensitive: True
   - menu: "genesupplementary"
     config:
       default: []
@@ -150,6 +151,9 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/phenotype"
       label: "Phenotype"
+      case_sensitive: True
+      wildcard:
+        - enabled: True
   - menu: "compound"
     config:
       default:
@@ -159,6 +163,7 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/compound"
       label: "Compound"
+      case_sensitive: True
   - menu: "compoundsupplementary"
     config:
       default: []
@@ -175,6 +180,8 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/organism"
       label: "Organism"
+      wildcard:
+        - enabled: True
   - menu: "others"
     config:
       default:

@@ -154,6 +154,10 @@
   src: https://github.com/openmicroscopy/ansible-role-omero-web-apps
   version: 0.1.0
 
+- name: prometheus
+  src: https://github.com/manics/ansible-role-prometheus
+  version: devel
+
 - name: reboot-server
   src: https://github.com/openmicroscopy/ansible-role-reboot-server
   version: 0.1.0

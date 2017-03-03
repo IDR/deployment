@@ -1,0 +1,82 @@
+# Experimental: Prometheus
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-hosts
+    {{ idr_environment | default('idr') }}-a-hosts
+
+  roles:
+  - role: prometheus
+    prometheus_components:
+    - node_exporter
+
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+    {{ idr_environment | default('idr') }}-a-omero-hosts
+
+  roles:
+  - role: prometheus
+    prometheus_components:
+    - node_exporter
+    - jmx_javaagent
+
+
+- hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+
+  roles:
+
+  - role: prometheus
+
+    prometheus_components:
+    - alertmanager
+    - blackbox_exporter
+    - node_exporter
+    - prometheus
+
+    prometheus_alertmanager_slack_webhook: SLACK_WEBHOOK
+
+    prometheus_alertmanager_slack_channel: '#trash'
+
+    prometheus_static_targets: >
+      {{(
+        groups[(idr_environment | default('idr')) + '-hosts'] |
+          map('extract', hostvars, [
+              'ansible_' + (hosts_populate_iface | default('eth0')),
+              'ipv4',
+              'address'
+          ])  |
+          map('regex_replace', '^(.*)$', '\1:9100' ) | list
+        )
+        +
+        (
+        groups[(idr_environment | default('idr')) + '-omero-hosts'] |
+          map('extract', hostvars, [
+              'ansible_' + (hosts_populate_iface | default('eth0')),
+              'ipv4',
+              'address'
+          ])  |
+          map('regex_replace', '^(.*)$', '\1:9180' ) | list
+        )
+      }}
+
+    prometheus_http_2xx_internal_targets: >
+      {{
+        (groups[(idr_environment | default('idr')) + '-omero-hosts'] +
+             (groups[(idr_environment | default('idr')) + '-a-omero-hosts']
+                 ) +
+             groups[(idr_environment | default('idr')) + '-proxy-hosts']
+        ) |
+        map('extract', hostvars, [
+            'ansible_' + (hosts_populate_iface | default('eth0')),
+            'ipv4',
+            'address'
+        ]) |
+        map('regex_replace', '^(.*)$', 'http://\1/webclient/metadata_details/screen/1201/' ) | list
+      }}
+
+    prometheus_http_2xx_external_targets:
+    - http://idr-demo.openmicroscopy.org/about/
+    - https://idr-demo.openmicroscopy.org/about/
+
+    prometheus_rsync_banner_targets:
+    - idr-rsync.openmicroscopy.org:873

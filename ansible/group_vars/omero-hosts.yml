@@ -54,30 +54,30 @@ omero_web_app_add_top_links:
     query_string: { experimenter: -1 }
   attrs:
     title: Phenotypes browser
-- label: siRNA
+- label: siRNAs
   link:
     viewname: maprindex_sirna
     query_string: { experimenter: -1 }
   attrs:
-    title: siRNA browser
-- label: Antibody
+    title: siRNAs browser
+- label: Antibodies
   link:
     viewname: maprindex_antibody
     query_string: {"experimenter": -1}
   attrs:
-    title: Antibody browser
-- label: Compound
+    title: Antibodies browser
+- label: Compounds
   link:
     viewname: maprindex_compound
     query_string: {"experimenter": -1}
   attrs:
-    title: Compound browser
-- label: Organism
+    title: Compounds browser
+- label: Organisms
   link:
     viewname: maprindex_organism
     query_string: {"experimenter": -1}
   attrs:
-    title: Organism browser
+    title: Organisms browser
 - label: Help
   link: http://help.openmicroscopy.org/
   attrs:

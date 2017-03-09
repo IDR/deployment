@@ -182,6 +182,23 @@ omero_web_additional_config_append:
       label: "Organism"
       wildcard:
         enabled: True
+  - menu: "antibody"
+    config:
+      default:
+        - "Antibody"
+      all:
+        - "Antibody"
+      ns:
+        - "openmicroscopy.org/mapr/antibody"
+      label: "Antibody"
+      case_sensitive: True
+  - menu: "antibodysupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/antibody/supplementary"
+      label: "Antibody supplementary"
   - menu: "others"
     config:
       default:

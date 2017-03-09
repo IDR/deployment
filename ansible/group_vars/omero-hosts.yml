@@ -191,9 +191,9 @@ omero_web_additional_config_append:
   - menu: "antibody"
     config:
       default:
-        - "Antibody"
+        - "Antibody Identifier"
       all:
-        - "Antibody"
+        - "Antibody Identifier"
       ns:
         - "openmicroscopy.org/mapr/antibody"
       label: "Antibody"

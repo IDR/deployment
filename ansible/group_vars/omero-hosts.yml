@@ -60,6 +60,12 @@ omero_web_app_add_top_links:
     query_string: { experimenter: -1 }
   attrs:
     title: siRNA browser
+- label: Antibody
+  link:
+    viewname: maprindex_antibody
+    query_string: {"experimenter": -1}
+  attrs:
+    title: Antibody browser
 - label: Compound
   link:
     viewname: maprindex_compound

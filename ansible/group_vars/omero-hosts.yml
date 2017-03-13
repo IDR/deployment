@@ -205,6 +205,23 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/antibody/supplementary"
       label: "Antibody supplementary"
+  - menu: "orf"
+    config:
+      default:
+        - "ORF Identifier"
+      all:
+        - "ORF Identifier"
+      ns:
+        - "openmicroscopy.org/mapr/orf"
+      label: "ORF"
+      case_sensitive: True
+  - menu: "orfsupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/orf/supplementary"
+      label: "ORF supplementary"
   - menu: "others"
     config:
       default:

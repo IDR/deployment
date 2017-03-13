@@ -214,7 +214,6 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/orf"
       label: "ORF"
-      case_sensitive: True
   - menu: "orfsupplementary"
     config:
       default: []

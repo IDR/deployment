@@ -28,7 +28,7 @@ omero_server_limit_nofile: 16384
 # mapr
 
 omero_web_app_packages:
-- "omero-mapr==0.1.10"
+- "omero-mapr==0.1.12"
 omero_web_apps_add:
 - omero_mapr
 
@@ -54,24 +54,30 @@ omero_web_app_add_top_links:
     query_string: { experimenter: -1 }
   attrs:
     title: Phenotypes browser
-- label: siRNA
+- label: siRNAs
   link:
     viewname: maprindex_sirna
     query_string: { experimenter: -1 }
   attrs:
-    title: siRNA browser
-- label: Compound
+    title: siRNAs browser
+- label: Antibodies
+  link:
+    viewname: maprindex_antibody
+    query_string: {"experimenter": -1}
+  attrs:
+    title: Antibodies browser
+- label: Compounds
   link:
     viewname: maprindex_compound
     query_string: {"experimenter": -1}
   attrs:
-    title: Compound browser
-- label: Organism
+    title: Compounds browser
+- label: Organisms
   link:
     viewname: maprindex_organism
     query_string: {"experimenter": -1}
   attrs:
-    title: Organism browser
+    title: Organisms browser
 - label: Help
   link: http://help.openmicroscopy.org/
   attrs:
@@ -116,6 +122,7 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/gene"
       label: "Gene"
+      case_sensitive: True
   - menu: "genesupplementary"
     config:
       default: []
@@ -150,6 +157,9 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/phenotype"
       label: "Phenotype"
+      case_sensitive: True
+      wildcard:
+        enabled: True
   - menu: "compound"
     config:
       default:
@@ -159,6 +169,7 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/compound"
       label: "Compound"
+      case_sensitive: True
   - menu: "compoundsupplementary"
     config:
       default: []
@@ -175,6 +186,41 @@ omero_web_additional_config_append:
       ns:
         - "openmicroscopy.org/mapr/organism"
       label: "Organism"
+      wildcard:
+        enabled: True
+  - menu: "antibody"
+    config:
+      default:
+        - "Antibody Identifier"
+      all:
+        - "Antibody Identifier"
+      ns:
+        - "openmicroscopy.org/mapr/antibody"
+      label: "Antibody"
+      case_sensitive: True
+  - menu: "antibodysupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/antibody/supplementary"
+      label: "Antibody supplementary"
+  - menu: "orf"
+    config:
+      default:
+        - "ORF Identifier"
+      all:
+        - "ORF Identifier"
+      ns:
+        - "openmicroscopy.org/mapr/orf"
+      label: "ORF"
+  - menu: "orfsupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/orf/supplementary"
+      label: "ORF supplementary"
   - menu: "others"
     config:
       default:

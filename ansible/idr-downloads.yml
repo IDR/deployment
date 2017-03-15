@@ -19,6 +19,9 @@
     - name: sql
       path: /srv/omero-sql
       comment: PostgreSQL 9.4 database dump of the IDR
+    - name: mineotaur
+      path: /data/mineotaur
+      comment: Neo4j databases for various IDR studies
 
   # TODO: Create DB dump file? Or should this be in another playbooks since
   # it's not directly related to deployment?

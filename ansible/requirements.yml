@@ -126,7 +126,7 @@
 
 - name: IDR.openstack-idr-security-groups
   src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git
-  version: 1.0.0
+  version: 1.1.0
 
 # External development roles
 - name: omero-user

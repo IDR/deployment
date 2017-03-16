@@ -12,15 +12,16 @@ which allows restoring the database in parallel:
 set -e
 set -u
 
+PATH=$PATH:/home/omero/OMERO.server/bin
 HOST=$(omero config get omero.db.host)
 DATE=$(date +"%Y-%m-%d")
 test -e $DATE && {
   echo $DATE already exists
   exit 1
 }
-sudo time pg_dump -h $HOST -U omero idr -j 8 -Fd -f $DATE \
+time pg_dump -h $HOST -U omero idr -j 8 -Fd -f $DATE \
     --exclude-table-data password \
     --exclude-table-data eventlog
 sudo chmod -R a+rX $DATE
-rm latest
+rm -f latest
 ln -s $DATE latest

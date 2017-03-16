@@ -29,21 +29,22 @@
     become: yes
     file:
       path: /srv/omero-sql/
-      mode: 0700
+      mode: 0755
+      state: directory
 
   - name: rsync | add readme
     become: yes
     template:
       src: files/idr-rsync-readme.txt
       dest: /srv/omero-sql/README.txt
-      mode: 0400
+      mode: 0444
 
   - name: rsync | add script
     become: yes
     template:
       src: files/idr-rsync-backup.sh
       dest: /srv/omero-sql/backup.sh
-      mode: 0500
+      mode: 0555
 
   - name: Get database IP
     set_fact:

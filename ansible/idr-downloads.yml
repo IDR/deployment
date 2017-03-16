@@ -25,6 +25,12 @@
 
   tasks:
 
+  - name: rsync | add directory
+    become: yes
+    file:
+      path: /srv/omero-sql/
+      mode: 0700
+
   - name: rsync | add readme
     become: yes
     template:

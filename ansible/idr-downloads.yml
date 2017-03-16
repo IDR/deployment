@@ -23,14 +23,27 @@
       path: /data/mineotaur
       comment: Neo4j databases for various IDR studies
 
-  # TODO: Create DB dump file? Or should this be in another playbooks since
-  # it's not directly related to deployment?
-  # tasks:
-  # - name: Get database IP
-  #   set_fact:
-  #     omero_omero_host_ansible: >-
-  #       {{
-  #         hostvars[groups[
-  #           idr_environment | default('idr') + '-database-hosts'][0]]
-  #           ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
-  #       }}
+  tasks:
+
+  - name: rsync | add readme
+    become: yes
+    template:
+      src: files/idr-rsync-readme.txt
+      dest: /srv/omero-sql/README.txt
+      mode: 0400
+
+  - name: rsync | add script
+    become: yes
+    template:
+      src: files/idr-rsync-backup.sh
+      dest: /srv/omero-sql/backup.sh
+      mode: 0500
+
+  - name: Get database IP
+    set_fact:
+      omero_omero_host_ansible: >-
+        {{
+          hostvars[groups[
+            idr_environment | default('idr') + '-database-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}

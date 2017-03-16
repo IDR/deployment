@@ -46,3 +46,7 @@
     yum:
       pkg: net-tools
       state: present
+  - name: Install libselinux-python
+    yum:
+      pkg: libselinux-python
+      state: present

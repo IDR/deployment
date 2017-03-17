@@ -15,6 +15,7 @@
       path: "/tmp/mineotaur"
       owner: 1000
 
+  # TODO: add version
   - name: enable mineotaur container
     docker_container:
       name: mineotaur

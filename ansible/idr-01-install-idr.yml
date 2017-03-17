@@ -8,6 +8,8 @@
 
 - include: idr-docker.yml
 
+#- include: idr-mineotaur.yml
+
 - include: idr-downloads.yml
 
 - include: idr-proxy.yml

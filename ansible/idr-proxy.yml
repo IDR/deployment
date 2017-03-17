@@ -13,6 +13,10 @@
 
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+  roles:
+  - openmicroscopy.selinux-utils
+
+- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 
   pre_tasks:
 
@@ -56,6 +60,7 @@
       proto: tcp
       setype: http_port_t
       state: present
+    when: selinux_enabled
 
   roles:
   # Default to a self-signed certificate, to use production certificates set:

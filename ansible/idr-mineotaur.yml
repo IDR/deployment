@@ -25,4 +25,3 @@
       ports:
         - "8080:8080"
       command: ["-Xmx8g", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/home/build/src/target/Mineotaur-1.0.1.jar", "-start", "/mineotaur"]
-

@@ -2,8 +2,6 @@
 
 # Check the networking is setup as expected
 - hosts: all
-  roles:
-  - role: openmicroscopy.selinux-utils
   tasks:
 
   - debug:

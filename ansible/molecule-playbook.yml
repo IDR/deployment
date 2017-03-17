@@ -2,6 +2,8 @@
 
 # Check the networking is setup as expected
 - hosts: all
+  roles:
+  - role: openmicroscopy.selinux-utils
   tasks:
 
   - debug:
@@ -45,8 +47,4 @@
   - name: Install netstat
     yum:
       pkg: net-tools
-      state: present
-  - name: Install libselinux-python
-    yum:
-      pkg: libselinux-python
       state: present

@@ -62,17 +62,23 @@
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
 
+- name: openmicroscopy.omero-common
+  src:  https://github.com/openmicroscopy/ansible-role-omero-common.git
+  version: master
+
+- name: openmicroscopy.omego
+  src:  https://github.com/openmicroscopy/ansible-role-omego.git
+  version: master
+
 - src: openmicroscopy.omero-logmonitor
   version: 1.0.0
 
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-- src: openmicroscopy.omero-server
-  version: 1.2.0
-
-- src: openmicroscopy.omero-web-runtime
-  version: 1.1.0
+- name: openmicroscopy.omero-server
+  src:  https://github.com/manics/ansible-role-omero-server.git
+  version: devel
 
 - src: openmicroscopy.openstack-volume-storage
   version: 1.0.0
@@ -103,6 +109,10 @@
 
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
+
+- name: openmicroscopy.omero-web
+  src:  https://github.com/manics/ansible-role-omero-web.git
+  version: master
 
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
@@ -138,8 +148,8 @@
   version: master
 
 - name: omero-web-apps
-  src: https://github.com/openmicroscopy/ansible-role-omero-web-apps
-  version: master
+  src: https://github.com/manics/ansible-role-omero-web-apps
+  version: devel
 
 - name: reboot-server
   src: https://github.com/openmicroscopy/ansible-role-reboot-server

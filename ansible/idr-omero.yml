@@ -17,16 +17,6 @@
 
   roles:
   - role: openmicroscopy.postgresql
-    postgresql_server_listen: "'*'"
-    postgresql_server_auth:
-    - database: all
-      user: omero
-      address: 0.0.0.0/0
-    postgresql_users_databases:
-    - user: omero
-      password: "{{ idr_secret_postgresql_password | default('omero') }}"
-      databases: [idr]
-    postgresql_server_chown_datadir: True
 
 
 # There are two OMERO and database servers. The next two plays set a

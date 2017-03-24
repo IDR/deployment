@@ -47,8 +47,9 @@
 - src: openmicroscopy.munin-node
   version: 1.2.1-openmicroscopy1
 
-- src: openmicroscopy.network-cloud-interfaces
-  version: 1.1.0
+- name: openmicroscopy.network-cloud-interfaces
+  src: https://github.com/manics/ansible-role-network-cloud-interfaces.git
+  version: peerdns-no
 
 - src: openmicroscopy.nfs-mount
   version: 1.0.0

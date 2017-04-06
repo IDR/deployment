@@ -5,7 +5,7 @@ services:
   - docker
 
 install:
-  - pip install -r ansible/tests/python-requirements.txt
+  - pip install ome-ansible-molecule-dependencies
 
 script:
   # TODO: molecule will only run ansible-lint on the target playbook,

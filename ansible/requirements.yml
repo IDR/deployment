@@ -2,6 +2,9 @@
 
 # External Ansible roles required by this repository
 
+# TODO: check ordering of these dependencies to ensure nested dependencies
+# are managed by this file and not the role
+
 - src: openmicroscopy.analysis-tools
   version: 1.0.0
 
@@ -20,11 +23,9 @@
 - src: openmicroscopy.haproxy
   version: 2.0.0
 
-#- src: openmicroscopy.ice
-#  version: 1.0.0
 - name: openmicroscopy.ice
   src:  https://github.com/manics/ansible-role-ice.git
-  version: devel
+  version: devel-20170405
 
 - src: openmicroscopy.java
   version: 2.0.0
@@ -48,8 +49,7 @@
   version: 1.2.1-openmicroscopy1
 
 - name: openmicroscopy.network-cloud-interfaces
-  src: https://github.com/manics/ansible-role-network-cloud-interfaces.git
-  version: peerdns-no
+  version: 1.2.0
 
 - src: openmicroscopy.nfs-mount
   version: 1.0.0
@@ -67,12 +67,12 @@
   version: 1.0.0
 
 - name: openmicroscopy.omero-common
-  src:  https://github.com/openmicroscopy/ansible-role-omero-common.git
-  version: master
+  src:  https://github.com/manics/ansible-role-omero-common.git
+  version: devel-20170405
 
 - name: openmicroscopy.omego
-  src:  https://github.com/openmicroscopy/ansible-role-omego.git
-  version: master
+  src:  https://github.com/manics/ansible-role-omego.git
+  version: devel-20170405
 
 - src: openmicroscopy.omero-logmonitor
   version: 1.0.0
@@ -82,7 +82,11 @@
 
 - name: openmicroscopy.omero-server
   src:  https://github.com/manics/ansible-role-omero-server.git
-  version: devel
+  version: devel-20170405
+
+- name: openmicroscopy.omero-web
+  src:  https://github.com/manics/ansible-role-omero-web.git
+  version: devel-20170405
 
 - src: openmicroscopy.openstack-volume-storage
   version: 1.0.0
@@ -113,10 +117,6 @@
 
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
-
-- name: openmicroscopy.omero-web
-  src:  https://github.com/manics/ansible-role-omero-web.git
-  version: master
 
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
@@ -153,7 +153,7 @@
 
 - name: omero-web-apps
   src: https://github.com/manics/ansible-role-omero-web-apps
-  version: devel
+  version: devel-20170405
 
 - name: reboot-server
   src: https://github.com/openmicroscopy/ansible-role-reboot-server

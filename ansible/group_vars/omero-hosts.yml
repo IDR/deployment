@@ -58,6 +58,7 @@ omero_logmonitor_basedir: /opt/omero/logmonitor
 omero_logmonitor_logs_dir: /opt/omero/server/OMERO.server/var/log
 
 omero_user_bin_omero: /opt/omero/server/OMERO.server/bin/omero
+omero_user_system: omero-server
 
 
 # TODO: The rest of this file should go into a new omero-web-hosts group

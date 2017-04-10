@@ -113,7 +113,7 @@ omero_web_config_set:
     omero: "Open Microscopy"
   # Clear the top links and metadata (They will be set later)
   omero.web.ui.top_links: []
-  omero.web.ui.metadata_pane: []
+  omero.web.ui.metadata_panes: []
 
 
 ######################################################################

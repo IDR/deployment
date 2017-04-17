@@ -1,28 +1,45 @@
+# Load hostvars
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
 # Setup IDR Mineotaur server
 - hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
 
   tasks:
 
+  - name: Get rsync IP
+    set_fact:
+      omero_rsync_host_ansible : >-
+        {{
+          hostvars[groups[
+            idr_environment | default('idr') + '-omero-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+
   - name: download mineotaur data
     become: yes
     synchronize:
-      src: "rsync://{{ TBD_omero_host }}/mineotaur/"
+      src: "rsync://idr-demo.openmicroscopy.org/mineotaur/"
       dest: "/tmp/mineotaur/"
+      mode: "pull"
+    delegate_to: "{{ inventory_hostname }}"
+    # TODO: "rsync://{{ omero_rsync_host_ansible }}/mineotaur/" currently inaccessible due to networking
 
   - name: change mineotaur to 1000 uid
     become: yes
     file:
       path: "/tmp/mineotaur"
       owner: 1000
+      recurse: yes
 
   # TODO: add version
   - name: enable mineotaur container
+    become: yes
     docker_container:
       name: mineotaur
       image: imagedata/mineotaur
       entrypoint: java
       volumes:
-        - /tmp/mineotaur:/mineotaur
+        - /tmp/mineotaur/idr0001gramlsysgroscreenA:/mineotaur
       ports:
         - "8080:8080"
-      command: ["-Xmx8g", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/home/build/src/target/Mineotaur-1.0.1.jar", "-start", "/mineotaur"]
+      command: "-Xmx8g -Djava.security.egd=file:/dev/./urandom -jar /home/build/src/target/Mineotaur-1.0.1.jar -start /mineotaur"

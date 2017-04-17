@@ -3,8 +3,8 @@
 set -e
 set -u
 
-HOST=$(su omero -lc "omero config get omero.db.host")
-echo $HOST
+HOST=$(su omero -lc "/opt/omero/server/OMERO.server/bin/omero config get omero.db.host")
+PASS=$(su omero -lc "/opt/omero/server/OMERO.server/bin/omero config get omero.db.pass")
 DATE=$(date +"%Y-%m-%d")
 test -e $DATE && {
   echo $DATE already exists

@@ -17,16 +17,6 @@
 
   roles:
   - role: openmicroscopy.postgresql
-    postgresql_server_listen: "'*'"
-    postgresql_server_auth:
-    - database: all
-      user: omero
-      address: 0.0.0.0/0
-    postgresql_users_databases:
-    - user: omero
-      password: omero
-      databases: [idr]
-    postgresql_server_chown_datadir: True
 
 
 # There are two OMERO and database servers. The next two plays set a
@@ -49,41 +39,25 @@
     {{ idr_environment | default('idr') }}-omero-hosts
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
-  pre_tasks:
-
-  # TODO: This shouldn't be needed any more since it's set in the omero
-  # systemd service file
-  - name: Increase open files and processes
-    copy:
-      content: |
-        omero hard nofile 16384
-        omero soft nofile 16384
-        omero hard noproc 8192
-        omero soft noproc 8192
-      dest: /etc/security/limits.d/95-omero.conf
-    become: yes
-
   roles:
   - role: openmicroscopy.basedeps
-    tags: "basedeps"
   - role: openmicroscopy.cli-utils
-    tags: "cli-utils"
   - role: openmicroscopy.versioncontrol-utils
-    tags: "versioncontrol-utils"
   - role: openmicroscopy.omero-server
-    tags: "omero-server"
   - role: openmicroscopy.python-pydata
-    tags: "python-pydata"
-  - role: omero-web-apps
-    tags: "omero-web-apps"
   - role: openmicroscopy.analysis-tools
 
-  vars:
-    omero_dbhost: "{{ omero_db_host_ansible }}"
-    omero_dbname: idr
-    #omero_upgrade: True
-    omero_systemd_setup: True
-    omero_db_create: False
-    omero_system_managedrepo_group: idr-data
+  # Vars are in group_vars/omero-hosts.yml
 
-  # Additional vars are in group_vars/omero-hosts.yml
+
+# TODO: Add omeroweb hosts group
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+    {{ idr_environment | default('idr') }}-a-omero-hosts
+
+  roles:
+  - role: openmicroscopy.redis
+  - role: openmicroscopy.omero-web
+  - role: omero-web-apps
+
+  # Vars are in group_vars/omero-hosts.yml

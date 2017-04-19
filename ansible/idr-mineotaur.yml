@@ -27,7 +27,7 @@
   - name: change mineotaur to 1000 uid
     become: yes
     file:
-      path: "/tmp/mineotaur"
+      path: "/data/mineotaur"
       owner: 1000
       recurse: yes
 
@@ -39,7 +39,7 @@
       image: imagedata/mineotaur
       entrypoint: java
       volumes:
-        - /tmp/mineotaur/idr0001gramlsysgroscreenA:/mineotaur
+        - /data/mineotaur/idr0001gramlsysgroscreenA:/mineotaur
       ports:
         - "8080:8080"
       command: "-Xmx8g -Djava.security.egd=file:/dev/./urandom -jar /home/build/src/target/Mineotaur-1.0.1.jar -start /mineotaur"

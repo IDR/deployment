@@ -15,7 +15,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.docker
-  version: 1.0.0
+  version: 2.0.0
 
 - src: openmicroscopy.docker-tools
   version: 1.0.0
@@ -144,11 +144,11 @@
 # External development roles
 - name: omero-user
   src: https://github.com/openmicroscopy/ansible-role-omero-user
-  version: master
+  version: 0.1.0
 
 - name: hosts-populate
   src: https://github.com/openmicroscopy/ansible-role-hosts-populate
-  version: master
+  version: 0.1.0
 
 - name: omero-web-apps
   src: https://github.com/openmicroscopy/ansible-role-omero-web-apps
@@ -156,4 +156,4 @@
 
 - name: reboot-server
   src: https://github.com/openmicroscopy/ansible-role-reboot-server
-  version: master
+  version: 0.1.0

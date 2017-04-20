@@ -1,6 +1,6 @@
 ######################################################################
 # Shared variables
-idr_omero_release: "0.3.4"
+idr_omero_release: "0.3.5"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -58,6 +58,7 @@ omero_logmonitor_basedir: /opt/omero/logmonitor
 omero_logmonitor_logs_dir: /opt/omero/server/OMERO.server/var/log
 
 omero_user_bin_omero: /opt/omero/server/OMERO.server/bin/omero
+omero_user_system: omero-server
 
 
 # TODO: The rest of this file should go into a new omero-web-hosts group
@@ -112,14 +113,14 @@ omero_web_config_set:
     omero: "Open Microscopy"
   # Clear the top links and metadata (They will be set later)
   omero.web.ui.top_links: []
-  omero.web.ui.metadata_pane: []
+  omero.web.ui.metadata_panes: []
 
 
 ######################################################################
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- "omero-mapr==0.1.12"
+- "omero-mapr==0.1.13"
 omero_web_apps_names:
 - omero_mapr
 

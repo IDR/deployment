@@ -209,5 +209,4 @@
   - idr_jupyter_notebook_volumes: >
       {
         '{{ idr_jupyter_notebook_host_volume }}': '/notebooks',
-        '/uod/idr/features': {'bind': '/uod/idr/features', 'mode': 'ro'},
       }

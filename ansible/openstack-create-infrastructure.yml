@@ -210,7 +210,7 @@
       openstack_volume_source: "{{ idr_environment_idr }}-omero-data"
 
     - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 10
+      openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_analysis }}-dockermanager"
       openstack_volume_name: jupyter
       openstack_volume_device: /dev/vdb

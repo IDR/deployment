@@ -1,6 +1,6 @@
 # IDR systems documentation
 
-The [Image Data Resource (IDR)](https://idr-demo.openmicroscopy.org/) is an online, public data repository that seeks to store, integrate and serve image datasets from published scientific studies.
+The [Image Data Resource (IDR)](https://idr.openmicroscopy.org/) is an online, public data repository that seeks to store, integrate and serve image datasets from published scientific studies.
 The IDR is also a platform that is entirely built with open-source components and tools, and these documents describe how to build and manage your own version of the IDR.
 
 The IDR is currently hosted on [OpenStack](https://www.openstack.org/) at [EMBL-EBI](http://www.ebi.ac.uk/).

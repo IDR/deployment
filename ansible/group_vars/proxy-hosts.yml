@@ -230,6 +230,6 @@ nginx_proxy_streams:
 
 jekyll_build_sourcedir: /home/omero/about
 jekyll_build_root: /srv/www/html
-jekyll_build_git_repo: https://github.com/IDR/idr-demo.openmicroscopy.org.git
+jekyll_build_git_repo: https://github.com/IDR/idr.openmicroscopy.org.git
 jekyll_build_force_git: True
 jekyll_build_baseurl: /about

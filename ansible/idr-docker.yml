@@ -181,7 +181,7 @@
   - name: jupyterhub | update jupyter omero connection file
     become: yes
     blockinfile:
-      dest: "{{ idr_jupyter_notebook_host_volume }}/library/idr_demo.py"
+      dest: "{{ idr_jupyter_notebook_host_volume }}/library/idr.py"
       state: present
       # This ensures the code will be indented with 4 spaces
       block: |6

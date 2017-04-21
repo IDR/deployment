@@ -15,21 +15,25 @@
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
 
-  - name: download mineotaur data
-    become: yes
-    synchronize:
-      src: "rsync://idr-demo.openmicroscopy.org/mineotaur/"
-      dest: "/tmp/mineotaur/"
-      mode: "pull"
-    delegate_to: "{{ inventory_hostname }}"
-    # TODO: "rsync://{{ omero_rsync_host_ansible }}/mineotaur/" currently inaccessible due to networking
-
-  - name: change mineotaur to 1000 uid
+  - name: create mineotaur directory
     become: yes
     file:
       path: "/data/mineotaur"
       owner: 1000
-      recurse: yes
+      state: directory
+
+  # Run as UID 1000 since this is required by the Docker container
+  - name: download mineotaur data
+    become: yes
+    become_user: 1000
+    synchronize:
+      src: "rsync://idr-demo.openmicroscopy.org/mineotaur/"
+      dest: "/data/mineotaur/"
+      mode: "pull"
+      owner: no
+      group: no
+    delegate_to: "{{ inventory_hostname }}"
+    # TODO: "rsync://{{ omero_rsync_host_ansible }}/mineotaur/" currently inaccessible due to networking
 
   # TODO: add version
   - name: enable mineotaur container
@@ -37,6 +41,7 @@
     docker_container:
       name: mineotaur
       image: imagedata/mineotaur
+      user: 1000
       entrypoint: java
       volumes:
         - /data/mineotaur/idr0001gramlsysgroscreenA:/mineotaur

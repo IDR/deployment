@@ -12,8 +12,8 @@ nginx_proxy_worker_processes: 4
 nginx_proxy_buffers: 32 16k
 
 nginx_proxy_ssl: True
-nginx_proxy_ssl_certificate: /etc/nginx/ssl/idr-fullchain.pem
-nginx_proxy_ssl_certificate_key: /etc/nginx/ssl/idr-privkey.pem
+nginx_proxy_ssl_certificate: idr-fullchain.pem
+nginx_proxy_ssl_certificate_key: idr-privkey.pem
 nginx_proxy_http2: True
 
 
@@ -206,6 +206,11 @@ nginx_proxy_direct_locations:
   redirect302: /about
 - location: "^~ /about"
   alias: /srv/www/html
+
+
+######################################################################
+# Redirect idr-demo -> idr (see private configuration)
+#nginx_proxy_sites:
 
 
 ######################################################################

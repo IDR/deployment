@@ -59,9 +59,8 @@
 - src: openmicroscopy.nginx
   version: 1.0.0
 
-- name: openmicroscopy.nginx-proxy
-  src: https://github.com/manics/ansible-role-nginx-proxy.git
-  version: multi-site
+- src: openmicroscopy.nginx-proxy
+  version: 1.1.0
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0

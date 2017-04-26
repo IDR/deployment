@@ -25,6 +25,7 @@
     - idr_volume_database_db_src: "{{ omit }}"
     - idr_volume_omero_data_src: "{{ omit }}"
     - idr_volume_proxy_nginxcache_src: "{{ omit }}"
+    - idr_volume_dockermanager_data_src: "{{ omit }}"
 
     - idr_vm_storage_group: idr-storage-hosts
     - idr_network_storage: ''
@@ -210,14 +211,17 @@
       openstack_volume_source: "{{ idr_environment_idr }}-omero-data"
 
     - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 10
+      openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_analysis }}-dockermanager"
-      openstack_volume_name: jupyter
+      openstack_volume_name: data
       openstack_volume_device: /dev/vdb
+      # Initialise volume from an existing volume
+      # TODO: Requires https://github.com/ansible/ansible/pull/19320
+      openstack_volume_source: "{{ idr_volume_dockermanager_data_src }}"
 
 
     ############################################################
-    # Analysis Instances
+    # Management Instances
 
     # Dedicated management server
     - role: IDR.openstack-idr-instance

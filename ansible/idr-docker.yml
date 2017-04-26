@@ -181,7 +181,7 @@
   - name: jupyterhub | update jupyter omero connection file
     become: yes
     blockinfile:
-      dest: "{{ idr_jupyter_notebook_host_volume }}/library/idr_demo.py"
+      dest: "{{ idr_jupyter_notebook_host_volume }}/library/idr.py"
       state: present
       # This ensures the code will be indented with 4 spaces
       block: |6
@@ -202,7 +202,6 @@
   # Mount this volume as /notebooks inside the docker container
   # You must ensure it has the correct permissions for writing
   - idr_jupyter_notebook_host_volume: /data/idr-notebooks
-  - idr_jupyter_notebook_repo: https://github.com/IDR/idr-notebooks.git
   - idr_jupyter_omero_host: "{{ hostvars[groups[idr_environment | default('idr') + '-a-omero-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
   - idr_jupyter_omero_user: public
   - idr_jupyter_omero_pass: public
@@ -210,5 +209,4 @@
   - idr_jupyter_notebook_volumes: >
       {
         '{{ idr_jupyter_notebook_host_volume }}': '/notebooks',
-        '/uod/idr/features': {'bind': '/uod/idr/features', 'mode': 'ro'},
       }

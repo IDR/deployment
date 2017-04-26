@@ -1,0 +1,3 @@
+# Runs all playbooks for setting up services built on top of the IDR
+
+- include: idr-mineotaur.yml

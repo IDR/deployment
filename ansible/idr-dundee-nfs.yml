@@ -27,5 +27,5 @@
       fstype: nfs4
       name: "{{ idr_mountpoint }}"
       opts: ro
-      src: idr-data.openmicroscopy.org:/idr
+      src: idr-data.openmicroscopy.org:/uod/idr
       state: mounted

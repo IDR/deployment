@@ -118,8 +118,8 @@
   version: 1.0.0
 
 - name: IDR.idr-jupyter
-  src: https://github.com/IDR/ansible-role-idr-jupyter.git
-  version: 1.1.0
+  src: https://github.com/manics/ansible-role-idr-jupyter.git
+  version: run-direct-0.7.2
 
 - name: IDR.openstack-idr-instance
   src: https://github.com/IDR/ansible-role-openstack-idr-instance.git

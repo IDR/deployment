@@ -1,6 +1,6 @@
 docker_use_ipv4_nic_mtu: True
 
-idr_jupyter_hub_image: "imagedata/jupyterhub-githubauth:0.3.0"
-idr_jupyter_notebook_image: "imagedata/jupyter-docker:0.2.0"
+#idr_jupyter_hub_image: "imagedata/jupyterhub-githubauth:0.3.0"
+idr_jupyter_notebook_image: "manics/jupyter-docker:merge"
 idr_jupyter_notebook_repo: https://github.com/IDR/idr-notebooks.git
 idr_jupyter_notebook_repo_version: "0.4.0"

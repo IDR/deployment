@@ -50,7 +50,7 @@ _nginx_proxy_backends_omero:
 # omero_jupyter_host_ansible may be empty
 _nginx_proxy_backends_jupyter:
 - name: jupyter
-  location: "^~ /jupyter"
+  location: "^~ /jupyter/"
   server: "http://{{ omero_jupyter_host_ansible | default(None) }}"
   websockets: True
   read_timeout: 86400

@@ -144,6 +144,12 @@ omero_web_apps_top_links:
     query_string: { experimenter: -1 }
   attrs:
     title: Phenotypes browser
+- label: Cell Line
+  link:
+    viewname: maprindex_cellline
+    query_string: {"experimenter": -1}
+  attrs:
+    title: Cell Line browser
 - label: siRNAs
   link:
     viewname: maprindex_sirna

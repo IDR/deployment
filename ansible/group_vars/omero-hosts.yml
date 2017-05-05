@@ -314,19 +314,19 @@ omero_web_apps_config_set:
   - menu: "cellline"
     config:
       default:
-        - "Cell line"
+        - "Cell Line"
       all:
-        - "Cell line"
+        - "Cell Line"
       ns:
         - "openmicroscopy.org/mapr/cell_line"
-      label: "Cell line"
+      label: "Cell Line"
   - menu: "celllinesupplementary"
     config:
       default: []
       all: []
       ns:
         - "openmicroscopy.org/mapr/cell_line/supplementary"
-      label: "Cell line supplementary"
+      label: "Cell Line supplementary"
   - menu: "others"
     config:
       default:

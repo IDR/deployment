@@ -326,6 +326,8 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/mapr/cell_line"
       label: "Cell Line"
+      wildcard:
+        enabled: True
   - menu: "celllinesupplementary"
     config:
       default: []

@@ -320,9 +320,9 @@ omero_web_apps_config_set:
   - menu: "cellline"
     config:
       default:
-        - "Cell Lines"
+        - "Cell Line"
       all:
-        - "Cell Lines"
+        - "Cell Line"
       ns:
         - "openmicroscopy.org/mapr/cell_line"
       label: "Cell Lines"

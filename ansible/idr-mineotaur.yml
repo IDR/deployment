@@ -53,6 +53,7 @@
     docker_container:
       name: mineotaur
       image: imagedata/mineotaur
+      restart_policy: always
       user: 1000
       entrypoint: java
       volumes:

@@ -124,6 +124,7 @@ omero_web_apps_packages:
 - "omero-mapr==0.1.14"
 omero_web_apps_names:
 - omero_mapr
+- omero_figure
 
 omero_web_apps_top_links:
 - label: Studies
@@ -174,11 +175,11 @@ omero_web_apps_top_links:
     query_string: {"experimenter": -1}
   attrs:
     title: Organisms browser
-- label: Help
-  link: http://help.openmicroscopy.org/
+- label: Figure
+  link: figure_index
   attrs:
     target: new
-    title: Open OMERO user guide in a new tab
+    title: Open OMERO.figure in a new tab
 
 # Metadata Panes order
 omero_web_apps_ui_metadata_panes:

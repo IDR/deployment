@@ -144,6 +144,12 @@ omero_web_apps_top_links:
     query_string: { experimenter: -1 }
   attrs:
     title: Phenotypes browser
+- label: Cell Lines
+  link:
+    viewname: maprindex_cellline
+    query_string: {"experimenter": -1}
+  attrs:
+    title: Cell Lines browser
 - label: siRNAs
   link:
     viewname: maprindex_sirna
@@ -311,6 +317,24 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/mapr/orf/supplementary"
       label: "ORF supplementary"
+  - menu: "cellline"
+    config:
+      default:
+        - "Cell Line"
+      all:
+        - "Cell Line"
+      ns:
+        - "openmicroscopy.org/mapr/cell_line"
+      label: "Cell Lines"
+      wildcard:
+        enabled: True
+  - menu: "celllinesupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/cell_line/supplementary"
+      label: "Cell Lines supplementary"
   - menu: "others"
     config:
       default:

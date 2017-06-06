@@ -11,6 +11,9 @@
 - src: openmicroscopy.basedeps
   version: 1.0.0
 
+- src: openmicroscopy.cadvisor
+  version: 0.1.0
+
 - src: openmicroscopy.cli-utils
   version: 1.0.0
 
@@ -155,8 +158,16 @@
   version: 0.1.0
 
 - name: prometheus
-  src: https://github.com/manics/ansible-role-prometheus
-  version: devel
+  src: https://github.com/manics/ansible-role-prometheus/archive/docker.tar.gz
+  version: docker
+
+- name: prometheus-jmx
+  src: https://github.com/manics/ansible-role-prometheus-jmx/archive/master.tar.gz
+  version: master
+
+- name: prometheus-node
+  src: https://github.com/manics/ansible-role-prometheus-node/archive/master.tar.gz
+  version: master
 
 - name: reboot-server
   src: https://github.com/openmicroscopy/ansible-role-reboot-server

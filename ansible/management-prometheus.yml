@@ -53,6 +53,11 @@
   - role: prometheus
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
     prometheus_alertmanager_slack_channel: '#trash'
+    # TODO: Use the defaults in the prometheus role instead (30s 5m 3h)
+    # This is currently reduced to make testing easier
+    prometheus_alert_group_wait: 10s
+    prometheus_alert_group_interval: 1m
+    prometheus_alert_repeat_interval: 1m
 
     # groupname must be unique
     prometheus_targets:
@@ -91,11 +96,10 @@
       port: 9280
       jobname: cadvisor-docker
 
+    # Note don't check -a-omero (VAE, not OMERO.web)
     prometheus_http_2xx_internal_targets: >
       {{
         (groups[(idr_environment | default('idr')) + '-omero-hosts'] +
-             (groups[(idr_environment | default('idr')) + '-a-omero-hosts']
-                 ) +
              groups[(idr_environment | default('idr')) + '-proxy-hosts']
         ) |
         map('extract', hostvars, [
@@ -107,8 +111,8 @@
       }}
 
     prometheus_http_2xx_external_targets:
-    - http://idr-demo.openmicroscopy.org/about/
-    - https://idr-demo.openmicroscopy.org/about/
+    - http://idr.openmicroscopy.org/about/
+    - https://idr.openmicroscopy.org/about/
 
     prometheus_rsync_banner_targets:
     - idr-rsync.openmicroscopy.org:873

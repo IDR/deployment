@@ -1,0 +1,6 @@
+######################################################################
+# Variables specific to OMERO read-only servers
+# See omero-hosts.yml for common OMERO variables
+######################################################################
+
+omero_server_datadir_manage: False

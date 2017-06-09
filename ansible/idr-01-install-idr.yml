@@ -4,6 +4,7 @@
 
 - include: idr-local-users.yml
 - include: idr-omero.yml
+- include: idr-omero-readonly.yml
 
 - include: idr-docker.yml
 

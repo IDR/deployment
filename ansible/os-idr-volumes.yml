@@ -10,8 +10,8 @@
     storage_volume_initialise_mount: /var/lib/pgsql
 
 - hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
+    {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
+    {{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts
   roles:
   - role: openmicroscopy.storage-volume-initialise
     storage_volume_initialise_device: "{{ omero_data_vol_dev | default('/dev/vdb') }}"

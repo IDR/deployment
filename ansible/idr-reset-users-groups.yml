@@ -18,7 +18,7 @@
 # TODO: The set_fact tasks are duplicated from idr-omero.yml
 
 
-- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
   tasks:
 
@@ -35,7 +35,7 @@
     register: random_root_pass
 
 
-- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts"
 
   tasks:
 
@@ -53,8 +53,8 @@
 
 
 - hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
+    {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
+    {{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts
 
   roles:
   - openmicroscopy.omero-user

@@ -165,6 +165,24 @@
              ternary([{'net-name': idr_network_storage}], []))
         }}
 
+    # OMERO readonly
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_analysis }}"
+      idr_vm_name: "{{ idr_environment_analysis }}-omeroreadonly"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_omeroreadonly: True
+      # TODO: Could we use the fileserver as an NFS proxy instead and
+      # get rid of the need for the additional network?
+      idr_vm_extra_groups:
+      - "{{ idr_vm_storage_group }}"
+      idr_vm_networks: >
+        {{ [ {'net-name': idr_environment_analysis} ] +
+           ((idr_network_storage | length > 0) |
+             ternary([{'net-name': idr_network_storage}], []))
+        }}
+      idr_vm_count: 2
+
     # Docker-manager server
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_analysis }}"

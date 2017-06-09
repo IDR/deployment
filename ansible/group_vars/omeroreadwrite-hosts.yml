@@ -1,0 +1,4 @@
+######################################################################
+# Variables specific to OMERO read-write servers
+# See omero-hosts.yml for common OMERO variables
+######################################################################

@@ -19,8 +19,9 @@
   - role: openmicroscopy.postgresql
 
 
-# There are two OMERO and database servers. The next two plays set a
-# hostvar so that the OMERO servers connect to the correct database
+# There are two OMERO rw and database servers, and multiple OMERO ro.
+# The next two plays set a hostvar so that the OMERO servers connect to
+# the correct database
 
 - hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
   tasks:
@@ -35,6 +36,17 @@
       omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-a-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
 
+# Currently there's a bug in OMERO read-only which means the database
+# must have been written to at least once by the current server version
+# The easiest way to do this is do:
+# - deploy a persistent read-write server which listens on localhost only
+# - bring up the servers in the required order
+
+# Vars are in
+# - group_vars/omero-hosts.yml
+# - group_vars/omeroreadwrite-hosts.yml
+# - group_vars/omeroreadonly-hosts.yml
+
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
     {{ idr_environment | default('idr') }}-a-omero-hosts
@@ -43,11 +55,18 @@
   - role: openmicroscopy.basedeps
   - role: openmicroscopy.cli-utils
   - role: openmicroscopy.versioncontrol-utils
-  - role: openmicroscopy.omero-server
   - role: openmicroscopy.python-pydata
   - role: openmicroscopy.analysis-tools
 
-  # Vars are in group_vars/omero-hosts.yml
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
+    {{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts
+
+  roles:
+  - role: openmicroscopy.omero-server
+
+  environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
 
 
 # TODO: Add omeroweb hosts group
@@ -61,3 +80,5 @@
   - role: openmicroscopy.omero-web-apps
 
   # Vars are in group_vars/omero-hosts.yml
+
+  environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

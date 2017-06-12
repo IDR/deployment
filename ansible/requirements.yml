@@ -32,14 +32,16 @@
 - src: openmicroscopy.ice
   version: 2.0.0
 
-- src: openmicroscopy.java
-  version: 2.0.0
+- name: openmicroscopy.java
+  src: https://github.com/openmicroscopy/ansible-role-java/archive/master.tar.gz
+  version: master
 
 - src: openmicroscopy.jekyll-build
   version: 1.0.0
 
-- src: openmicroscopy.local-accounts
-  version: 1.0.0
+- name: openmicroscopy.local-accounts
+  src: https://github.com/manics/ansible-role-local-accounts/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.logrotate
   version: 1.0.0
@@ -53,8 +55,9 @@
 - src: openmicroscopy.munin-node
   version: 1.2.1-openmicroscopy1
 
-- src: openmicroscopy.network-cloud-interfaces
-  version: 1.2.0
+- name: openmicroscopy.network-cloud-interfaces
+  src: https://github.com/manics/ansible-role-network-cloud-interfaces/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.nfs-mount
   version: 1.0.0
@@ -77,14 +80,16 @@
 - src: openmicroscopy.omego
   version: 0.1.0
 
-- src: openmicroscopy.omero-logmonitor
-  version: 1.0.0
+- name: openmicroscopy.omero-logmonitor
+  src: https://github.com/manics/ansible-role-omero-logmonitor/archive/decouple-web.tar.gz
+  version: decouple-web
 
 - src: openmicroscopy.omero-python-deps
   version: 1.1.0
 
-- src: openmicroscopy.omero-server
-  version: 2.0.0-m1
+- name: openmicroscopy.omero-server
+  src: https://github.com/manics/ansible-role-omero-server/archive/devel2.tar.gz
+  version: devel
 
 - src: openmicroscopy.omero-user
   version: 0.1.0

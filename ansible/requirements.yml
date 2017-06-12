@@ -18,7 +18,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.docker
-  version: 1.0.0
+  version: 2.1.0
 
 - src: openmicroscopy.docker-tools
   version: 1.0.0
@@ -60,7 +60,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.nfs-share
-  version: 1.0.0
+  version: 1.0.1
 
 - src: openmicroscopy.nginx
   version: 1.0.0
@@ -81,7 +81,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.omero-python-deps
-  version: 1.0.0
+  version: 1.1.0
 
 - src: openmicroscopy.omero-server
   version: 2.0.0-m1
@@ -130,7 +130,7 @@
 
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
-  version: 2.0.0
+  version: 2.0.1
 
 - name: IDR.openstack-idr-instance
   src: https://github.com/IDR/ansible-role-openstack-idr-instance.git

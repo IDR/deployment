@@ -5,8 +5,8 @@
 ######################################################################
 # nginx and SSL
 
-# We need config options from 1.11
-nginx_stable_repo: False
+# The stable line is now 1.12
+nginx_stable_repo: True
 
 nginx_proxy_worker_processes: 4
 nginx_proxy_buffers: 32 16k

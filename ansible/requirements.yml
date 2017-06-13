@@ -1,5 +1,6 @@
 ---
 
+######################################################################
 # External Ansible roles required by this repository
 
 # TODO: check ordering of these dependencies to ensure nested dependencies
@@ -30,18 +31,16 @@
   version: 0.1.0
 
 - src: openmicroscopy.ice
-  version: 2.0.0
+  version: 2.1.0
 
-- name: openmicroscopy.java
-  src: https://github.com/openmicroscopy/ansible-role-java/archive/master.tar.gz
-  version: master
+- src: openmicroscopy.java
+  version: 2.0.1
 
 - src: openmicroscopy.jekyll-build
-  version: 1.0.0
+  version: 1.1.0
 
-- name: openmicroscopy.local-accounts
-  src: https://github.com/manics/ansible-role-local-accounts/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.local-accounts
+  version: 1.0.1
 
 - src: openmicroscopy.logrotate
   version: 1.0.0
@@ -77,8 +76,9 @@
 - src: openmicroscopy.omero-common
   version: 0.1.0
 
-- src: openmicroscopy.omego
-  version: 0.1.0
+- name: openmicroscopy.omego
+  src: https://github.com/manics/ansible-role-omego/archive/temporary-db-check.tar.gz
+  version: temporary-db-check
 
 - name: openmicroscopy.omero-logmonitor
   src: https://github.com/manics/ansible-role-omero-logmonitor/archive/decouple-web.tar.gz
@@ -88,11 +88,12 @@
   version: 1.1.0
 
 - name: openmicroscopy.omero-server
-  src: https://github.com/manics/ansible-role-omero-server/archive/devel2.tar.gz
+  src: https://github.com/manics/ansible-role-omero-server/archive/devel.tar.gz
   version: devel
 
-- src: openmicroscopy.omero-user
-  version: 0.1.0
+- name: openmicroscopy.omero-user
+  src: https://github.com/manics/ansible-role-omero-user/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.omero-web
   version: 1.0.0-m3
@@ -100,8 +101,9 @@
 - src: openmicroscopy.omero-web-apps
   version: 0.1.0
 
-- src: openmicroscopy.openstack-volume-storage
-  version: 1.0.0
+- name: openmicroscopy.openstack-volume-storage
+  src: https://github.com/manics/ansible-role-openstack-volume-storage/archive/ansible23.tar.gz
+  version: ansible23
 
 - src: openmicroscopy.postgresql
   version: 2.0.0
@@ -109,8 +111,9 @@
 - src: openmicroscopy.python-pydata
   version: 1.0.0
 
-- src: openmicroscopy.reboot-server
-  version: 0.1.0
+- name: openmicroscopy.reboot-server
+  src: https://github.com/manics/ansible-role-reboot-server/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.redis
   version: 1.0.0
@@ -118,8 +121,9 @@
 - src: openmicroscopy.rsync-server
   version: 1.0.0
 
-- src: openmicroscopy.selinux-utils
-  version: 1.0.1
+- name: openmicroscopy.selinux-utils
+  src: https://github.com/manics/ansible-role-selinux-utils/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -127,31 +131,36 @@
 - src: openmicroscopy.sudoers
   version: 1.0.0
 
-- src: openmicroscopy.upgrade-distpackages
-  version: 1.0.0
+- name: openmicroscopy.upgrade-distpackages
+  src: https://github.com/manics/ansible-role-upgrade-distpackages/archive/deprecations.tar.gz
+  version: deprecations
 
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
 
+
+######################################################################
+# External IDR roles
+
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
-  version: 2.0.1
+  version: 2.0.2
 
 - name: IDR.openstack-idr-instance
-  src: https://github.com/IDR/ansible-role-openstack-idr-instance.git
-  version: 1.0.2
+  src: https://github.com/manics/ansible-role-openstack-idr-instance/archive/omeroro.tar.gz
+  version: omeroro
 
 - name: IDR.openstack-idr-instance-network
-  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network.git
-  version: 1.1.0
+  src: https://github.com/manics/ansible-role-openstack-idr-instance-network/archive/deprecations.tar.gz
+  version: deprecations
 
 - name: IDR.openstack-idr-keypairs
   src: https://github.com/IDR/ansible-role-openstack-idr-keypairs.git
   version: 1.0.0
 
 - name: IDR.openstack-idr-network
-  src: https://github.com/IDR/ansible-role-openstack-idr-network.git
-  version: 2.0.1
+  src: https://github.com/manics/ansible-role-openstack-idr-network.git
+  version: external-mult
 
 - name: IDR.openstack-idr-security-groups
   src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git

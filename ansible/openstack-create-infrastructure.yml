@@ -77,7 +77,7 @@
       idr_vm_name: "{{ idr_environment_idr }}-omero"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
-      idr_vm_omero: True
+      idr_vm_omeroreadwrite: True
       idr_vm_extra_groups:
       - "{{ idr_vm_storage_group }}"
       idr_vm_networks: >
@@ -156,7 +156,7 @@
       idr_vm_name: "{{ idr_environment_analysis }}-omero"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
-      idr_vm_omero: True
+      idr_vm_omeroreadwrite: True
       idr_vm_extra_groups:
       - "{{ idr_vm_storage_group }}"
       idr_vm_networks: >

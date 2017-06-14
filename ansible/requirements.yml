@@ -54,9 +54,8 @@
 - src: openmicroscopy.munin-node
   version: 1.2.1-openmicroscopy1
 
-- name: openmicroscopy.network-cloud-interfaces
-  src: https://github.com/manics/ansible-role-network-cloud-interfaces/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.network-cloud-interfaces
+  version: 1.2.1
 
 - src: openmicroscopy.nfs-mount
   version: 1.0.0
@@ -91,9 +90,8 @@
   src: https://github.com/manics/ansible-role-omero-server/archive/devel.tar.gz
   version: devel
 
-- name: openmicroscopy.omero-user
-  src: https://github.com/manics/ansible-role-omero-user/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.omero-user
+  version: 0.1.1
 
 - src: openmicroscopy.omero-web
   version: 1.0.0-m3
@@ -101,9 +99,8 @@
 - src: openmicroscopy.omero-web-apps
   version: 0.1.0
 
-- name: openmicroscopy.openstack-volume-storage
-  src: https://github.com/manics/ansible-role-openstack-volume-storage/archive/ansible23.tar.gz
-  version: ansible23
+- src: openmicroscopy.openstack-volume-storage
+  version: 1.1.0
 
 - src: openmicroscopy.postgresql
   version: 2.0.0
@@ -111,9 +108,8 @@
 - src: openmicroscopy.python-pydata
   version: 1.0.0
 
-- name: openmicroscopy.reboot-server
-  src: https://github.com/manics/ansible-role-reboot-server/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.reboot-server
+  version: 0.1.1
 
 - src: openmicroscopy.redis
   version: 1.0.0
@@ -121,9 +117,8 @@
 - src: openmicroscopy.rsync-server
   version: 1.0.0
 
-- name: openmicroscopy.selinux-utils
-  src: https://github.com/manics/ansible-role-selinux-utils/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.selinux-utils
+  version: 1.0.2
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -131,9 +126,8 @@
 - src: openmicroscopy.sudoers
   version: 1.0.0
 
-- name: openmicroscopy.upgrade-distpackages
-  src: https://github.com/manics/ansible-role-upgrade-distpackages/archive/deprecations.tar.gz
-  version: deprecations
+- src: openmicroscopy.upgrade-distpackages
+  version: 1.0.1
 
 - src: openmicroscopy.versioncontrol-utils
   version: 1.0.0
@@ -151,16 +145,16 @@
   version: omeroro
 
 - name: IDR.openstack-idr-instance-network
-  src: https://github.com/manics/ansible-role-openstack-idr-instance-network/archive/deprecations.tar.gz
-  version: deprecations
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network.git
+  version: 1.1.1
 
 - name: IDR.openstack-idr-keypairs
   src: https://github.com/IDR/ansible-role-openstack-idr-keypairs.git
-  version: 1.0.0
+  version: 1.1.0
 
 - name: IDR.openstack-idr-network
-  src: https://github.com/manics/ansible-role-openstack-idr-network.git
-  version: external-mult
+  src: https://github.com/IDR/ansible-role-openstack-idr-network.git
+  version: 3.0.0
 
 - name: IDR.openstack-idr-security-groups
   src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git

@@ -79,9 +79,8 @@
   src: https://github.com/manics/ansible-role-omego/archive/temporary-db-check.tar.gz
   version: temporary-db-check
 
-- name: openmicroscopy.omero-logmonitor
-  src: https://github.com/manics/ansible-role-omero-logmonitor/archive/decouple-web.tar.gz
-  version: decouple-web
+- src: openmicroscopy.omero-logmonitor
+  version: 2.0.0
 
 - src: openmicroscopy.omero-python-deps
   version: 1.1.0
@@ -141,8 +140,8 @@
   version: 2.0.2
 
 - name: IDR.openstack-idr-instance
-  src: https://github.com/manics/ansible-role-openstack-idr-instance/archive/omeroro.tar.gz
-  version: omeroro
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance.git
+  version: 2.0.0
 
 - name: IDR.openstack-idr-instance-network
   src: https://github.com/IDR/ansible-role-openstack-idr-instance-network.git

@@ -1,5 +1,5 @@
 # Load hostvars
-- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
 
 # Setup IDR Mineotaur server
 - hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
@@ -11,7 +11,7 @@
       omero_rsync_host_ansible : >-
         {{
           hostvars[groups[
-            idr_environment | default('idr') + '-omero-hosts'][0]]
+            idr_environment | default('idr') + '-a-omero-hosts'][0]]
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
 
@@ -22,18 +22,30 @@
       owner: 1000
       state: directory
 
+  - name: rsync mineotaur url
+    debug:
+      msg: >-
+        {{ idr_rsync_mineotaur_url | default(
+           'rsync://' + omero_rsync_host_ansible + '/mineotaur/')
+        }}
+
   # Run as UID 1000 since this is required by the Docker container
+  # When running externally pull down the IDR data by defining:
+  # idr_rsync_mineotaur_url: "rsync://idr.openmicroscopy.org/mineotaur/"
   - name: download mineotaur data
     become: yes
     become_user: 1000
     synchronize:
-      src: "rsync://idr-demo.openmicroscopy.org/mineotaur/"
+      src: >-
+        {{
+          idr_rsync_mineotaur_url | default(
+            'rsync://' + omero_rsync_host_ansible + '/mineotaur/')
+        }}
       dest: "/data/mineotaur/"
       mode: "pull"
       owner: no
       group: no
     delegate_to: "{{ inventory_hostname }}"
-    # TODO: "rsync://{{ omero_rsync_host_ansible }}/mineotaur/" currently inaccessible due to networking
 
   # TODO: add version
   - name: enable mineotaur container

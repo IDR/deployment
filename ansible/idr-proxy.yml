@@ -4,7 +4,9 @@
 # full list of backend services to be proxied
 
 # Load hostvars (production OMERO)
-- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+    {{ idr_environment | default('idr') }}-a-omero-hosts
 
 # Load hostvars (jupyter), this should be the proxy idr_environment
 # suffixed with `-a`
@@ -26,6 +28,15 @@
         {{
           hostvars[groups[
             idr_environment | default('idr') + '-omero-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+
+  - name: Get rsync IP
+    set_fact:
+      omero_downloads_host_ansible: >-
+        {{
+          hostvars[groups[
+            idr_environment | default('idr') + '-a-omero-hosts'][0]]
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
 

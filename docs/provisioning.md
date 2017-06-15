@@ -96,6 +96,9 @@ Warning: At present the `nova` command may be used to [attach additional network
 `nova` does not support [`clouds.yaml`](http://docs.openstack.org/developer/os-client-config/).
 This will be fixed when the `openstack` command-line client supports this feature.
 
+Occasionally you may see misleading such as `Quota exceeded for resources: ['floatingip'].`
+If this happens manually associate a floating IP with the idr-proxy server, and re-run the playbook.
+
 
 ## Other platforms
 

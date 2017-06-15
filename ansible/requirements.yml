@@ -24,6 +24,10 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
+- name: openmicroscopy.docker-slack-notifier
+  src: https://github.com/manics/ansible-role-docker-slack-notifier/archive/master.tar.gz
+  version: master
+
 - src: openmicroscopy.haproxy
   version: 2.0.0
 

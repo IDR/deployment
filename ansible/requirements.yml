@@ -163,18 +163,9 @@
   src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git
   version: 1.1.0
 
+
+######################################################################
 # External development roles
-- name: omero-user
-  src: https://github.com/openmicroscopy/ansible-role-omero-user
-  version: 0.1.0
-
-- name: hosts-populate
-  src: https://github.com/openmicroscopy/ansible-role-hosts-populate
-  version: 0.1.0
-
-- name: omero-web-apps
-  src: https://github.com/openmicroscopy/ansible-role-omero-web-apps
-  version: 0.1.0
 
 - name: prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
@@ -186,8 +177,4 @@
 
 - name: prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.0.tar.gz
-  version: 0.1.0
-
-- name: reboot-server
-  src: https://github.com/openmicroscopy/ansible-role-reboot-server
   version: 0.1.0

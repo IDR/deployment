@@ -26,6 +26,9 @@
 - src: openmicroscopy.haproxy
   version: 2.0.0
 
+- src: openmicroscopy.hosts-populate
+  version: 0.1.0
+
 - src: openmicroscopy.ice
   version: 2.0.0
 
@@ -68,12 +71,10 @@
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
 
-- name: openmicroscopy.omero-common
-  src: https://github.com/openmicroscopy/ansible-role-omero-common.git
+- src: openmicroscopy.omero-common
   version: 0.1.0
 
-- name: openmicroscopy.omego
-  src: https://github.com/openmicroscopy/ansible-role-omego.git
+- src: openmicroscopy.omego
   version: 0.1.0
 
 - src: openmicroscopy.omero-logmonitor
@@ -82,13 +83,17 @@
 - src: openmicroscopy.omero-python-deps
   version: 1.0.0
 
-- name: openmicroscopy.omero-server
-  src:  https://github.com/openmicroscopy/ansible-role-omero-server.git
+- src: openmicroscopy.omero-server
   version: 2.0.0-m1
 
-- name: openmicroscopy.omero-web
-  src:  https://github.com/openmicroscopy/ansible-role-omero-web.git
-  version: 1.0.0-m1
+- src: openmicroscopy.omero-user
+  version: 0.1.0
+
+- src: openmicroscopy.omero-web
+  version: 1.0.0-m3
+
+- src: openmicroscopy.omero-web-apps
+  version: 0.1.0
 
 - src: openmicroscopy.openstack-volume-storage
   version: 1.0.0
@@ -98,6 +103,9 @@
 
 - src: openmicroscopy.python-pydata
   version: 1.0.0
+
+- src: openmicroscopy.reboot-server
+  version: 0.1.0
 
 - src: openmicroscopy.redis
   version: 1.0.0

@@ -5,7 +5,7 @@
     {{ idr_environment | default('idr') }}-a-hosts
 
   roles:
-  - role: prometheus-node
+  - role: openmicroscopy.prometheus-node
 
 
 - hosts: >
@@ -13,7 +13,7 @@
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
-  - role: prometheus-jmx
+  - role: openmicroscopy.prometheus-jmx
   # Needed for handlers
   - role: openmicroscopy.omero-common
 
@@ -50,7 +50,7 @@
   - role: openmicroscopy.docker
     docker_use_ipv4_nic_mtu: True
 
-  - role: prometheus
+  - role: openmicroscopy.prometheus
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
     prometheus_alertmanager_slack_channel: '#trash'
     # TODO: Use the defaults in the prometheus role instead (30s 5m 3h)

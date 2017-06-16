@@ -13,7 +13,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.cadvisor
-  version: 0.1.0
+  version: 0.1.1
 
 - src: openmicroscopy.cli-utils
   version: 1.0.0
@@ -167,14 +167,14 @@
 ######################################################################
 # External development roles
 
-- name: prometheus
+- name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
-  version: 0.1.0
+  version: 0.1.1
 
-- name: prometheus-jmx
+- name: openmicroscopy.prometheus-jmx
   src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz
   version: 0.1.0
 
-- name: prometheus-node
-  src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.0.tar.gz
-  version: 0.1.0
+- name: openmicroscopy.prometheus-node
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/master.tar.gz
+  version: master

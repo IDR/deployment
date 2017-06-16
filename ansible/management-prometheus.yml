@@ -8,13 +8,14 @@
   - role: openmicroscopy.prometheus-node
 
 
+# TODO: Do we trust the JMX monitoring agent for OMERO?
+# If not disable this playbook
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
-  # TODO: Enable JMX monitoring?
-  #- role: openmicroscopy.prometheus-jmx
+  - role: openmicroscopy.prometheus-jmx
   # Needed for handlers
   - role: openmicroscopy.omero-common
 

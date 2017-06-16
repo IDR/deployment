@@ -11,6 +11,9 @@
 - src: openmicroscopy.basedeps
   version: 1.0.0
 
+- src: openmicroscopy.cadvisor
+  version: 0.1.0
+
 - src: openmicroscopy.cli-utils
   version: 1.0.0
 
@@ -152,6 +155,18 @@
 
 - name: omero-web-apps
   src: https://github.com/openmicroscopy/ansible-role-omero-web-apps
+  version: 0.1.0
+
+- name: prometheus
+  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
+  version: 0.1.0
+
+- name: prometheus-jmx
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz
+  version: 0.1.0
+
+- name: prometheus-node
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.0.tar.gz
   version: 0.1.0
 
 - name: reboot-server

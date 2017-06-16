@@ -52,12 +52,12 @@
 
   - role: openmicroscopy.prometheus
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
-    prometheus_alertmanager_slack_channel: '#trash'
-    # TODO: Use the defaults in the prometheus role instead (30s 5m 3h)
-    # This is currently reduced to make testing easier
-    prometheus_alert_group_wait: 10s
-    prometheus_alert_group_interval: 1m
-    prometheus_alert_repeat_interval: 1m
+    prometheus_alertmanager_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
+    # The defaults in the prometheus role are (30s 5m 3h)
+    # When testing you may want to decrease these to make it easier
+    #prometheus_alert_group_wait: 10s
+    #prometheus_alert_group_interval: 1m
+    #prometheus_alert_repeat_interval: 1m
 
     # groupname must be unique
     prometheus_targets:

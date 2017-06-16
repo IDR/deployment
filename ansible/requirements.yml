@@ -24,10 +24,6 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
-- name: openmicroscopy.docker-slack-notifier
-  src: https://github.com/manics/ansible-role-docker-slack-notifier/archive/master.tar.gz
-  version: master
-
 - src: openmicroscopy.haproxy
   version: 2.0.0
 
@@ -167,6 +163,10 @@
 ######################################################################
 # External development roles
 
+- name: openmicroscopy.docker-slack-notifier
+  src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.1.tar.gz
+  version: 0.0.1
+
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
   version: 0.1.1
@@ -176,5 +176,5 @@
   version: 0.1.0
 
 - name: openmicroscopy.prometheus-node
-  src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/master.tar.gz
-  version: master
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz
+  version: 0.1.1

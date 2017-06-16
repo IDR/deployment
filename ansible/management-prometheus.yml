@@ -13,7 +13,8 @@
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
-  - role: openmicroscopy.prometheus-jmx
+  # TODO: Enable JMX monitoring?
+  #- role: openmicroscopy.prometheus-jmx
   # Needed for handlers
   - role: openmicroscopy.omero-common
 

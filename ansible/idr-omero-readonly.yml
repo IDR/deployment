@@ -71,9 +71,9 @@
     copy:
       content: |
         config set -- omero.data.dir /data/OMERO
-        config set -- omero.cluster.node_provider ome.security.basic.BasicInMemoryNodeProvider
+        config set -- omero.cluster.node_provider ome.security.basic.InMemoryNodeProvider
         config set -- omero.sessions.session_manager ome.services.sessions.InMemorySessionManagerImpl
-        config set -- omero.security.event_provider ome.security.basic.BasicInMemoryEventProvider
+        config set -- omero.security.event_provider ome.security.basic.InMemoryEventProvider
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
 

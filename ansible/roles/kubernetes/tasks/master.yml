@@ -1,0 +1,72 @@
+---
+# Master tasks
+
+- name: kubernetes | get flannel manifests
+  become: yes
+  get_url:
+    dest: /root
+    url: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/{{ item }}
+  with_items:
+  - kube-flannel.yml
+  - kube-flannel-rbac.yml
+
+- name: kubernetes | create token
+  become: yes
+  shell: "kubeadm token generate > /root/kubernetes.token"
+  args:
+    creates: /root/kubernetes.token
+  when: 'kubernetes_token | length < 1'
+
+- name: kubernetes | read token
+  become: yes
+  slurp:
+    src: /root/kubernetes.token
+  ignore_errors: yes
+  register: kubernetes_read_token
+  when: 'kubernetes_token | length < 1'
+
+- name: kubernetes | set token
+  set_fact:
+    kubernetes_token: "{{ kubernetes_read_token.content | b64decode | trim }}"
+  when: 'kubernetes_token | length < 1'
+
+- name: kubernetes | initialise
+  debug:
+    msg: kubeadm init {{ kubernetes_init_args }}
+
+- name: kubernetes | initialise
+  become: yes
+  command: kubeadm init {{ kubernetes_init_args }}
+  args:
+    creates: /etc/kubernetes/manifests/kube-apiserver.yaml
+  register: kubernetes_kubeadm_init_r
+  # TODO: Always seems to return 1, whether it works or errors
+  failed_when: >
+    (kubernetes_kubeadm_init_r.rc != 0) and
+    (kubernetes_kubeadm_init_r.rc != 1) and
+    ("[apiclient] First node has registered after "
+       not in kubernetes_kubeadm_init_r.stdout)
+
+- name: kubernetes | flannel-rbac
+  become: yes
+  command: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f {{ item }}
+  args:
+    creates: /root/kubernetes.initialised
+  with_items:
+  - /root/kube-flannel-rbac.yml
+  - /root/kube-flannel.yml
+
+# check 'flannel' in kubectl --kubeconfig /etc/kubernetes/admin.conf get clusterrole
+# check 'flannel' in kubectl --kubeconfig /etc/kubernetes/admin.conf get serviceaccount
+- name: kubernetes | create flag file
+  become: yes
+  copy:
+    content: "Applied kube-flannel-rbac.yml kube-flannel.yml"
+    dest: /root/kubernetes.initialised
+    force: yes
+
+
+# Check everything running (especially DNS)
+#kubectl --kubeconfig /etc/kubernetes/admin.conf get pods --all-namespaces
+# master: check node connected
+#kubectl --kubeconfig /etc/kubernetes/admin.conf get nodes

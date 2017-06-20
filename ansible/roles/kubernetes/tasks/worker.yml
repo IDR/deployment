@@ -1,0 +1,19 @@
+---
+# Worker tasks
+
+- name: kubernetes worker | join node
+  debug:
+    msg: kubeadm join {{ kubernetes_join_args }}
+
+- name: kubernetes worker | join node
+  become: yes
+  command: kubeadm join --token {{ kubernetes_token }} {{ kubernetes_master }}
+  args:
+    creates: /root/kubernetes.initialised
+
+- name: kubernetes | create flag file
+  become: yes
+  copy:
+    content: "Kubernetes worker"
+    dest: /root/kubernetes.initialised
+    force: yes

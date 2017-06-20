@@ -1,0 +1,49 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: tests/requirements.yml
+
+driver:
+  name: vagrant
+
+vagrant:
+  platforms:
+    - name: centos7
+      box: centos/7
+  providers:
+    - name: virtualbox
+      type: virtualbox
+      options:
+        memory: 512
+        cpus: 1
+  instances:
+    - name: kubernetes-master
+      interfaces:
+        - network_name: private_network
+          type: dhcp
+          auto_config: true
+      ansible_groups:
+      - vagrant-hosts
+    - name: kubernetes-worker
+      interfaces:
+        - network_name: private_network
+          type: dhcp
+          auto_config: true
+      ansible_groups:
+      - vagrant-hosts
+
+# docker in molecule is not supported by this role
+
+ansible:
+  diff: True
+  #verbose: True
+  group_vars:
+    docker-hosts:
+      # This should allow docker-in-docker to work
+      docker_storage_driver: vfs
+      molecule_ansible_iface: ansible_eth0
+    vagrant-hosts:
+      molecule_ansible_iface: ansible_eth1
+
+verifier:
+  name: testinfra

@@ -1,0 +1,6 @@
+---
+# handlers file for kubernetes
+
+- name: kubernetes disable selinux without reboot
+  become: yes
+  command: setenforce permissive

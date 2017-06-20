@@ -1,0 +1,14 @@
+---
+- hosts: kubernetes-master
+  roles:
+    - role: kubernetes
+      kubernetes_role: master
+      kubernetes_advertise_address: "{{ hostvars['kubernetes-master'][molecule_ansible_iface].ipv4.address }}"
+
+- hosts: kubernetes-worker
+  roles:
+    - role: kubernetes
+      kubernetes_role: worker
+      kubernetes_token: "{{ hostvars['kubernetes-master'].kubernetes_token }}"
+      #molecule_ansible_iface: ansible_eth1
+      kubernetes_master: "{{ hostvars['kubernetes-master'][molecule_ansible_iface].ipv4.address }}:6443"

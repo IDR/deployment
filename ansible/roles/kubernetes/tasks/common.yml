@@ -1,0 +1,74 @@
+---
+# Common tasks for master and worker
+
+# https://kubernetes.io/docs/setup/independent/install-kubeadm/#installing-kubelet-and-kubeadm
+- name: kubernetes | import rpm gpg key
+  become: yes
+  rpm_key:
+    key: "{{ item }}"
+    state: present
+  with_items:
+  - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+  - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+- name: kubernetes | setup repo
+  become: yes
+  yum_repository:
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    description: Kubernetes
+    enabled: yes
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    name: kubernetes
+    # Bug in rpm_key means the key isn't imported properly
+    # https://github.com/ansible/ansible/issues/20711
+    repo_gpgcheck: no
+    state: present
+
+- name: kubernetes | disable selinux
+  become: yes
+  selinux:
+    policy: targeted
+    state: permissive
+  when: selinux_enabled
+  # selinux only sets the policy on bootup, use this to change at runtime:
+  notify:
+  - kubernetes disable selinux without reboot
+
+# Using the distribution docker since that's what the instructions suggest
+- name: kubernetes | install docker
+  become: yes
+  yum:
+    name: docker
+    state: present
+
+- name: kubernetes | enable docker
+  become: yes
+  service:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: kubernetes | set sysctl bridge-nf-call-iptables
+  become: yes
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    reload: yes
+    sysctl_file: /etc/sysctl.d/kubernetes.conf
+
+- name: kubernetes | install packages
+  become: yes
+  yum:
+    name:
+    - kubeadm
+    - kubectl
+    - kubelet
+    - kubernetes-cni
+    state: present
+
+- name: kubernetes | enable kubelet
+  become: yes
+  service:
+    name: kubelet
+    enabled: yes
+    state: started

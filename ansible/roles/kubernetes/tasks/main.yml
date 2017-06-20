@@ -1,0 +1,10 @@
+---
+# tasks file for kubernetes
+
+- include: common.yml
+
+- include: master.yml
+  when: kubernetes_role == 'master'
+
+- include: worker.yml
+  when: kubernetes_role == 'worker'

@@ -4,3 +4,15 @@
 - name: kubernetes disable selinux without reboot
   become: yes
   command: setenforce permissive
+
+# The conditional means you can safely notify this on non-systemd servers
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+  when: ansible_service_mgr == 'systemd'
+
+- name: restart kubelet
+  become: yes
+  service:
+    name: kubelet
+    state: restarted

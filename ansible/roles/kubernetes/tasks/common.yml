@@ -66,6 +66,18 @@
     - kubernetes-cni
     state: present
 
+# This is needed to avoid kubeadm initialising the cluster with a short
+# hostname, but kubelet restarting with the long hostname
+# See https://github.com/kubernetes/kubeadm/issues/144
+- name: kubernetes | override kubelet hostname
+  become: yes
+  template:
+    dest: /etc/systemd/system/kubelet.service.d/05-hostname.conf
+    src: systemd-system-kubelet-service-d-05-hostname-conf.j2
+  notify:
+  - reload systemd
+  - restart kubelet
+
 - name: kubernetes | enable kubelet
   become: yes
   service:

@@ -108,7 +108,7 @@
   - name: OMERO.server get ManagedRepository dirs
     find:
       file_type: directory
-      paths: /data/OMERO-ro/ManagedRepository/
+      paths: /data/OMERO-readonly/ManagedRepository/
       recurse: no
     register: omero_ro_managedrepo_dirs
 

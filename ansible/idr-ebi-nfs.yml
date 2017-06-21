@@ -1,7 +1,6 @@
 # Self-contained Ansible playbook for setting up the Embassy IDR NFS shares
 - hosts: >
     {{ idr_environment | default('idr') }}-ebi-nfs
-    {{ idr_environment | default('idr') }}-a-ebi-nfs
 
   tasks:
 

@@ -5,7 +5,7 @@
 # TODO: Consider putting some of this into a role
 
 # OMERO read-write fileserver for OMERO read-only
-- hosts: "{{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
   roles:
   - role: openmicroscopy.nfs-share
     nfs_shares:
@@ -38,12 +38,12 @@
 
 
 # Read-only OMERO.server config
-- hosts: "{{ idr_environment | default('idr') }}-a-omeroreadonly-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
 
   pre_tasks:
   - name: Get fileserver host
     set_fact:
-      omero_fileserver_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-a-omeroreadwrite-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+      omero_fileserver_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-omeroreadwrite-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
   roles:
   - role: openmicroscopy.nfs-mount
@@ -126,15 +126,15 @@
 # Load hostvars
 
 
-- hosts: "{{ idr_environment | default('idr') }}-a-omeroreadonly-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
   tasks:
   - name: Get database host
     set_fact:
-      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-a-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
 
 - hosts: >
-    {{ idr_environment | default('idr') }}-a-omeroreadonly-hosts
+    {{ idr_environment | default('idr') }}-omeroreadonly-hosts
 
   roles:
   - role: openmicroscopy.omero-server

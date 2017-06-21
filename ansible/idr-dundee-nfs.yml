@@ -4,7 +4,6 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-uod-nfs
-    {{ idr_environment | default('idr') }}-a-uod-nfs
 
   vars:
     idr_mountpoint: /uod/idr

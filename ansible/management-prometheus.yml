@@ -2,7 +2,6 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-hosts
-    {{ idr_environment | default('idr') }}-a-hosts
 
   roles:
   - role: openmicroscopy.prometheus-node
@@ -12,7 +11,6 @@
 # If not disable this playbook
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
   - role: openmicroscopy.prometheus-jmx
@@ -39,8 +37,8 @@
 
 
 - hosts: >
-    {{ idr_environment | default('idr') }}-a-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-a-dockerworker-hosts
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
 
@@ -68,7 +66,6 @@
     - groupname: nodes
       groups:
       - "{{ idr_environment | default('idr') + '-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-a-hosts' }}"
       port: 9100
       jobname: node-exporter
 
@@ -76,32 +73,28 @@
     - groupname: blitz
       # groups:
       # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9180
       jobname: jmx-blitz
 
     - groupname: indexer
       # groups:
       # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9181
       jobname: jmx-indexer
 
     - groupname: pixeldata
       # groups:
       # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9182
       jobname: jmx-pixeldata
 
     - groupname: cadvisor
       groups:
-      - "{{ idr_environment | default('idr') + '-a-dockermanager-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-a-dockerworker-hosts' }}"
+      - "{{ idr_environment | default('idr') + '-dockermanager-hosts' }}"
+      - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
 
-    # Note don't check -a-omero (VAE, not OMERO.web)
     prometheus_http_2xx_internal_targets: >
       {{
         (groups[(idr_environment | default('idr')) + '-omero-hosts'] +

@@ -5,11 +5,30 @@
   roles:
     - role: kubernetes
       kubernetes_role: master
-      kubernetes_advertise_address: >
+      kubernetes_advertise_address: >-
         {{ hostvars[groups[idr_environment | default('idr') +
            '-dockermanager-hosts'][0]]['ansible_' +
            (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
+
+  tasks:
+
+  - name: Create kubernetes spec directory
+    become: yes
+    file:
+      path: /opt/kubernetes-spec
+      state: directory
+
+  - name: Copy kubernetes spec files
+    become: yes
+    copy:
+      dest: /opt/kubernetes-spec/
+      src: "{{ item }}"
+    with_items:
+    - jupyterhub-config-example.yml
+    - jupyterhub-deployment.yml
+    - jupyterhub-config.yml
+
 
 - hosts: >
     {{ idr_environment | default('idr') }}-dockerworker-hosts
@@ -25,3 +44,8 @@
            '-dockermanager-hosts'][0]]['ansible_' +
            (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}:6443
+
+# Now run:
+# kubectl get nodes
+# kubectl apply -f jupyterhub-config.yml -f jupyterhub-deployment.yml
+# kubectl logs -f deployment/jupyterhub-deployment

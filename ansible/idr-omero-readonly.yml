@@ -71,6 +71,7 @@
     copy:
       content: |
         config set -- omero.data.dir /data/OMERO
+        config set -- omero.cluster.read_only true
         config set -- omero.cluster.node_provider ome.security.basic.InMemoryNodeProvider
         config set -- omero.sessions.session_manager ome.services.sessions.InMemorySessionManagerImpl
         config set -- omero.security.event_provider ome.security.basic.InMemoryEventProvider
@@ -78,7 +79,7 @@
       force: yes
 
   # There are several bugs- read-only still needs write access to several
-  # directories including { omero.data.dir }/.omero
+  # directories including ManagedRepository/.omero
 
   - name: OMERO.server read-only data dir
     become: yes
@@ -101,8 +102,10 @@
     with_items:
     - Files
     - FullText
+#    - ManagedRepository
     - Pixels
     - Thumbnails
+    - .omero
 
   # And now we need to symlink ManagedRepository/*
   - name: OMERO.server get ManagedRepository dirs
@@ -122,7 +125,7 @@
     with_items: "{{ omero_ro_managedrepo_dirs.files }}"
 
 
-- hosts: "{{ idr_environment | default('idr') }}-a-database-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
 # Load hostvars
 
 

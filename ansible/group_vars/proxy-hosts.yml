@@ -20,7 +20,13 @@ nginx_proxy_http2: True
 ######################################################################
 # OMERO.web proxy
 
+nginx_proxy_log_format: main_timed_upstream_cache
+
 nginx_proxy_websockets_enable: True
+
+nginx_proxy_upstream_servers:
+- name: omeroreadonly
+  servers: "{{ omero_omeroreadonly_hosts }}"
 
 # The regex is getting complicated, so unroll it into a list and join
 _nginx_proxy_omero_locations:
@@ -37,15 +43,15 @@ _nginx_proxy_omero_locations:
 _nginx_proxy_backends_omero:
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
-  server: "http://{{ omero_omero_host_ansible }}"
+  server: http://omeroreadonly
   cache_validity: 180d
 - name: omerostatic
   location: ~ /static/*
-  server: "http://{{ omero_omero_host_ansible }}"
+  server: http://omeroreadonly
   cache_validity: 30d
 - name: omero
   location: /
-  server: "http://{{ omero_omero_host_ansible }}"
+  server: http://omeroreadonly
 
 # omero_jupyter_host_ansible may be empty
 _nginx_proxy_backends_jupyter:

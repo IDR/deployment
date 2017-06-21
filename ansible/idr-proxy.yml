@@ -24,14 +24,15 @@
   - name: Get omero IP
     set_fact:
       # TODO: get all readonly
-      omero_omero_host_ansible: >-
+      omero_omeroreadonly_hosts: >-
         {{
-          hostvars[groups[
-            idr_environment | default('idr') + '-omero-hosts'][0]]
-            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+          groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
+          map('extract', hostvars,
+            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
         }}
 
   - name: Get rsync IP
+    # TODO: get all readonly
     set_fact:
       omero_downloads_host_ansible: >-
         {{
@@ -42,6 +43,7 @@
     when: "{{ groups[idr_environment | default('idr') + '-omero-hosts'] is defined }}"
 
   - name: Get jupyterhub IP
+    # TODO: get all?
     set_fact:
       # Optional, so that it can run in an environment where there's only
       # an OMERO server but no analysis platform

@@ -12,144 +12,23 @@
 # TODO: Convert this into one or more roles
 
 
-- hosts: "{{ idr_environment | default('idr') }}-a-docker-hosts"
-
-  pre_tasks:
-
-  # This sets a host_var on all docker-hosts which can be used in other plays
-  - name: enable/disable docker swarm
-    set_fact:
-      # Disable docker swarm mode until we're more confident in running
-      # JupyterHub
-      docker_swarm_enabled: False
-      #docker_swarm_enabled: True
-
-  roles:
-
-  - role: openmicroscopy.docker
-  - role: openmicroscopy.docker-tools
-
-  tasks:
-
-  - name: docker swarm | check active
-    become: yes
-    shell: "docker info 2> /dev/null | sed -n 's/^Swarm: //p'"
-    check_mode: no
-    ignore_errors: yes
-    register: docker_swarm_active
-    changed_when: False
-
-  # TODO: Maybe check docker_use_ipv4_nic_mtu?
-  # TODO: Use docker_network when we switch to Ansible 2.2
-  - name: docker swarm | check mtu
-    become: yes
-    command: docker network inspect docker_gwbridge -f "{{ '{{' }} index .Options \"com.docker.network.driver.mtu\" {{ '}}' }}"
-    check_mode: no
-    #ignore_errors: yes
-    register: docker_swarm_net_mtu
-    when: docker_swarm_enabled
-    #changed_when: "(docker_use_ipv4_nic_mtu | default(True)) and
-    changed_when: docker_swarm_net_mtu.stdout != "{{ ansible_default_ipv4.mtu }}"
-    failed_when: "(docker_swarm_net_mtu.rc != 0) and {{ not docker_swarm_net_mtu.stderr.endswith('No such network: docker_gwbridge') }}"
-    notify:
-    - docker swarm | network mtu delete docker_gwbridge
-
-  handlers:
-
-  - name: docker swarm | network mtu delete docker_gwbridge
-    become: yes
-    command: docker network rm docker_gwbridge
-    register: docker_swarm_net_rm
-    failed_when: "(docker_swarm_net_rm.rc != 0) and {{ not docker_swarm_net_rm.stderr.endswith('network docker_gwbridge not found') }}"
-    notify:
-    - docker swarm | network mtu create docker_gwbridge
-
-  # TODO: Make subnet configurable
-  - name: docker swarm | network mtu create docker_gwbridge
-    become: yes
-    command: docker network create --opt com.docker.network.driver.mtu={{ ansible_default_ipv4.mtu }} --subnet 172.18.0.0/16 docker_gwbridge
+- include: idr-kubernetes.yml
 
 
-- hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
-
-  pre_tasks:
-
-  - name: docker swarm | get docker host ips
-    set_fact:
-      docker_host_ips: "{{ groups[idr_environment | default('idr') + '-a-docker-hosts'] | map('extract', hostvars, 'ansible_' + (idr_net_iface | default('eth0'))) | map(attribute='ipv4') | map(attribute='address') | list }}"
-
-  # Create a list of dicts: http://stackoverflow.com/a/35608380
-  # TODO: `no_root_squash` is potentially unsafe but docker requires root
-  - name: docker swarm | get docker nfs server config
-    set_fact:
-      docker_nfs_clients:
-        "{{ docker_nfs_clients | default([]) + [ { 'host': item, 'options': 'rw,no_root_squash' } ] }}"
-    with_items: "{{ docker_host_ips }}"
-
-  - debug:
-      msg: "{{ docker_nfs_clients }}"
-
-  roles:
-
-  - role: openmicroscopy.nfs-share
-    nfs_shares: "{{ {'/data': docker_nfs_clients } }}"
-    when: docker_swarm_enabled
-
-  tasks:
-
-  - name: docker swarm | manager address
-    set_fact:
-      docker_swarm_manager_ip: "{{ hostvars[groups[idr_environment | default('idr') + '-a-dockermanager-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
-
-  - name: docker swarm | initialise
-    become: yes
-    command: docker swarm init --advertise-addr {{ docker_swarm_manager_ip }}
-    when: docker_swarm_active.stdout != 'active' and docker_swarm_enabled
-
-  - name: docker swarm | get worker token
-    become: yes
-    command: docker swarm join-token worker -q
-    register: docker_swarm_worker_token_out
-    when: docker_swarm_enabled
-
-  - name: docker swarm | worker token
-    set_fact:
-      docker_swarm_worker_token: "{{ docker_swarm_worker_token_out.stdout }}"
-    when: docker_swarm_enabled
-
-
-- hosts: "{{ idr_environment | default('idr') }}-a-dockerworker-hosts"
-
-  tasks:
-
-  - name: docker swarm | mount nfs share
-    become: yes
-    mount:
-      fstype: nfs4
-      name: "/data"
-      opts: rsize=8192,wsize=8192,timeo=14,intr,rw
-      src: "{{ manager_ip }}:/data"
-      state: mounted
-    when: docker_swarm_enabled
-
-  - name: docker swarm | join worker
-    become: yes
-    command: docker swarm join --token {{ token }} {{ manager_ip }}
-    when: docker_swarm_enabled and docker_swarm_active.stdout != 'active'
-
-  vars:
-    token: "{{ hostvars[groups[idr_environment | default('idr') + '-a-dockermanager-hosts'][0]]['docker_swarm_worker_token'] }}"
-    manager_ip: "{{ hostvars[groups[idr_environment | default('idr') + '-a-dockermanager-hosts'][0]]['docker_swarm_manager_ip'] }}"
-
-
-- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
   # Empty playbook to force loading of omero-hosts hostvars
 
-- hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
+
+- hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 
   roles:
   - role: openmicroscopy.versioncontrol-utils
-  - role: IDR.idr-jupyter
+  - role: openmicroscopy.nfs-share
+    nfs_shares:
+      /data:
+      - host: "*"
+        options: 'ro'
+#  - role: IDR.idr-jupyter
 
   tasks:
 
@@ -191,28 +70,42 @@
                 PASSWORD = "{{ idr_jupyter_omero_pass | quote }}"
 
   vars:
-  - idr_jupyter_docker_swarm: "{{ docker_swarm_enabled }}"
-
-  # Default is system (PAM)
-  #- idr_jupyter_authenticator:
-  #- idr_jupyter_authenticator: "dummyauthenticator.DummyAuthenticator"
-
-  - idr_docker_pull_latest: True
-  - idr_jupyter_ip: "{{ hostvars[inventory_hostname]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
-
   # Mount this volume as /notebooks inside the docker container
   # You must ensure it has the correct permissions for writing
   - idr_jupyter_notebook_host_volume: /data/idr-notebooks
   - idr_jupyter_omero_host: >
       {{
-        groups[idr_environment | default('idr') + '-a-omeroreadonly-hosts'] |
+        groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
         map('extract', hostvars,
           ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
       }}
   - idr_jupyter_omero_user: public
   - idr_jupyter_omero_pass: public
 
-  - idr_jupyter_notebook_volumes: >
-      {
-        '{{ idr_jupyter_notebook_host_volume }}': '/notebooks',
-      }
+#  - idr_jupyter_notebook_volumes: >
+#      {
+#        '{{ idr_jupyter_notebook_host_volume }}': '/notebooks',
+#      }
+
+- hosts: "{{ idr_environment | default('idr') }}-dockerworker-hosts"
+
+  tasks:
+
+  - name: jupyterhub | install docker-python
+    become: yes
+    yum:
+      name: docker-python
+      state: present
+
+  - name: jupyterhub | pull docker images in advance
+    become: yes
+    docker_image:
+      name: "{{ item }}"
+      state: "present"
+      force: "{{ idr_docker_pull_latest }}"
+    with_items:
+    - "{{ idr_jupyter_hub_image }}"
+    - "{{ idr_jupyter_notebook_image }}"
+
+  vars:
+  - idr_docker_pull_latest: True

@@ -40,6 +40,7 @@
   yum:
     name: docker
     state: present
+  when: kubernetes_install_docker
 
 - name: kubernetes | enable docker
   become: yes
@@ -47,6 +48,7 @@
     name: docker
     enabled: yes
     state: started
+  when: kubernetes_install_docker
 
 - name: kubernetes | set sysctl bridge-nf-call-iptables
   become: yes
@@ -72,8 +74,8 @@
 - name: kubernetes | override kubelet hostname
   become: yes
   template:
-    dest: /etc/systemd/system/kubelet.service.d/05-hostname.conf
-    src: systemd-system-kubelet-service-d-05-hostname-conf.j2
+    dest: /etc/systemd/system/kubelet.service.d/15-centos.conf
+    src: systemd-system-kubelet-service-d-centos-conf.j2
   notify:
   - reload systemd
   - restart kubelet

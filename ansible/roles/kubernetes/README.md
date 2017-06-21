@@ -16,16 +16,24 @@ To check whether the cluster has been successfully deployed try on a master node
 Dependencies
 ------------
 
+This role will install the distribution Docker package.
+Using the upstream package is currently not supported.
 
 
 Role Variables
 --------------
 
+Required:
+- `kubernetes_role`: Either `master` or `worker`, currently only a single master is supported
+
+Optional:
+- `kubernetes_token`: The token for initialising/joining a cluster
+- `kubernetes_advertise_address`: The address for connecting to the Kubernetes master
+- `kubernetes_install_docker`: Whether to automatically install the distribution docker (Kubernetes will probably fail if you try to use the upstream package)
 
 
 Example Playbooks
 -----------------
-
 
 
 Author Information

@@ -1,0 +1,27 @@
+---
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+  roles:
+    - role: kubernetes
+      kubernetes_role: master
+      kubernetes_advertise_address: >
+        {{ hostvars[groups[idr_environment | default('idr') +
+           '-dockermanager-hosts'][0]]['ansible_' +
+           (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
+  roles:
+    - role: kubernetes
+      kubernetes_role: worker
+      kubernetes_token: >-
+        {{ hostvars[groups[idr_environment | default('idr') +
+           '-dockermanager-hosts'][0]].kubernetes_token
+        }}
+      kubernetes_master: >
+        {{ hostvars[groups[idr_environment | default('idr') +
+           '-dockermanager-hosts'][0]]['ansible_' +
+           (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}:6443

@@ -193,18 +193,16 @@
       idr_vm_networks:
       - net-name: "{{ idr_environment_analysis }}"
 
-    # TODO: For the initial release we're staying with a single analysis VM
-    # until we're more confident in Docker swarm
     # Docker-worker server
-    #- role: IDR.openstack-idr-instance
-    #  idr_environment: "{{ idr_environment_analysis }}"
-    #  idr_vm_name: "{{ idr_environment_analysis }}-dockerworker"
-    #  idr_vm_image: "{{ vm_image }}"
-    #  idr_vm_flavour: "{{ vm_flavour_large }}"
-    #  idr_vm_dockerworker: True
-    #  idr_vm_networks:
-    #  - net-name: "{{ idr_environment_analysis }}"
-    #  idr_vm_count: 1
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_analysis }}"
+      idr_vm_name: "{{ idr_environment_analysis }}-dockerworker"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_dockerworker: True
+      idr_vm_networks:
+      - net-name: "{{ idr_environment_analysis }}"
+      idr_vm_count: 2
 
 
     ############################################################

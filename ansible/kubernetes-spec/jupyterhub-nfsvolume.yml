@@ -11,8 +11,7 @@ spec:
     - ReadOnlyMany
   storageClassName: idr-notebooks-ro
   nfs:
-    # TODO: use the right IP
-    server: 192.168.1.8
+    server: {{ jupyter_nfs_host_ansible }}
     path: /data/idr-notebooks
 
 ---

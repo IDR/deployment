@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyterhub-config
+  namespace: default
+data:
+  jupyterhub_config.py: |
+    import os
+
+    c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
+    c.JupyterHub.ip = '0.0.0.0'
+
+    c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
+    c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be really slow
+    c.KubeSpawner.singleuser_image_spec = 'imagedata/jupyter-docker:develop'
+    c.KubeSpawner.singleuser_uid = 1000
+
+    c.KubeSpawner.hub_connect_ip = os.environ['JUPYTERHUB_PROXY_SERVICE_HOST']
+    c.KubeSpawner.hub_connect_port = int(os.environ['JUPYTERHUB_PROXY_SERVICE_PORT'])
+
+    c.KubeSpawner.volumes = [{
+        'name': 'idr-notebooks',
+        'persistentVolumeClaim': {'claimName': 'idr-notebooks-ro'}
+    }]
+    c.KubeSpawner.volume_mounts = [{
+        'mountPath': '/notebooks',
+        'name': 'idr-notebooks'}
+    ]
+
+    c.Authenticator.whitelist = {{ idr_jupyter_users | to_json }}
+    c.Authenticator.admin_users = {{ idr_jupyter_admins | to_json }}
+
+    {% if idr_jupyter_authenticator == 'system' %}
+    # Use default authenticator
+    {% elif idr_jupyter_authenticator == 'github' %}
+    # TODO: Switch back to GitHubOAuthenticator
+    c.JupyterHub.authenticator_class = "oauthenticator.GitHubOrgOAuthenticator"
+    c.GitHubOAuthenticator.oauth_callback_url = "{{ idr_jupyter_urlbase }}/jupyter/hub/oauth_callback"
+    c.GitHubOAuthenticator.client_id = "{{ idr_jupyter_github_id }}"
+    c.GitHubOAuthenticator.client_secret = "{{ idr_jupyter_github_secret }}"
+    # https://github.com/jupyterhub/oauthenticator/pull/58 is ready
+    #c.GitHubOAuthenticator.github_organization_whitelist = {{ idr_jupyter_github_orgs | to_json }}
+    c.GitHubOrgOAuthenticator.github_organization_whitelist = {{ idr_jupyter_github_orgs | to_json }}
+    {% else %}
+    c.JupyterHub.authenticator_class = "{{ idr_jupyter_authenticator }}"
+    {% endif %}

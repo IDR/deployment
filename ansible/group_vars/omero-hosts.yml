@@ -99,7 +99,7 @@ omero_web_config_set:
   omero.web.public.enabled: True
   omero.web.public.server_id: 1
   omero.web.public.user: public
-  omero.web.public.password: "{{ idr_secret_omero_web_public_password | default('public') }}"
+  omero.web.public.password: public
   omero.web.public.url_filter: "^/(webadmin/myphoto/|mapr/|webclient/(?!(action|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script))|webgateway/(?!(archived_files|download_as)))"
   omero.web.login_redirect:
     redirect:

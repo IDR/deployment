@@ -6,35 +6,35 @@
 
 # OMERO read-write fileserver for OMERO read-only
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
+
   roles:
+
   - role: openmicroscopy.nfs-share
     nfs_shares:
       /data/OMERO:
       - host: "*"
         options: 'ro'
       /data/OMERO/BioFormatsCache:
+      # TODO: Limit which hosts can write to this dir
       - host: "*"
         options: 'rw'
 
-# Lock down the read-write node in the read-only cluster
-- hosts: "{{ idr_environment | default('idr') }}-a-omeroreadwrite-hosts"
+  # Include restart handlers
+  - role: openmicroscopy.omero-common
 
   tasks:
-
-  - name: OMERO.server config directory (pre-install)
-    become: yes
-    file:
-      path: /opt/omero/server/config/
-      recurse: yes
-      state: directory
-
+  # Lock down the read-write node in the read-only cluster
+  # TODO: This doesn't seem to work, OMERO is still accessible from
+  # other servers
   - name: OMERO.server prevent external access
     become: yes
     copy:
       content: |
-        config set Ice.Admin.Endpoints 'tcp -h localhost'
+        config set -- Ice.Admin.Endpoints 'tcp -h localhost'
       dest: /opt/omero/server/config/omero-localhostonly-config.omero
       force: yes
+    notify:
+    - restart omero-server
 
 
 # Read-only OMERO.server config
@@ -54,6 +54,9 @@
     - path: /data/OMERO/BioFormatsCache
       location: "{{ omero_fileserver_host_ansible }}:/data/OMERO/BioFormatsCache"
       opts: rw,sync
+
+  # Include restart handlers
+  - role: openmicroscopy.omero-common
 
   tasks:
 
@@ -77,6 +80,8 @@
         config set -- omero.security.event_provider ome.security.basic.InMemoryEventProvider
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
+    notify:
+    - restart omero-server
 
   # There are several bugs- read-only still needs write access to several
   # directories including ManagedRepository/.omero

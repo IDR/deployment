@@ -1,18 +1,13 @@
 # Setup IDR Docker nodes
-# Inspired by https://thisendout.com/2016/09/13/deploying-docker-swarm-with-ansible/
-# Host groups must be named $IDR_ENVIRONMENT-a
 
-# TODO: Docker uses an incorrect MTU on OpenStack VMs, and it is not possible
-# to easily set it on the swarm ingress network. See this workround:
-# https://github.com/docker/docker/issues/24906#issuecomment-235894478
-# This must be done before creating the swarm
-#     docker network rm docker_gwbridge
-#     docker network create --opt com.docker.network.driver.mtu=1400 --subnet 172.18.0.0/16 docker_gwbridge
-
-# TODO: Convert this into one or more roles
-
-
-- include: idr-kubernetes.yml
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
+  roles:
+    - role: openmicroscopy.docker
+      # Upstream requires additional kubernetes configuration
+      docker_install_upstream: False
+      docker_use_ipv4_nic_mtu: True
 
 
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"

@@ -55,7 +55,13 @@
     {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
 
   roles:
+
   - role: openmicroscopy.omero-server
+
+  # Use a single redis server for shared web sessions
+  # TODO: Add omeroweb hosts group
+  - role: openmicroscopy.redis
+    redis_listen: 0.0.0.0
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
 
@@ -64,8 +70,18 @@
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
 
+  pre_tasks:
+  - name: Get redis IP
+    set_fact:
+      omero_redis_host_ansible: >-
+        {{
+          hostvars[groups[
+            idr_environment | default('idr') + '-omeroreadwrite-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+    when: "{{ groups[idr_environment | default('idr') + '-omeroreadwrite-hosts'] is defined }}"
+
   roles:
-  - role: openmicroscopy.redis
   - role: openmicroscopy.omero-web
   - role: openmicroscopy.omero-web-apps
 

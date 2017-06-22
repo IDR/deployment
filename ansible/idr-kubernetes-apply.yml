@@ -1,0 +1,21 @@
+---
+# Not idempotent!
+# Apply the Kubernetes specs to start jupyterhub
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+
+  tasks:
+
+  - name: kubernetes jupyterhub
+    become: yes
+    command: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f /opt/kubernetes-spec/{{ item }}
+    with_items:
+    - jupyterhub-config.yml
+    - jupyterhub-nfsvolume.yml
+    - jupyterhub-deployment.yml
+
+# Now run:
+# kubectl get nodes
+# kubectl apply -f jupyterhub-config.yml -f jupyterhub-deployment.yml
+# kubectl logs -f deployment/jupyterhub-deployment

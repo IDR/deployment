@@ -52,7 +52,7 @@
           hostvars[groups[
             idr_environment | default('idr') + '-dockermanager-hosts'][0]]
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
-        }}:8000
+        }}:31800
     when: "{{ groups[idr_environment | default('idr') + '-dockermanager-hosts'] is defined }}"
 
   - name: Get mineotaur IP

@@ -67,14 +67,13 @@
       recurse: yes
       state: directory
 
-  # WARNING: Since this config comes before the omero-server role there is no
-  # restart handler
+  # TODO: Rendering in web is current broken with omero.cluster.read_only true
   - name: OMERO.server read-only configuration
     become: yes
     copy:
       content: |
         config set -- omero.data.dir /data/OMERO
-        config set -- omero.cluster.read_only true
+        #config set -- omero.cluster.read_only true
         config set -- omero.cluster.node_provider ome.security.basic.InMemoryNodeProvider
         config set -- omero.sessions.session_manager ome.services.sessions.InMemorySessionManagerImpl
         config set -- omero.security.event_provider ome.security.basic.InMemoryEventProvider

@@ -20,7 +20,7 @@ nginx_proxy_http2: True
 ######################################################################
 # OMERO.web proxy
 
-nginx_proxy_log_format: main_timed_upstream_cache
+nginx_proxy_log_format: main_timed_cache_upstream
 
 nginx_proxy_websockets_enable: True
 

@@ -27,6 +27,7 @@
     with_items:
     - jupyterhub-config-example.yml
     - jupyterhub-deployment.yml
+    - jupyterhub-nfsvolume.yml
     - jupyterhub-config.yml
 
 

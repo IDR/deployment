@@ -30,7 +30,7 @@
     become: yes
     copy:
       content: |
-        config set -- Ice.Admin.Endpoints 'tcp -h localhost'
+        config set -- Ice.Default.Host 127.0.0.1
       dest: /opt/omero/server/config/omero-localhostonly-config.omero
       force: yes
     notify:

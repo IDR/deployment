@@ -49,13 +49,14 @@
       version: "{{ idr_jupyter_notebook_repo_version | default('HEAD') }}"
     when: not idr_notebook_st.stat.exists
 
-  - name: jupyterhub | create scratch notebooks directory
+  # Symlink to a directory inside the notebook (not present on host)
+  - name: jupyterhub | create notebooks scratch
     become: yes
     file:
-      mode: "0755"
-      owner: 1000
-      path: "{{ idr_jupyter_notebook_host_volume }}/scratch"
-      state: directory
+      src: /scratch
+      dest: "{{ idr_jupyter_notebook_host_volume }}/scratch"
+      force: yes
+      state: link
 
   - name: jupyterhub | update jupyter omero connection file
     become: yes

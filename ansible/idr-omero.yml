@@ -58,6 +58,6 @@
   roles:
   - role: openmicroscopy.redis
   - role: openmicroscopy.omero-web
-  - role: omero-web-apps
+  - role: openmicroscopy.omero-web-apps
 
   # Vars are in group_vars/omero-hosts.yml

@@ -57,7 +57,7 @@
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
-  - omero-user
+  - openmicroscopy.omero-user
 
   post_tasks:
 

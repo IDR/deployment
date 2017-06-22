@@ -12,7 +12,7 @@
     {{ idr_environment | default('idr') }}-a-hosts
     !bastion-hosts
   roles:
-  - role: reboot-server
+  - role: openmicroscopy.reboot-server
     reboot_server_timeout: 0
 
 
@@ -23,5 +23,5 @@
     {{ idr_environment | default('idr') }}-a-hosts
     &bastion-hosts
   roles:
-  - role: reboot-server
+  - role: openmicroscopy.reboot-server
     reboot_server_timeout: 0

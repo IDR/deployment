@@ -5,7 +5,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_services_running_and_enabled(Service):
-    service = Service('postgresql-9.4')
+    service = Service('postgresql-9.6')
     assert service.is_running
     assert service.is_enabled
 
@@ -19,4 +19,4 @@ def test_omero_database_created(Command):
             "'SELECT currentpatch,currentversion FROM dbpatch "
             "ORDER BY id DESC LIMIT 1;'")
     out = Command.check_output('bash -c %s', psql)
-    assert '0|OMERO5.2' == out
+    assert '0|OMERO5.3' == out

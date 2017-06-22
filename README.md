@@ -16,6 +16,10 @@ If you are deploying the IDR platform on OpenStack you should have a good workin
 
 All documents assume extensive knowledge of [OMERO](https://www.openmicroscopy.org/site/support/omero5/sysadmins/).
 
+Ansible 2.3 is required.
+Some Ansible tasks can take a long time, such as pulling Docker images.
+If you see lost connections you can try setting a keep-alive in your `.ssh/config` file, e.g. `ServerAliveInterval 30`.
+
 
 ## Documents
 

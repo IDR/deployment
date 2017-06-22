@@ -5,26 +5,30 @@
     {{ idr_environment | default('idr') }}-a-hosts
 
   roles:
-  - role: prometheus-node
+  - role: openmicroscopy.prometheus-node
 
 
+# TODO: Do we trust the JMX monitoring agent for OMERO?
+# If not disable this playbook
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
     {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
-  - role: prometheus-jmx
+  - role: openmicroscopy.prometheus-jmx
   # Needed for handlers
   - role: openmicroscopy.omero-common
 
   tasks:
+  # TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
   - name: omero prometheus agent
     become: yes
     copy:
       content: |
-        config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
-        config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
-        config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
+        # Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
+        #config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
+        #config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
+        #config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
       dest: "{{ omero_common_basedir }}/server/config/prometheus.omero"
     notify:
     - restart omero-server
@@ -50,14 +54,14 @@
   - role: openmicroscopy.docker
     docker_use_ipv4_nic_mtu: True
 
-  - role: prometheus
+  - role: openmicroscopy.prometheus
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
-    prometheus_alertmanager_slack_channel: '#trash'
-    # TODO: Use the defaults in the prometheus role instead (30s 5m 3h)
-    # This is currently reduced to make testing easier
-    prometheus_alert_group_wait: 10s
-    prometheus_alert_group_interval: 1m
-    prometheus_alert_repeat_interval: 1m
+    prometheus_alertmanager_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
+    # The defaults in the prometheus role are (30s 5m 3h)
+    # When testing you may want to decrease these to make it easier
+    #prometheus_alert_group_wait: 10s
+    #prometheus_alert_group_interval: 1m
+    #prometheus_alert_repeat_interval: 1m
 
     # groupname must be unique
     prometheus_targets:
@@ -68,24 +72,25 @@
       port: 9100
       jobname: node-exporter
 
+# TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
     - groupname: blitz
-      groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
+      # groups:
+      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9180
       jobname: jmx-blitz
 
     - groupname: indexer
-      groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
+      # groups:
+      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9181
       jobname: jmx-indexer
 
     - groupname: pixeldata
-      groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
+      # groups:
+      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      # - "{{ idr_environment | default('idr') + '-a-omero-hosts' }}"
       port: 9182
       jobname: jmx-pixeldata
 

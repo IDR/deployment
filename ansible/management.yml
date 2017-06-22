@@ -71,7 +71,7 @@
   - name: Get short hostname (not the same as the Ansible hostname vars)
     command: hostname -s
     register: short_hostname
-    always_run: True
+    check_mode: no
     changed_when: False
 
   - name: Set omero logmonitor bot-name
@@ -83,3 +83,16 @@
   - role: openmicroscopy.omero-logmonitor
     omero_logmonitor_slack_token: "{{ idr_secret_omero_logmonitor_slack_token | default(None) }}"
     omero_logmonitor_slack_channel: "#idr-logs"
+
+
+# Docker slack notifications
+- hosts: >
+    {{ idr_environment | default('idr') }}-a-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-a-dockerworker-hosts
+
+  roles:
+  - role: openmicroscopy.docker-slack-notifier
+    docker_slack_notifier_channel: "#idr-deployment"
+    docker_slack_notifier_username: "{{ ansible_hostname }}"
+    docker_slack_notifier_icon: ":docker:"
+    docker_slack_notifier_token: "{{ idr_secret_management_slack_webhook | default(None) }}"

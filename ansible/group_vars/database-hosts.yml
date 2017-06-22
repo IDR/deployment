@@ -10,3 +10,4 @@ postgresql_users_databases:
   password: "{{ idr_secret_postgresql_password | default('omero') }}"
   databases: [idr]
 postgresql_server_chown_datadir: True
+postgresql_version: "9.6"

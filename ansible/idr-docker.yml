@@ -34,7 +34,7 @@
   - name: docker swarm | check active
     become: yes
     shell: "docker info 2> /dev/null | sed -n 's/^Swarm: //p'"
-    always_run: yes
+    check_mode: no
     ignore_errors: yes
     register: docker_swarm_active
     changed_when: False
@@ -44,7 +44,7 @@
   - name: docker swarm | check mtu
     become: yes
     command: docker network inspect docker_gwbridge -f "{{ '{{' }} index .Options \"com.docker.network.driver.mtu\" {{ '}}' }}"
-    always_run: yes
+    check_mode: no
     #ignore_errors: yes
     register: docker_swarm_net_mtu
     when: docker_swarm_enabled

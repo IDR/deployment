@@ -1,1 +1,2 @@
+- src: openmicroscopy.docker
 - src: openmicroscopy.selinux-utils

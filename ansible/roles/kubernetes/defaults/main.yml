@@ -12,9 +12,6 @@ kubernetes_advertise_address: ''
 # Expert users only!
 ######################################################################
 
-# Uses the distribution docker
-kubernetes_install_docker: True
-
 # CIDR 10.244.0.0/16 is set in the kube-flannel.yml network plugin manifest
 kubernetes_init_args: >-
   --pod-network-cidr=10.244.0.0/16

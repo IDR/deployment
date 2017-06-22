@@ -34,22 +34,6 @@
   notify:
   - kubernetes disable selinux without reboot
 
-# Using the distribution docker since that's what the instructions suggest
-- name: kubernetes | install docker
-  become: yes
-  yum:
-    name: docker
-    state: present
-  when: kubernetes_install_docker
-
-- name: kubernetes | enable docker
-  become: yes
-  service:
-    name: docker
-    enabled: yes
-    state: started
-  when: kubernetes_install_docker
-
 - name: kubernetes | set sysctl bridge-nf-call-iptables
   become: yes
   sysctl:

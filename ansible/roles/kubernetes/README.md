@@ -16,7 +16,7 @@ To check whether the cluster has been successfully deployed try on a master node
 Dependencies
 ------------
 
-This role will install the distribution Docker package.
+This role requires the distribution Docker package (you must install it yourself).
 Using the upstream package is currently not supported.
 
 

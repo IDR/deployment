@@ -4,9 +4,9 @@
     {{ idr_environment | default('idr') }}-dockermanager-hosts
 
   pre_tasks:
-  - name: Get omero NFS IP
+  - name: Get NFS IP
     set_fact:
-      jupyter_nfs_host_ansible: >-
+      docker_nfs_host_ansible: >-
         {{
           hostvars[groups[
             idr_environment | default('idr') + '-dockermanager-hosts'][0]]

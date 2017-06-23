@@ -25,12 +25,22 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate 
+    type: Recreate
   template:
     metadata:
       labels:
         app: nfs-provisioner
     spec:
+      serviceAccount: nfs-provisioner
+      # This is a special service since it requires local storage
+      # so run it on the master node
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Equal
+          value: ""
+          effect: NoSchedule
       containers:
         - name: nfs-provisioner
           image: quay.io/kubernetes_incubator/nfs-provisioner:v1.0.8
@@ -50,7 +60,7 @@ spec:
                 - DAC_READ_SEARCH
                 - SYS_RESOURCE
           args:
-            - "-provisioner=example.com/nfs"
+            - "-provisioner=dynamic-storage/nfs"
           env:
             - name: POD_IP
               valueFrom:
@@ -69,4 +79,4 @@ spec:
       volumes:
         - name: export-volume
           hostPath:
-            path: /srv
+            path: /data/volumes

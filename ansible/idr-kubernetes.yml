@@ -28,17 +28,21 @@
   - name: Create kubernetes spec directory
     become: yes
     file:
-      path: /opt/kubernetes-spec
+      path: "{{ item }}"
       state: directory
+    with_items:
+    - /opt/kubernetes-spec
+    - /opt/kubernetes-spec/mineotaur
 
   - name: Copy kubernetes spec files
     become: yes
     copy:
       src: kubernetes-spec/{{ item }}
-      dest: /opt/kubernetes-spec/
+      dest: /opt/kubernetes-spec/{{ item }}
     with_items:
     - jupyterhub-config-example.yml
     - jupyterhub-deployment.yml
+    - mineotaur/deployment.yml
 
   # TODO: This currently requires private vars and will fail without them.
   # Defaults should be provided to allow public deployment
@@ -46,10 +50,11 @@
     become: yes
     template:
       src: kubernetes-spec/{{ item }}
-      dest: /opt/kubernetes-spec/
+      dest: /opt/kubernetes-spec/{{ item }}
     with_items:
     - jupyterhub-nfsvolume.yml
     - jupyterhub-config.yml
+    - mineotaur/nfsvolume.yml
 
 
 - hosts: >

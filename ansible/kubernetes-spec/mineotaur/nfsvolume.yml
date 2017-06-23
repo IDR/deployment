@@ -1,0 +1,28 @@
+# Persistent NFS volume for Jupyterhub share
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-idr-mineotaur
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: idr-mineotaur-rw
+  nfs:
+    server: {{ docker_nfs_host_ansible }}
+    path: /data/mineotaur/idr0001gramlsysgroscreenA
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: idr-mineotaur-rw
+spec:
+  storageClassName: idr-mineotaur-rw
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

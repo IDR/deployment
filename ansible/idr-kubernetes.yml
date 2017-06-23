@@ -32,6 +32,7 @@
       state: directory
     with_items:
     - /opt/kubernetes-spec
+    - /opt/kubernetes-spec/nfs-volume-provisioner
     - /opt/kubernetes-spec/jupyterhub
     - /opt/kubernetes-spec/mineotaur
 

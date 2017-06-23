@@ -16,6 +16,8 @@
     - jupyterhub/config.yml
     - jupyterhub/nfsvolume.yml
     - jupyterhub/deployment.yml
+    - mineotaur/nfsvolume.yml
+    - mineotaur/deployment.yml
 
 # Now run:
 # kubectl get nodes

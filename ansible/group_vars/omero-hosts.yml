@@ -35,6 +35,7 @@ omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }
 omero_server_system_uid: 546
 omero_server_system_managedrepo_group: idr-data
 omero_server_datadir: /data/OMERO
+omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
 

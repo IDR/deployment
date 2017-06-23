@@ -13,9 +13,9 @@
     become: yes
     command: kubectl --kubeconfig /etc/kubernetes/admin.conf {{ kubectl_action | default('apply') }} -f /opt/kubernetes-spec/{{ item }}
     with_items:
-    - jupyterhub-config.yml
-    - jupyterhub-nfsvolume.yml
-    - jupyterhub-deployment.yml
+    - jupyterhub/config.yml
+    - jupyterhub/nfsvolume.yml
+    - jupyterhub/deployment.yml
 
 # Now run:
 # kubectl get nodes

@@ -1,6 +1,8 @@
 ---
 # Not idempotent!
 # Apply the Kubernetes specs to start jupyterhub
+# Pass `-e kubectl_action=delete` to delete the existing deployment (needed
+# for a configuration change)
 
 - hosts: >
     {{ idr_environment | default('idr') }}-dockermanager-hosts
@@ -9,7 +11,7 @@
 
   - name: kubernetes jupyterhub
     become: yes
-    command: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f /opt/kubernetes-spec/{{ item }}
+    command: kubectl --kubeconfig /etc/kubernetes/admin.conf {{ kubectl_action | default('apply') }} -f /opt/kubernetes-spec/{{ item }}
     with_items:
     - jupyterhub-config.yml
     - jupyterhub-nfsvolume.yml

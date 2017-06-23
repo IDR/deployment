@@ -1,3 +1,9 @@
 # Runs all playbooks for setting up services built on top of the IDR
 
+- include: idr-kubernetes.yml
+# TODO: Not idempotent
+- include: idr-kubernetes-apply.yml
+
+- include: idr-downloads.yml
+
 - include: idr-mineotaur.yml

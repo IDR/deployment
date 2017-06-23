@@ -10,6 +10,4 @@
 
 - include: idr-docker.yml
 
-- include: idr-downloads.yml
-
 - include: idr-proxy.yml

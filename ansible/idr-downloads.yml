@@ -7,7 +7,7 @@
 # TODO: Use new download-hosts group to avoid coupling this to omero-hosts
 # https://trello.com/c/ztvftdc8/154-define-download-hosts-group-for-rsync-server
 #- hosts: "{{ idr_environment | default('idr') }}-download-hosts"
-- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
   roles:
 

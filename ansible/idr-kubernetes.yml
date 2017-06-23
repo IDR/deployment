@@ -41,8 +41,15 @@
       src: kubernetes-spec/{{ item }}
       dest: /opt/kubernetes-spec/{{ item }}
     with_items:
+    - nfs-volume-provisioner/clusterrole.yaml
+    - nfs-volume-provisioner/clusterrolebinding.yaml
+    - nfs-volume-provisioner/serviceaccount.yaml
+    - nfs-volume-provisioner/deployment.yaml
+    - nfs-volume-provisioner/class.yaml
+
     - jupyterhub/config-example.yml
     - jupyterhub/deployment.yml
+
     - mineotaur/deployment.yml
 
   # TODO: This currently requires private vars and will fail without them.

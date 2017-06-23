@@ -13,9 +13,16 @@
     become: yes
     command: kubectl --kubeconfig /etc/kubernetes/admin.conf {{ kubectl_action | default('apply') }} -f /opt/kubernetes-spec/{{ item }}
     with_items:
+    - nfs-volume-provisioner/clusterrole.yaml
+    - nfs-volume-provisioner/clusterrolebinding.yaml
+    - nfs-volume-provisioner/serviceaccount.yaml
+    - nfs-volume-provisioner/deployment.yaml
+    - nfs-volume-provisioner/class.yaml
+
     - jupyterhub/config.yml
     - jupyterhub/nfsvolume.yml
     - jupyterhub/deployment.yml
+
     - mineotaur/nfsvolume.yml
     - mineotaur/deployment.yml
 

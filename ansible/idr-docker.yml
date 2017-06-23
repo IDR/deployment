@@ -25,6 +25,7 @@
     with_items:
     - idr-notebooks
     - mineotaur
+    - volumes
 
   roles:
   - role: openmicroscopy.versioncontrol-utils

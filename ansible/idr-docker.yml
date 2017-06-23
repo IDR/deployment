@@ -16,13 +16,26 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 
+  pre_tasks:
+  - name: create NFS export directories
+    become: yes
+    file:
+      path: /data/{{ item }}
+      state: directory
+    with_items:
+    - idr-notebooks
+    - mineotaur
+
   roles:
   - role: openmicroscopy.versioncontrol-utils
   - role: openmicroscopy.nfs-share
     nfs_shares:
-      /data:
+      /data/idr-notebooks:
       - host: "*"
         options: 'ro'
+      /data/mineotaur:
+      - host: "*"
+        options: 'rw'
 #  - role: IDR.idr-jupyter
 
   tasks:

@@ -15,18 +15,38 @@ data:
     c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be really slow
     c.KubeSpawner.singleuser_image_spec = 'imagedata/jupyter-docker:develop'
     c.KubeSpawner.singleuser_uid = 1000
+    c.KubeSpawner.singleuser_fs_gid = 1000
 
     c.KubeSpawner.hub_connect_ip = os.environ['JUPYTERHUB_PROXY_SERVICE_HOST']
     c.KubeSpawner.hub_connect_port = int(os.environ['JUPYTERHUB_PROXY_SERVICE_PORT'])
 
-    c.KubeSpawner.volumes = [{
+    c.KubeSpawner.volumes = [
+      {
         'name': 'idr-notebooks',
         'persistentVolumeClaim': {'claimName': 'idr-notebooks-ro'}
-    }]
-    c.KubeSpawner.volume_mounts = [{
-        'mountPath': '/notebooks',
-        'name': 'idr-notebooks'}
+      },
+      {
+        'name': 'jupyter-scratch-{username}',
+        'persistentVolumeClaim': {'claimName': 'jupyter-scratch-{username}'}
+      },
     ]
+    c.KubeSpawner.volume_mounts = [
+      {
+        'mountPath': '/notebooks',
+        'name': 'idr-notebooks'
+      },
+      {
+        'mountPath': '/scratch',
+        'name': 'jupyter-scratch-{username}'
+      },
+    ]
+
+    # This isn't actually enforced on NFS
+    c.KubeSpawner.pvc_name_template = 'jupyter-scratch-{username}'
+    c.KubeSpawner.user_storage_capacity = '100M'
+    c.KubeSpawner.user_storage_class = 'dynamic-nfs-volume'
+    c.KubeSpawner.user_storage_access_modes = ['ReadWriteMany']
+    c.KubeSpawner.user_storage_pvc_ensure = True
 
     c.Authenticator.whitelist = {{ idr_jupyter_users | to_json }}
     c.Authenticator.admin_users = {{ idr_jupyter_admins | to_json }}

@@ -11,6 +11,8 @@ data:
     c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
     c.JupyterHub.ip = '0.0.0.0'
 
+    c.JupyterHub.proxy_auth_token = "{{ idr_jupyter_proxy_token }}"
+
     c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
     c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be really slow
     c.KubeSpawner.singleuser_image_spec = 'imagedata/jupyter-docker:develop'

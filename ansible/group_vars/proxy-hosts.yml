@@ -26,6 +26,7 @@ nginx_proxy_websockets_enable: True
 
 nginx_proxy_upstream_servers:
 - name: omeroreadonly
+  balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts }}"
 
 # The regex is getting complicated, so unroll it into a list and join

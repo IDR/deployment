@@ -111,6 +111,8 @@ omero_web_config_set:
     query_string: experimenter=-1
   # session
   omero.web.session_cookie_name: sessionid_{{ idr_environment | default('idr') }}
+  # TODO: Do we need separate cookies for each web backend?
+  #omero.web.session_cookie_name: sessionid_{{ ansible_hostname }}
   omero.web.session_cookie_age: 3600
   # redis
   omero.web.session_engine: django.contrib.sessions.backends.cache

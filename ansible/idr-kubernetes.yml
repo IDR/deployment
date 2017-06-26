@@ -48,8 +48,9 @@
     - nfs-volume-provisioner/deployment.yaml
     - nfs-volume-provisioner/class.yaml
 
-    - jupyterhub/config-example.yml
-    - jupyterhub/deployment.yml
+    #- jupyterhub/config-example.yml
+    # Requires the hash of the config file (see later tasks)
+    #- jupyterhub/deployment.yml
 
     - mineotaur/deployment.yml
 
@@ -64,6 +65,27 @@
     - jupyterhub/nfsvolume.yml
     - jupyterhub/config.yml
     - mineotaur/nfsvolume.yml
+
+  # `kubectl apply` automaticallty restarts deployments if the spec
+  # changes, but not if a ConfigMap changes.
+  # We can force an update by including a hash of the config file in the
+  # deployment spec: https://stackoverflow.com/q/37317003
+  # Related issue: https://github.com/kubernetes/kubernetes/issues/22368
+  - name: Hash kubernetes configuration files
+    stat:
+      path: /opt/kubernetes-spec/jupyterhub/config.yml
+    register: _kubernetes_jupyterhub_config_st
+
+  - name: Get kubernetes jupyterhub config hash
+    set_fact:
+      kubernetes_jupyterhub_config_hash: "{{ _kubernetes_jupyterhub_config_st.stat.checksum }}"
+
+  - name: Copy kubernetes jupyterhub spec templates
+    become: yes
+    template:
+      # Requires kubernetes_jupyterhub_config_hash
+      src: kubernetes-spec/jupyterhub/deployment.yml
+      dest: /opt/kubernetes-spec/jupyterhub/deployment.yml
 
 
 - hosts: >

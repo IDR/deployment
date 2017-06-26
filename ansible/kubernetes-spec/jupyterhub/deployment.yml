@@ -65,6 +65,7 @@ spec:
     metadata:
       labels:
         name: jupyterhub-pod
+        confighash: "{{ kubernetes_jupyterhub_config_hash }}"
     spec:
       serviceAccount: jupyterhub-spawner
       containers:

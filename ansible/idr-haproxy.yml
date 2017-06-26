@@ -1,0 +1,54 @@
+# Setup the IDR haproxy for non-web requests
+
+# Load hostvars (production OMERO)
+- hosts: >
+    {{ idr_environment | default('idr') }}-omeroreadonly-hosts
+
+
+- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+
+  pre_tasks:
+
+  - name: Get omero IP
+    set_fact:
+      omero_omeroreadonly_hosts: >-
+        {{
+          groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
+          map('extract', hostvars,
+            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
+        }}
+
+
+  roles:
+  - openmicroscopy.selinux-utils
+  - openmicroscopy.haproxy
+
+  vars:
+
+    # haproxy needs some special setup to log to a file
+    haproxy_syslog_configure_udp: True
+    haproxy_syslog_dest: local2
+
+    haproxy_frontends:
+    - name: 'omero4064'
+      address: '*:4064'
+      mode: 'tcp'
+      backend: omero4064
+      timeout_client: 10m
+      options:
+      - tcplog
+
+    haproxy_backends:
+    - name: omero4064
+      mode: tcp
+      balance_method: source
+      servers:
+      # TODO: iterate though list, don't assume 2 servers
+      - name: omero4064-1
+        address: "{{ omero_omeroreadonly_hosts[0] }}:4064"
+      - name: omero4064-2
+        address: "{{ omero_omeroreadonly_hosts[1] }}:4064"
+      timeout_connect: 10s
+      timeout_server: 10m
+      options:
+      - tcplog

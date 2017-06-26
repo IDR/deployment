@@ -24,8 +24,6 @@
 
   tasks:
   # Lock down the read-write node in the read-only cluster
-  # TODO: This doesn't seem to work, OMERO is still accessible from
-  # other servers
   - name: OMERO.server prevent external access
     become: yes
     copy:
@@ -107,10 +105,11 @@
     with_items:
     - Files
     - FullText
+# TODO: OMERO read-only writes to .omero and ManagedRepository/.omero
 #    - ManagedRepository
     - Pixels
     - Thumbnails
-    - .omero
+#    - .omero
 
   - name: OMERO.server BioFormatsCache symlinks
     become: yes
@@ -136,6 +135,16 @@
       state: link
       force: yes
     with_items: "{{ omero_ro_managedrepo_dirs.files }}"
+
+  # Finally .omero/UUID/repo_uuid needs to be writeable, but must still be
+  # identical to the readwrite copy
+  - name: OMERO.server read-only copy read-write repo uuid
+    become: yes
+    become_user: omero-server
+    # Can't get synchronize to work
+    command: rsync -rci --delete /data/OMERO-readonly/.omero/ /data/OMERO/.omero/
+    register: _omero_readonly_synchronize
+    changed_when: '_omero_readonly_synchronize.stdout_lines | length > 0'
 
 
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"

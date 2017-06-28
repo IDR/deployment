@@ -12,8 +12,8 @@ nginx_proxy_worker_processes: 4
 nginx_proxy_buffers: 32 16k
 
 nginx_proxy_ssl: True
-nginx_proxy_ssl_certificate: /etc/nginx/ssl/idr-fullchain.pem
-nginx_proxy_ssl_certificate_key: /etc/nginx/ssl/idr-privkey.pem
+nginx_proxy_ssl_certificate: "{{ idr_default_nginx_proxy_ssl_certificate | default('/etc/nginx/ssl/idr-fullchain.pem') }}"
+nginx_proxy_ssl_certificate_key: "{{ idr_default_nginx_proxy_ssl_certificate_key | default('/etc/nginx/ssl/idr-privkey.pem') }}"
 nginx_proxy_http2: True
 
 

@@ -28,9 +28,10 @@ omero_server_ice_version: "{{ idr_omero_ice_version }}"
 
 # Must be defined outside
 omero_server_dbhost: "{{ omero_db_host_ansible }}"
-omero_server_dbuser: omero
 omero_server_dbname: idr
-omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }}"
+# These are separate for omeroreadwrite and omeroreadonly
+#omero_server_dbuser:
+#omero_server_dbpassword:
 
 omero_server_system_uid: 546
 omero_server_system_managedrepo_group: idr-data

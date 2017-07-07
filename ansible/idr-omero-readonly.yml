@@ -148,7 +148,39 @@
 
 
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
-# Load hostvars
+# Load hostvars for subsequent playbooks
+
+  tasks:
+
+  - name: Give omeroreadonly database user access to database
+    become: yes
+    become_user: postgres
+    postgresql_privs:
+      database: "{{ idr_omero_readonly_database.name }}"
+      objs: ALL_IN_SCHEMA
+      privs: "SELECT"
+      roles: "{{ idr_omero_readonly_database.user }}"
+      state: present
+      type: table
+
+  - name: Check whether statement_timeout needs to be changed
+    become: yes
+    become_user: postgres
+    command: psql -Atqc "SELECT useconfig FROM pg_user WHERE usename='{{ idr_omero_readonly_database.user }}'"
+    register: omero_readonly_statement_timeout
+    check_mode: no
+    changed_when: no
+
+  - name: Limit query timeouts for omeroreadonly database user
+    become: yes
+    become_user: postgres
+    command: psql -c 'ALTER ROLE {{ idr_omero_readonly_database.user }} SET statement_timeout = {{ idr_omero_readonly_database.statement_timeout }};'
+    when: >-
+      not (omero_readonly_statement_timeout.stdout | search(
+        '[{,]statement_timeout=' + (
+          idr_omero_readonly_database.statement_timeout | string) +
+        '[},]'
+      ))
 
 
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"

@@ -23,10 +23,15 @@
 
   - name: Get omero IP
     set_fact:
-      # TODO: get all readonly
       omero_omeroreadonly_hosts: >-
         {{
           groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
+          map('extract', hostvars,
+            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
+        }}
+      omero_omeroreadwrite_hosts: >-
+        {{
+          groups[idr_environment | default('idr') + '-omeroreadwrite-hosts'] |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
         }}

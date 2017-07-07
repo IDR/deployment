@@ -28,6 +28,8 @@ nginx_proxy_upstream_servers:
 - name: omeroreadonly
   balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts }}"
+- name: omeroreadwrite
+  servers: "{{ omero_omeroreadwrite_hosts }}"
 
 # The regex is getting complicated, so unroll it into a list and join
 _nginx_proxy_omero_locations:
@@ -92,6 +94,7 @@ nginx_proxy_forward_scheme_header: X-Forwarded-Proto-Omero-Web
 # OMERO.web proxy and caching
 
 nginx_proxy_cachebuster_port: 9000
+nginx_proxy_cachebuster_enabled: False
 
 # Cache the request path but not the host so that cache can be copied to
 # other servers
@@ -214,8 +217,30 @@ nginx_proxy_direct_locations:
 
 
 ######################################################################
-# Redirect idr-demo -> idr (see private configuration)
-#nginx_proxy_sites:
+# Additional sites/virtualhosts
+_nginx_proxy_sites:
+  # This enables the default site:
+  - nginx_proxy_is_default: True
+  # This is a duplicate of the main OMERO.web proxy configuration, but with
+  # cache-busting:
+  - nginx_proxy_server_name: cachebuster
+    nginx_proxy_listen_http:
+    nginx_proxy_ssl: False
+    nginx_proxy_cachebuster_enabled: True
+    nginx_proxy_backends:
+    - name: omerocached
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      server: http://omeroreadwrite
+      cache_validity: 180d
+    - name: omerostatic
+      location: ~ /static/*
+      server: http://omeroreadwrite
+      cache_validity: 30d
+    - name: omero
+      location: /
+      server: http://omeroreadwrite
+
+nginx_proxy_sites: "{{ _nginx_proxy_sites + (idr_proxy_additional_sites | default([])) }}"
 
 
 ######################################################################

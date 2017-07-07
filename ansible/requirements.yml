@@ -19,7 +19,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.docker
-  version: 2.1.0
+  version: 2.2.0
 
 - src: openmicroscopy.docker-tools
   version: 1.0.0
@@ -28,7 +28,7 @@
   version: 2.0.0
 
 - src: openmicroscopy.hosts-populate
-  version: 0.1.0
+  version: 0.1.1
 
 - src: openmicroscopy.ice
   version: 2.1.0
@@ -67,25 +67,25 @@
   version: 1.0.0
 
 - src: openmicroscopy.nginx-proxy
-  version: 1.1.0
+  version: 1.2.0
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
 
 - src: openmicroscopy.omero-common
-  version: 0.1.0
+  version: 0.3.0
 
 - src: openmicroscopy.omego
   version: 0.1.0
 
 - src: openmicroscopy.omero-logmonitor
-  version: 2.0.0
+  version: 2.1.0
 
 - src: openmicroscopy.omero-python-deps
   version: 1.1.0
 
 - src: openmicroscopy.omero-server
-  version: 2.0.0-m2
+  version: 2.0.0-m3
 
 - src: openmicroscopy.omero-user
   version: 0.1.1
@@ -109,7 +109,7 @@
   version: 0.1.1
 
 - src: openmicroscopy.redis
-  version: 1.0.0
+  version: 1.1.0
 
 - src: openmicroscopy.rsync-server
   version: 1.0.0
@@ -162,8 +162,8 @@
 # External development roles
 
 - name: openmicroscopy.docker-slack-notifier
-  src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.1.tar.gz
-  version: 0.0.1
+  src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
+  version: 0.0.2
 
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz

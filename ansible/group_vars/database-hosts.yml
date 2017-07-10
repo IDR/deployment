@@ -14,11 +14,10 @@ postgresql_users_databases:
 - user: omero
   password: "{{ idr_secret_postgresql_password | default('omero') }}"
   databases: [idr]
-# TODO: Currently OMERO read-only may needs a read-write database user
+# TODO: Currently OMERO read-only may need a read-write database user
 - user: "{{ idr_omero_readonly_database.user }}"
   password:  "{{ idr_omero_readonly_database.password }}"
-  # Note can't specify idr here because a database can only have one owner
-  databases: []
+  databases: [idr]
 
 postgresql_server_chown_datadir: True
 

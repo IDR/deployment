@@ -16,6 +16,8 @@ ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/release
 # If you're using a CI build you might need to disable omego SSL verification
 idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
+# This is needed to ensure the client version matches the server
+postgresql_version: "9.6"
 
 ######################################################################
 # openmicroscopy.omero-server role vars

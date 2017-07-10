@@ -79,7 +79,7 @@
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
     notify:
-    - restart omero-server
+    - restart omero-server if installed
 
   # There are several bugs- read-only still needs write access to several
   # directories including ManagedRepository/.omero

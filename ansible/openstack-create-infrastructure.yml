@@ -108,6 +108,11 @@
       idr_vm_assign_floating_ip: True
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
+      idr_vm_security_groups:
+      - default
+      - idr-bastion-external
+      - idr-omero-external
+      - idr-web-external
 
 
     ############################################################

@@ -140,9 +140,9 @@
   # identical to the readwrite copy
   - name: OMERO.server read-only copy read-write repo uuid
     become: yes
-    become_user: omero-server
     # Can't get synchronize to work
-    command: rsync -rci --delete /data/OMERO-readonly/.omero/ /data/OMERO/.omero/
+    # omero-server user doens't exist at this point, this copies UID/GID
+    command: rsync -rcgoi --delete /data/OMERO-readonly/.omero/ /data/OMERO/.omero/
     register: _omero_readonly_synchronize
     changed_when: '_omero_readonly_synchronize.stdout_lines | length > 0'
 

@@ -224,7 +224,7 @@ _nginx_proxy_sites:
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:
   - nginx_proxy_server_name: cachebuster
-    nginx_proxy_listen_http:
+    nginx_proxy_listen_http: 0
     nginx_proxy_ssl: False
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:

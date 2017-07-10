@@ -188,11 +188,10 @@ omero_web_apps_top_links:
     query_string: {"experimenter": -1}
   attrs:
     title: Organisms browser
-- label: Help
-  link: http://help.openmicroscopy.org/
+- label: About
+  link: https://idr.openmicroscopy.org/about/
   attrs:
-    target: new
-    title: Open OMERO user guide in a new tab
+    title: About the Image Data Resource
 
 # Metadata Panes order
 omero_web_apps_ui_metadata_panes:

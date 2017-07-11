@@ -219,14 +219,37 @@ nginx_proxy_direct_locations:
 ######################################################################
 # Additional sites/virtualhosts
 _nginx_proxy_sites:
-  # This enables the default site:
+
+  # This enables the default site (configured using the global
+  # nginx_proxy_* variables):
   - nginx_proxy_is_default: True
+
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:
   - nginx_proxy_server_name: cachebuster
     nginx_proxy_listen_http: 0
     nginx_proxy_ssl: False
     nginx_proxy_cachebuster_enabled: True
+    nginx_proxy_backends:
+    - name: omerocached
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      server: http://omeroreadwrite
+      cache_validity: 180d
+      # For populating the cache we need to increase the default timeout
+      read_timeout: 600
+    - name: omerostatic
+      location: ~ /static/*
+      server: http://omeroreadwrite
+      cache_validity: 30d
+    - name: omero
+      location: /
+      server: http://omeroreadwrite
+
+  # This is a duplicate of the main OMERO.web proxy configuration, but
+  # connecting to the read-write host for internal use
+  - nginx_proxy_server_name: omeroreadwrite
+    nginx_proxy_listen_http: 8009
+    nginx_proxy_ssl: False
     nginx_proxy_backends:
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}

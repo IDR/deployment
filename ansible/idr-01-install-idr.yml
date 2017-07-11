@@ -6,7 +6,11 @@
 - include: idr-bastion.yml
 
 - include: idr-omero.yml
+
 - include: idr-omero-readonly.yml
+  tags:
+  # Requires NFS shares which can't be configured in Docker
+  - skip_if_molecule_docker
 
 - include: idr-docker.yml
 

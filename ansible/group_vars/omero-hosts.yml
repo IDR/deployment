@@ -135,6 +135,7 @@ omero_web_config_set:
   # Clear the top links and metadata (They will be set later)
   omero.web.ui.top_links: []
   omero.web.ui.metadata_panes: []
+  omero.web.wsgi_timeout: "{{ idr_omero_web_timeout | default(60) }}"
 
 
 ######################################################################

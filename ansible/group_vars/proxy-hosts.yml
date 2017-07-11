@@ -232,6 +232,8 @@ _nginx_proxy_sites:
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
       server: http://omeroreadwrite
       cache_validity: 180d
+      # For populating the cache we need to increase the default timeout
+      read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite

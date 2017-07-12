@@ -1,8 +1,9 @@
 import testinfra.utils.ansible_runner
 import pytest
 
+# TODO: This should be 'omero-hosts' if we get it deployed in docker
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    '.molecule/ansible_inventory').get_hosts('omero-hosts')
+    '.molecule/ansible_inventory').get_hosts('omeroreadwrite-hosts')
 
 
 @pytest.mark.parametrize("name", ["omero-server", "omero-web", "nginx"])

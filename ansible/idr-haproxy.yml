@@ -15,9 +15,22 @@
         {{
           groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
           map('extract', hostvars,
-            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
+            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
         }}
 
+  # https://stackoverflow.com/a/35608380
+  # TODO: Find a nicer way to do this instead of a set_fact loop
+  - name: Get haproxy backend server list
+    set_fact:
+      omero_haproxy_backend_omeroreadonly: >
+        {{ omero_haproxy_backend_omeroreadonly | default([]) +
+           [{
+             'name': 'omero4064-' + (item | regex_replace('\.', '_')),
+             'address': item + ':4064'
+            }]
+        }}
+    with_items:
+    - "{{ omero_omeroreadonly_hosts }}"
 
   roles:
   - openmicroscopy.selinux-utils
@@ -42,12 +55,7 @@
     - name: omero4064
       mode: tcp
       balance_method: source
-      servers:
-      # TODO: iterate though list, don't assume 2 servers
-      - name: omero4064-1
-        address: "{{ omero_omeroreadonly_hosts[0] }}:4064"
-      - name: omero4064-2
-        address: "{{ omero_omeroreadonly_hosts[1] }}:4064"
+      servers: "{{ omero_haproxy_backend_omeroreadonly }}"
       timeout_connect: 10s
       timeout_server: 10m
       options:

@@ -28,4 +28,4 @@ idr_omero_readonly_database:
   name: idr
   user: omeroreadonly
   password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
-  statement_timeout: 15000
+  statement_timeout: 60000

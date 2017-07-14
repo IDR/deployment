@@ -20,13 +20,36 @@ docker:
     - idr-hosts
     - docker-hosts
 
-  - name: idr-omero-docker
+  - name: idr-omeroreadwrite-docker
     image: manics/centos-systemd-ip-docker
     image_version: latest
     privileged: True
     ansible_groups:
     - idr-omero-hosts
     - omero-hosts
+    - idr-omeroreadwrite-hosts
+    - omeroreadwrite-hosts
+    - idr-hosts
+    - docker-hosts
+
+    ######################################################################
+    # WARNING:
+    # At present idr-omero-readonly.yml is excluded because it requires
+    # NFS shares which don't work on Docker.
+    # However idr-proxy.yml needs an omeroreadonly server IP for the
+    # proxy config so we fake this by creating a server that's not
+    # fully deployed (i.e. the read-only deployment is never tested)
+    # TODO: Test idr-omero-readonly.yml
+    ######################################################################
+  - name: idr-omeroreadonly-docker
+    image: manics/centos-systemd-ip-docker
+    image_version: latest
+    privileged: True
+    ansible_groups:
+    - idr-omero-hosts
+    - omero-hosts
+    - idr-omeroreadonly-hosts
+    - omeroreadonly-hosts
     - idr-hosts
     - docker-hosts
 
@@ -140,6 +163,8 @@ openstack:
 
 ansible:
   playbook: molecule-playbook.yml
+  # TODO: Only skip when driver==docker
+  skip_tags: skip_if_molecule_docker
 
   group_vars:
 
@@ -147,22 +172,10 @@ ansible:
     # Vagrant attaches the private network to eth1
       idr_net_iface: eth1
 
-
-  host_vars:
-
-    idr-omero-docker:
+    docker-hosts:
+      # Strictly speaking only idr-omero*-docker need this variable
       omero_server_systemd_require_network: False
 
 
 verifier:
   name: testinfra
-
-# If the idempotence test fails (typically due to pip incorrectly showing
-# changes) you can override the sequence to skip the idempotence test
-# molecule:
-#   test:
-#     sequence:
-#       - create
-#       - converge
-#       - verify
-#       - destroy

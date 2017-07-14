@@ -7,41 +7,17 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-database-hosts
-    {{ idr_environment | default('idr') }}-a-database-hosts
 #  name: Get facts from database hosts (need IP)
 
 
-# There are two OMERO and database servers. The production and analysis
-# servers are handled separately since analysis should have a public
-# password
-
 # TODO: The set_fact tasks are duplicated from idr-omero.yml
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
-
-- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
-
-  tasks:
+  pre_tasks:
 
   - name: Get database host
     set_fact:
       omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
-
-  - name: Get omero public password
-    set_fact:
-      omero_user_web_public_password: "{{ idr_secret_omero_web_public_password | default('public') }}"
-
-  - name: Generate random OMERO root password
-    command: openssl rand -base64 15
-    register: random_root_pass
-
-
-- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
-
-  tasks:
-
-  - name: Get database host
-    set_fact:
-      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-a-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
   - name: Get omero public password
     set_fact:
@@ -50,11 +26,6 @@
   - name: Generate random OMERO root password
     command: openssl rand -base64 15
     register: random_root_pass
-
-
-- hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
 
   roles:
   - openmicroscopy.omero-user

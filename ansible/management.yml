@@ -65,7 +65,6 @@
 # Install slack notifier on all OMERO servers in all environments
 - hosts: >
     {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
 
   pre_tasks:
   - name: Get short hostname (not the same as the Ansible hostname vars)
@@ -87,8 +86,8 @@
 
 # Docker slack notifications
 - hosts: >
-    {{ idr_environment | default('idr') }}-a-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-a-dockerworker-hosts
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
   - role: openmicroscopy.docker-slack-notifier

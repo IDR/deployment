@@ -10,5 +10,14 @@ install:
 script:
   # TODO: molecule will only run ansible-lint on the target playbook,
   # we should run it on all once they're compliant
-  - bash -O extglob -c 'ansible-lint -v ansible/!(idr-03-postinstall.yml|idr-reset-users-groups.yml|molecule.yml|ansible.cfg)'
+  - "bash -O extglob -c 'ansible-lint -v \
+      ansible/!(\
+      idr-kubernetes-apply.yml|\
+      idr-reset-users-groups.yml|\
+      molecule.yml|\
+      ansible.cfg) \
+      --exclude ansible/idr-kubernetes-apply.yml \
+      --exclude ansible/idr-reset-users-groups.yml \
+      --exclude ansible/roles/kubernetes/meta/main.yml \
+      '"
   - cd ansible; molecule test

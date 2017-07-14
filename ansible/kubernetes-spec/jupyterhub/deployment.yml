@@ -1,0 +1,96 @@
+# Based on
+# https://github.com/yuvipanda/jupyterhub-simplest-k8s/tree/master/simplest
+
+# You must run jupyterhub-config.yml first to create jupyterhub-config
+---
+# TODO: can we tighten up the privileges?
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: jupyterhub-spawner
+  namespace: default
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["*"]
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jupyterhub-spawner
+  namespace: default
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: jupyterhub-spawner
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: jupyterhub-spawner
+subjects:
+- kind: ServiceAccount
+  name: jupyterhub-spawner
+  namespace: default
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupyterhub-proxy
+  labels:
+    name: jupyterhub-proxy
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    # Use a fixed port to make testing easier
+    nodePort: 31800
+  selector:
+    name: jupyterhub-pod
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jupyterhub-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: jupyterhub-pod
+        confighash: "{{ kubernetes_jupyterhub_config_hash }}"
+    spec:
+      serviceAccount: jupyterhub-spawner
+      containers:
+      - name: jupyterhub-container
+        image: manics/jupyterhub-githubauth:merge
+        imagePullPolicy: IfNotPresent
+        command:
+        - jupyterhub
+        - --no-ssl
+        - --no-db
+        - --log-level=DEBUG
+        - --base-url=/jupyter
+        - --config=/k8s-config/jupyterhub_config.py
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+        - name: jupyterhub-port
+          containerPort: 8000
+        volumeMounts:
+        - name: jupyterhub-config-volume
+          mountPath: /k8s-config
+      volumes:
+      - name: jupyterhub-config-volume
+        configMap:
+          name: jupyterhub-config

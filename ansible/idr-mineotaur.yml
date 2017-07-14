@@ -1,33 +1,15 @@
-# Load hostvars
-- hosts: "{{ idr_environment | default('idr') }}-a-omero-hosts"
+# IDR Mineotaur data
 
-# Setup IDR Mineotaur server
-- hosts: "{{ idr_environment | default('idr') }}-a-dockermanager-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 
   tasks:
-
-  - name: Get rsync IP
-    set_fact:
-      omero_rsync_host_ansible : >-
-        {{
-          hostvars[groups[
-            idr_environment | default('idr') + '-a-omero-hosts'][0]]
-            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
-        }}
 
   - name: create mineotaur directory
     become: yes
     file:
-      path: "/data/mineotaur"
+      path: "/data/mineotaur/idr0001gramlsysgroscreenA"
       owner: 1000
       state: directory
-
-  - name: rsync mineotaur url
-    debug:
-      msg: >-
-        {{ idr_rsync_mineotaur_url | default(
-           'rsync://' + omero_rsync_host_ansible + '/mineotaur/')
-        }}
 
   # Run as UID 1000 since this is required by the Docker container
   # When running externally pull down the IDR data by defining:
@@ -39,25 +21,10 @@
       src: >-
         {{
           idr_rsync_mineotaur_url | default(
-            'rsync://' + omero_rsync_host_ansible + '/mineotaur/')
+          'rsync://idr.openmicroscopy.org/mineotaur/idr0001gramlsysgroscreenA/')
         }}
-      dest: "/data/mineotaur/"
+      dest: /data/mineotaur/idr0001gramlsysgroscreenA/
       mode: "pull"
       owner: no
       group: no
     delegate_to: "{{ inventory_hostname }}"
-
-  # TODO: add version
-  - name: enable mineotaur container
-    become: yes
-    docker_container:
-      name: mineotaur
-      image: imagedata/mineotaur
-      restart_policy: always
-      user: 1000
-      entrypoint: java
-      volumes:
-        - /data/mineotaur/idr0001gramlsysgroscreenA:/mineotaur
-      ports:
-        - "8080:8080"
-      command: "-Xmx8g -Djava.security.egd=file:/dev/urandom -jar /home/build/src/target/Mineotaur-1.0.1.jar -start /mineotaur"

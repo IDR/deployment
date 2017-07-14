@@ -3,15 +3,13 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-database-hosts
-    {{ idr_environment | default('idr') }}-a-database-hosts
   roles:
   - role: openmicroscopy.storage-volume-initialise
     storage_volume_initialise_device: "{{ database_db_vol_dev | default('/dev/vdb') }}"
     storage_volume_initialise_mount: /var/lib/pgsql
 
 - hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
-    {{ idr_environment | default('idr') }}-a-omero-hosts
+    {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
   roles:
   - role: openmicroscopy.storage-volume-initialise
     storage_volume_initialise_device: "{{ omero_data_vol_dev | default('/dev/vdb') }}"
@@ -26,7 +24,6 @@
 # Use this group for any other IDR VMs that should have a volume mounted on /data
 - hosts: >
     {{ idr_environment | default('idr') }}-data-hosts
-    {{ idr_environment | default('idr') }}-a-data-hosts
   roles:
   - role: openmicroscopy.storage-volume-initialise
     storage_volume_initialise_device: "{{ data_vol_dev | default('/dev/vdb') }}"

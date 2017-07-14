@@ -4,28 +4,13 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-uod-nfs
-    {{ idr_environment | default('idr') }}-a-uod-nfs
 
   vars:
     idr_mountpoint: /uod/idr
 
-  tasks:
-
-  - name: Install NFS mount utility
-    become: yes
-    yum:
-      name: nfs-utils
-      state: present
-
-  # Do not create mountpoint using file, the mount module will create it
-  # automatically. This avoids problems where the module tries to change
-  # permissions on an existing directory
-
-  - name: Mount NFS share
-    become: yes
-    mount:
-      fstype: nfs4
-      name: "{{ idr_mountpoint }}"
+  roles:
+  - role: openmicroscopy.nfs-mount
+    nfs_share_mounts:
+    - path: "{{ idr_mountpoint }}"
+      location: idr-data.openmicroscopy.org:/uod/idr
       opts: ro
-      src: idr-data.openmicroscopy.org:/uod/idr
-      state: mounted

@@ -1,0 +1,9 @@
+######################################################################
+# Variables specific to OMERO read-write servers
+# See omero-hosts.yml for common OMERO variables
+######################################################################
+
+omero_server_dbuser: omero
+omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }}"
+
+idr_omero_web_timeout: 600

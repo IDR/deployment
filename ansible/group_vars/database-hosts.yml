@@ -1,13 +1,31 @@
 # Parameters for database servers
 
 postgresql_server_listen: "'*'"
+
 postgresql_server_auth:
 - database: all
   user: omero
   address: 0.0.0.0/0
+- database: all
+  user: "{{ idr_omero_readonly_database.user }}"
+  address: 0.0.0.0/0
+
 postgresql_users_databases:
 - user: omero
   password: "{{ idr_secret_postgresql_password | default('omero') }}"
   databases: [idr]
+# TODO: Currently OMERO read-only may need a read-write database user
+- user: "{{ idr_omero_readonly_database.user }}"
+  password:  "{{ idr_omero_readonly_database.password }}"
+  databases: [idr]
+
 postgresql_server_chown_datadir: True
+
 postgresql_version: "9.6"
+
+
+idr_omero_readonly_database:
+  name: idr
+  user: omeroreadonly
+  password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
+  statement_timeout: 60000

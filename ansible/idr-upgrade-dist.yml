@@ -3,7 +3,6 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-hosts
-    {{ idr_environment | default('idr') }}-a-hosts
   roles:
   - role: openmicroscopy.upgrade-distpackages
   # Ideally we should auto-reboot, but if the SSH proxy host is rebooted

@@ -3,10 +3,16 @@
 # tasks, nor does it run playbooks requiring private configuration
 
 - include: idr-local-users.yml
+- include: idr-bastion.yml
+
 - include: idr-omero.yml
+
+- include: idr-omero-readonly.yml
+  tags:
+  # Requires NFS shares which can't be configured in Docker
+  - skip_if_molecule_docker
 
 - include: idr-docker.yml
 
-- include: idr-downloads.yml
-
 - include: idr-proxy.yml
+- include: idr-haproxy.yml

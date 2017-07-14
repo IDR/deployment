@@ -8,9 +8,6 @@
     # Do not change these unless you are running multiple deployments
     - idr_deployment_cloud: idr
     - idr_environment_idr: idr
-    # Analysis instances must have `-a` as the suffix so that the single
-    # gateway VM can proxy it
-    - idr_environment_analysis: "{{ idr_environment_idr }}-a"
     # REQUIRED: List of public SSH keys
     - idr_keypair_keys:
     # Change these to match the image and flavours in your OpenStack cloud
@@ -31,7 +28,6 @@
     - idr_network_storage: ''
 
     - idr_environment_idr_subnet: 192.168.1.0/24
-    - idr_environment_analysis_subnet: 192.168.2.0/24
 
 
   roles:
@@ -55,10 +51,6 @@
       idr_network_name: "{{ idr_environment_idr }}"
       idr_network_subnet: "{{ idr_environment_idr_subnet }}"
 
-    - role: IDR.openstack-idr-network
-      idr_network_name: "{{ idr_environment_analysis }}"
-      idr_network_subnet: "{{ idr_environment_analysis_subnet }}"
-
 
     ############################################################
     # IDR Instances
@@ -74,7 +66,7 @@
     # OMERO server
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}"
-      idr_vm_name: "{{ idr_environment_idr }}-omero"
+      idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_omeroreadwrite: True
@@ -85,6 +77,25 @@
            ((idr_network_storage | length > 0) |
              ternary([{'net-name': idr_network_storage}], []))
         }}
+
+    # OMERO readonly
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-omeroreadonly"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_omeroreadonly: True
+      # TODO: Could we use the fileserver as an NFS proxy instead and
+      # get rid of the need for the additional network?
+      idr_vm_extra_groups:
+      - "{{ idr_vm_storage_group }}"
+      idr_vm_networks: >
+        {{ [ {'net-name': idr_environment_idr} ] +
+           ((idr_network_storage | length > 0) |
+             ternary([{'net-name': idr_network_storage}], []))
+        }}
+      idr_vm_count: 2
+
 
     # Proxy server, doubles up as a bastion server
     - role: IDR.openstack-idr-instance
@@ -97,15 +108,12 @@
       idr_vm_assign_floating_ip: True
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
+      idr_vm_security_groups:
+      - default
+      - idr-bastion-external
+      - idr-omero-external
+      - idr-web-external
 
-    # Due to issues with floating IPs and multiple networks it's easier
-    # to bring the VM up on one network, assign a floating IP, then add
-    # other networks
-    - role: IDR.openstack-idr-instance-network
-      idr_instance_network_server: "{{ idr_environment_idr }}-proxy"
-      idr_instance_network_networks:
-      - "{{ idr_environment_idr }}"
-      - "{{ idr_environment_analysis }}"
 
     ############################################################
     # IDR Volumes
@@ -115,17 +123,13 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
 
     - role: openmicroscopy.openstack-volume-storage
       openstack_volume_size: 500
-      openstack_volume_vmname: "{{ idr_environment_idr }}-omero"
+      openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
 
     - role: openmicroscopy.openstack-volume-storage
@@ -133,90 +137,42 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-proxy"
       openstack_volume_name: nginxcache
       openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
       openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"
+
 
     ############################################################
     # Analysis Instances
 
-    # Dedicated database server
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_analysis }}"
-      idr_vm_name: "{{ idr_environment_analysis }}-database"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour }}"
-      idr_vm_database: True
-      idr_vm_networks:
-      - net-name: "{{ idr_environment_analysis }}"
-
-    # OMERO server
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_analysis }}"
-      idr_vm_name: "{{ idr_environment_analysis }}-omero"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_large }}"
-      idr_vm_omeroreadwrite: True
-      idr_vm_extra_groups:
-      - "{{ idr_vm_storage_group }}"
-      idr_vm_networks: >
-        {{ [ {'net-name': idr_environment_analysis} ] +
-           ((idr_network_storage | length > 0) |
-             ternary([{'net-name': idr_network_storage}], []))
-        }}
-
     # Docker-manager server
     - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_analysis }}"
-      idr_vm_name: "{{ idr_environment_analysis }}-dockermanager"
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-dockermanager"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_dockermanager: True
       idr_vm_networks:
-      - net-name: "{{ idr_environment_analysis }}"
+      - net-name: "{{ idr_environment_idr }}"
 
-    # TODO: For the initial release we're staying with a single analysis VM
-    # until we're more confident in Docker swarm
     # Docker-worker server
-    #- role: IDR.openstack-idr-instance
-    #  idr_environment: "{{ idr_environment_analysis }}"
-    #  idr_vm_name: "{{ idr_environment_analysis }}-dockerworker"
-    #  idr_vm_image: "{{ vm_image }}"
-    #  idr_vm_flavour: "{{ vm_flavour_large }}"
-    #  idr_vm_dockerworker: True
-    #  idr_vm_networks:
-    #  - net-name: "{{ idr_environment_analysis }}"
-    #  idr_vm_count: 1
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-dockerworker"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_dockerworker: True
+      idr_vm_networks:
+      - net-name: "{{ idr_environment_idr }}"
+      idr_vm_count: 2
 
 
     ############################################################
     # Analysis Volumes
 
     - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 250
-      openstack_volume_vmname: "{{ idr_environment_analysis }}-database"
-      openstack_volume_name: db
-      openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
-      openstack_volume_source: "{{ idr_environment_idr }}-database-db"
-
-    - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 500
-      openstack_volume_vmname: "{{ idr_environment_analysis }}-omero"
-      openstack_volume_name: data
-      openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
-      openstack_volume_source: "{{ idr_environment_idr }}-omero-data"
-
-    - role: openmicroscopy.openstack-volume-storage
       openstack_volume_size: 100
-      openstack_volume_vmname: "{{ idr_environment_analysis }}-dockermanager"
+      openstack_volume_vmname: "{{ idr_environment_idr }}-dockermanager"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb
-      # Initialise volume from an existing volume
-      # TODO: Requires https://github.com/ansible/ansible/pull/19320
       openstack_volume_source: "{{ idr_volume_dockermanager_data_src }}"
 
 
@@ -232,4 +188,3 @@
       idr_vm_management: True
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
-      - net-name: "{{ idr_environment_analysis }}"

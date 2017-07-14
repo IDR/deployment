@@ -9,7 +9,6 @@
 # via a proxy-host is difficult
 - hosts: >
     {{ idr_environment | default('idr') }}-hosts
-    {{ idr_environment | default('idr') }}-a-hosts
     !bastion-hosts
   roles:
   - role: openmicroscopy.reboot-server
@@ -20,7 +19,6 @@
 # it proxies itself instead of using the external IP
 - hosts: >
     {{ idr_environment | default('idr') }}-hosts
-    {{ idr_environment | default('idr') }}-a-hosts
     &bastion-hosts
   roles:
   - role: openmicroscopy.reboot-server

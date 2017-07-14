@@ -1,0 +1,25 @@
+---
+# defaults file for idr-kubernetes
+
+# Either "master" or "worker", only one master is currently supported
+#kubernetes_role: master worker
+
+kubernetes_token: ''
+kubernetes_advertise_address: ''
+
+
+######################################################################
+# Expert users only!
+######################################################################
+
+# CIDR 10.244.0.0/16 is set in the kube-flannel.yml network plugin manifest
+kubernetes_init_args: >-
+  --pod-network-cidr=10.244.0.0/16
+  --token {{ kubernetes_token }}
+  {{ (kubernetes_advertise_address | length > 0) |
+     ternary(
+       ' --apiserver-advertise-address=' + kubernetes_advertise_address +
+       ' --apiserver-cert-extra-sans=' + kubernetes_advertise_address
+     , '') }}
+
+kubernetes_join_args: --token {{ kubernetes_token }} {{ kubernetes_master }}

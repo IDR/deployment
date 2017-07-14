@@ -1,11 +1,27 @@
 ######################################################################
+# Variables common to OMERO read-write and read-only servers
+######################################################################
+
+
+######################################################################
 # Shared variables
-idr_omero_release: "0.4.0"
+
+idr_omero_release: "0.4.2-2"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
-idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
+# The IDR version system doesn't match the OMERO.server version
+omero_server_checkupgrade_comparator: '!='
+idr_omero_upgrade: False
 
+idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
+# If you want to speed up Ice installation use a precompiled IcePy:
+ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.2/zeroc_ice-3.6.3-cp27-cp27mu-linux_x86_64.whl
+# If you're using a CI build you might need to disable omego SSL verification
+#idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
+
+# This is needed to ensure the client version matches the server
+postgresql_version: "9.6"
 
 ######################################################################
 # openmicroscopy.omero-server role vars
@@ -18,13 +34,15 @@ omero_server_ice_version: "{{ idr_omero_ice_version }}"
 
 # Must be defined outside
 omero_server_dbhost: "{{ omero_db_host_ansible }}"
-omero_server_dbuser: omero
 omero_server_dbname: idr
-omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }}"
+# These are separate for omeroreadwrite and omeroreadonly
+#omero_server_dbuser:
+#omero_server_dbpassword:
 
 omero_server_system_uid: 546
 omero_server_system_managedrepo_group: idr-data
 omero_server_datadir: /data/OMERO
+omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
 
@@ -89,7 +107,7 @@ omero_web_config_set:
   omero.web.public.enabled: True
   omero.web.public.server_id: 1
   omero.web.public.user: public
-  omero.web.public.password: "{{ idr_secret_omero_web_public_password | default('public') }}"
+  omero.web.public.password: public
   omero.web.public.url_filter: "^/(webadmin/myphoto/|mapr/|webclient/(?!(action|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script))|webgateway/(?!(archived_files|download_as)))"
   omero.web.login_redirect:
     redirect:
@@ -100,13 +118,15 @@ omero_web_config_set:
     query_string: experimenter=-1
   # session
   omero.web.session_cookie_name: sessionid_{{ idr_environment | default('idr') }}
+  # TODO: Do we need separate cookies for each web backend?
+  #omero.web.session_cookie_name: sessionid_{{ ansible_hostname }}
   omero.web.session_cookie_age: 3600
   # redis
   omero.web.session_engine: django.contrib.sessions.backends.cache
   omero.web.caches:
     default:
       BACKEND: django_redis.cache.RedisCache
-      LOCATION: redis://127.0.0.1:6379/0
+      LOCATION: redis://{{ omero_redis_host_ansible | default('127.0.0.1') }}:6379/0
   # social media
   omero.web.sharing.twitter:
     omero: "@openmicroscopy"
@@ -115,6 +135,7 @@ omero_web_config_set:
   # Clear the top links and metadata (They will be set later)
   omero.web.ui.top_links: []
   omero.web.ui.metadata_panes: []
+  omero.web.wsgi_timeout: "{{ idr_omero_web_timeout | default(60) }}"
 
 
 ######################################################################
@@ -174,11 +195,10 @@ omero_web_apps_top_links:
     query_string: {"experimenter": -1}
   attrs:
     title: Organisms browser
-- label: Help
-  link: http://help.openmicroscopy.org/
+- label: About
+  link: https://idr.openmicroscopy.org/about/
   attrs:
-    target: new
-    title: Open OMERO user guide in a new tab
+    title: About the Image Data Resource
 
 # Metadata Panes order
 omero_web_apps_ui_metadata_panes:

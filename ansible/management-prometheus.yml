@@ -31,6 +31,28 @@
     notify:
     - restart omero-server
 
+  - name: omero-web django prometheus install
+    become: yes
+    pip:
+      name: django_prometheus
+      state: present
+      version: 1.0.8
+      virtualenv: "{{ omero_common_basedir }}/web/venv"
+      virtualenv_site_packages: yes
+    notify:
+    - restart omero-web
+
+  - name: omero-web django prometheus configure
+    become: yes
+    copy:
+      content: |
+        config append -- omero.web.middleware '{"index":0, "class": "django_prometheus.middleware.PrometheusBeforeMiddleware"}'
+        config append -- omero.web.middleware '{"index":1000, "class": "django_prometheus.middleware.PrometheusAfterMiddleware"}'
+        config append -- omero.web.apps '"django_prometheus"'
+      dest: "{{ omero_common_basedir }}/web/config/django-prometheus.omero"
+    notify:
+    - restart omero-web
+
   vars:
     # prometheus-jmx automatically creates this:
     jmx_javaagent: /opt/prometheus/jars/jmx_prometheus_javaagent.jar
@@ -94,6 +116,13 @@
       - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
+
+    - groupname: omero-web
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      port: 80
+      jobname: django
+      metrics_path: /django_prometheus/metrics
 
     prometheus_http_2xx_internal_targets: >
       {{

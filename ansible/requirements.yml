@@ -165,9 +165,10 @@
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2
 
+# TODO: Update and tag
 - name: openmicroscopy.prometheus
-  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
-  version: 0.1.1
+  src: https://github.com/manics/ansible-role-prometheus/archive/metrics_path.tar.gz
+  version: metrics_path
 
 - name: openmicroscopy.prometheus-jmx
   src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz

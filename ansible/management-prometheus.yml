@@ -18,15 +18,15 @@
   - role: openmicroscopy.omero-common
 
   tasks:
-  # TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
+  # TODO: Requires a custom build from HEAD
   - name: omero prometheus agent
     become: yes
     copy:
       content: |
-        # Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
-        #config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
-        #config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
-        #config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
+        # Requires https://github.com/prometheus/jmx_exporter/pull/162
+        config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
+        config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
+        config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
       dest: "{{ omero_common_basedir }}/server/config/prometheus.omero"
     notify:
     - restart omero-server
@@ -92,21 +92,24 @@
       jobname: node-exporter
 
 # TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
+# Currently testing using a custom build from HEAD
+# https://github.com/prometheus/jmx_exporter/pull/162
+# https://github.com/prometheus/jmx_exporter/commit/5b180affbefa445088d4608b9640ca404ce91ae2
     - groupname: blitz
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
       port: 9180
       jobname: jmx-blitz
 
     - groupname: indexer
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
       port: 9181
       jobname: jmx-indexer
 
     - groupname: pixeldata
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
       port: 9182
       jobname: jmx-pixeldata
 

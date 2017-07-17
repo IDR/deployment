@@ -170,9 +170,10 @@
   src: https://github.com/manics/ansible-role-prometheus/archive/metrics_path.tar.gz
   version: metrics_path
 
+# TODO: Update and tag
 - name: openmicroscopy.prometheus-jmx
-  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz
-  version: 0.1.0
+  src: https://github.com/manics/ansible-role-prometheus-jmx/archive/jmx_prometheus_javaagent_head.tar.gz
+  version: jmx_prometheus_javaagent_head
 
 - name: openmicroscopy.prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz

@@ -81,7 +81,7 @@
   roles:
   - role: openmicroscopy.omero-logmonitor
     omero_logmonitor_slack_token: "{{ idr_secret_omero_logmonitor_slack_token | default(None) }}"
-    omero_logmonitor_slack_channel: "#idr-logs"
+    omero_logmonitor_slack_channel: idr-logs-{{ idr_environment | default('idr') }}
 
 
 # Docker slack notifications

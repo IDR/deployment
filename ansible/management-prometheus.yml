@@ -198,17 +198,20 @@
       port: 9180
       jobname: jmx-blitz
 
-    - groupname: indexer
-      groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      port: 9181
-      jobname: jmx-indexer
-
-    - groupname: pixeldata
-      groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      port: 9182
-      jobname: jmx-pixeldata
+    # TODO: indexer and pixeldata are currently broken (fail to start)on
+    # metadata53 due to the readonly work. These two targets should be
+    # reenabled when they are fixed:
+    # - groupname: indexer
+    #   groups:
+    #   - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+    #   port: 9181
+    #   jobname: jmx-indexer
+    #
+    # - groupname: pixeldata
+    #   groups:
+    #   - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+    #   port: 9182
+    #   jobname: jmx-pixeldata
 
     - groupname: cadvisor
       groups:

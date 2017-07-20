@@ -271,7 +271,8 @@ nginx_proxy_sites: "{{ _nginx_proxy_sites + (idr_proxy_additional_sites | defaul
 ######################################################################
 # Other
 
-#nginx_proxy_block_locations:
+nginx_proxy_block_locations:
+- "^~ /django_prometheus"
 #- "^~ /login"
 
 #nginx_proxy_set_header_host: 'idr.openmicroscopy.org'

@@ -34,9 +34,10 @@
   - name: omero-web django prometheus install
     become: yes
     pip:
-      name: django_prometheus
+      #name: django_prometheus
+      name: https://github.com/manics/django-prometheus/archive/1.0.9-ome1.zip
       state: present
-      version: 1.0.8
+      #version: v1.0.8
       virtualenv: "{{ omero_common_basedir }}/web/venv"
       virtualenv_site_packages: yes
     notify:
@@ -49,7 +50,38 @@
         config append -- omero.web.middleware '{"index":0, "class": "django_prometheus.middleware.PrometheusBeforeMiddleware"}'
         config append -- omero.web.middleware '{"index":1000, "class": "django_prometheus.middleware.PrometheusAfterMiddleware"}'
         config append -- omero.web.apps '"django_prometheus"'
+
+        config set -- omero.web.wsgi_args '--config file:/opt/omero/web/config/gunicorn-config.py'
       dest: "{{ omero_common_basedir }}/web/config/django-prometheus.omero"
+    notify:
+    - restart omero-web
+
+  - name: omero-web gunicorn prometheus configure
+    become: yes
+    copy:
+      content: |
+        from prometheus_client import multiprocess
+        def child_exit(server, worker):
+            multiprocess.mark_process_dead(worker.pid)
+      dest: "{{ omero_common_basedir }}/web/config/gunicorn-config.py"
+    notify:
+    - restart omero-web
+
+  - name: omero-web service.d directory
+    become: yes
+    file:
+      path: /etc/systemd/system/omero-web.service.d
+      state: directory
+
+  - name: omero-web service.d prometheus
+    become: yes
+    copy:
+      content: |
+        [Service]
+        Environment="prometheus_multiproc_dir=/opt/omero/web/OMERO.web/var/prometheus"
+        ExecStartPre=/bin/sh -c '/usr/bin/rm -rf "$prometheus_multiproc_dir" && \
+            /usr/bin/mkdir -p "$prometheus_multiproc_dir"'
+      dest: /etc/systemd/system/omero-web.service.d/prometheus.conf
     notify:
     - restart omero-web
 

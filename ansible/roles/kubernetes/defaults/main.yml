@@ -23,3 +23,5 @@ kubernetes_init_args: >-
      , '') }}
 
 kubernetes_join_args: --token {{ kubernetes_token }} {{ kubernetes_master }}
+
+kubernetes_kube_version: ''

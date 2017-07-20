@@ -90,6 +90,71 @@
     jmx_javaagent: /opt/prometheus/jars/jmx_prometheus_javaagent.jar
 
 
+# prometheus-omero-py session monitoring
+# TODO: Consider moving this into a role
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  roles:
+  - role: openmicroscopy.versioncontrol-utils
+
+  tasks:
+
+  - name: prometheus-omero-py | install prometheus-omero-py
+    become: yes
+    git:
+      dest: /opt/prometheus-omero-py/src
+      force: yes
+      repo: https://gist.github.com/238a63cfd9c2fb8a450252d79e609296.git
+      version: HEAD
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | setup virtualenv
+    become: yes
+    pip:
+      requirements: /opt/prometheus-omero-py/src/requirements.txt
+      state: present
+      virtualenv: /opt/prometheus-omero-py/venv
+      virtualenv_site_packages: yes
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | systemd service
+    become: yes
+    copy:
+      dest: /etc/systemd/system/prometheus-omero-py.service
+      src: /opt/prometheus-omero-py/src/prometheus-omero-py-metrics.service
+      remote_src: True
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | options
+    become: yes
+    copy:
+      content: >
+        OPTIONS="--host localhost --listen 9171 --verbose --interval 15"
+      dest: /etc/sysconfig/prometheus-omero-py
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | enable service
+    become: yes
+    systemd:
+      daemon_reload: yes
+      enabled: yes
+      name: prometheus-omero-py
+      state: started
+
+  handlers:
+  - name: restart prometheus-omero-py
+    become: yes
+    systemd:
+      daemon_reload: yes
+      enabled: yes
+      name: prometheus-omero-py
+      state: restarted
+
+
 - hosts: >
     {{ idr_environment | default('idr') }}-dockermanager-hosts
     {{ idr_environment | default('idr') }}-dockerworker-hosts
@@ -158,6 +223,12 @@
       port: 80
       jobname: django
       metrics_path: /django_prometheus/metrics
+
+    - groupname: omero-sessions
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      port: 9171
+      jobname: omero-sessions
 
     prometheus_http_2xx_internal_targets: >
       {{

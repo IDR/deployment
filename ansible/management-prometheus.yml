@@ -114,3 +114,22 @@
 
     prometheus_rsync_banner_targets:
     - idr.openmicroscopy.org:873
+
+
+# Grafana
+- hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+
+  tasks:
+
+  - name: run grafana in docker
+    become: yes
+    docker_container:
+      image: grafana/grafana
+      links:
+      - prometheus:prometheus
+      name: grafana
+      published_ports:
+      - "3000:3000"
+      state: started
+      volumes:
+      - /data/grafana:/var/lib/grafana

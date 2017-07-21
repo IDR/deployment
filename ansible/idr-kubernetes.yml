@@ -1,3 +1,5 @@
+# Setup a kubernetes cluster
+# idr-docker.yml must be run first
 ---
 
 - hosts: >

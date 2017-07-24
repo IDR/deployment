@@ -12,7 +12,7 @@
   - role: openmicroscopy.basedeps  # munin requires EPEL
   - role: openmicroscopy.munin
     munin_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
-    munin_slack_channel: "#idr-notify"
+    munin_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
     munin_slack_username: "{{ idr_environment | default('idr') }} Munin Notification"
     munin_slack_emoji: ":pony:"
     munin_slack_url: http://{{ ansible_host }}/munin/problems.html
@@ -91,7 +91,7 @@
 
   roles:
   - role: openmicroscopy.docker-slack-notifier
-    docker_slack_notifier_channel: "#idr-deployment"
+    docker_slack_notifier_channel: "#idr-logs-{{ idr_environment | default('idr') }}"
     docker_slack_notifier_username: "{{ ansible_hostname }}"
     docker_slack_notifier_icon: ":docker:"
     docker_slack_notifier_token: "{{ idr_secret_management_slack_webhook | default(None) }}"

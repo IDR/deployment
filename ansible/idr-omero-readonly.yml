@@ -9,6 +9,7 @@
 
   pre_tasks:
   - name: Create idr-metadata directory
+    become: yes
     file:
       path: /data/idr-metadata
       state: directory

@@ -31,7 +31,7 @@
   version: 0.1.1
 
 - src: openmicroscopy.ice
-  version: 2.1.0
+  version: 2.1.1
 
 - src: openmicroscopy.java
   version: 2.0.1

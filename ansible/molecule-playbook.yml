@@ -34,6 +34,16 @@
     - skip_ansible_lint
 
 
+# TODO: Refactor the openmicroscopy.haproxy role so that rsyslog is separate
+# syslog isn't included in the docker image
+- hosts: idr-proxy-docker
+  tasks:
+  - name: Install rsyslog
+    yum:
+      pkg: rsyslog
+      state: present
+
+
 # The playbook to be tested
 - include: idr-01-install-idr.yml
 

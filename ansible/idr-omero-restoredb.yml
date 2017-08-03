@@ -1,0 +1,78 @@
+# Example playbook for reseting Database and Data Repository
+#
+# This is initially aimed at maintenance tasks, e.g. restoring production database
+
+
+# STOP
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  tasks:
+  - name: omero | stop omero server
+    become: yes
+    systemd:
+      name: omero
+      state: stopped
+
+
+# DB MAINTENANCE
+- hosts: >
+    {{ idr_environment | default('idr') }}-database-hosts
+
+  tasks:
+  - name: postgres | rsync and reset db
+    become: yes
+    include: idr-omero-restoredb-pg.yml
+    when: omero_dbreset
+
+  vars:
+    rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
+    rsync_dest_dbdump: "/tmp/db_dump"
+    omero_dbname: idr
+    omero_dbreset: True
+    omero_dbreset_user_passwords:
+      - {'uid': 0, 'password': ""}
+      - {'uid': 1, 'password': ""}
+      - {'uid': 2, 'password': ""}
+      - {'uid': 52, 'password': ""}
+
+
+# SERVER MAINTENANCE
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  pre_tasks:
+  - name: omero | restore data repository
+    become: yes
+    include: idr-omero-restoredb-repo.yml
+    when: omero_datareporeset
+
+  - name: Get database host
+    set_fact:
+      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+
+    # Upgrade and start
+    # roles:
+    #   - role: openmicroscopy.omero-server
+    #     omero_dbhost: "{{ omero_db_host_ansible }}"
+    #     omero_dbname: idr
+    #     omero_upgrade: True
+    #     omero_systemd_setup: True
+    #     omero_db_create: False
+    #     omero_system_managedrepo_group: idr-data
+
+  vars:
+    rsync_host: "rsync://idr-rsync.openmicroscopy.org/"
+    omero_datareporeset: False
+
+
+# START
+- hosts: >
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  tasks:
+  - name: omero | start omero.server
+    become: yes
+    systemd:
+      name: omero
+      state: started

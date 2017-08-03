@@ -1,0 +1,44 @@
+---
+# restore omero database from compressed dump
+
+- name: postgres | download from rsync
+  become: yes
+  synchronize:
+    mode: pull
+    compress: no
+    src: "{{ rsync_host }}sql/latest/"
+    dest: "{{ rsync_dest_dbdump }}"
+  delegate_to: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+
+- name: postgres | restore with compression | drop schema
+  become: yes
+  become_user: postgres
+  command: psql -d {{ omero_dbname }} -c "DROP SCHEMA public CASCADE;"
+
+- name: postgres | restore with compression | create schema
+  become: yes
+  become_user: postgres
+  command: psql -d {{ omero_dbname }} -c "CREATE SCHEMA public;"
+
+- name: postgres | restore with compression | grant permissions1
+  become: yes
+  become_user: postgres
+  command: psql -d {{ omero_dbname }} -c "GRANT ALL ON SCHEMA public TO postgres;"
+
+- name: postgres | restore with compression | grant permissions2
+  become: yes
+  become_user: postgres
+  command: psql -d {{ omero_dbname }} -c "GRANT ALL ON SCHEMA public TO public;"
+
+# TODO: fix when https://github.com/ansible/ansible/pull/20627
+- name: postgres | restore with compression
+  become: yes
+  become_user: postgres
+  command: pg_restore -Fd -j8 -d {{ omero_dbname }} --exit-on-error /tmp/db_dump
+
+- name: postgres | restore password table
+  become: yes
+  become_user: postgres
+  command: psql -d {{ omero_dbname }} -c "INSERT INTO password(experimenter_id,hash) VALUES ({{ item.uid }},'{{ item.password }}');"
+  with_items: "{{ omero_dbreset_user_passwords | default([]) }}"
+

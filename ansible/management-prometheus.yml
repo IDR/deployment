@@ -99,13 +99,15 @@
 
   tasks:
 
+  # TODO: If we keep this move to a separate repo
   - name: prometheus-omero-py | install prometheus-omero-py
     become: yes
     git:
       dest: /opt/prometheus-omero-py/src
       force: yes
       repo: https://gist.github.com/238a63cfd9c2fb8a450252d79e609296.git
-      version: HEAD
+      #version: HEAD
+      version: dbcb32b5bd212ff9dd1060808f2fa850194ab2d1
     notify:
     - restart prometheus-omero-py
 

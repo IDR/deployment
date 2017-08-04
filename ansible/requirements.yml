@@ -66,11 +66,8 @@
 - src: openmicroscopy.nginx
   version: 1.0.0
 
-#- src: openmicroscopy.nginx-proxy
-#  version: 1.3.0
-- name: openmicroscopy.nginx-proxy
-  src: https://github.com/manics/ansible-role-nginx-proxy/archive/nginx_proxy_block_locations.tar.gz
-  verison: nginx_proxy_block_locations
+- src: openmicroscopy.nginx-proxy
+  version: 1.5.1
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0

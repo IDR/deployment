@@ -83,6 +83,20 @@ omero_user_system: omero-server
 ######################################################################
 # openmicroscopy.omero-web role vars
 
+idr_omero_web_public_url_filters_webclient_exclude:
+- action
+- annotate_(file|tags|comment|rating|map)
+- script_ui
+- ome_tiff
+- figure_script
+
+idr_omero_web_public_url_filters:
+- webadmin/myphoto/
+- mapr/
+- webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
+- webgateway/(?!(archived_files|download_as))
+
+
 omero_web_release: "{{ idr_omero_release }}"
 # Upgrades are normally disabled, uncomment if you want to upgrade OMERO:
 omero_web_upgrade: "{{ idr_omero_upgrade }}"
@@ -107,7 +121,7 @@ omero_web_config_set:
   omero.web.public.server_id: 1
   omero.web.public.user: public
   omero.web.public.password: public
-  omero.web.public.url_filter: "^/(webadmin/myphoto/|mapr/|webclient/(?!(action|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script))|webgateway/(?!(archived_files|download_as)))"
+  omero.web.public.url_filter: "^/({{ idr_omero_web_public_url_filters | join('|') }})"
   omero.web.login_redirect:
     redirect:
       - webindex

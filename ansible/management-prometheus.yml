@@ -35,7 +35,8 @@
     become: yes
     pip:
       #name: django_prometheus
-      name: https://github.com/manics/django-prometheus/archive/1.0.9-ome1.zip
+      #name: https://github.com/manics/django-prometheus/archive/1.0.9-ome1.zip
+      name: https://github.com/manics/django-prometheus/archive/pr46.zip
       state: present
       #version: v1.0.8
       virtualenv: "{{ omero_common_basedir }}/web/venv"

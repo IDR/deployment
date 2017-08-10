@@ -17,10 +17,7 @@
 #    - queries-pg_stat_statements.yml
 
 
-# TODO: Do we trust the JMX monitoring agent for OMERO?
-# If not disable this playbook
-- hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
 
   roles:
   - role: openmicroscopy.prometheus-jmx
@@ -28,12 +25,10 @@
   - role: openmicroscopy.omero-common
 
   tasks:
-  # TODO: Requires a custom build from HEAD
   - name: omero prometheus agent
     become: yes
     copy:
       content: |
-        # Requires https://github.com/prometheus/jmx_exporter/pull/162
         config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
         config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
         config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
@@ -199,10 +194,6 @@
       port: 9100
       jobname: node-exporter
 
-# TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
-# Currently testing using a custom build from HEAD
-# https://github.com/prometheus/jmx_exporter/pull/162
-# https://github.com/prometheus/jmx_exporter/commit/5b180affbefa445088d4608b9640ca404ce91ae2
     - groupname: blitz
       groups:
       - "{{ idr_environment | default('idr') + '-omero-hosts' }}"

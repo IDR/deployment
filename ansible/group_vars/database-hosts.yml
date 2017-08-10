@@ -29,3 +29,18 @@ idr_omero_readonly_database:
   user: omeroreadonly
   password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
   statement_timeout: 60000
+
+postgresql_install_extensions: True
+
+# TODO: add a variable to easily enable/disable
+# TESTING ONLY!
+#postgresql_server_conf:
+#pg_stat_staments?
+#  shared_preload_libraries: "'pg_stat_statements'"
+#  pg_stat_statements.max: 20000
+#Database tuning?
+#  default_statistics_target = 1000
+#  maintenance_work_mem = 256MB
+#  checkpoint_completion_target = 0.9
+#  effective_cache_size = "{{ (ansible_memtotal_mb / 2) | int }}MB"
+#  work_mem = 64MB

@@ -8,6 +8,15 @@
   roles:
   - role: openmicroscopy.postgresql
 
+  # tasks:
+  # - name: postgres idr pg_stat_statements extension
+  #   become: yes
+  #   become_user: postgres
+  #   postgresql_ext:
+  #     db: idr
+  #     name: pg_stat_statements
+  #     state: present
+
 
 # There are two OMERO rw and database servers, and multiple OMERO ro.
 # The next two plays set a hostvar so that the OMERO servers connect to

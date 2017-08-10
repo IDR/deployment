@@ -6,6 +6,7 @@
 - include: idr-bastion.yml
 
 - include: idr-omero.yml
+- include: idr-omero-web.yml
 
 - include: idr-omero-readonly.yml
   tags:

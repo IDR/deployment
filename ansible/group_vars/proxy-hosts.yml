@@ -303,3 +303,9 @@ jekyll_build_root: /srv/www/html
 jekyll_build_git_repo: https://github.com/IDR/idr.openmicroscopy.org.git
 jekyll_build_force_git: True
 jekyll_build_baseurl: /about
+jekyll_build_config:
+- /home/omero/about-config.yml
+
+idr_openmicroscopy_org_config:
+  idr_deployment_version: "{{ idr_environment | default('idr') }}"
+  idr_deployment_date: "DD MMM YYYY"

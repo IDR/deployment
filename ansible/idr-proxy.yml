@@ -83,5 +83,15 @@
 
 # Playbook for setting up the IDR static website pages
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+
+  pre_tasks:
+  - name: create jekyll config
+    become: yes
+    copy:
+      content: "{{ idr_openmicroscopy_org_config | to_nice_yaml }}"
+      dest: "{{ jekyll_build_config.0 }}"
+    notify:
+    - jekyll build
+
   roles:
   - role: openmicroscopy.jekyll-build

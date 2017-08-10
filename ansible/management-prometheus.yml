@@ -7,6 +7,16 @@
   - role: openmicroscopy.prometheus-node
 
 
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+  roles:
+  - role: openmicroscopy.prometheus-postgres
+    prometheus_postgres_dbname: idr
+    prometheus_postgres_query_filenames:
+    - queries-default.yml
+    - queries-pg_statio_user_tables.yml
+#    - queries-pg_stat_statements.yml
+
+
 # TODO: Do we trust the JMX monitoring agent for OMERO?
 # If not disable this playbook
 - hosts: >
@@ -220,6 +230,14 @@
       - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
+
+    # TODO: may need to split this into two roles, one for general stats
+    # and one for detailed statement performance metrics
+    - groupname: postgres
+      groups:
+      - "{{ idr_environment | default('idr') + '-database-hosts' }}"
+      port: 9187
+      jobname: postgres-exporter
 
     - groupname: omero-web
       groups:

@@ -145,3 +145,4 @@
     - idr-per-server
     - idr-sessions
     - idr-vertical
+    - idr-postgresql

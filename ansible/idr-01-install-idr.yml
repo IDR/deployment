@@ -15,4 +15,5 @@
 - include: idr-docker.yml
 
 - include: idr-proxy.yml
+- include: idr-proxy-about.yml
 - include: idr-haproxy.yml

@@ -298,7 +298,7 @@ nginx_proxy_streams: >
 ######################################################################
 # Static webpages (/about) on proxy
 
-jekyll_build_sourcedir: /home/omero/about
+jekyll_build_sourcedir: /srv/www/src/about
 jekyll_build_root: /srv/www/html
 jekyll_build_git_repo: https://github.com/IDR/idr.openmicroscopy.org.git
 jekyll_build_force_git: True

@@ -46,9 +46,9 @@
   become: yes
   yum:
     name:
-    - kubeadm
-    - kubectl
-    - kubelet
+    - kubeadm{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
+    - kubectl{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
+    - kubelet{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
     - kubernetes-cni
     state: present
 

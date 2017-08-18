@@ -1,0 +1,147 @@
+# Setup grafana docker, user and dashboard
+# Assumes there is already a local docker container called prometheus
+# as a datasource
+
+- hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+
+  tasks:
+
+  - name: Run docker grafana
+    become: yes
+    docker_container:
+      image: grafana/grafana
+      links:
+      - prometheus:prometheus
+      name: grafana
+      published_ports:
+      - "3000:3000"
+      state: started
+      volumes:
+      - /data/grafana:/var/lib/grafana
+
+  - name: Wait for grafana
+    wait_for:
+      port: 3000
+
+  # Port 3000 may be open before Grafana is ready, so retry a few times
+  - name: Check user
+    uri:
+      url: "{{ grafana_host }}/api/users/lookup?loginOrEmail=idr"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      status_code: [200, 404]
+    register: grafana_get_user
+    check_mode: no
+    until: grafana_get_user | succeeded
+    retries: 5
+    delay: 5
+
+  - name: Create user
+    uri:
+      url: "{{ grafana_host }}/api/admin/users"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      method: POST
+      body:
+        name: idr
+        email: idr@openmicroscopy.org
+        login: idr
+        password: idr123
+      body_format: json
+      status_code: 200
+    register: grafana_create_user
+    when: grafana_get_user.status == 404
+
+  - name: Check datasource
+    uri:
+      url: "{{ grafana_host }}/api/datasources/name/prometheus"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      status_code: [200, 404]
+    register: grafana_get_datasource
+    check_mode: no
+
+  - name: Create datasource
+    uri:
+      url: "{{ grafana_host }}/api/datasources"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      method: POST
+      body:
+        name: prometheus
+        type: prometheus
+        url: "http://prometheus:9090"
+        access: proxy
+        isDefault: true
+      body_format: json
+      status_code: 200
+    when: grafana_get_datasource.status == 404
+
+  - name: Create dashboards directory
+    become: yes
+    file:
+      path: "{{ grafana_dashboard_json_dir }}"
+      recurse: yes
+
+  - name: Copy dashboards
+    become: yes
+    copy:
+      src: grafana-dashboards/{{ item }}.json
+      dest: "{{ grafana_dashboard_json_dir }}/{{ item }}.json"
+    with_items:
+    - "{{ grafana_dashboard_list }}"
+
+  - name: Check dashboard
+    uri:
+      url: "{{ grafana_host }}/api/dashboards/db/{{ item }}"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      status_code: [200, 404]
+    with_items:
+    - "{{ grafana_dashboard_list }}"
+    register: grafana_get_dashboard
+    check_mode: no
+
+  - name: Read dashboard json
+    slurp:
+      src: "{{ grafana_dashboard_json_dir }}/{{ item.item }}.json"
+    register: grafana_dashboard_json
+    when: item.status == 404
+    with_items:
+    - "{{ grafana_get_dashboard.results }}"
+
+  - name: Create dashboard
+    uri:
+      url: "{{ grafana_host }}/api/dashboards/db"
+      user: "{{ grafana_admin_user }}"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: yes
+      method: POST
+      body:
+        dashboard: >
+          {{ item.content |
+             b64decode |
+             regex_replace('\$\{DS_PROMETHEUS\}', 'prometheus') |
+             from_json
+          }}
+        overwrite: True
+      body_format: json
+      status_code: 200
+    when: item.content is defined
+    with_items:
+    - "{{ grafana_dashboard_json.results }}"
+
+  vars:
+    grafana_dashboard_json_dir: /opt/grafana/dashboards
+    grafana_host: "http://localhost:3000"
+    grafana_admin_user: admin
+    grafana_admin_password: admin
+    grafana_dashboard_list:
+    - idr-per-server
+    - idr-sessions
+    - idr-vertical

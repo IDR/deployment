@@ -66,8 +66,11 @@
 - src: openmicroscopy.nginx
   version: 1.0.0
 
-- src: openmicroscopy.nginx-proxy
-  version: 1.3.0
+#- src: openmicroscopy.nginx-proxy
+#  version: 1.3.0
+- name: openmicroscopy.nginx-proxy
+  src: https://github.com/manics/ansible-role-nginx-proxy/archive/nginx_proxy_block_locations.tar.gz
+  verison: nginx_proxy_block_locations
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
@@ -165,13 +168,15 @@
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2
 
+# TODO: Update and tag
 - name: openmicroscopy.prometheus
-  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
-  version: 0.1.1
+  src: https://github.com/manics/ansible-role-prometheus/archive/metrics_path.tar.gz
+  version: metrics_path
 
+# TODO: Update and tag
 - name: openmicroscopy.prometheus-jmx
-  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz
-  version: 0.1.0
+  src: https://github.com/manics/ansible-role-prometheus-jmx/archive/jmx_prometheus_javaagent_head.tar.gz
+  version: jmx_prometheus_javaagent_head
 
 - name: openmicroscopy.prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz

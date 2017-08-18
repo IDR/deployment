@@ -7,6 +7,13 @@
 # OMERO read-write fileserver for OMERO read-only
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
+  pre_tasks:
+  - name: Create idr-metadata directory
+    become: yes
+    file:
+      path: /data/idr-metadata
+      state: directory
+
   roles:
 
   - role: openmicroscopy.nfs-share
@@ -18,6 +25,9 @@
       # TODO: Limit which hosts can write to this dir
       - host: "*"
         options: 'rw'
+      /data/idr-metadata:
+      - host: "*"
+        options: 'ro'
 
   # Include restart handlers
   - role: openmicroscopy.omero-common
@@ -53,6 +63,9 @@
     - path: /data/BioFormatsCache
       location: "{{ omero_fileserver_host_ansible }}:/data/BioFormatsCache"
       opts: rw,sync
+    - path: /data/idr-metadata
+      location: "{{ omero_fileserver_host_ansible }}:/data/idr-metadata"
+      opts: ro
 
   # Include restart handlers
   - role: openmicroscopy.omero-common

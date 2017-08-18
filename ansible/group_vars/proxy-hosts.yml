@@ -27,7 +27,7 @@ nginx_proxy_websockets_enable: True
 nginx_proxy_upstream_servers:
 - name: omeroreadonly
   balance: ip_hash
-  servers: "{{ omero_omeroreadonly_hosts }}"
+  servers: "{{ omero_omeroreadonly_hosts | sort }}"
 - name: omeroreadwrite
   servers: "{{ omero_omeroreadwrite_hosts }}"
 

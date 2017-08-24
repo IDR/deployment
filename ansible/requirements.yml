@@ -99,12 +99,8 @@
 - src: openmicroscopy.openstack-volume-storage
   version: 1.1.0
 
-# TODO: Update and tag
-#- src: openmicroscopy.postgresql
-#  version: 2.0.0
-- name: openmicroscopy.postgresql
-  src: https://github.com/manics/ansible-role-postgresql/archive/pg-tune.tar.gz
-  version: pg-tune
+- src: openmicroscopy.postgresql
+  version: 3.0.0-m1
 
 - src: openmicroscopy.python-pydata
   version: 1.0.0
@@ -119,7 +115,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.selinux-utils
-  version: 1.0.2
+  version: 1.0.3
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -169,15 +165,13 @@
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2
 
-# TODO: Update and tag
 - name: openmicroscopy.prometheus
-  src: https://github.com/manics/ansible-role-prometheus/archive/metrics_path.tar.gz
-  version: metrics_path
+  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz
+  version: 0.2.0
 
-# TODO: Update and tag
 - name: openmicroscopy.prometheus-jmx
-  src: https://github.com/manics/ansible-role-prometheus-jmx/archive/jmx_prometheus_javaagent_0_10.tar.gz
-  version: jmx_prometheus_javaagent_0_10
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.1.tar.gz
+  version: 0.1.1
 
 - name: openmicroscopy.prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz

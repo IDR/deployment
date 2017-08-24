@@ -67,7 +67,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.nginx-proxy
-  version: 1.3.0
+  version: 1.5.1
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
@@ -166,12 +166,12 @@
   version: 0.0.2
 
 - name: openmicroscopy.prometheus
-  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.1.0.tar.gz
-  version: 0.1.1
+  src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz
+  version: 0.2.0
 
 - name: openmicroscopy.prometheus-jmx
-  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.0.tar.gz
-  version: 0.1.0
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-jmx/archive/0.1.1.tar.gz
+  version: 0.1.1
 
 - name: openmicroscopy.prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz

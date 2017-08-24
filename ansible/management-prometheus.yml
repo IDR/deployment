@@ -18,22 +18,142 @@
   - role: openmicroscopy.omero-common
 
   tasks:
-  # TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
+  # TODO: Requires a custom build from HEAD
   - name: omero prometheus agent
     become: yes
     copy:
       content: |
-        # Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
-        #config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
-        #config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
-        #config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
+        # Requires https://github.com/prometheus/jmx_exporter/pull/162
+        config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
+        config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
+        config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
       dest: "{{ omero_common_basedir }}/server/config/prometheus.omero"
     notify:
     - restart omero-server
 
+  - name: omero-web django prometheus install
+    become: yes
+    pip:
+      #name: django_prometheus
+      name: https://github.com/IDR/django-prometheus/archive/v1.0.10-IDR1.zip
+      state: present
+      #version: v
+      virtualenv: "{{ omero_common_basedir }}/web/venv"
+      virtualenv_site_packages: yes
+    notify:
+    - restart omero-web
+
+  - name: omero-web django prometheus configure
+    become: yes
+    copy:
+      content: |
+        config append -- omero.web.middleware '{"index":0, "class": "django_prometheus.middleware.PrometheusBeforeMiddleware"}'
+        config append -- omero.web.middleware '{"index":1000, "class": "django_prometheus.middleware.PrometheusAfterMiddleware"}'
+        config append -- omero.web.apps '"django_prometheus"'
+
+        config set -- omero.web.wsgi_args '--config file:/opt/omero/web/config/gunicorn-config.py'
+      dest: "{{ omero_common_basedir }}/web/config/django-prometheus.omero"
+    notify:
+    - restart omero-web
+
+  - name: omero-web gunicorn prometheus configure
+    become: yes
+    copy:
+      content: |
+        from prometheus_client import multiprocess
+        def child_exit(server, worker):
+            multiprocess.mark_process_dead(worker.pid)
+      dest: "{{ omero_common_basedir }}/web/config/gunicorn-config.py"
+    notify:
+    - restart omero-web
+
+  - name: omero-web service.d directory
+    become: yes
+    file:
+      path: /etc/systemd/system/omero-web.service.d
+      state: directory
+
+  - name: omero-web service.d prometheus
+    become: yes
+    copy:
+      content: |
+        [Service]
+        Environment="prometheus_multiproc_dir=/opt/omero/web/OMERO.web/var/prometheus"
+        ExecStartPre=/bin/sh -c '/usr/bin/rm -rf "$prometheus_multiproc_dir" && \
+            /usr/bin/mkdir -p "$prometheus_multiproc_dir"'
+      dest: /etc/systemd/system/omero-web.service.d/prometheus.conf
+    notify:
+    - restart omero-web
+
   vars:
     # prometheus-jmx automatically creates this:
     jmx_javaagent: /opt/prometheus/jars/jmx_prometheus_javaagent.jar
+
+
+# prometheus-omero-py session monitoring
+# TODO: Consider moving this into a role
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  roles:
+  - role: openmicroscopy.versioncontrol-utils
+
+  tasks:
+
+  # TODO: If we keep this move to a separate repo
+  - name: prometheus-omero-py | install prometheus-omero-py
+    become: yes
+    git:
+      dest: /opt/prometheus-omero-py/src
+      force: yes
+      repo: https://github.com/IDR/omero-prometheus-tools.git
+      version: 0.0.1
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | setup virtualenv
+    become: yes
+    pip:
+      requirements: /opt/prometheus-omero-py/src/sessions/requirements.txt
+      state: present
+      virtualenv: /opt/prometheus-omero-py/venv
+      virtualenv_site_packages: yes
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | systemd service
+    become: yes
+    copy:
+      dest: /etc/systemd/system/prometheus-omero-py.service
+      src: /opt/prometheus-omero-py/src/sessions/prometheus-omero-py-metrics.service
+      remote_src: True
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | options
+    become: yes
+    copy:
+      content: >
+        OPTIONS="--host localhost --listen 9171 --verbose --interval 15"
+      dest: /etc/sysconfig/prometheus-omero-py
+    notify:
+    - restart prometheus-omero-py
+
+  - name: prometheus-omero-py | enable service
+    become: yes
+    systemd:
+      daemon_reload: yes
+      enabled: yes
+      name: prometheus-omero-py
+      state: started
+
+  handlers:
+  - name: restart prometheus-omero-py
+    become: yes
+    systemd:
+      daemon_reload: yes
+      enabled: yes
+      name: prometheus-omero-py
+      state: restarted
 
 
 - hosts: >
@@ -70,23 +190,29 @@
       jobname: node-exporter
 
 # TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
+# Currently testing using a custom build from HEAD
+# https://github.com/prometheus/jmx_exporter/pull/162
+# https://github.com/prometheus/jmx_exporter/commit/5b180affbefa445088d4608b9640ca404ce91ae2
     - groupname: blitz
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
       port: 9180
       jobname: jmx-blitz
 
-    - groupname: indexer
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      port: 9181
-      jobname: jmx-indexer
-
-    - groupname: pixeldata
-      # groups:
-      # - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
-      port: 9182
-      jobname: jmx-pixeldata
+    # TODO: indexer and pixeldata are currently broken (fail to start)on
+    # metadata53 due to the readonly work. These two targets should be
+    # reenabled when they are fixed:
+    # - groupname: indexer
+    #   groups:
+    #   - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+    #   port: 9181
+    #   jobname: jmx-indexer
+    #
+    # - groupname: pixeldata
+    #   groups:
+    #   - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+    #   port: 9182
+    #   jobname: jmx-pixeldata
 
     - groupname: cadvisor
       groups:
@@ -94,6 +220,19 @@
       - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
+
+    - groupname: omero-web
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      port: 80
+      jobname: django
+      metrics_path: /django_prometheus/metrics
+
+    - groupname: omero-sessions
+      groups:
+      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      port: 9171
+      jobname: omero-sessions
 
     prometheus_http_2xx_internal_targets: >
       {{

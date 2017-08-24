@@ -105,16 +105,15 @@
     git:
       dest: /opt/prometheus-omero-py/src
       force: yes
-      repo: https://gist.github.com/238a63cfd9c2fb8a450252d79e609296.git
-      #version: HEAD
-      version: dbcb32b5bd212ff9dd1060808f2fa850194ab2d1
+      repo: https://github.com/IDR/omero-prometheus-tools.git
+      version: 0.0.1
     notify:
     - restart prometheus-omero-py
 
   - name: prometheus-omero-py | setup virtualenv
     become: yes
     pip:
-      requirements: /opt/prometheus-omero-py/src/requirements.txt
+      requirements: /opt/prometheus-omero-py/src/sessions/requirements.txt
       state: present
       virtualenv: /opt/prometheus-omero-py/venv
       virtualenv_site_packages: yes
@@ -125,7 +124,7 @@
     become: yes
     copy:
       dest: /etc/systemd/system/prometheus-omero-py.service
-      src: /opt/prometheus-omero-py/src/prometheus-omero-py-metrics.service
+      src: /opt/prometheus-omero-py/src/sessions/prometheus-omero-py-metrics.service
       remote_src: True
     notify:
     - restart prometheus-omero-py

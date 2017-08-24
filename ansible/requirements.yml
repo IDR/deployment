@@ -99,12 +99,8 @@
 - src: openmicroscopy.openstack-volume-storage
   version: 1.1.0
 
-# TODO: Update and tag
-#- src: openmicroscopy.postgresql
-#  version: 2.0.0
-- name: openmicroscopy.postgresql
-  src: https://github.com/manics/ansible-role-postgresql/archive/pg-tune.tar.gz
-  version: pg-tune
+- src: openmicroscopy.postgresql
+  version: 3.0.0-m1
 
 - src: openmicroscopy.python-pydata
   version: 1.0.0
@@ -119,7 +115,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.selinux-utils
-  version: 1.0.2
+  version: 1.0.3
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0

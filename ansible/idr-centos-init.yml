@@ -1,0 +1,23 @@
+# Initialisation tasks for CentOS-7 VMs
+# - Persistent journald logs https://unix.stackexchange.com/a/159390
+
+- hosts: "{{ idr_environment | default('idr') }}-hosts"
+
+  tasks:
+  - name: Create persistent journald directory
+    become: yes
+    file:
+      path: /var/log/journal
+      owner: root
+      group: systemd-journal
+      mode: "u=rwx,g=rws,o=rx"
+      state: directory
+    notify:
+    - restart systemd-journald
+
+  handlers:
+  - name: restart systemd-journald
+    become: yes
+    service:
+      name: systemd-journald
+      state: restarted

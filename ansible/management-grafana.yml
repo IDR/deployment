@@ -114,6 +114,8 @@
     when: item.status == 404
     with_items:
     - "{{ grafana_get_dashboard.results }}"
+    loop_control:
+      label: "{{ item.item }}"
 
   - name: Create dashboard
     uri:
@@ -135,6 +137,8 @@
     when: item.content is defined
     with_items:
     - "{{ grafana_dashboard_json.results }}"
+    loop_control:
+      label: "{{ item.item.url }}"
 
   vars:
     grafana_dashboard_json_dir: /opt/grafana/dashboards

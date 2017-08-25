@@ -31,6 +31,10 @@ data:
         'name': 'jupyter-scratch-{username}',
         'persistentVolumeClaim': {'claimName': 'jupyter-scratch-{username}'}
       },
+      {
+        'name': 'jupyter-sharedscratch',
+        'persistentVolumeClaim': {'claimName': 'jupyter-sharedscratch-rw'}
+      },
     ]
     c.KubeSpawner.volume_mounts = [
       {
@@ -40,6 +44,10 @@ data:
       {
         'mountPath': '/scratch',
         'name': 'jupyter-scratch-{username}'
+      },
+      {
+        'mountPath': '/shared',
+        'name': 'jupyter-sharedscratch'
       },
     ]
 

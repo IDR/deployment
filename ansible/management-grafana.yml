@@ -10,6 +10,9 @@
     become: yes
     docker_container:
       image: grafana/grafana
+      env:
+        # Enable anonymous login
+        GF_AUTH_ANONYMOUS_ENABLED: true
       links:
       - prometheus:prometheus
       name: grafana

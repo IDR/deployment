@@ -167,6 +167,16 @@
 
   tasks:
 
+  - name: Allow omeroreadonly database user to create temporary tables
+    become: yes
+    become_user: postgres
+    postgresql_privs:
+      database: "{{ idr_omero_readonly_database.name }}"
+      privs: "TEMPORARY"
+      roles: "{{ idr_omero_readonly_database.user }}"
+      state: present
+      type: database
+
   - name: Give omeroreadonly database user access to database
     become: yes
     become_user: postgres

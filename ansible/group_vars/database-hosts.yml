@@ -10,7 +10,11 @@ postgresql_server_auth:
   user: "{{ idr_omero_readonly_database.user }}"
   address: 0.0.0.0/0
 
-postgresql_users_databases:
+postgresql_databases:
+- name: idr
+  owner: omero
+  restrict: True
+postgresql_users:
 - user: omero
   password: "{{ idr_secret_postgresql_password | default('omero') }}"
   databases: [idr]

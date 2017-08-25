@@ -58,14 +58,19 @@
       version: "{{ idr_jupyter_notebook_repo_version | default('HEAD') }}"
     when: not idr_notebook_st.stat.exists
 
-  # Symlink to a directory inside the notebook (not present on host)
+  # Symlinks to directories inside the notebook (not present on host)
   - name: jupyterhub | create notebooks scratch
     become: yes
     file:
-      src: /scratch
-      dest: "{{ idr_jupyter_notebook_host_volume }}/scratch"
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
       force: yes
       state: link
+    with_items:
+    - src: /scratch
+      dest: "{{ idr_jupyter_notebook_host_volume }}/scratch"
+    - src: /shared
+      dest: "{{ idr_jupyter_notebook_host_volume }}/shared"
 
   - name: jupyterhub | update jupyter omero connection file
     become: yes

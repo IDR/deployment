@@ -57,7 +57,7 @@ omero_server_config_set:
   omero.pixeldata.fail_if_missing: True
   # Group/User drop down menu
   omero.client.ui.menu.dropdown.colleagues.enabled: False
-  omero.client.ui.menu.dropdown.everyone.label: "Demo data"
+  omero.client.ui.menu.dropdown.everyone.label: "Public data"
   omero.client.ui.menu.dropdown.leaders.enabled: False
   # Tree display
   omero.client.ui.tree.type_order: False

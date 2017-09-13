@@ -4,21 +4,6 @@
 
   tasks:
 
-  - name: Create NFS group
-    become: yes
-    group:
-      gid: 1030
-      name: idrnfs
-      state: present
-
-  - name: Create NFS user
-    become: yes
-    user:
-      group: idrnfs
-      name: idrnfs
-      state: present
-      uid: 6166
-
   - name: Mount NFS share
     become: yes
     mount:

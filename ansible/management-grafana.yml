@@ -19,6 +19,7 @@
       published_ports:
       - "3000:3000"
       state: started
+      restart_policy: always
       volumes:
       - /data/grafana:/var/lib/grafana
 

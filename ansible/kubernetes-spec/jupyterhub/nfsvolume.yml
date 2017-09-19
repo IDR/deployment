@@ -1,34 +1,6 @@
 # Persistent NFS volume for Jupyterhub share
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-idr-notebooks
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadOnlyMany
-  storageClassName: idr-notebooks-ro
-  nfs:
-    server: {{ docker_nfs_host_ansible }}
-    path: /data/idr-notebooks
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: idr-notebooks-ro
-spec:
-  storageClassName: idr-notebooks-ro
-  accessModes:
-    - ReadOnlyMany
-  resources:
-    requests:
-      storage: 1Gi
-
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: jupyter-sharedscratch-rw

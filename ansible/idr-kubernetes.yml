@@ -50,23 +50,18 @@
     - nfs-volume-provisioner/deployment.yaml
     - nfs-volume-provisioner/class.yaml
 
-    #- jupyterhub/config-example.yml
+    #- jupyterhub/config.yml
     # Requires the hash of the config file (see later tasks)
     #- jupyterhub/deployment.yml
+    - jupyterhub/nfsvolume.yml
 
     - mineotaur/deployment.yml
 
-  # TODO: This currently requires private vars and will fail without them.
-  # Defaults should be provided to allow public deployment
-  - name: Copy kubernetes spec templates
+  - name: Jupyterhub kubernetes config file
     become: yes
-    template:
-      src: kubernetes-spec/{{ item }}
-      dest: /opt/kubernetes-spec/{{ item }}
-    with_items:
-    - jupyterhub/nfsvolume.yml
-    - jupyterhub/config.yml
-    - mineotaur/nfsvolume.yml
+    copy:
+      src: "{{ idr_jupyterhub_config_file }}"
+      dest: /opt/kubernetes-spec/jupyterhub/config.yml
 
   # `kubectl apply` automaticallty restarts deployments if the spec
   # changes, but not if a ConfigMap changes.
@@ -82,12 +77,15 @@
     set_fact:
       kubernetes_jupyterhub_config_hash: "{{ _kubernetes_jupyterhub_config_st.stat.checksum }}"
 
-  - name: Copy kubernetes jupyterhub spec templates
+  - name: Template kubernetes spec templates
     become: yes
     template:
-      # Requires kubernetes_jupyterhub_config_hash
-      src: kubernetes-spec/jupyterhub/deployment.yml
-      dest: /opt/kubernetes-spec/jupyterhub/deployment.yml
+      src: kubernetes-spec/{{ item }}
+      dest: /opt/kubernetes-spec/{{ item }}
+    with_items:
+    - mineotaur/nfsvolume.yml
+    # Requires kubernetes_jupyterhub_config_hash
+    - jupyterhub/deployment.yml
 
 
 - hosts: >

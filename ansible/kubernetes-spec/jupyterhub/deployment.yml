@@ -78,19 +78,14 @@ spec:
         - --no-db
         - --log-level=DEBUG
         - --base-url=/jupyter
-        - --config=/k8s-config/jupyterhub_config.py
         env:
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        envFrom:
+        - configMapRef:
+            name: jupyterhub-envvars
         ports:
         - name: jupyterhub-port
           containerPort: 8000
-        volumeMounts:
-        - name: jupyterhub-config-volume
-          mountPath: /k8s-config
-      volumes:
-      - name: jupyterhub-config-volume
-        configMap:
-          name: jupyterhub-config

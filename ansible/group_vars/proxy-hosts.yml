@@ -323,3 +323,4 @@ jekyll_build_config:
 idr_openmicroscopy_org_config:
   idr_deployment_version: "{{ idr_environment | default('idr') }}"
 #  idr_deployment_date: "DD MMM YYYY"
+#  idr_deployment_notes: "https://example.org/release-notes"

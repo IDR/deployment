@@ -39,10 +39,9 @@
   - name: omero-web django prometheus install
     become: yes
     pip:
-      #name: django_prometheus
-      name: https://github.com/IDR/django-prometheus/archive/v1.0.10-IDR1.zip
+      name: djangoprometheus
       state: present
-      #version: v
+      version: 1.0.10
       virtualenv: "{{ omero_common_basedir }}/web/venv"
       virtualenv_site_packages: yes
     notify:

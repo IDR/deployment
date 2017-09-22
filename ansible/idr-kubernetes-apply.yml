@@ -19,6 +19,8 @@
     - nfs-volume-provisioner/deployment.yaml
     - nfs-volume-provisioner/class.yaml
 
+    - external-omero/external-service.yml
+
     - jupyterhub/config.yml
     - jupyterhub/nfsvolume.yml
     - jupyterhub/deployment.yml

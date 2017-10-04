@@ -47,9 +47,7 @@
       name: "{{ item }}"
       state: "present"
       force: "{{ idr_docker_pull_latest }}"
-    with_items:
-    - "{{ idr_jupyter_hub_image }}"
-    - "{{ idr_jupyter_notebook_image }}"
+    with_items: "{{ idr_prepull_docker_images }}"
 
   vars:
   - idr_docker_pull_latest: True

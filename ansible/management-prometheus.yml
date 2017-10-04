@@ -138,7 +138,13 @@
     become: yes
     copy:
       content: >
-        OPTIONS="--host localhost --listen 9171 --verbose --interval 15"
+        OPTIONS="
+        --host localhost
+        --user public
+        --password {{ idr_secret_public_password | default('public') }}
+        --listen 9171
+        --verbose
+        --interval 15"
       dest: /etc/sysconfig/prometheus-omero-py
     notify:
     - restart prometheus-omero-py

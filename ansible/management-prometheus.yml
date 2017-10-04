@@ -39,7 +39,7 @@
   - name: omero-web django prometheus install
     become: yes
     pip:
-      name: djangoprometheus
+      name: django-prometheus
       state: present
       version: 1.0.10
       virtualenv: "{{ omero_common_basedir }}/web/venv"
@@ -87,6 +87,7 @@
             /usr/bin/mkdir -p "$prometheus_multiproc_dir"'
       dest: /etc/systemd/system/omero-web.service.d/prometheus.conf
     notify:
+    - reload systemd
     - restart omero-web
 
   vars:

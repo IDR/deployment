@@ -135,5 +135,5 @@
 
 # Now run:
 # kubectl get nodes
-# kubectl apply -f jupyterhub-config.yml -f jupyterhub-deployment.yml
+# kubectl apply -f config.yml -f jupyterhub-deployment.yml
 # kubectl logs -f deployment/jupyterhub-deployment

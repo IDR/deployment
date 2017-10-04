@@ -10,10 +10,6 @@
       docker_use_ipv4_nic_mtu: True
 
 
-- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
-  # Empty playbook to force loading of omero-hosts hostvars
-
-
 - hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 
   pre_tasks:
@@ -23,7 +19,6 @@
       path: /data/{{ item }}
       state: directory
     with_items:
-    - idr-notebooks
     - mineotaur
     - volumes
 
@@ -31,76 +26,10 @@
   - role: openmicroscopy.versioncontrol-utils
   - role: openmicroscopy.nfs-share
     nfs_shares:
-      /data/idr-notebooks:
-      - host: "*"
-        options: 'ro'
       /data/mineotaur:
       - host: "*"
         options: 'rw'
-#  - role: IDR.idr-jupyter
 
-  tasks:
-
-  # Notebooks
-
-  - name: jupyterhub | check if idr-notebooks repo exists
-    stat:
-      path: "{{ idr_jupyter_notebook_host_volume }}/.git/HEAD"
-    register: idr_notebook_st
-
-  # If a repo exists locally don't update it in case there are local changes
-  - name: jupyterhub | clone idr-notebooks
-    become: yes
-    git:
-      dest: "{{ idr_jupyter_notebook_host_volume }}/"
-      repo: "{{ idr_jupyter_notebook_repo }}"
-      force: no
-      version: "{{ idr_jupyter_notebook_repo_version | default('HEAD') }}"
-    when: not idr_notebook_st.stat.exists
-
-  # Symlinks to directories inside the notebook (not present on host)
-  - name: jupyterhub | create notebooks scratch
-    become: yes
-    file:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
-      force: yes
-      state: link
-    with_items:
-    - src: /scratch
-      dest: "{{ idr_jupyter_notebook_host_volume }}/scratch"
-    - src: /shared
-      dest: "{{ idr_jupyter_notebook_host_volume }}/shared"
-
-  - name: jupyterhub | update jupyter omero connection file
-    become: yes
-    blockinfile:
-      dest: "{{ idr_jupyter_notebook_host_volume }}/library/idr.py"
-      state: present
-      # This ensures the code will be indented with 4 spaces
-      block: |6
-                import random
-                HOSTNAME = str(random.choice({{ idr_jupyter_omero_host }}))
-                USERNAME = "{{ idr_jupyter_omero_user }}"
-                PASSWORD = "{{ idr_jupyter_omero_pass | quote }}"
-
-  vars:
-  # Mount this volume as /notebooks inside the docker container
-  # You must ensure it has the correct permissions for writing
-  - idr_jupyter_notebook_host_volume: /data/idr-notebooks
-  - idr_jupyter_omero_host: >
-      {{
-        groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
-        map('extract', hostvars,
-          ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
-      }}
-  - idr_jupyter_omero_user: public
-  - idr_jupyter_omero_pass: public
-
-#  - idr_jupyter_notebook_volumes: >
-#      {
-#        '{{ idr_jupyter_notebook_host_volume }}': '/notebooks',
-#      }
 
 - hosts: "{{ idr_environment | default('idr') }}-dockerworker-hosts"
 

@@ -1,0 +1,26 @@
+# Create a Kubernetes service to represent the external OMERO.servers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idr-omero-public
+  labels:
+    name: idr-omero-public
+spec:
+  ports:
+  - name: omero-secure
+    protocol: TCP
+    port: 4064
+    targetPort: 4064
+  selector: {}
+
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: idr-omero-public
+subsets:
+- addresses: {{ docker_omeroreadonly_endpoint_addresses | sort | to_json }}
+  ports:
+  - name: omero-secure
+    port: 4064

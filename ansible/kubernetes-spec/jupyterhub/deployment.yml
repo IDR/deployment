@@ -58,19 +58,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jupyterhub-deployment
+  name: jupyterhub
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         name: jupyterhub-pod
-        confighash: "{{ kubernetes_jupyterhub_config_hash }}"
     spec:
       serviceAccount: jupyterhub-spawner
       containers:
       - name: jupyterhub-container
-        image: manics/jupyterhub-githubauth:merge
+        image: imagedata/jupyterhub-githubauth:latest
         imagePullPolicy: IfNotPresent
         command:
         - jupyterhub
@@ -83,6 +82,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: CONFIG_HASH
+          value: "{{ kubernetes_jupyterhub_config_hash }}"
         envFrom:
         - configMapRef:
             name: jupyterhub-envvars

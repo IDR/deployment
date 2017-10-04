@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.4.2-2"
+idr_omero_release: "0.4.3"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -15,7 +15,7 @@ omero_server_checkupgrade_comparator: '!='
 
 idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
 # If you want to speed up Ice installation use a precompiled IcePy:
-ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.2/zeroc_ice-3.6.3-cp27-cp27mu-linux_x86_64.whl
+ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.3/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
 # If you're using a CI build you might need to disable omego SSL verification
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 

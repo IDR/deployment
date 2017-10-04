@@ -5,10 +5,7 @@
   become: yes
   get_url:
     dest: /root
-    url: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/{{ item }}
-  with_items:
-  - kube-flannel.yml
-  - kube-flannel-rbac.yml
+    url: https://raw.githubusercontent.com/coreos/flannel/v0.9.0/Documentation/kube-flannel.yml
 
 - name: kubernetes | create token
   become: yes
@@ -49,19 +46,16 @@
 
 - name: kubernetes | flannel-rbac
   become: yes
-  command: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f {{ item }}
+  command: kubectl --kubeconfig /etc/kubernetes/admin.conf apply -f /root/kube-flannel.yml
   args:
     creates: /root/kubernetes.initialised
-  with_items:
-  - /root/kube-flannel-rbac.yml
-  - /root/kube-flannel.yml
 
 # check 'flannel' in kubectl --kubeconfig /etc/kubernetes/admin.conf get clusterrole
 # check 'flannel' in kubectl --kubeconfig /etc/kubernetes/admin.conf get serviceaccount
 - name: kubernetes | create flag file
   become: yes
   copy:
-    content: "Applied kube-flannel-rbac.yml kube-flannel.yml"
+    content: "Applied kube-flannel.yml"
     dest: /root/kubernetes.initialised
     force: yes
 

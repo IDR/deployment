@@ -226,6 +226,8 @@ nginx_proxy_direct_locations:
   redirect302: /about
 - location: "^~ /about"
   alias: /srv/www/html
+- location: "^~ /connection"
+  alias: /srv/www/connection
 - location: "^~ /.well-known/acme-challenge"
   alias: /srv/www/letsencrypt/challenge
 

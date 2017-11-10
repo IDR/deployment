@@ -17,9 +17,9 @@ vol_errors=0
 
 for vm in \
         database \
-        omero \
+        omeroreadwrite \
         proxy \
-        a-dockermanager \
+        dockermanager \
         management \
         ; do
     server="$vm_prefix-$vm"
@@ -31,13 +31,13 @@ done
 
 for vol in \
         database-db \
-        omero-data \
+        omeroreadwrite-data \
         proxy-nginxcache \
-        a-dockermanager-data \
+        dockermanager-data \
         ; do
     volume="$vm_prefix-$vol"
     echo "Snapshotting volume $volume"
-    openstack snapshot create --force --name "$volume-$today" "$volume" -f yaml
+    openstack volume snapshot create --force --volume "$volume" "$volume-$today" -f yaml
     [ $? -eq 0 ] || let vol_errors++
     echo
 done

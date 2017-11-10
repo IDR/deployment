@@ -1,0 +1,25 @@
+# Shutdown services on a production instance
+
+- hosts: "{{ idr_environment }}-hosts"
+
+  gather_facts: False
+
+  tasks:
+  - name: Shutdown and disable production services
+    become: yes
+    service:
+      name: "{{ item }}"
+      state: stopped
+      enabled: False
+    with_items:
+    - omero-server
+    - omero-web
+    - omero-logmonitor
+    - redis
+    - httpd
+    - nginx
+    - postgresql-9.6
+    - prometheus-node-exporter
+    - prometheus-omero-py
+    - docker
+    ignore_errors: yes

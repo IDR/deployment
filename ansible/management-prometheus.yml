@@ -7,10 +7,17 @@
   - role: openmicroscopy.prometheus-node
 
 
-# TODO: Do we trust the JMX monitoring agent for OMERO?
-# If not disable this playbook
-- hosts: >
-    {{ idr_environment | default('idr') }}-omero-hosts
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+  roles:
+  - role: openmicroscopy.prometheus-postgres
+    prometheus_postgres_dbname: idr
+    prometheus_postgres_query_filenames:
+    - queries-default.yml
+    - queries-pg_statio_user_tables.yml
+#    - queries-pg_stat_statements.yml
+
+
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
 
   roles:
   - role: openmicroscopy.prometheus-jmx
@@ -18,12 +25,10 @@
   - role: openmicroscopy.omero-common
 
   tasks:
-  # TODO: Requires a custom build from HEAD
   - name: omero prometheus agent
     become: yes
     copy:
       content: |
-        # Requires https://github.com/prometheus/jmx_exporter/pull/162
         config set -- omero.jvmcfg.append.blitz "-javaagent:{{ jmx_javaagent }}=9180:/etc/prometheus/jmx-default-config.yml"
         config set -- omero.jvmcfg.append.indexer "-javaagent:{{ jmx_javaagent }}=9181:/etc/prometheus/jmx-default-config.yml"
         config set -- omero.jvmcfg.append.pixeldata "-javaagent:{{ jmx_javaagent }}=9182:/etc/prometheus/jmx-default-config.yml"
@@ -34,10 +39,9 @@
   - name: omero-web django prometheus install
     become: yes
     pip:
-      #name: django_prometheus
-      name: https://github.com/IDR/django-prometheus/archive/v1.0.10-IDR1.zip
+      name: django-prometheus
       state: present
-      #version: v
+      version: 1.0.10
       virtualenv: "{{ omero_common_basedir }}/web/venv"
       virtualenv_site_packages: yes
     notify:
@@ -83,6 +87,7 @@
             /usr/bin/mkdir -p "$prometheus_multiproc_dir"'
       dest: /etc/systemd/system/omero-web.service.d/prometheus.conf
     notify:
+    - reload systemd
     - restart omero-web
 
   vars:
@@ -133,7 +138,13 @@
     become: yes
     copy:
       content: >
-        OPTIONS="--host localhost --listen 9171 --verbose --interval 15"
+        OPTIONS="
+        --host localhost
+        --user public
+        --password {{ idr_secret_public_password | default('public') }}
+        --listen 9171
+        --verbose
+        --interval 15"
       dest: /etc/sysconfig/prometheus-omero-py
     notify:
     - restart prometheus-omero-py
@@ -189,10 +200,6 @@
       port: 9100
       jobname: node-exporter
 
-# TODO: Disabled due to https://github.com/prometheus/jmx_exporter/issues/156
-# Currently testing using a custom build from HEAD
-# https://github.com/prometheus/jmx_exporter/pull/162
-# https://github.com/prometheus/jmx_exporter/commit/5b180affbefa445088d4608b9640ca404ce91ae2
     - groupname: blitz
       groups:
       - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
@@ -220,6 +227,14 @@
       - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
+
+    # TODO: may need to split this into two roles, one for general stats
+    # and one for detailed statement performance metrics
+    - groupname: postgres
+      groups:
+      - "{{ idr_environment | default('idr') + '-database-hosts' }}"
+      port: 9187
+      jobname: postgres-exporter
 
     - groupname: omero-web
       groups:

@@ -10,12 +10,16 @@
     become: yes
     docker_container:
       image: grafana/grafana
+      env:
+        # Enable anonymous login
+        GF_AUTH_ANONYMOUS_ENABLED: true
       links:
       - prometheus:prometheus
       name: grafana
       published_ports:
       - "3000:3000"
       state: started
+      restart_policy: always
       volumes:
       - /data/grafana:/var/lib/grafana
 
@@ -114,6 +118,8 @@
     when: item.status == 404
     with_items:
     - "{{ grafana_get_dashboard.results }}"
+    loop_control:
+      label: "{{ item.item }}"
 
   - name: Create dashboard
     uri:
@@ -135,6 +141,8 @@
     when: item.content is defined
     with_items:
     - "{{ grafana_dashboard_json.results }}"
+    loop_control:
+      label: "{{ item.item.url }}"
 
   vars:
     grafana_dashboard_json_dir: /opt/grafana/dashboards
@@ -145,3 +153,4 @@
     - idr-per-server
     - idr-sessions
     - idr-vertical
+    - idr-postgresql

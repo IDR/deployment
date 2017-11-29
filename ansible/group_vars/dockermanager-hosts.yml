@@ -2,8 +2,7 @@ docker_use_ipv4_nic_mtu: True
 
 kubernetes_kube_version: 1.7.4
 
-idr_prepull_docker_images:
-- "imagedata/jupyterhub-githubauth:latest"
-- "imagedata/jupyter-docker:develop"
+# Most pods are exluded from running on master
+idr_prepull_docker_images: []
 
 idr_jupyterhub_config_file: "{{ idr_secret_jupyterhub_config_file | default('kubernetes-spec/jupyterhub/config.yml') }}"

@@ -3,5 +3,5 @@ docker_use_ipv4_nic_mtu: True
 kubernetes_kube_version: 1.7.4
 
 idr_prepull_docker_images:
-- "imagedata/jupyterhub-githubauth:latest"
-- "imagedata/jupyter-docker:develop"
+- "imagedata/jupyterhub-githubauth:0.5.0"
+- "imagedata/jupyter-docker:0.5.0"

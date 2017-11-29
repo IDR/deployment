@@ -1,0 +1,30 @@
+# Experimental: fpbioimage
+
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  roles:
+  # Needed for handlers
+  - role: openmicroscopy.omero-common
+
+  tasks:
+
+  - name: omero-web fpbioimage install
+    become: yes
+    pip:
+      name: omero-fpbioimage
+      state: present
+      version: 0.2.0
+      virtualenv: "{{ omero_common_basedir }}/web/venv"
+      virtualenv_site_packages: yes
+    notify:
+    - restart omero-web
+
+  - name: omero-web fpbioimage configure
+    become: yes
+    copy:
+      content: |
+        config append -- omero.web.apps '"omero_fpbioimage"'
+        config append -- omero.web.open_with '["omero_fpbioimage", "fpbioimage_index", {"script_url": "fpbioimage/openwith.js", "supported_objects": ["image"], "label": "FPBioimage"}]'
+      dest: "{{ omero_common_basedir }}/web/config/fpbioimage.omero"
+    notify:
+    - restart omero-web

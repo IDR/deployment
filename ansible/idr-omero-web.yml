@@ -1,0 +1,37 @@
+# Install OMERO.web on the IDR
+
+# TODO: Add omeroweb hosts group
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  roles:
+  - role: openmicroscopy.redis
+  - role: openmicroscopy.omero-web
+  - role: openmicroscopy.omero-web-apps
+
+  # Vars are in group_vars/omero-hosts.yml
+
+  environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
+
+
+# TODO: Replace with a template using
+# https://github.com/openmicroscopy/openmicroscopy/pull/5387
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
+
+  tasks:
+  - name: Set Nginx proxy timeout
+    become: yes
+    lineinfile:
+      insertafter: 'server\s*{'
+      path: /etc/nginx/conf.d/omero-web.conf
+      line: proxy_read_timeout {{ idr_omero_web_timeout }};
+      regexp: proxy_read_timeout\s+.*
+      state: present
+    notify:
+    - restart nginx
+
+  handlers:
+  - name: restart nginx
+    become: yes
+    service:
+      name: nginx
+      state: restarted

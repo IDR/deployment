@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.4.2-2"
+idr_omero_release: "0.4.3"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -15,7 +15,7 @@ omero_server_checkupgrade_comparator: '!='
 
 idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
 # If you want to speed up Ice installation use a precompiled IcePy:
-ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.2/zeroc_ice-3.6.3-cp27-cp27mu-linux_x86_64.whl
+ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.3/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
 # If you're using a CI build you might need to disable omego SSL verification
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
@@ -83,6 +83,20 @@ omero_user_system: omero-server
 ######################################################################
 # openmicroscopy.omero-web role vars
 
+idr_omero_web_public_url_filters_webclient_exclude:
+- action
+- annotate_(file|tags|comment|rating|map)
+- script_ui
+- ome_tiff
+- figure_script
+
+idr_omero_web_public_url_filters:
+- webadmin/myphoto/
+- mapr/
+- webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
+- webgateway/(?!(archived_files|download_as))
+
+
 omero_web_release: "{{ idr_omero_release }}"
 # Upgrades are normally disabled, uncomment if you want to upgrade OMERO:
 omero_web_upgrade: "{{ idr_omero_upgrade }}"
@@ -106,8 +120,8 @@ omero_web_config_set:
   omero.web.public.enabled: True
   omero.web.public.server_id: 1
   omero.web.public.user: public
-  omero.web.public.password: public
-  omero.web.public.url_filter: "^/(webadmin/myphoto/|mapr/|webclient/(?!(action|annotate_(file|tags|comment|rating|map)|script_ui|ome_tiff|figure_script))|webgateway/(?!(archived_files|download_as)))"
+  omero.web.public.password: "{{ idr_secret_public_password | default('public') }}"
+  omero.web.public.url_filter: "^/({{ idr_omero_web_public_url_filters | join('|') }})"
   omero.web.login_redirect:
     redirect:
       - webindex

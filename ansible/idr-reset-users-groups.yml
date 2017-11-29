@@ -21,7 +21,7 @@
 
   - name: Get omero public password
     set_fact:
-      omero_user_web_public_password: public
+      omero_user_web_public_password: "{{ idr_secret_public_password | default('public') }}"
 
   - name: Generate random OMERO root password
     command: openssl rand -base64 15

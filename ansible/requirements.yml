@@ -67,7 +67,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.nginx-proxy
-  version: 1.5.1
+  version: 1.5.2
 
 - src: openmicroscopy.nginx-ssl-selfsigned
   version: 1.0.0
@@ -85,7 +85,7 @@
   version: 1.1.0
 
 - src: openmicroscopy.omero-server
-  version: 2.0.0-m3
+  version: 2.0.0-m4
 
 - src: openmicroscopy.omero-user
   version: 0.1.1
@@ -100,7 +100,7 @@
   version: 1.1.0
 
 - src: openmicroscopy.postgresql
-  version: 2.0.0
+  version: 3.0.0-m2
 
 - src: openmicroscopy.python-pydata
   version: 1.0.0
@@ -115,7 +115,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.selinux-utils
-  version: 1.0.2
+  version: 1.0.3
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0
@@ -176,3 +176,7 @@
 - name: openmicroscopy.prometheus-node
   src: https://github.com/openmicroscopy/ansible-role-prometheus-node/archive/0.1.1.tar.gz
   version: 0.1.1
+
+- name: openmicroscopy.prometheus-postgres
+  src: https://github.com/openmicroscopy/ansible-role-prometheus-postgres/archive/0.1.0.tar.gz
+  version: 0.1.0

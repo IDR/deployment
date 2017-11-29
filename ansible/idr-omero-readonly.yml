@@ -59,13 +59,13 @@
     nfs_share_mounts:
     - path: /data/OMERO-readonly
       location: "{{ omero_fileserver_host_ansible }}:/data/OMERO"
-      opts: ro
+      opts: ro,soft
     - path: /data/BioFormatsCache
       location: "{{ omero_fileserver_host_ansible }}:/data/BioFormatsCache"
-      opts: rw,sync
+      opts: rw,,soft,sync
     - path: /data/idr-metadata
       location: "{{ omero_fileserver_host_ansible }}:/data/idr-metadata"
-      opts: ro
+      opts: ro,soft
 
   # Include restart handlers
   - role: openmicroscopy.omero-common
@@ -166,6 +166,16 @@
 # Load hostvars for subsequent playbooks
 
   tasks:
+
+  - name: Allow omeroreadonly database user to create temporary tables
+    become: yes
+    become_user: postgres
+    postgresql_privs:
+      database: "{{ idr_omero_readonly_database.name }}"
+      privs: "TEMPORARY"
+      roles: "{{ idr_omero_readonly_database.user }}"
+      state: present
+      type: database
 
   - name: Give omeroreadonly database user access to database
     become: yes

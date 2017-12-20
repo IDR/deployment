@@ -76,7 +76,7 @@
   version: 0.3.0
 
 - src: openmicroscopy.omego
-  version: 0.1.0
+  version: 0.1.1
 
 - src: openmicroscopy.omero-logmonitor
   version: 2.1.0

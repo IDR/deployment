@@ -1,0 +1,32 @@
+# Fluentd log handling
+
+- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+
+  roles:
+  - role: openmicroscopy.fluentd
+    fluentd_plugins:
+      - fluent-plugin-slack
+    fluentd_env:
+      SLACK_TOKEN: "{{ idr_secret_management_slack_token | default(None) }}"
+
+  tasks:
+
+  - name: copy nginx fluentd config
+    become: yes
+    template:
+      src: files/fluentd/nginx-proxy-conf.j2
+      dest: /etc/td-agent/conf.d/nginx-proxy.conf
+    notify:
+    - restart fluentd
+
+  - name: add fluentd user to adm group
+    become: yes
+    user:
+      name: td-agent
+      append: yes
+      groups: adm
+    notify:
+    - restart fluentd
+
+  vars:
+    fluentd_nginx_slack_channel: idr-notify-{{ idr_environment | default('idr') }}

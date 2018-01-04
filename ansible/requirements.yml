@@ -24,6 +24,10 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
+- name: openmicroscopy.fluentd
+  src: https://github.com/manics/ansible-role-fluentd/archive/0.2.0.tar.gz
+  version: 0.2.0
+
 - src: openmicroscopy.haproxy
   version: 2.1.0-m1
 

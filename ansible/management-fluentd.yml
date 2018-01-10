@@ -1,32 +1,100 @@
 # Fluentd log handling
 
-- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
-
-  roles:
-  - role: openmicroscopy.fluentd
-    fluentd_plugins:
-      - fluent-plugin-slack
-    fluentd_env:
-      SLACK_TOKEN: "{{ idr_secret_management_slack_token | default(None) }}"
+# This assumes docker has already been installed
+# (by management-prometheus.yml)
+- hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
   tasks:
 
-  - name: copy nginx fluentd config
+  - name: Create fluentd server configuration directory
+    become: yes
+    file:
+      path: /etc/fluentd
+      recurse: yes
+      state: directory
+
+  - name: Create fluentd aggregated logs directory
+    become: yes
+    file:
+      path: /data/fluentd
+      recurse: yes
+      state: directory
+      # User id in fluentd Docker image
+      owner: 1000
+      group: 1000
+
+  - name: Copy fluentd server configuration files
     become: yes
     template:
-      src: files/fluentd/nginx-proxy-conf.j2
-      dest: /etc/td-agent/conf.d/nginx-proxy.conf
+      src: files/fluentd-server/fluent.conf.j2
+      dest: /etc/fluentd/fluent.conf
+    register: fluent_conf_status
+
+  - name: Stop docker fluentd if config changed
+    become: yes
+    docker_container:
+      image: manics/fluentd-idr
+      name: fluentd
+      state: stopped
+    when: fluent_conf_status | changed
+
+  - name: Run docker fluentd
+    become: yes
+    docker_container:
+      image: manics/fluentd-idr
+      name: fluentd
+      published_ports:
+      - "24224:24224/udp"
+      - "24224:24224"
+      state: started
+      restart_policy: always
+      volumes:
+      - /etc/fluentd/fluent.conf:/fluentd/etc/fluent.conf:ro
+      - /data/fluentd:/data/fluentd
+
+  vars:
+    fluentd_server_name: "{{ ansible_hostname }}"
+    fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"
+    fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
+    fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
+
+
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-proxy-hosts
+    {{ idr_environment | default('idr') }}-omero-hosts
+
+  roles:
+  - role: openmicroscopy.fluentd
+
+  tasks:
+
+  # TODO: Ideally we'd use the `validate:` option to check these config
+  # files, but it's not possible to validate only a fragment
+  # If there's an error in these files you will ahve to manually delete
+  # them since the previous role will attempt (and fail) to start
+  # td-agent, so we'll never reach the point at which config fixes
+  # are applied
+  - name: Configure fluentd forwarding
+    become: yes
+    template:
+      src: files/fluentd/forward-conf.j2
+      dest: /etc/td-agent/conf.d/forward.conf
     notify:
     - restart fluentd
 
-  - name: add fluentd user to adm group
+  - name: Copy fluentd configuration
     become: yes
-    user:
-      name: td-agent
-      append: yes
-      groups: adm
+    copy:
+      src: "{{ item }}"
+      dest: "/etc/td-agent/conf.d/{{ item | basename }}"
+    with_items:
+    # These are specifc to each host-group
+    - "{{ fluentd_source_configs }}"
     notify:
     - restart fluentd
 
   vars:
-    fluentd_nginx_slack_channel: idr-notify-{{ idr_environment | default('idr') }}
+    fluentd_server_name: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]].ansible_hostname }}"
+    fluentd_server_address: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
+    fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"

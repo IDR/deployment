@@ -22,6 +22,13 @@ ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/release
 # This is needed to ensure the client version matches the server
 postgresql_version: "9.6"
 
+
+######################################################################
+# openmicroscopy.fluentd vars
+fluentd_source_configs:
+- files/fluentd/omero.conf
+
+
 ######################################################################
 # openmicroscopy.omero-server role vars
 

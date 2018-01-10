@@ -3,10 +3,6 @@
 # TODO: Add multiple central servers for HA
 
 <label @FORWARD>
-  <filter **>
-    @type stdout
-  </filter>
-
   <match **>
     @type forward
     send_timeout 60s

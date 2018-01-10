@@ -15,9 +15,9 @@
 </source>
 
 # For debugging only
-<filter **>
-  @type stdout
-</filter>
+#<filter **>
+#  @type stdout
+#</filter>
 
 
 ###########################################################################
@@ -110,6 +110,7 @@
 </match>
 
 # Send slack notifications for error and critical
+# Exclude known errors
 <label @OMERO_NOTIFICATION>
   <filter omero.**>
     @type grep
@@ -117,7 +118,10 @@
       key level
       pattern ^(error|critical)
     </regexp>
-    # Could also filter by message content
+    <exclude>
+      key message
+      pattern ^Failed during repository takeover
+    </exclude>
   </filter>
 
   <filter omero.**>

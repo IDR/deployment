@@ -41,6 +41,21 @@
 
 
 ###########################################################################
+# Send to Elasticsearch
+###########################################################################
+
+<label @ELASTICSEARCH>
+  <match **>
+    @type elasticsearch
+    logstash_format true
+    host "{{ fluentd_elasticsearch_host }}"
+    port 9200
+    flush_interval 5s
+  </match>
+</label>
+
+
+###########################################################################
 # nginx-proxy
 ###########################################################################
 
@@ -50,6 +65,10 @@
   <store>
     @type relabel
     @label @STORE_LOGS
+  </store>
+  <store>
+    @type relabel
+    @label @ELASTICSEARCH
   </store>
   <store>
     @type relabel
@@ -101,6 +120,10 @@
   <store>
     @type relabel
     @label @STORE_LOGS
+  </store>
+  <store>
+    @type relabel
+    @label @ELASTICSEARCH
   </store>
   <store>
     @type relabel

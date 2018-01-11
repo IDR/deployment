@@ -1,4 +1,5 @@
 # Fluentd log handling
+# + Elasticsearch + Kibana
 
 # This assumes docker has already been installed
 # (by management-prometheus.yml)
@@ -38,11 +39,38 @@
       state: stopped
     when: fluent_conf_status | changed
 
+  - name: Create elasticsearch directory
+    become: yes
+    file:
+      path: /data/elasticsearch
+      recurse: yes
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: 1000
+
+  - name: Run docker elasticsearch
+    become: yes
+    docker_container:
+      image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
+      name: elasticsearch
+      env:
+        discovery.type: single-node
+      published_ports:
+      - "9200:9200"
+      #- "9300:9300"
+      state: started
+      restart_policy: always
+      volumes:
+      - /data/elasticsearch:/usr/share/elasticsearch/data
+
   - name: Run docker fluentd
     become: yes
     docker_container:
       image: manics/fluentd-idr
       name: fluentd
+      links:
+      - "elasticsearch:elasticsearch"
       published_ports:
       - "24224:24224/udp"
       - "24224:24224"
@@ -52,10 +80,24 @@
       - /etc/fluentd/fluent.conf:/fluentd/etc/fluent.conf:ro
       - /data/fluentd:/data/fluentd
 
+  - name: Run docker kibana
+    become: yes
+    docker_container:
+      image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
+      name: kibana
+      links:
+      # This matches the default kibana config:
+      - "elasticsearch:elasticsearch"
+      published_ports:
+      - "5601:5601"
+      state: started
+      restart_policy: always
+
   vars:
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
     fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
+    fluentd_elasticsearch_host: elasticsearch
 
 
 

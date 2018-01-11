@@ -53,7 +53,6 @@
       - /data/fluentd:/data/fluentd
 
   vars:
-    fluentd_server_name: "{{ ansible_hostname }}"
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
     fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
@@ -67,14 +66,17 @@
   roles:
   - role: openmicroscopy.fluentd
 
-  tasks:
-
   # TODO: Ideally we'd use the `validate:` option to check these config
-  # files, but it's not possible to validate only a fragment
-  # If there's an error in these files you will ahve to manually delete
-  # them since the previous role will attempt (and fail) to start
-  # td-agent, so we'll never reach the point at which config fixes
-  # are applied
+  # files, but it's not possible to validate only a fragment.
+  # Instead we need to create these files before applying the role
+  pre_tasks:
+
+  - name: Create fluentd conf.d
+    become: yes
+    file:
+      path: /etc/td-agent/conf.d
+      state: directory
+
   - name: Configure fluentd forwarding
     become: yes
     template:
@@ -95,6 +97,5 @@
     - restart fluentd
 
   vars:
-    fluentd_server_name: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]].ansible_hostname }}"
     fluentd_server_address: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"

@@ -50,7 +50,9 @@
     logstash_format true
     host "{{ fluentd_elasticsearch_host }}"
     port 9200
-    flush_interval 5s
+    include_tag_key true
+    tag_key @log_name
+    flush_interval 10s
   </match>
 </label>
 

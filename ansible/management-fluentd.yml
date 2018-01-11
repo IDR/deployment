@@ -1,5 +1,6 @@
 # Fluentd log handling
-# + Elasticsearch + Kibana
+# + Elasticsearch + Kibana in Docker
+# https://www.fluentd.org/guides/recipes/elasticsearch-and-s3
 
 # This assumes docker has already been installed
 # (by management-prometheus.yml)
@@ -56,6 +57,7 @@
       name: elasticsearch
       env:
         discovery.type: single-node
+        ES_JAVA_OPTS: "-Xmx4096m"
       published_ports:
       - "9200:9200"
       #- "9300:9300"

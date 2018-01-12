@@ -37,6 +37,7 @@
     docker_container:
       image: manics/fluentd-idr
       name: fluentd
+      cleanup: True
       state: stopped
     when: fluent_conf_status | changed
 
@@ -55,6 +56,7 @@
     docker_container:
       image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
       name: elasticsearch
+      cleanup: True
       env:
         discovery.type: single-node
         ES_JAVA_OPTS: "-Xmx4096m"
@@ -71,6 +73,7 @@
     docker_container:
       image: manics/fluentd-idr
       name: fluentd
+      cleanup: True
       links:
       - "elasticsearch:elasticsearch"
       published_ports:
@@ -87,6 +90,7 @@
     docker_container:
       image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
       name: kibana
+      cleanup: True
       links:
       # This matches the default kibana config:
       - "elasticsearch:elasticsearch"

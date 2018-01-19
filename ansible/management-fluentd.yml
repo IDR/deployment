@@ -15,15 +15,21 @@
       recurse: yes
       state: directory
 
+  - name: Create data top level directory
+    become: yes
+    file:
+      path: /data
+      state: directory
+      owner: root
+      group: root
+
   - name: Create fluentd aggregated logs directory
     become: yes
     file:
       path: /data/fluentd
-      recurse: yes
       state: directory
-      # User id in fluentd Docker image
-      owner: 1000
-      group: 1000
+      owner: "{{ fluentd_uid }}"
+      group: "{{ fluentd_uid }}"
 
   - name: Copy fluentd server configuration files
     become: yes
@@ -32,34 +38,32 @@
       dest: /etc/fluentd/fluent.conf
     register: fluent_conf_status
 
-  - name: Stop docker fluentd if config changed
-    become: yes
-    docker_container:
-      image: manics/fluentd-idr
-      name: fluentd
-      cleanup: True
-      state: stopped
-    when: fluent_conf_status | changed
-
   - name: Create elasticsearch directory
     become: yes
     file:
       path: /data/elasticsearch
-      recurse: yes
       state: directory
       # User id in elasticsearch Docker image
       owner: 1000
       group: 1000
 
+  - name: Create docker network
+    become: yes
+    docker_network:
+      name: fluent-es-kb
+      state: present
+
   - name: Run docker elasticsearch
     become: yes
     docker_container:
-      image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
+      image: "{{ elasticsearch_docker_image }}"
       name: elasticsearch
       cleanup: True
       env:
         discovery.type: single-node
         ES_JAVA_OPTS: "-Xmx4096m"
+      networks:
+      - name: fluent-es-kb
       published_ports:
       - "9200:9200"
       #- "9300:9300"
@@ -71,14 +75,17 @@
   - name: Run docker fluentd
     become: yes
     docker_container:
-      image: manics/fluentd-idr
+      image: "{{ fluentd_docker_image }}"
       name: fluentd
       cleanup: True
-      links:
-      - "elasticsearch:elasticsearch"
+      env:
+        FLUENT_UID: "{{ fluentd_uid }}"
+      networks:
+      - name: fluent-es-kb
       published_ports:
       - "24224:24224/udp"
       - "24224:24224"
+      restart: "{{ fluent_conf_status | changed }}"
       state: started
       restart_policy: always
       volumes:
@@ -88,12 +95,11 @@
   - name: Run docker kibana
     become: yes
     docker_container:
-      image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
+      image: "{{ kibana_docker_image }}"
       name: kibana
       cleanup: True
-      links:
-      # This matches the default kibana config:
-      - "elasticsearch:elasticsearch"
+      networks:
+      - name: fluent-es-kb
       published_ports:
       - "5601:5601"
       state: started
@@ -104,6 +110,11 @@
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
     fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
     fluentd_elasticsearch_host: elasticsearch
+    fluentd_uid: 1010
+    elasticsearch_docker_image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
+    fluentd_docker_image: "openmicroscopy/fluentd:0.1.0"
+    #fluentd_docker_image: "manics/fluentd-idr"
+    kibana_docker_image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
 
 
 

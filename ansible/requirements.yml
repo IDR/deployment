@@ -24,10 +24,6 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
-- name: openmicroscopy.fluentd
-  src: https://github.com/manics/ansible-role-fluentd/archive/0.2.1.tar.gz
-  version: 0.2.1
-
 - src: openmicroscopy.haproxy
   version: 2.1.0-m1
 
@@ -168,6 +164,10 @@
 - name: openmicroscopy.docker-slack-notifier
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2
+
+- name: openmicroscopy.fluentd
+  src: https://github.com/openmicroscopy/ansible-role-fluentd/archive/0.2.1.tar.gz
+  version: 0.2.1
 
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz

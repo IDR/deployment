@@ -134,6 +134,7 @@
     become: yes
     file:
       path: /etc/td-agent/conf.d
+      recurse: yes
       state: directory
 
   - name: Configure fluentd forwarding

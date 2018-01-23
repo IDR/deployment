@@ -105,6 +105,20 @@
       state: started
       restart_policy: always
 
+  - name: Run elasticsearch curator
+    become: yes
+    docker_container:
+      image: "{{ elasticsearch_curator_docker_image }}"
+      name: elasticsearch-curator
+      cleanup: True
+      env:
+        OLDER_THAN_IN_DAYS: "{{ elasticsearch_expire_logs_days }}"
+        INTERVAL_IN_HOURS: 24
+      networks:
+      - name: fluent-es-kb
+      state: started
+      restart_policy: always
+
   vars:
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
@@ -112,8 +126,9 @@
     fluentd_elasticsearch_host: elasticsearch
     fluentd_uid: 1010
     elasticsearch_docker_image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
+    elasticsearch_curator_docker_image: "openmicroscopy/elasticsearch-curator:5.4.1"
+    elasticsearch_expire_logs_days: 14
     fluentd_docker_image: "openmicroscopy/fluentd:0.1.0"
-    #fluentd_docker_image: "manics/fluentd-idr"
     kibana_docker_image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
 
 

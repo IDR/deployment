@@ -48,8 +48,9 @@
     name:
     - kubeadm{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
     - kubectl{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
+    # See https://github.com/kubernetes/kubernetes/issues/57334
+    - kubernetes-cni{{ (kubernetes_cni_version | length > 0) | ternary('-', '') + kubernetes_cni_version }}
     - kubelet{{ (kubernetes_kube_version | length > 0) | ternary('-', '') + kubernetes_kube_version }}
-    - kubernetes-cni
     state: present
 
 # This is needed to avoid kubeadm initialising the cluster with a short

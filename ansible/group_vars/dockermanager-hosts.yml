@@ -1,7 +1,7 @@
 docker_use_ipv4_nic_mtu: True
 
 kubernetes_kube_version: 1.7.4
-kubernetes_cni_version: 0.5.1
+kubernetes_cni_version: 0.5.1-0
 
 # Most pods are exluded from running on master
 idr_prepull_docker_images: []

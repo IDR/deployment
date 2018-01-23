@@ -2,7 +2,8 @@
 
 - include: idr-downloads.yml
 
-- include: idr-mineotaur.yml
+# Fails during the data download step
+# - include: idr-mineotaur.yml
 
 - include: idr-kubernetes.yml
 # TODO: Not idempotent

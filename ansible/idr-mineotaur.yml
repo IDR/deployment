@@ -2,6 +2,8 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 
+- hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
+
   tasks:
 
   - name: create mineotaur directory

@@ -1,6 +1,6 @@
 # IDR Mineotaur data
 
-- hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
 
 - hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
 

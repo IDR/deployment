@@ -1,0 +1,8 @@
+######################################################################
+# Include these variables to upgrade IDR OMERO to a CI build:
+#   -e @var-overrides/omero-ci-build.yml
+######################################################################
+
+idr_omero_release: OMERO-build
+idr_omero_upgrade: True
+idr_omero_omego_additional_args: "--ci https://idr-ci.openmicroscopy.org"

@@ -49,6 +49,10 @@
     with_items:
     - "{{ omero_omeroreadonly_hosts }}"
 
+  - name: Get haproxy number of backends
+    set_fact:
+      omero_haproxy_backend_omeroreadonly_size: "{{ omero_haproxy_backend_omeroreadonly | length }}"
+
   # TODO: Find a nicer way to do this instead of a set_fact loop
   - name: haproxy duplicate frontend ports
     set_fact:
@@ -58,7 +62,7 @@
              'name': 'omero4064-' + item,
              'address': '*:' + (omero_haproxy_frontend_omero_offset + item | int) | string,
              'mode': 'tcp',
-             'backend': 'omero4064',
+             'backend': 'omero4064-' + item,
              'timeout_client': '10m',
              'options': ['tcplog']
             }]
@@ -68,6 +72,25 @@
            [{
              'host': omero_haproxy_frontend_omero_host,
              'port': (omero_haproxy_frontend_omero_offset + item | int)
+            }]
+        }}
+      # TODO: Ideally we'd use 'servers: omero_haproxy_backend_omeroreadonly'
+      # but 'balance_method: source' means the hash calculation used to
+      # determine the backend is based purely on the number of backend
+      # servers.
+      #
+      # For now we rotate the servers in omero_haproxy_backend_omeroreadonly
+      # so the "first" server in each backend entry varies
+      omero_haproxy_backend_omero_multiple: >
+        {{ omero_haproxy_backend_omero_multiple | default(haproxy_backend_default) +
+           [{
+             'name': 'omero4064-' + item,
+             'mode': 'tcp',
+             'balance_method': 'source',
+             'servers': (omero_haproxy_backend_omeroreadonly[((item | int) % (omero_haproxy_backend_omeroreadonly_size | int)):] + omero_haproxy_backend_omeroreadonly[:((item | int) % (omero_haproxy_backend_omeroreadonly_size | int))]),
+             'timeout_connect': '10s',
+             'timeout_server': '10m',
+             'options': ['tcplog']
             }]
         }}
     with_sequence: start=0 count=10
@@ -101,7 +124,7 @@
     haproxy_syslog_configure_udp: True
     haproxy_syslog_dest: local2
 
-    haproxy_backends:
+    haproxy_backend_default:
     - name: omero4064
       mode: tcp
       balance_method: source
@@ -110,6 +133,7 @@
       timeout_server: 10m
       options:
       - tcplog
+    haproxy_backends: "{{ omero_haproxy_backend_omero_multiple }}"
 
     # Ideally we'd set this to [] to disable port 4064 completely
     #haproxy_frontend_default: []

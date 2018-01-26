@@ -53,7 +53,7 @@
   - name: haproxy duplicate frontend ports
     set_fact:
       omero_haproxy_frontend_omero_multiple: >
-        {{ omero_haproxy_frontend_omero_multiple | default(haproxy_backend_default) +
+        {{ omero_haproxy_frontend_omero_multiple | default(haproxy_frontend_default) +
            [{
              'name': 'omero4064-' + item,
              'address': '*:' + (omero_haproxy_frontend_omero_offset + item | int) | string,
@@ -101,8 +101,6 @@
     haproxy_syslog_configure_udp: True
     haproxy_syslog_dest: local2
 
-    haproxy_frontends: "{{ omero_haproxy_frontend_omero_multiple }}"
-
     haproxy_backends:
     - name: omero4064
       mode: tcp
@@ -114,8 +112,8 @@
       - tcplog
 
     # Ideally we'd set this to [] to disable port 4064 completely
-    #haproxy_backend_default: []
-    haproxy_backend_default:
+    #haproxy_frontend_default: []
+    haproxy_frontend_default:
     - name: omero4064-default
       address: '*:4064'
       mode: tcp
@@ -123,3 +121,4 @@
       timeout_client: 10m
       options:
       - tcplog
+    haproxy_frontends: "{{ omero_haproxy_frontend_omero_multiple }}"

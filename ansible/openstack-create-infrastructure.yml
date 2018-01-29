@@ -94,7 +94,7 @@
            ((idr_network_storage | length > 0) |
              ternary([{'net-name': idr_network_storage}], []))
         }}
-      idr_vm_count: 2
+      idr_vm_count: 4
 
 
     # Proxy server, doubles up as a bastion server

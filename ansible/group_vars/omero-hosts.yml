@@ -106,7 +106,7 @@ omero_web_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 omero_web_config_set:
   # web
   omero.web.application_server: wsgi-tcp
-  omero.web.application_server.max_requests: 300
+  omero.web.application_server.max_requests: 30000
   omero.web.wsgi_workers: 25
   #omero.web.wsgi_timeout 30
   #omero.web.wsgi_args -- '--forwarded-allow-ips=YOUR_IP'

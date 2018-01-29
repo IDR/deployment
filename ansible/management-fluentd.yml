@@ -137,13 +137,17 @@
     {{ idr_environment | default('idr') }}-proxy-hosts
     {{ idr_environment | default('idr') }}-omero-hosts
 
-  roles:
-  - role: openmicroscopy.fluentd
-
   # TODO: Ideally we'd use the `validate:` option to check these config
   # files, but it's not possible to validate only a fragment.
   # Instead we need to create these files before applying the role
+  # However, we can only trigger the restart handler if the agent is
+  # already installed.
   pre_tasks:
+
+  - name: Check if td-agent already installed
+    stat:
+      path: /etc/init.d/td-agent
+    register: _td_agent_st
 
   - name: Create fluentd conf.d
     become: yes
@@ -158,7 +162,7 @@
       src: files/fluentd/forward-conf.j2
       dest: /etc/td-agent/conf.d/forward.conf
     notify:
-    - restart fluentd
+    - restart fluentd if installed
 
   - name: Copy fluentd configuration
     become: yes
@@ -169,7 +173,19 @@
     # These are specifc to each host-group
     - "{{ fluentd_source_configs }}"
     notify:
-    - restart fluentd
+    - restart fluentd if installed
+
+  handlers:
+  - name: restart fluentd if installed
+    become: yes
+    systemd:
+      daemon_reload: yes
+      name: td-agent
+      state: restarted
+    when: _td_agent_st.stat.exists
+
+  roles:
+  - role: openmicroscopy.fluentd
 
   vars:
     fluentd_server_address: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"

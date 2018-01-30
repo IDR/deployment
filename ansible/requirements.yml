@@ -124,7 +124,6 @@
   version: 1.0.0
 
 - name: openmicroscopy.upgrade-distpackages
-  src: https://github.com/manics/ansible-role-upgrade-distpackages/archive/excludes.tar.gz
   version: 1.1.0
 
 - src: openmicroscopy.versioncontrol-utils

@@ -20,6 +20,8 @@ for server in \
     proxy \
     omeroreadonly-1 \
     omeroreadonly-2 \
+    omeroreadonly-3 \
+    omeroreadonly-4 \
     omeroreadwrite \
     database \
     dockermanager \

@@ -165,6 +165,10 @@
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2
 
+- name: openmicroscopy.fluentd
+  src: https://github.com/openmicroscopy/ansible-role-fluentd/archive/0.2.1.tar.gz
+  version: 0.2.1
+
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz
   version: 0.2.0

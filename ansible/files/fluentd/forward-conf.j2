@@ -1,0 +1,39 @@
+# Forward all logs labelled FORWARD to a central server
+# https://docs.fluentd.org/v1.0/articles/out_forward
+# TODO: Add multiple central servers for HA
+
+<label @FORWARD>
+  # Add hostname to all records
+  <filter **>
+    @type record_transformer
+    <record>
+      hostname "#{Socket.gethostname[/^[^.]+/]}"
+    </record>
+  </filter>
+
+  <match **>
+    @type forward
+    send_timeout 60s
+    recover_wait 10s
+    heartbeat_interval 1s
+    phi_threshold 16
+    hard_timeout 60s
+
+    <server>
+      host {{ fluentd_server_address }}
+      port 24224
+      weight 60
+    </server>
+
+    <security>
+      self_hostname {{ ansible_hostname }}
+      shared_key {{ fluentd_shared_key }}
+    </security>
+
+    # Causes a warning: secondary type should be same with primary one
+    <secondary>
+      @type file
+      path /var/log/td-agent/forward-failed.log
+    </secondary>
+  </match>
+</label>

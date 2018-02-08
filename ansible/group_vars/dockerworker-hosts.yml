@@ -5,4 +5,4 @@ kubernetes_cni_version: 0.5.1-0
 
 idr_prepull_docker_images:
 - "imagedata/jupyterhub-githubauth:0.5.0"
-- "bramalingam/idr_jupyter:idr_jupyter_v06"
+- "imagedata/jupyter-docker:0.6.1"

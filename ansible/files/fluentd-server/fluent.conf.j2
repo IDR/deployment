@@ -78,7 +78,7 @@
   </store>
 </match>
 
-# Notify 5XX and all error logs
+# Notify 5XX and all error logs apart from known warnings
 <label @NGINX_NOTIFICATION>
   <filter nginx.access>
     @type grep
@@ -93,6 +93,13 @@
     <record>
       message ${record.to_json}
     </record>
+  </filter>
+  <filter nginx.error>
+    @type grep
+    <exclude>
+      key message
+      pattern (buffered to a temporary file)
+    </exclude>
   </filter>
 
   <match nginx.*>

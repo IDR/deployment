@@ -118,6 +118,7 @@
     # Requires docker_omeroreadonly_endpoint_addresses
     - external-omero/external-service.yml
 
+
 - hosts: >
     {{ idr_environment | default('idr') }}-dockerworker-hosts
   roles:
@@ -132,6 +133,25 @@
            '-dockermanager-hosts'][0]]['ansible_' +
            (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}:6443
+
+
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
+
+  tasks:
+
+  - name: jupyterhub | pull docker images in advance
+    become: yes
+    docker_image:
+      name: "{{ item }}"
+      state: "present"
+      force: "{{ idr_docker_pull_latest }}"
+    with_items: "{{ idr_prepull_docker_images }}"
+
+  vars:
+  - idr_docker_pull_latest: True
+
 
 # Now run:
 # kubectl get nodes

@@ -1,5 +1,5 @@
 [
-{% for backend in omero_omeroreadonly_hosts %}
+{% for backend in omero_omeroreadonly_hosts_external %}
   {
     "host": "{{ omero_haproxy_frontend_omero_host }}",
     "port": {{ omero_haproxy_frontend_omero_offset + loop.index0 | int }}

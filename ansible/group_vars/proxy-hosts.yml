@@ -27,7 +27,7 @@ nginx_proxy_websockets_enable: True
 nginx_proxy_upstream_servers:
 - name: omeroreadonly
   balance: ip_hash
-  servers: "{{ omero_omeroreadonly_hosts | sort }}"
+  servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
 - name: omeroreadwrite
   servers: "{{ omero_omeroreadwrite_hosts }}"
 
@@ -309,6 +309,19 @@ nginx_proxy_streams: >
      ((omero_downloads_host_ansible is defined) |
        ternary(_nginx_proxy_streams_rsync, [])
      ) }}
+
+
+######################################################################
+# OMERO backend read-only servers
+
+# If there are [0:N] backends:
+# - [0:idr_backend_reserved_offset] will be used for production
+#   OMERO.web
+# - [idr_backend_reserved_offset:N] will be used for analysis and
+#   external OMERO API access. At least one backend will always be
+#   assigned as an external proxy; if necessary it will overlap with
+#   OMERO.web
+idr_backend_reserved_offset: 2
 
 
 ######################################################################

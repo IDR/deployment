@@ -1,16 +1,9 @@
 # Setup the IDR haproxy for non-web requests
 #
 # We can't do proper session pinning with the OMERO binary protocol because
-# there's no way to insert or extract an identifier, so we have to use
-# the client IP. If there are multiple clients behind the same IP such as
-# Jupyterhub this means they'll all hit the same backend server.
-#
-# To get around this create multiple front-end ports with identical
-# backend configuration. If clients connect to a random port the client
-# IP will only be pinned for that front-end port.
-#
-# This should give us the benefit of haproxy's load-balancing whilst
-# distributing clients from the same IP.
+# there's no way to insert or extract an identifier, so instead we assign
+# separate front-end ports for each back-end server and rely on the client
+# to choose a random port for each connection.
 #
 # To support autoconfiguration of clients we also create a json config
 # file with a list of connections parameters that clients should randomly
@@ -35,70 +28,10 @@
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
         }}
 
-  # https://stackoverflow.com/a/35608380
-  # TODO: Find a nicer way to do this instead of a set_fact loop
-  - name: Get haproxy backend server list
-    set_fact:
-      omero_haproxy_backend_omeroreadonly: >
-        {{ omero_haproxy_backend_omeroreadonly | default([]) +
-           [{
-             'name': 'omero4064-' + (item | regex_replace('\.', '_')),
-             'address': item + ':4064'
-            }]
-        }}
-    with_items:
-    - "{{ omero_omeroreadonly_hosts }}"
-
-  - name: Get haproxy number of backends
-    set_fact:
-      omero_haproxy_backend_omeroreadonly_size: "{{ omero_haproxy_backend_omeroreadonly | length }}"
-
-  # TODO: Find a nicer way to do this instead of a set_fact loop
-  - name: haproxy duplicate frontend ports
-    set_fact:
-      omero_haproxy_frontend_omero_multiple: >
-        {{ omero_haproxy_frontend_omero_multiple | default(haproxy_frontend_default) +
-           [{
-             'name': 'omero4064-' + item,
-             'address': '*:' + (omero_haproxy_frontend_omero_offset + item | int) | string,
-             'mode': 'tcp',
-             'backend': 'omero4064-' + item,
-             'timeout_client': '10m',
-             'options': ['tcplog']
-            }]
-        }}
-      omero_haproxy_frontend_omero_multiple_conn: >
-        {{ omero_haproxy_frontend_omero_multiple_conn | default([]) +
-           [{
-             'host': omero_haproxy_frontend_omero_host,
-             'port': (omero_haproxy_frontend_omero_offset + item | int)
-            }]
-        }}
-      # TODO: Ideally we'd use 'servers: omero_haproxy_backend_omeroreadonly'
-      # but 'balance_method: source' means the hash calculation used to
-      # determine the backend is based purely on the number of backend
-      # servers.
-      #
-      # For now we rotate the servers in omero_haproxy_backend_omeroreadonly
-      # so the "first" server in each backend entry varies
-      omero_haproxy_backend_omero_multiple: >
-        {{ omero_haproxy_backend_omero_multiple | default(haproxy_backend_default) +
-           [{
-             'name': 'omero4064-' + item,
-             'mode': 'tcp',
-             'balance_method': 'source',
-             'servers': (omero_haproxy_backend_omeroreadonly[((item | int) % (omero_haproxy_backend_omeroreadonly_size | int)):] + omero_haproxy_backend_omeroreadonly[:((item | int) % (omero_haproxy_backend_omeroreadonly_size | int))]),
-             'timeout_connect': '10s',
-             'timeout_server': '10m',
-             'options': ['tcplog']
-            }]
-        }}
-    with_sequence: start=0 count=10
-
-
   roles:
-  - openmicroscopy.selinux-utils
-  - openmicroscopy.haproxy
+  - role: openmicroscopy.selinux-utils
+  - role: openmicroscopy.haproxy
+    haproxy_cfg_template: "{{ playbook_dir }}/templates/haproxy.cfg.j2"
 
   tasks:
 
@@ -111,8 +44,8 @@
 
   - name: Create client autoconfiguration file
     become: yes
-    copy:
-      content: "{{ omero_haproxy_frontend_omero_multiple_conn | to_nice_json }}"
+    template:
+      src: templates/omero-connection.json.j2
       dest: "/srv/www/connection/omero-connection.json"
 
   vars:
@@ -123,26 +56,3 @@
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
     haproxy_syslog_dest: local2
-
-    haproxy_backend_default:
-    - name: omero4064
-      mode: tcp
-      balance_method: source
-      servers: "{{ omero_haproxy_backend_omeroreadonly }}"
-      timeout_connect: 10s
-      timeout_server: 10m
-      options:
-      - tcplog
-    haproxy_backends: "{{ omero_haproxy_backend_omero_multiple }}"
-
-    # Ideally we'd set this to [] to disable port 4064 completely
-    #haproxy_frontend_default: []
-    haproxy_frontend_default:
-    - name: omero4064-default
-      address: '*:4064'
-      mode: tcp
-      backend: omero4064
-      timeout_client: 10m
-      options:
-      - tcplog
-    haproxy_frontends: "{{ omero_haproxy_frontend_omero_multiple }}"

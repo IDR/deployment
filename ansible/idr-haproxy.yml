@@ -56,8 +56,8 @@
   - name: Create client autoconfiguration file
     become: yes
     template:
-      src: templates/omero-connection.json.j2
-      dest: "/srv/www/connection/omero-connection.json"
+      src: templates/omero-client.json.j2
+      dest: /srv/www/connection/omero-client.json
 
   vars:
 

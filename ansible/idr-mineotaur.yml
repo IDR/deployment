@@ -10,7 +10,7 @@
     become: yes
     file:
       path: "/data/mineotaur/idr0001gramlsysgroscreenA"
-      owner: 1000
+      owner: centos
       state: directory
 
   - name: set default rsync mineotaur_url
@@ -27,7 +27,7 @@
   # idr_rsync_mineotaur_url: "rsync://idr.openmicroscopy.org/mineotaur/"
   - name: download mineotaur data
     become: yes
-    become_user: 1000
+    become_user: centos
     synchronize:
       src: >-
         {{

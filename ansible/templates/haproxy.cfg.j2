@@ -27,7 +27,7 @@ frontend omero4064-default
 
 {% for backend in omero_omeroreadonly_hosts_external %}
 frontend omero4064-{{ loop.index0 }}
-    bind *:{{ (omero_haproxy_frontend_omero_offset + loop.index0 | int) | string }}
+    bind *:{{ (idr_haproxy_frontend_omero_offset + loop.index0 | int) | string }}
     mode tcp
     default_backend omero4064-{{ loop.index0 }}
     option tcplog

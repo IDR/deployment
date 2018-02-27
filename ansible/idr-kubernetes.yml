@@ -4,7 +4,7 @@
 
 # Load hostvars (production OMERO)
 - hosts: >
-    {{ idr_environment | default('idr') }}-omeroreadonly-hosts
+    {{ idr_environment | default('idr') }}-proxy-hosts
 
 
 - hosts: >
@@ -21,28 +21,14 @@
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
 
-  - name: Get omero IP
+  - name: Get internal proxy IP for omero
     set_fact:
-      docker_omeroreadonly_hosts: >-
+      proxy_omeroreadonly_endpoint_addresses: >-
         {{
-          groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
+          groups[idr_environment | default('idr') + '-proxy-hosts'] |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
         }}
-
-  # https://stackoverflow.com/a/35608380
-  # TODO: Find a nicer way to do this instead of a set_fact loop
-  - name: Get omero kubernetes endpoint addresses
-    set_fact:
-      docker_omeroreadonly_endpoint_addresses: >
-        {{ docker_omeroreadonly_endpoint_addresses | default([]) +
-           [{
-             'ip': item
-            }]
-        }}
-    with_items:
-    - "{{ docker_omeroreadonly_hosts }}"
-
 
   roles:
     - role: kubernetes
@@ -115,7 +101,7 @@
     - mineotaur/nfsvolume.yml
     # Requires kubernetes_jupyterhub_config_hash
     - jupyterhub/deployment.yml
-    # Requires docker_omeroreadonly_endpoint_addresses
+    # Requires proxy_omeroreadonly_endpoint_addresses
     - external-omero/external-service.yml
 
 - hosts: >

@@ -8,10 +8,10 @@ metadata:
     name: idr-omero-public
 spec:
   ports:
-  - name: omero-secure
+  - name: omero-proxyinfo
     protocol: TCP
-    port: 4064
-    targetPort: 4064
+    port: 80
+    targetPort: 80
   selector: {}
 
 ---
@@ -20,7 +20,10 @@ apiVersion: v1
 metadata:
   name: idr-omero-public
 subsets:
-- addresses: {{ docker_omeroreadonly_endpoint_addresses | sort | to_json }}
+- addresses:
+{% for addr in proxy_omeroreadonly_endpoint_addresses %}
+  - ip: {{ addr }}
+{% endfor %}
   ports:
-  - name: omero-secure
-    port: 4064
+  - name: omero-proxyinfo
+    port: 80

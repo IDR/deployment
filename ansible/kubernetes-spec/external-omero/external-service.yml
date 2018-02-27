@@ -12,6 +12,12 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+{% for n in range(idr_backend_max_external_port_count) %}
+  - name: omero-external-{{ idr_haproxy_frontend_omero_offset + n }}
+    protocol: TCP
+    port: {{ idr_haproxy_frontend_omero_offset + n }}
+    targetPort: {{ idr_haproxy_frontend_omero_offset + n }}
+{% endfor %}
   selector: {}
 
 ---
@@ -27,3 +33,7 @@ subsets:
   ports:
   - name: omero-proxyinfo
     port: 80
+{% for n in range(idr_backend_max_external_port_count) %}
+  - name: omero-external-{{ idr_haproxy_frontend_omero_offset + n }}
+    port: {{ idr_haproxy_frontend_omero_offset + n }}
+{% endfor %}

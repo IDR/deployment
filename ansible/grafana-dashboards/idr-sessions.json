@@ -204,7 +204,7 @@
           "lines": true,
           "linewidth": 1,
           "links": [],
-          "minSpan": 3,
+          "minSpan": 2,
           "nullPointMode": "null",
           "percentage": false,
           "pointradius": 5,
@@ -437,7 +437,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -467,5 +467,5 @@
   },
   "timezone": "",
   "title": "IDR sessions",
-  "version": 8
+  "version": 9
 }

@@ -24,9 +24,8 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
-- name: openmicroscopy.haproxy
-  src: https://github.com/manics/ansible-role-haproxy/archive/custom-template-source.tar.gz
-  version: custom-template-source
+- src: openmicroscopy.haproxy
+  version: 2.2.0
 
 - src: openmicroscopy.hosts-populate
   version: 0.1.1

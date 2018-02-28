@@ -7,8 +7,3 @@ kubernetes_cni_version: 0.5.1-0
 idr_prepull_docker_images: []
 
 idr_jupyterhub_config_file: "{{ idr_secret_jupyterhub_config_file | default('kubernetes-spec/jupyterhub/config.yml') }}"
-
-# Copied from group_vars/proxy-hosts.yml:
-# This is needed to configure the internal kubernets omero proxy pointer
-idr_haproxy_frontend_omero_offset: 14060
-idr_backend_max_external_port_count: 20

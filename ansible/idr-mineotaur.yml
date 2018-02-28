@@ -22,11 +22,12 @@
           ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}/mineotaur/idr0001gramlsysgroscreenA/
 
-  # Run as UID 1000 since this is required by the Docker container
   # When running externally pull down the IDR data by defining:
   # idr_rsync_mineotaur_url: "rsync://idr.openmicroscopy.org/mineotaur/"
   - name: download mineotaur data
     become: yes
+    # centos user has UID 1000 as required by the mineotaur Docker container
+    # https://hub.docker.com/r/imagedata/mineotaur/
     become_user: centos
     synchronize:
       src: >-

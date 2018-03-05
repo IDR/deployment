@@ -83,7 +83,7 @@
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadonly"
       idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_flavour: "{{ vm_flavour }}"
       idr_vm_omeroreadonly: True
       # TODO: Could we use the fileserver as an NFS proxy instead and
       # get rid of the need for the additional network?
@@ -94,7 +94,7 @@
            ((idr_network_storage | length > 0) |
              ternary([{'net-name': idr_network_storage}], []))
         }}
-      idr_vm_count: 2
+      idr_vm_count: 4
 
 
     # Proxy server, doubles up as a bastion server

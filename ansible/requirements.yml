@@ -154,8 +154,8 @@
   version: 3.0.0
 
 - name: IDR.openstack-idr-security-groups
-  src: https://github.com/manics/ansible-role-openstack-idr-security-groups.git
-  version: omero-external-load-balance
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git
+  version: 1.2.0
 
 
 ######################################################################

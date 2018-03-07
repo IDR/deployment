@@ -1,4 +1,14 @@
 # Setup the IDR haproxy for non-web requests
+#
+# We can't do proper session pinning with the OMERO binary protocol because
+# there's no way to insert or extract an identifier, so instead we assign
+# separate front-end ports for each back-end server and rely on the client
+# to choose a random port for each connection.
+#
+# To support autoconfiguration of clients we also create a json config
+# file with a list of connections parameters that clients should randomly
+# choose from.
+
 
 # Load hostvars (production OMERO)
 - hosts: >
@@ -9,54 +19,45 @@
 
   pre_tasks:
 
-  - name: Get omero IP
+  - name: Get all omeroreadonly IP
     set_fact:
-      omero_omeroreadonly_hosts: >-
+      _omero_omeroreadonly_hosts: >-
         {{
           groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
         }}
 
-  # https://stackoverflow.com/a/35608380
-  # TODO: Find a nicer way to do this instead of a set_fact loop
-  - name: Get haproxy backend server list
+  - name: Get external omeroreadonly IP
     set_fact:
-      omero_haproxy_backend_omeroreadonly: >
-        {{ omero_haproxy_backend_omeroreadonly | default([]) +
-           [{
-             'name': 'omero4064-' + (item | regex_replace('\.', '_')),
-             'address': item + ':4064'
-            }]
+      omero_omeroreadonly_hosts_external: >-
+        {{
+          _omero_omeroreadonly_hosts[
+            ([
+              idr_backend_reserved_offset,
+              _omero_omeroreadonly_hosts | length - 1
+            ] | min):]
         }}
-    with_items:
-    - "{{ omero_omeroreadonly_hosts }}"
 
   roles:
-  - openmicroscopy.selinux-utils
-  - openmicroscopy.haproxy
-
-  vars:
-
+  - role: openmicroscopy.selinux-utils
+  - role: openmicroscopy.haproxy
+    haproxy_cfg_template: "{{ playbook_dir }}/templates/haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
     haproxy_syslog_dest: local2
 
-    haproxy_frontends:
-    - name: 'omero4064'
-      address: '*:4064'
-      mode: 'tcp'
-      backend: omero4064
-      timeout_client: 10m
-      options:
-      - tcplog
+  tasks:
 
-    haproxy_backends:
-    - name: omero4064
-      mode: tcp
-      balance_method: source
-      servers: "{{ omero_haproxy_backend_omeroreadonly }}"
-      timeout_connect: 10s
-      timeout_server: 10m
-      options:
-      - tcplog
+  - name: Create client autoconfiguration directory
+    become: yes
+    file:
+      path: /srv/www/connection
+      recurse: yes
+      state: directory
+
+  - name: Create client autoconfiguration file
+    become: yes
+    template:
+      src: templates/omero-client.json.j2
+      dest: /srv/www/connection/omero-client.json

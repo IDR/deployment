@@ -1,0 +1,56 @@
+global
+  log /dev/log  local0
+  log /dev/log  local1 notice
+  log 127.0.0.1 {{ haproxy_syslog_dest }}
+  stats socket {{ haproxy_socket }} level admin
+  chroot {{ haproxy_chroot }}
+  user {{ haproxy_user }}
+  group {{ haproxy_group }}
+  daemon
+
+defaults
+  log global
+  mode  http
+  option  httplog
+  option  dontlognull
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
+
+
+frontend omero4064-default
+    bind *:4064
+    mode tcp
+    default_backend omero4064
+    option tcplog
+    timeout client 10m
+
+{% for backend in omero_omeroreadonly_hosts_external %}
+frontend omero4064-{{ loop.index0 }}
+    bind *:{{ (idr_haproxy_frontend_omero_offset + loop.index0 | int) | string }}
+    mode tcp
+    default_backend omero4064-{{ loop.index0 }}
+    option tcplog
+    timeout client 10m
+{% endfor %}
+
+
+backend omero4064
+    mode tcp
+    balance source
+    option tcplog
+{% for backend in omero_omeroreadonly_hosts_external %}
+    server {{ 'omero4064-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:4064 check
+{% endfor %}
+    timeout connect 10s
+    timeout server 10m
+
+{% for backend in omero_omeroreadonly_hosts_external %}
+backend omero4064-{{ loop.index0 }}
+    mode tcp
+    balance source
+    option tcplog
+    server {{ 'omero4064-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:4064 check
+    timeout connect 10s
+    timeout server 10m
+{% endfor %}

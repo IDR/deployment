@@ -1,0 +1,86 @@
+global
+  log /dev/log  local0
+  log /dev/log  local1 notice
+  log 127.0.0.1 {{ haproxy_syslog_dest }}
+  stats socket {{ haproxy_socket }} level admin
+  chroot {{ haproxy_chroot }}
+  user {{ haproxy_user }}
+  group {{ haproxy_group }}
+  daemon
+
+defaults
+  log global
+  mode  http
+  option  httplog
+  option  dontlognull
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
+
+
+######################################################################
+# Public web
+
+# For info on configuring https see:
+# https://serversforhackers.com/c/using-ssl-certificates-with-haproxy
+# https://raymii.org/s/snippets/haproxy_ssl_backends.html
+# This configuration will:
+# - Redirect front end http to https
+# - Use https internally (self-signed certificates on backend)
+
+frontend web-vae-http
+    bind *:80
+    bind *:443 ssl crt /etc/haproxy/ssl/idr.pem
+    redirect scheme https if !{ ssl_fc }
+    default_backend web-vae-http
+
+backend web-vae-http
+    # TODO: check whether session pinning is required
+    balance source
+    #balance roundrobin
+{% for backend in k8s_vae_nodes %}
+    # Internal self-signed certificate
+    server {{ 'vae-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:443 check ssl verify none
+{% endfor %}
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+
+
+######################################################################
+# Kubernetes API
+# TCP passthrough since Kubernetes uses it's own client/server
+# certificates
+
+frontend kubernetes-api-vae
+    bind *:6450
+    mode tcp
+    default_backend kubernetes-api-vae
+    option tcplog
+    timeout client 10m
+
+frontend kubernetes-api-train
+    bind *:6451
+    mode tcp
+    default_backend kubernetes-api-train
+    option tcplog
+    timeout client 10m
+
+backend kubernetes-api-vae
+    mode tcp
+    balance source
+    option tcplog
+{% for backend in k8s_vae_masters %}
+    server {{ 'vae-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:6443 check
+{% endfor %}
+    timeout connect 10s
+    timeout server 10m
+
+backend kubernetes-api-train
+    mode tcp
+    balance source
+    option tcplog
+{% for backend in k8s_train_masters %}
+    server {{ 'vae-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:6443 check
+{% endfor %}
+    timeout connect 10s
+    timeout server 10m

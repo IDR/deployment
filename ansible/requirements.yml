@@ -27,8 +27,9 @@
 - src: openmicroscopy.haproxy
   version: 2.2.0
 
-- src: openmicroscopy.hosts-populate
-  version: 0.1.1
+- name: openmicroscopy.hosts-populate
+  src: https://github.com/manics/ansible-role-hosts-populate.git
+  version: host-alias
 
 - src: openmicroscopy.ice
   version: 2.1.1

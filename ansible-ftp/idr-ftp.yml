@@ -1,0 +1,93 @@
+# IDR anonymous FTP server
+
+- hosts: idrftp-ftp-hosts
+
+  roles:
+
+  - role: openmicroscopy.storage-volume-initialise
+    storage_volume_initialise_device: /dev/vdb
+    storage_volume_initialise_mount: /data
+
+  - role: openmicroscopy.sudoers
+    # Private:
+    #sudoers_individual_commands:
+
+  - role: openmicroscopy.local-accounts
+    # Private:
+    #local_accounts_groups:
+    #- group: idr-data
+    #local_accounts_create:
+
+  - role: openmicroscopy.docker
+    docker_use_ipv4_nic_mtu: True
+
+  tasks:
+
+  - name: Create directories
+    become: yes
+    file:
+      path: "{{ item }}"
+      owner: root
+      group: idr-data
+      mode: 0755
+      state: directory
+    with_items:
+    - /data/idrftp
+    - /etc/vsftpd
+
+  - name: Create incoming directory
+    become: yes
+    file:
+      path: /data/idrftp/incoming
+      # UID of ftp in docker image
+      owner: 21
+      group: idr-data
+      mode: "u+wx,u-r,g+rwxs,o-rwx"
+      state: directory
+
+  - name: Configuration files
+    become: yes
+    template:
+      src: templates/{{ item }}.j2
+      dest: /etc/vsftpd/{{ item }}
+    # Uses private variable idrftp_anonymous_emails
+    with_items:
+    - vsftpd.banner
+    - vsftpd.conf
+    - vsftpd.email_passwords
+
+  - name: Install docker-py
+    become: yes
+    yum:
+      name: docker-python
+      state: present
+
+  - name: Run docker vsftpd
+    become: yes
+    docker_container:
+      image: openmicroscopy/vsftpd-anonymous-upload:0.1.0
+      name: vsftpd
+      published_ports:
+      - "32021:21"
+      - "32022:32022"
+      - "32023:32023"
+      - "32024:32024"
+      - "32025:32025"
+      - "32026:32026"
+      - "32027:32027"
+      - "32028:32028"
+      - "32029:32029"
+      - "32030:32030"
+      - "32031:32031"
+      state: started
+      restart_policy: always
+      volumes:
+      - /data/idrftp/incoming:/var/lib/ftp/incoming
+      - /etc/vsftpd:/etc/vsftpd:ro
+
+  vars:
+    #idrftp_public_address: 193.62.55.107
+    idrftp_public_address: 10.0.51.177
+
+    # Private:
+    #idrftp_anonymous_emails:

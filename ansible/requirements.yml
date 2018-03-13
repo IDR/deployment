@@ -69,9 +69,6 @@
 - src: openmicroscopy.nginx-proxy
   version: 1.5.2
 
-- src: openmicroscopy.nginx-ssl-selfsigned
-  version: 1.0.0
-
 - src: openmicroscopy.omero-common
   version: 0.3.0
 
@@ -116,6 +113,10 @@
 
 - src: openmicroscopy.selinux-utils
   version: 1.0.3
+
+- name: openmicroscopy.ssl-certificate
+  src: https://github.com/manics/ansible-role-nginx-ssl-selfsigned.git
+  version: ssl-certificate
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0

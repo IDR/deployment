@@ -161,6 +161,10 @@
 ######################################################################
 # External development roles
 
+- name: openmicroscopy.anonymous-ftp
+  src: https://github.com/manics/ansible-role-anonymous-ftp.git
+  version: master
+
 - name: openmicroscopy.docker-slack-notifier
   src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
   version: 0.0.2

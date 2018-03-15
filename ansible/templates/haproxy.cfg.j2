@@ -1,7 +1,9 @@
+# Requires "haproxy_syslog_enable: True" in the openmicroscopy.haproxy role
+
 global
   log /dev/log  local0
   log /dev/log  local1 notice
-  log 127.0.0.1 {{ haproxy_syslog_dest }}
+  log 127.0.0.1 {{ haproxy_syslog_dest }} notice
   stats socket {{ haproxy_socket }} level admin
   chroot {{ haproxy_chroot }}
   user {{ haproxy_user }}
@@ -24,6 +26,7 @@ frontend omero4064-default
     default_backend omero4064
     option tcplog
     timeout client 10m
+    log 127.0.0.1 {{ haproxy_syslog_dest_tcp }}
 
 {% for backend in omero_omeroreadonly_hosts_external %}
 frontend omero4064-{{ loop.index0 }}
@@ -32,6 +35,7 @@ frontend omero4064-{{ loop.index0 }}
     default_backend omero4064-{{ loop.index0 }}
     option tcplog
     timeout client 10m
+    log 127.0.0.1 {{ haproxy_syslog_dest_tcp }}
 {% endfor %}
 
 

@@ -6,8 +6,8 @@
   # on the ansible command line as -e @path/to/secret.yml
   vars:
     # Do not change these unless you are running multiple deployments
-    - idr_deployment_cloud: k8s
-    - idr_environment_idr: k8s
+    - idr_deployment_cloud: idr
+    - idr_environment_idr: idr
     # REQUIRED: List of public SSH keys
     - idr_keypair_keys:
     # Change these to match the image and flavours in your OpenStack cloud
@@ -20,7 +20,35 @@
     #- vm_flavour_medium: m1.medium
     #- vm_flavour_medium: m1.medium
 
-    - idr_environment_idr_subnet: 172.16.0.0/16
+    - idr_environment_idr_subnet: 192.168.1.0/24
+
+
+  pre_tasks:
+
+    ############################################################
+    # Security groups
+
+    - name: IDR k8s external access security group
+      os_security_group:
+        description: External access to IDR FTP (managed by Ansible)
+        name: k8s-external
+        state: present
+
+    - name: IDR k8s external access security group rules
+      os_security_group_rule:
+        direction: ingress
+        port_range_min: "{{ item }}"
+        port_range_max: "{{ item }}"
+        protocol: tcp
+        remote_ip_prefix: 0.0.0.0/0
+        security_group: k8s-external
+        state: present
+      with_items:
+      - 22
+      - 80
+      - 443
+      - 6450
+      - 6451
 
 
   roles:
@@ -29,13 +57,7 @@
     # Keypairs
 
     - role: IDR.openstack-idr-keypairs
-      idr_keypair_name: k8s-deployment-key
-
-
-    ############################################################
-    # Security groups
-
-    - role: IDR.openstack-idr-security-groups
+      idr_keypair_name: "{{ idr_environment_idr }}-deployment-key"
 
 
     ############################################################
@@ -51,6 +73,7 @@
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-vae"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
       idr_vm_name: "{{ idr_environment_idr }}-vae-master"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour }}"
@@ -63,6 +86,7 @@
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-vae"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
       idr_vm_name: "{{ idr_environment_idr }}-vae-node"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
@@ -79,6 +103,7 @@
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-train"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
       idr_vm_name: "{{ idr_environment_idr }}-train-master"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour }}"
@@ -91,6 +116,7 @@
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-train"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
       idr_vm_name: "{{ idr_environment_idr }}-train-node"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
@@ -107,17 +133,18 @@
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}"
-      idr_vm_name: "{{ idr_environment_idr }}-proxy"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
+      idr_vm_name: "{{ idr_environment_idr }}-k8sproxy"
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour }}"
-      idr_vm_proxy: True
+      #idr_vm_proxy: True
       idr_vm_bastion: True
       idr_vm_assign_floating_ip: True
       idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-proxy"
+      - k8sproxy-hosts
+      - "{{ idr_environment_idr }}-k8sproxy-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_security_groups:
       - default
-      - idr-bastion-external
-      - idr-web-external
+      - k8s-external

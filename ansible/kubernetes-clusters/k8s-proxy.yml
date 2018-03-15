@@ -6,60 +6,7 @@
     {{ idr_environment | default('k8s') }}-train-hosts
 
 
-# Setup certificates
-- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
-
-  pre_tasks:
-  - name: Create haproxy ssl directory
-    become: yes
-    file:
-      path: /etc/haproxy/ssl/
-      state: directory
-      recurse: yes
-
-  roles:
-  # Default to a self-signed certificate, to use production certificates set:
-  # idr_nginx_ssl_production: True
-  # nginx_proxy_ssl_certificate_source_path: local/path/to/certificate
-  # nginx_proxy_ssl_certificate_key_source_path: local/path/to/key
-  - role: openmicroscopy.nginx-ssl-selfsigned
-    nginx_ssl_certificate: /etc/haproxy/ssl/01-idr-fullchain.pem
-    nginx_ssl_certificate_key: /etc/haproxy/ssl/02-idr-privkey.pem
-    when: "not (idr_nginx_ssl_production | default(False)) | bool"
-
-  tasks:
-
-  - name: Copy SSL certificates
-    become: yes
-    copy:
-      src: "{{ item.src }}"
-      dest: "/etc/haproxy/ssl/{{ item.dest }}"
-      owner: root
-      group: root
-      mode: 0400
-    when: "(idr_nginx_ssl_production | default(False))"
-    with_items:
-    - src: "{{ nginx_proxy_ssl_certificate_source_path }}"
-      dest: 01-idr-fullchain.pem
-    - src: "{{ nginx_proxy_ssl_certificate_key_source_path }}"
-      dest: 02-idr-privkey.pem
-
-  # haproxy needs concatenated certificates
-  - name: Concatenate SSL certificates
-    become: yes
-    assemble:
-      dest: /etc/haproxy/ssl/idr.pem
-      regexp: '\d\d-.*\.pem'
-      src: /etc/haproxy/ssl/
-      owner: root
-      group: root
-      mode: 0400
-
-  # TODO: Include SSL in the haproxy role so that it is automatically
-  # restarted
-
-
-- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8sproxy-hosts"
 
   pre_tasks:
 
@@ -102,8 +49,18 @@
 
   - role: openmicroscopy.selinux-utils
 
+  # Default to a self-signed certificate, to use production certificates set:
+  # ssl_certificate_content: "{{ secret_certificate_content }}"
+  # ssl_certificate_key_content: "{{ secret_certificate_key_content }}"
+  # ssl_certificate_selfsigned_create: False
+  - role: openmicroscopy.ssl-certificate
+    ssl_certificate_path: /etc/ssl/idr-fullchain.pem
+    ssl_certificate_key_path: /etc/ssl/idr-privkey.pem
+    ssl_certificate_combined_path: /etc/ssl/idr-combined.pem
+
+  # TODO: Restart haproxy when certificate changes
   - role: openmicroscopy.haproxy
     haproxy_cfg_template: "{{ playbook_dir }}/haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
-    haproxy_syslog_dest: local2
+    haproxy_syslog_enable: True

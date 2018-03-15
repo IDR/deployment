@@ -4,3 +4,6 @@
 - include: openstack-create-publicidr.yml
   when: 'idr_enable_publicidr | default(True)'
 
+# Independent anonymous FTP server
+- include: openstack-create-ftp.yml
+  when: 'idr_enable_ftp | default(True)'

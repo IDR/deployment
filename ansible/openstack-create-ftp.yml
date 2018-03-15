@@ -2,21 +2,13 @@
 - hosts: localhost
   connection: local
 
-  # These variables can be defined in a variables file and included
-  # on the ansible command line as -e @path/to/secret.yml
-  vars:
-    # Do not change these unless you are running multiple deployments
-    - idr_deployment_cloud: ebi
-    - idr_environment_idr: idrftp
-    # REQUIRED: List of public SSH keys
-    - idr_keypair_keys:
-    # Change these to match the image and flavours in your OpenStack cloud
-    - vm_image: CentOS 7
-    - vm_flavour: m1.medium
-    - idr_environment_idr_subnet: 192.168.131.0/24
-
-
   pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
 
   ############################################################
   # Security groups
@@ -70,7 +62,9 @@
     idr_vm_assign_floating_ip: True
     idr_vm_bastion: True
     idr_vm_extra_groups:
-    - idrftp-ftp-hosts
+    - "{{ idr_environment_idr }}-ftp-hosts"
+    - "{{ idr_environment_idr }}-data-hosts"
+    - ftp-hosts
     idr_vm_networks:
     - net-name: "{{ idr_environment_idr }}"
     idr_vm_security_groups:

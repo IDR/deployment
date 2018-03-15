@@ -18,3 +18,5 @@
 - include: idr-proxy.yml
 - include: idr-proxy-about.yml
 - include: idr-haproxy.yml
+
+- include: idr-ftp.yml

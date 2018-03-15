@@ -1,0 +1,67 @@
+# Kubespray includes a playbook with it's own set of groups.
+# We can either copy and modify the playbook to match our group name,
+# or dynamically add hosts to the required kubespray groups.
+# This does the latter.
+#
+# Requires Ansible 2.4.
+#
+# We don't need kubespray's bastion handling because our custo openstack
+# dynamic inventory will automatically setup the SSH ProxyCommand
+#
+# WARNING: Since we have two separate clusters we must clear the
+# dynamically created groups before running kubespray on other clusters
+
+
+- hosts: localhost
+  tasks:
+  - meta: refresh_inventory
+
+
+- hosts: "{{ idr_environment_idr }}-train-master-hosts"
+  tasks:
+  - name: Create kubespray kube-master group
+    add_host:
+      name: "{{ ansible_hostname }}"
+      groups:
+      - k8s-cluster
+      - kube-master
+      - etcd
+
+
+- hosts: "{{ idr_environment_idr }}-train-node-hosts"
+  tasks:
+  - name: Create kubespray kube-node group
+    add_host:
+      name: "{{ ansible_hostname }}"
+      groups:
+      - k8s-cluster
+      - kube-node
+
+
+- hosts: localhost
+  tasks:
+  - debug:
+      msg: "{{ item }}: {{ groups[item] }}"
+    with_items:
+    - kube-master
+    - kube-node
+    - etcd
+    - k8s-cluster
+
+
+- include: ../../kubespray/cluster.yml
+
+
+- hosts: "{{ idr_environment_idr }}-train-master-hosts"
+  become: yes
+  tasks:
+  - fetch:
+      src: /etc/kubernetes/admin.conf
+      dest: "{{ playbook_dir }}/{{ idr_environment_idr }}-train.kubeconfig"
+      flat: yes
+    run_once: true
+
+
+- hosts: localhost
+  tasks:
+  - meta: refresh_inventory

@@ -64,7 +64,7 @@ kube_users:
 
 # Choose network plugin (cilium, calico, contiv, weave or flannel)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
-kube_network_plugin: calico
+kube_network_plugin: canal
 
 # weave's network password for encryption
 # if null then no network encryption
@@ -87,7 +87,7 @@ weave_peers: uninitialized
 weave_mtu: 1376
 
 # Enable kubernetes network policies
-enable_network_policy: false
+enable_network_policy: true
 
 # Kubernetes internal network for services, unused block of space.
 kube_service_addresses: 10.233.0.0/18
@@ -111,7 +111,7 @@ kube_apiserver_insecure_port: 8080 # (http)
 
 # Kube-proxy proxyMode configuration.
 # Can be ipvs, iptables
-kube_proxy_mode: iptables 
+kube_proxy_mode: iptables
 
 # DNS configuration.
 # Kubernetes cluster name, also will be used as DNS domain
@@ -160,7 +160,7 @@ dashboard_enabled: true
 efk_enabled: false
 
 # Helm deployment
-helm_enabled: false
+helm_enabled: true
 
 # Istio deployment
 istio_enabled: false
@@ -188,7 +188,7 @@ cephfs_provisioner_enabled: false
 # cephfs_provisioner_storage_class: cephfs
 
 # Nginx ingress controller deployment
-ingress_nginx_enabled: false
+ingress_nginx_enabled: true
 # ingress_nginx_namespace: "ingress-nginx"
 # ingress_nginx_insecure_port: 80
 # ingress_nginx_secure_port: 443
@@ -204,7 +204,7 @@ ingress_nginx_enabled: false
 persistent_volumes_enabled: false
 
 # Make a copy of kubeconfig on the host that runs Ansible in GITDIR/artifacts
-# kubeconfig_localhost: false
+#kubeconfig_localhost: false
 # Download kubectl onto the host that runs Ansible in GITDIR/artifacts
 # kubectl_localhost: false
 
@@ -222,9 +222,20 @@ persistent_volumes_enabled: false
 
 ## Supplementary addresses that can be added in kubernetes ssl keys.
 ## That can be useful for example to setup a keepalived virtual IP
-# supplementary_addresses_in_ssl_keys: [10.0.0.1, 10.0.0.2, 10.0.0.3]
+supplementary_addresses_in_ssl_keys:
+- idr-analysis.openmicroscopy.org
+- test-k8s-vae.openmicroscopy.org
+- idr-training.openmicroscopy.org
+- test-k8s-train.openmicroscopy.org
+- 10.0.51.112
 
 ## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
 ## See https://github.com/kubernetes-incubator/kubespray/issues/2141
 ## Set this variable to true to get rid of this issue
 volume_cross_zone_attachment: false
+
+
+## IDR ADDITION
+## kubespray requires "--become", in contrast to the other IDR playbooks
+## Set it here instead of on the command line
+ansible_become: yes

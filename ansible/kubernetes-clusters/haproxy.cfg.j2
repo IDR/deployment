@@ -41,7 +41,9 @@ frontend web-http
     redirect scheme https if !{ ssl_fc }
     #default_backend web-vae-http
     acl host_vae hdr(host) -i idr-analysis.openmicroscopy.org
+    acl host_vae hdr(host) -i test-k8s-vae.openmicroscopy.org
     acl host_train hdr(host) -i idr-training.openmicroscopy.org
+    acl host_train hdr(host) -i test-k8s-train.openmicroscopy.org
     use_backend web-vae-http if host_vae
     use_backend web-train-http if host_train
     log 127.0.0.1 {{ haproxy_syslog_dest_http }}

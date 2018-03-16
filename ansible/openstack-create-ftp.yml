@@ -16,7 +16,7 @@
   - name: IDR FTP external access security group
     os_security_group:
       description: External access to IDR FTP (managed by Ansible)
-      name: idr-ftp-external
+      name: "{{ idr_environment_idr }}-ftp-external"
       state: present
 
   - name: IDR FTP external access security group rules
@@ -26,7 +26,7 @@
       port_range_max: "{{ item.max }}"
       protocol: tcp
       remote_ip_prefix: 0.0.0.0/0
-      security_group: idr-ftp-external
+      security_group: "{{ idr_environment_idr }}-ftp-external"
       state: present
     with_items:
     - min: 22
@@ -69,7 +69,7 @@
     - net-name: "{{ idr_environment_idr }}"
     idr_vm_security_groups:
     - default
-    - idr-ftp-external
+    - "{{ idr_environment_idr }}-ftp-external"
 
 
   ############################################################

@@ -2,28 +2,16 @@
 - hosts: localhost
   connection: local
 
-  # These variables can be defined in a variables file and included
-  # on the ansible command line as -e @path/to/secret.yml
   vars:
-    # Do not change these unless you are running multiple deployments
-    - idr_deployment_cloud: idr
-    - idr_environment_idr: idr
-    # REQUIRED: List of public SSH keys
-    - idr_keypair_keys:
-    # Change these to match the image and flavours in your OpenStack cloud
-    #- vm_image: CentOS 7
-    - vm_image: CentOS-7-1708
-    #- vm_flavour: m1.large
-    - vm_flavour: m1.medium
-    #- vm_flavour_large: m1.xlarge
-    - vm_flavour_large: m1.medium
-    #- vm_flavour_medium: m1.medium
-    #- vm_flavour_medium: m1.medium
-
-    - idr_environment_idr_subnet: 192.168.1.0/24
+    k8s_vae_gluster_volume_size: 1024
 
 
   pre_tasks:
+
+    # These variables can be overridden in a variables file and included
+    # on the ansible command line as -e @path/to/secret.yml
+    - name: Include default provisioning variables
+      include_vars: vars/openstack-vars.yml
 
     ############################################################
     # Security groups
@@ -31,7 +19,7 @@
     - name: IDR k8s external access security group
       os_security_group:
         description: External access to IDR FTP (managed by Ansible)
-        name: k8s-external
+        name: "{{ idr_environment_idr }}-external"
         state: present
 
     - name: IDR k8s external access security group rules
@@ -41,7 +29,7 @@
         port_range_max: "{{ item }}"
         protocol: tcp
         remote_ip_prefix: 0.0.0.0/0
-        security_group: k8s-external
+        security_group: "{{ idr_environment_idr }}-external"
         state: present
       with_items:
       - 22
@@ -97,6 +85,48 @@
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_count: 1
 
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}-vae"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
+      idr_vm_name: "{{ idr_environment_idr }}-vae-gluster-1"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_medium }}"
+      idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-vae-storage-hosts"
+      - "{{ idr_environment_idr }}-vae-hosts"
+      idr_vm_networks:
+      - net-name: "{{ idr_environment_idr }}"
+
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}-vae"
+      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
+      idr_vm_name: "{{ idr_environment_idr }}-vae-gluster-2"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_medium }}"
+      idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-vae-storage-hosts"
+      - "{{ idr_environment_idr }}-vae-hosts"
+      idr_vm_networks:
+      - net-name: "{{ idr_environment_idr }}"
+
+      # Bug in idr_vm_count, it doesn't set the metadata hostname correctly
+
+
+    ############################################################
+    # VAE Volumes
+
+    - role: openmicroscopy.openstack-volume-storage
+      openstack_volume_size: "{{ k8s_vae_gluster_volume_size }}"
+      openstack_volume_vmname: "{{ idr_environment_idr }}-vae-gluster-1"
+      openstack_volume_name: gluster
+      openstack_volume_device: /dev/vdb
+
+    - role: openmicroscopy.openstack-volume-storage
+      openstack_volume_size: "{{ k8s_vae_gluster_volume_size }}"
+      openstack_volume_vmname: "{{ idr_environment_idr }}-vae-gluster-2"
+      openstack_volume_name: gluster
+      openstack_volume_device: /dev/vdb
+
 
     ############################################################
     # Training Instances
@@ -147,4 +177,4 @@
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_security_groups:
       - default
-      - k8s-external
+      - "{{ idr_environment_idr }}-external"

@@ -1,0 +1,8 @@
+## Copied from kubespray group_vars/all.yml
+bootstrap_os: none
+etcd_data_dir: /var/lib/etcd
+bin_dir: /usr/local/bin
+
+## kubespray requires "--become", in contrast to the other IDR playbooks
+## Set it here instead of on the command line
+ansible_become: yes

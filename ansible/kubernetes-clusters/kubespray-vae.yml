@@ -17,25 +17,38 @@
   - meta: refresh_inventory
 
 
-- hosts: "{{ idr_environment_idr }}-vae-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
   tasks:
   - name: Create kubespray kube-master group
     add_host:
-      name: "{{ ansible_hostname }}"
+      name: "{{ item }}"
       groups:
       - k8s-cluster
       - kube-master
       - etcd
+    with_items: "{{ play_hosts }}"
 
 
-- hosts: "{{ idr_environment_idr }}-vae-node-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-vae-node-hosts"
   tasks:
   - name: Create kubespray kube-node group
     add_host:
-      name: "{{ ansible_hostname }}"
+      name: "{{ item }}"
       groups:
       - k8s-cluster
       - kube-node
+    with_items: "{{ play_hosts }}"
+
+
+- hosts: "{{ idr_environment | default('idr') }}-vae-storage-hosts"
+  tasks:
+  - name: Create kubespray network-storage group
+    add_host:
+      name: "{{ item }}"
+      groups:
+      - gfs-cluster
+      - network-storage
+    with_items: "{{ play_hosts }}"
 
 
 - hosts: localhost
@@ -49,17 +62,42 @@
     - k8s-cluster
 
 
+- hosts: localhost
+  tasks:
+  - debug:
+      msg: "{{ item }}: {{ groups[item] }}"
+    with_items:
+    - gfs-cluster
+    - network-storage
+    when: '((idr_environment_idr | default("idr")) + "-vae-storage-hosts") in groups'
+
+
 - include: ../../kubespray/cluster.yml
 
+- include: ../../kubespray/contrib/network-storage/glusterfs/glusterfs.yml
 
-- hosts: "{{ idr_environment_idr }}-vae-master-hosts"
-  become: yes
+
+- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
+  run_once: true
+
   tasks:
-  - fetch:
+
+  - name: Load Kubernetes admin.conf file
+    become: yes
+    slurp:
       src: /etc/kubernetes/admin.conf
-      dest: "{{ playbook_dir }}/{{ idr_environment_idr }}-vae.kubeconfig"
-      flat: yes
-    run_once: true
+    register: _idr_kubernetes_admin_conf
+
+  - name: Update server and save kubeconfig locally
+    copy:
+      content: >-
+        {{ _idr_kubernetes_admin_conf.content | b64decode |
+           regex_replace(
+             'server: https://.+:6443',
+             'server: https://test-k8s-vae.openmicroscopy.org:6450')
+        }}
+      dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-vae.kubeconfig"
+    delegate_to: localhost
 
 
 - hosts: localhost

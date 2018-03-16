@@ -17,25 +17,27 @@
   - meta: refresh_inventory
 
 
-- hosts: "{{ idr_environment_idr }}-train-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-train-master-hosts"
   tasks:
   - name: Create kubespray kube-master group
     add_host:
-      name: "{{ ansible_hostname }}"
+      name: "{{ item }}"
       groups:
       - k8s-cluster
       - kube-master
       - etcd
+    with_items: "{{ play_hosts }}"
 
 
-- hosts: "{{ idr_environment_idr }}-train-node-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-train-node-hosts"
   tasks:
   - name: Create kubespray kube-node group
     add_host:
-      name: "{{ ansible_hostname }}"
+      name: "{{ item }}"
       groups:
       - k8s-cluster
       - kube-node
+    with_items: "{{ play_hosts }}"
 
 
 - hosts: localhost
@@ -52,14 +54,26 @@
 - include: ../../kubespray/cluster.yml
 
 
-- hosts: "{{ idr_environment_idr }}-train-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-train-master-hosts"
   become: yes
   tasks:
-  - fetch:
+
+  - name: Load Kubernetes admin.conf file
+    become: yes
+    slurp:
       src: /etc/kubernetes/admin.conf
-      dest: "{{ playbook_dir }}/{{ idr_environment_idr }}-train.kubeconfig"
-      flat: yes
-    run_once: true
+    register: _idr_kubernetes_admin_conf
+
+  - name: Update server and save kubeconfig locally
+    copy:
+      content: >-
+        {{ _idr_kubernetes_admin_conf.content | b64decode |
+           regex_replace(
+             'server: https://.+:6443',
+             'server: https://test-k8s-train.openmicroscopy.org:6451')
+        }}
+      dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-train.kubeconfig"
+    delegate_to: localhost
 
 
 - hosts: localhost

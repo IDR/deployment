@@ -24,9 +24,8 @@
 - src: openmicroscopy.docker-tools
   version: 1.0.0
 
-- name: openmicroscopy.haproxy
-  src: https://github.com/manics/ansible-role-haproxy.git
-  version: restart-rsyslog
+- src: openmicroscopy.haproxy
+  version: 3.0.0
 
 - src: openmicroscopy.hosts-populate
   version: 0.1.1

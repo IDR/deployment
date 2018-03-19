@@ -45,7 +45,7 @@
     haproxy_cfg_template: "{{ playbook_dir }}/templates/haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
-    haproxy_syslog_dest: local2
+    haproxy_syslog_enable: True
 
   tasks:
 

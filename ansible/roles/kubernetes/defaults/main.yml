@@ -14,6 +14,7 @@ kubernetes_advertise_address: ''
 
 # CIDR 10.244.0.0/16 is set in the kube-flannel.yml network plugin manifest
 kubernetes_init_args: >-
+  --node-name {{ ansible_hostname }}
   --pod-network-cidr=10.244.0.0/16
   --token {{ kubernetes_token }}
   {{ (kubernetes_advertise_address | length > 0) |
@@ -22,6 +23,9 @@ kubernetes_init_args: >-
        ' --apiserver-cert-extra-sans=' + kubernetes_advertise_address
      , '') }}
 
-kubernetes_join_args: --token {{ kubernetes_token }} {{ kubernetes_master }}
+kubernetes_join_args: >-
+  --node-name {{ ansible_hostname }}
+  --token {{ kubernetes_token }}
+  {{ kubernetes_master }}
 
 kubernetes_kube_version: ''

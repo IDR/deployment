@@ -40,17 +40,6 @@
     with_items: "{{ play_hosts }}"
 
 
-- hosts: "{{ idr_environment | default('idr') }}-vae-storage-hosts"
-  tasks:
-  - name: Create kubespray network-storage group
-    add_host:
-      name: "{{ item }}"
-      groups:
-      - gfs-cluster
-      - network-storage
-    with_items: "{{ play_hosts }}"
-
-
 - hosts: localhost
   tasks:
   - debug:
@@ -73,8 +62,6 @@
 
 
 - include: ../../kubespray/cluster.yml
-
-- include: ../../kubespray/contrib/network-storage/glusterfs/glusterfs.yml
 
 
 - hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
@@ -103,3 +90,35 @@
 - hosts: localhost
   tasks:
   - meta: refresh_inventory
+
+
+- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
+
+  roles:
+  - role: openmicroscopy.k8s-heketi-gluster
+    k8s_heketi_gluster_tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Exists
+      effect: NoSchedule
+    k8s_heketi_gluster_nodeselector:
+      node-role.kubernetes.io/master: "true"
+    k8s_heketi_gluster_storage_device: /dev/vdb
+    run_once: true
+
+  tasks:
+  # This isn't needed since Gluster is run inside Docker, but the Storage
+  # device is on the host and it's useful for investigation
+  - name: Install LVM tools
+    become: yes
+    yum:
+      name: lvm2
+      state: present
+
+
+- hosts: "{{ idr_environment | default('idr') }}-vae-hosts"
+  tasks:
+  - name: Install gluster mount client
+    become: yes
+    yum:
+      name: glusterfs-fuse
+      state: present

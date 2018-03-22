@@ -60,7 +60,7 @@
 
   # TODO: Restart haproxy when certificate changes
   - role: openmicroscopy.haproxy
-    haproxy_cfg_template: "{{ playbook_dir }}/haproxy.cfg.j2"
+    haproxy_cfg_template: "{{ playbook_dir }}/templates/k8sproxy-haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
     haproxy_syslog_enable: True

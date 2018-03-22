@@ -4,6 +4,10 @@
 
   vars:
     k8s_vae_gluster_volume_size: 1024
+    idr_k8s_master_count_vae: 3
+    idr_k8s_node_count_vae: 3
+    idr_k8s_master_count_train: 3
+    idr_k8s_node_count_train: 3
 
 
   pre_tasks:
@@ -70,7 +74,7 @@
       - "{{ idr_environment_idr }}-vae-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
-      idr_vm_count: 1
+      idr_vm_count: "{{ idr_k8s_master_count_vae }}"
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-vae"
@@ -83,49 +87,7 @@
       - "{{ idr_environment_idr }}-vae-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
-      idr_vm_count: 1
-
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_idr }}-vae"
-      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
-      idr_vm_name: "{{ idr_environment_idr }}-vae-gluster-1"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_medium }}"
-      idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-vae-storage-hosts"
-      - "{{ idr_environment_idr }}-vae-hosts"
-      idr_vm_networks:
-      - net-name: "{{ idr_environment_idr }}"
-
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_idr }}-vae"
-      idr_vm_keyname: "{{ idr_environment_idr }}-deployment-key"
-      idr_vm_name: "{{ idr_environment_idr }}-vae-gluster-2"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_medium }}"
-      idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-vae-storage-hosts"
-      - "{{ idr_environment_idr }}-vae-hosts"
-      idr_vm_networks:
-      - net-name: "{{ idr_environment_idr }}"
-
-      # Bug in idr_vm_count, it doesn't set the metadata hostname correctly
-
-
-    ############################################################
-    # VAE Volumes
-
-    - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: "{{ k8s_vae_gluster_volume_size }}"
-      openstack_volume_vmname: "{{ idr_environment_idr }}-vae-gluster-1"
-      openstack_volume_name: gluster
-      openstack_volume_device: /dev/vdb
-
-    - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: "{{ k8s_vae_gluster_volume_size }}"
-      openstack_volume_vmname: "{{ idr_environment_idr }}-vae-gluster-2"
-      openstack_volume_name: gluster
-      openstack_volume_device: /dev/vdb
+      idr_vm_count: "{{ idr_k8s_node_count_vae }}"
 
 
     ############################################################
@@ -142,7 +104,7 @@
       - "{{ idr_environment_idr }}-train-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
-      idr_vm_count: 1
+      idr_vm_count: "{{ idr_k8s_master_count_train }}"
 
     - role: IDR.openstack-idr-instance
       idr_environment: "{{ idr_environment_idr }}-train"
@@ -155,7 +117,7 @@
       - "{{ idr_environment_idr }}-train-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
-      idr_vm_count: 1
+      idr_vm_count: "{{ idr_k8s_node_count_train }}"
 
 
     ############################################################
@@ -178,3 +140,19 @@
       idr_vm_security_groups:
       - default
       - "{{ idr_environment_idr }}-external"
+
+
+  tasks:
+
+    ############################################################
+    # VAE Volumes
+
+    - name: Create gluster VAE master volumes
+      include_role:
+        name: openmicroscopy.openstack-volume-storage
+      vars:
+        openstack_volume_size: "{{ k8s_vae_gluster_volume_size }}"
+        openstack_volume_vmname: "{{ idr_environment_idr }}-vae-master{{ (idr_k8s_master_count_vae > 1) | ternary('-' + item, '') }}"
+        openstack_volume_name: gluster
+        openstack_volume_device: /dev/vdb
+      with_sequence: start=1 end="{{ idr_k8s_master_count_vae }}"

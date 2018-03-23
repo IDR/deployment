@@ -115,7 +115,7 @@
   version: 1.0.3
 
 - name: openmicroscopy.ssl-certificate
-  src: https://github.com/manics/ansible-role-nginx-ssl-selfsigned.git
+  src: https://github.com/manics/ansible-role-ssl-certificate.git
   version: ssl-certificate
 
 - src: openmicroscopy.storage-volume-initialise

@@ -174,7 +174,7 @@
 
 - name: openmicroscopy.k8s-heketi-gluster
   src: https://github.com/manics/ansible-role-k8s-heketi-gluster.git
-  version: 0.0.1
+  version: 0.0.2
 
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz

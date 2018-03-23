@@ -2,8 +2,8 @@
 
 # Load hostvars
 - hosts: >
-    {{ idr_environment | default('k8s') }}-vae-hosts
-    {{ idr_environment | default('k8s') }}-train-hosts
+    {{ idr_environment | default('k8s') }}-k8svae-hosts
+    {{ idr_environment | default('k8s') }}-k8strain-hosts
 
 
 - hosts: "{{ idr_environment | default('idr') }}-k8sproxy-hosts"
@@ -14,7 +14,7 @@
     set_fact:
       k8s_vae_nodes: >-
         {{
-          (groups[idr_environment | default('k8s') + '-vae-node-hosts']) |
+          (groups[idr_environment | default('k8s') + '-k8svae-node-hosts']) |
           default([]) |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) |
@@ -22,7 +22,7 @@
         }}
       k8s_vae_masters: >-
         {{
-          (groups[idr_environment | default('k8s') + '-vae-master-hosts']) |
+          (groups[idr_environment | default('k8s') + '-k8svae-master-hosts']) |
           default([]) |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) |
@@ -30,7 +30,7 @@
         }}
       k8s_train_nodes: >-
         {{
-          groups[idr_environment | default('k8s') + '-train-node-hosts'] |
+          groups[idr_environment | default('k8s') + '-k8strain-node-hosts'] |
           default([]) |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) |
@@ -38,7 +38,7 @@
         }}
       k8s_train_masters: >-
         {{
-          groups[idr_environment | default('k8s') + '-train-master-hosts'] |
+          groups[idr_environment | default('k8s') + '-k8strain-master-hosts'] |
           default([]) |
           map('extract', hostvars,
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) |

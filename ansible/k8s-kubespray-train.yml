@@ -17,7 +17,7 @@
   - meta: refresh_inventory
 
 
-- hosts: "{{ idr_environment | default('idr') }}-train-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8strain-master-hosts"
   tasks:
   - name: Create kubespray kube-master group
     add_host:
@@ -29,7 +29,7 @@
     with_items: "{{ play_hosts }}"
 
 
-- hosts: "{{ idr_environment | default('idr') }}-train-node-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8strain-node-hosts"
   tasks:
   - name: Create kubespray kube-node group
     add_host:
@@ -51,11 +51,15 @@
     - k8s-cluster
 
 
-- include: ../../kubespray/cluster.yml
+# This should be a symlink to the kubespray/cluster.yml playbook
+- include: k8s-kubespray-cluster.yml
+# Group vars are in group_vars/k8strain-hosts.yml and are based on
+# kubespray/inventory/sample/group_vars/k8s-cluster.yml
 
 
-- hosts: "{{ idr_environment | default('idr') }}-train-master-hosts"
-  become: yes
+- hosts: "{{ idr_environment | default('idr') }}-k8strain-master-hosts"
+  run_once: true
+
   tasks:
 
   - name: Load Kubernetes admin.conf file

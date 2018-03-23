@@ -37,7 +37,7 @@ kube_log_level: 2
 
 # Users to create for basic auth in Kubernetes API via HTTP
 # Optionally add groups for user
-kube_api_pwd: "{{ lookup('password', inventory_dir + '/credentials/kube_user length=15 chars=ascii_letters,digits') }}"
+kube_api_pwd: "{{ lookup('password', inventory_dir + '/../credentials/kube_user-vae length=15 chars=ascii_letters,digits') }}"
 kube_users:
   kube:
     pass: "{{kube_api_pwd}}"
@@ -225,9 +225,7 @@ persistent_volumes_enabled: false
 supplementary_addresses_in_ssl_keys:
 - idr-analysis.openmicroscopy.org
 - test-k8s-vae.openmicroscopy.org
-- idr-training.openmicroscopy.org
-- test-k8s-train.openmicroscopy.org
-- 10.0.51.112
+- idr-dev.openmicroscopy.org
 
 ## Running on top of openstack vms with cinder enabled may lead to unschedulable pods due to NoVolumeZoneConflict restriction in kube-scheduler.
 ## See https://github.com/kubernetes-incubator/kubespray/issues/2141

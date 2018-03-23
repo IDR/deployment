@@ -70,8 +70,10 @@
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour }}"
       idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-vae-master-hosts"
-      - "{{ idr_environment_idr }}-vae-hosts"
+      - "{{ idr_environment_idr }}-k8svae-master-hosts"
+      - "{{ idr_environment_idr }}-k8svae-hosts"
+      - "{{ idr_environment_idr }}-hosts"
+      - k8svae-hosts
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_count: "{{ idr_k8s_master_count_vae }}"
@@ -83,8 +85,10 @@
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-vae-node-hosts"
-      - "{{ idr_environment_idr }}-vae-hosts"
+      - "{{ idr_environment_idr }}-k8svae-node-hosts"
+      - "{{ idr_environment_idr }}-k8svae-hosts"
+      - "{{ idr_environment_idr }}-hosts"
+      - k8svae-hosts
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_count: "{{ idr_k8s_node_count_vae }}"
@@ -100,8 +104,10 @@
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour }}"
       idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-train-master-hosts"
-      - "{{ idr_environment_idr }}-train-hosts"
+      - "{{ idr_environment_idr }}-k8strain-master-hosts"
+      - "{{ idr_environment_idr }}-k8strain-hosts"
+      - "{{ idr_environment_idr }}-hosts"
+      - k8strain-hosts
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_count: "{{ idr_k8s_master_count_train }}"
@@ -113,8 +119,10 @@
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_extra_groups:
-      - "{{ idr_environment_idr }}-train-node-hosts"
-      - "{{ idr_environment_idr }}-train-hosts"
+      - "{{ idr_environment_idr }}-k8strain-node-hosts"
+      - "{{ idr_environment_idr }}-k8strain-hosts"
+      - "{{ idr_environment_idr }}-hosts"
+      - k8strain-hosts
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_count: "{{ idr_k8s_node_count_train }}"
@@ -133,8 +141,9 @@
       idr_vm_bastion: True
       idr_vm_assign_floating_ip: True
       idr_vm_extra_groups:
-      - k8sproxy-hosts
       - "{{ idr_environment_idr }}-k8sproxy-hosts"
+      - "{{ idr_environment_idr }}-hosts"
+      - k8sproxy-hosts
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_security_groups:

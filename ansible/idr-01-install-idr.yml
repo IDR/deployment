@@ -20,3 +20,11 @@
 - include: idr-haproxy.yml
 
 - include: idr-ftp.yml
+
+# It should be fine to always run these since even if no hosts match, but
+# to save time protect the kubespray playbooks
+- include: k8s-k8sproxy.yml
+- include: k8s-kubespray-vae.yml
+  when: 'idr_enable_k8s | default(True)'
+- include: k8s-kubespray-train.yml
+  when: 'idr_enable_k8s | default(True)'

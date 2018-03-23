@@ -17,7 +17,7 @@
   - meta: refresh_inventory
 
 
-- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
   tasks:
   - name: Create kubespray kube-master group
     add_host:
@@ -29,7 +29,7 @@
     with_items: "{{ play_hosts }}"
 
 
-- hosts: "{{ idr_environment | default('idr') }}-vae-node-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-node-hosts"
   tasks:
   - name: Create kubespray kube-node group
     add_host:
@@ -51,20 +51,13 @@
     - k8s-cluster
 
 
-- hosts: localhost
-  tasks:
-  - debug:
-      msg: "{{ item }}: {{ groups[item] }}"
-    with_items:
-    - gfs-cluster
-    - network-storage
-    when: '((idr_environment_idr | default("idr")) + "-vae-storage-hosts") in groups'
+# This should be a symlink to the kubespray/cluster.yml playbook
+- include: k8s-kubespray-cluster.yml
+# Group vars are in group_vars/k8svae-hosts.yml and are based on
+# kubespray/inventory/sample/group_vars/k8s-cluster.yml
 
 
-- include: ../../kubespray/cluster.yml
-
-
-- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
   run_once: true
 
   tasks:
@@ -92,7 +85,7 @@
   - meta: refresh_inventory
 
 
-- hosts: "{{ idr_environment | default('idr') }}-vae-master-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
 
   roles:
   - role: openmicroscopy.k8s-heketi-gluster
@@ -103,19 +96,11 @@
     k8s_heketi_gluster_nodeselector:
       node-role.kubernetes.io/master: "true"
     k8s_heketi_gluster_storage_device: /dev/vdb
+    k8s_heketi_gluster_kubectl: /usr/local/bin/kubectl
     run_once: true
 
-  tasks:
-  # This isn't needed since Gluster is run inside Docker, but the Storage
-  # device is on the host and it's useful for investigation
-  - name: Install LVM tools
-    become: yes
-    yum:
-      name: lvm2
-      state: present
 
-
-- hosts: "{{ idr_environment | default('idr') }}-vae-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-hosts"
   tasks:
   - name: Install gluster mount client
     become: yes

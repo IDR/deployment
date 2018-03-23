@@ -11,9 +11,18 @@ def is_in_idrenv(idrenv, obj):
     return (obj.name.startswith('%s-' % idrenv) or obj.name == idrenv)
 
 
-class DeleteServers(object):
-    def __init__(self, cloud, idrenv):
+class DeleteResource(object):
+    def __init__(self, cloud, wait):
         self.cloud = cloud
+        self.wait = wait
+
+    def __str__(self):
+        return '\n'.join(self.description)
+
+
+class DeleteServers(DeleteResource):
+    def __init__(self, cloud, idrenv, wait=True):
+        super(DeleteServers, self).__init__(cloud, wait)
         self.servers = [s for s in cloud.list_servers()
                         if is_in_idrenv(idrenv, s)]
 
@@ -25,15 +34,12 @@ class DeleteServers(object):
 
     def __call__(self):
         for s in self.servers:
-            self.cloud.delete_server(s.id, wait=True)
-
-    def __str__(self):
-        return '\n'.join(self.description)
+            self.cloud.delete_server(s.id, wait=self.wait)
 
 
-class DeleteVolumes(object):
-    def __init__(self, cloud, idrenv):
-        self.cloud = cloud
+class DeleteVolumes(DeleteResource):
+    def __init__(self, cloud, idrenv, wait=True):
+        super(DeleteVolumes, self).__init__(cloud, wait)
         self.volumes = [v for v in cloud.list_volumes()
                         if is_in_idrenv(idrenv, v)]
         volume_ids = set(v.id for v in self.volumes)
@@ -50,17 +56,14 @@ class DeleteVolumes(object):
 
     def __call__(self):
         for s in self.volume_snapshots:
-            cloud.delete_volume_snapshot(s.id, wait=True)
+            cloud.delete_volume_snapshot(s.id, wait=self.wait)
         for v in self.volumes:
-            self.cloud.delete_volume(v.id, wait=True)
-
-    def __str__(self):
-        return '\n'.join(self.description)
+            self.cloud.delete_volume(v.id, wait=self.wait)
 
 
-class DeleteNetworks(object):
-    def __init__(self, cloud, idrenv):
-        self.cloud = cloud
+class DeleteNetworks(DeleteResource):
+    def __init__(self, cloud, idrenv, wait=True):
+        super(DeleteNetworks, self).__init__(cloud, wait)
         self.routers = [r for r in cloud.list_routers()
                         if is_in_idrenv(idrenv, r)]
         self.networks = [n for n in cloud.list_networks()
@@ -109,13 +112,10 @@ class DeleteNetworks(object):
         for n in self.networks:
             self.cloud.delete_network(n.id)
 
-    def __str__(self):
-        return '\n'.join(self.description)
 
-
-class DeleteSecurityGroups(object):
-    def __init__(self, cloud, idrenv):
-        self.cloud = cloud
+class DeleteSecurityGroups(DeleteResource):
+    def __init__(self, cloud, idrenv, wait=True):
+        super(DeleteSecurityGroups, self).__init__(cloud, wait)
         self.security_groups = [g for g in cloud.list_security_groups()
                                 if is_in_idrenv(idrenv, g)]
 
@@ -129,22 +129,19 @@ class DeleteSecurityGroups(object):
         for g in self.security_groups:
             self.cloud.delete_security_group(g.id)
 
-    def __str__(self):
-        return '\n'.join(self.description)
 
-
-def delete(cloud, idrenv, resource_types):
+def delete(cloud, idrenv, resource_types, wait):
     commands = []
     delete_all = 'all' in resource_types
 
     if delete_all or 'server' in resource_types:
-        commands.append(DeleteServers(cloud, idrenv))
+        commands.append(DeleteServers(cloud, idrenv, wait))
     if delete_all or 'volume' in resource_types:
-        commands.append(DeleteVolumes(cloud, idrenv))
+        commands.append(DeleteVolumes(cloud, idrenv, wait))
     if delete_all or 'network' in resource_types:
-        commands.append(DeleteNetworks(cloud, idrenv))
+        commands.append(DeleteNetworks(cloud, idrenv, wait))
     if delete_all or 'secgroup' in resource_types:
-        commands.append(DeleteSecurityGroups(cloud, idrenv))
+        commands.append(DeleteSecurityGroups(cloud, idrenv, wait))
 
     return commands
 
@@ -166,10 +163,12 @@ def parse_args(args):
     p.add_argument('idrenv', help='IDR Environment', type=idrenv_validate)
     p.add_argument(
         '--type', '-t', action='append', choices=resource_types,
-        help='OpenStack resource type(s), use "all" to delete all')
+        help='OpenStack resource type, use "all" to delete all')
+    p.add_argument('--nowait', action="store_true", default=False,
+                   help='Do not wait for deletions')
     args = p.parse_args(args)
     if not args.type:
-        raise argparse.ArgumentTypeError('Invalid resource type')
+        raise argparse.ArgumentTypeError('Resource type required')
     return args
 
 
@@ -184,7 +183,7 @@ if __name__ == '__main__':
             sys.exit(2)
 
     cloud = shade.openstack_cloud()
-    commands = delete(cloud, args.idrenv, args.type)
+    commands = delete(cloud, args.idrenv, args.type, not args.nowait)
     for c in commands:
         print(c)
 

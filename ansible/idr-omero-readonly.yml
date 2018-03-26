@@ -79,16 +79,13 @@
       recurse: yes
       state: directory
 
-  # TODO: Rendering in web is current broken with omero.cluster.read_only true
   - name: OMERO.server read-only configuration
     become: yes
     copy:
       content: |
         config set -- omero.data.dir /data/OMERO
-        #config set -- omero.cluster.read_only true
-        config set -- omero.cluster.node_provider ome.security.basic.InMemoryNodeProvider
-        config set -- omero.sessions.session_manager ome.services.sessions.InMemorySessionManagerImpl
-        config set -- omero.security.event_provider ome.security.basic.InMemoryEventProvider
+        config set -- omero.cluster.read_only true
+        config set -- omero.pixeldata.memoizer.dir.local /tmp/BioFormatsCache
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
     notify:
@@ -105,7 +102,6 @@
       state: directory
     with_items:
     - /data/OMERO
-    - /data/OMERO/ManagedRepository
 
   # Note BioFormatsCache is a separate read-write shared cache
   - name: OMERO.server read-only data dir symlinks
@@ -118,11 +114,10 @@
     with_items:
     - Files
     - FullText
-# TODO: OMERO read-only writes to .omero and ManagedRepository/.omero
-#    - ManagedRepository
+    - ManagedRepository
     - Pixels
     - Thumbnails
-#    - .omero
+    - .omero
 
   - name: OMERO.server BioFormatsCache symlinks
     become: yes
@@ -131,36 +126,6 @@
       path: /data/OMERO/BioFormatsCache
       state: link
       force: yes
-
-  # And now we need to symlink ManagedRepository/*
-  - name: OMERO.server get ManagedRepository dirs
-    find:
-      file_type: directory
-      paths: /data/OMERO-readonly/ManagedRepository/
-      recurse: no
-    register: omero_ro_managedrepo_dirs
-
-  - name: OMERO.server read-only ManagedRepository symlinks
-    become: yes
-    file:
-      src: "{{ item.path }}"
-      path: /data/OMERO/ManagedRepository/{{ item.path | basename }}
-      state: link
-      force: yes
-    with_items: "{{ omero_ro_managedrepo_dirs.files }}"
-
-  # Finally .omero/UUID/repo_uuid needs to be writeable, but must still be
-  # identical to the readwrite copy
-  - name: OMERO.server read-only copy read-write repo uuid
-    become: yes
-    # omero-server user doens't exist at this point, this copies UID/GID
-    command: rsync -rcgoi --delete /data/OMERO-readonly/.omero/ /data/OMERO/.omero/
-    register: _omero_readonly_synchronize
-    changed_when: '_omero_readonly_synchronize.stdout_lines | length > 0'
-    tags:
-    # TODO: Can't get synchronize to work so use command rsync instead
-    - skip_ansible_lint
-
 
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
 # Load hostvars for subsequent playbooks

@@ -3,7 +3,7 @@
   connection: local
 
   vars:
-    k8s_vae_gluster_volume_size: 1024
+    k8s_vae_gluster_volume_size: 2048
     idr_k8s_master_count_vae: 3
     idr_k8s_node_count_vae: 3
     idr_k8s_master_count_train: 3

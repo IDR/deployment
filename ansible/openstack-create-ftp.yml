@@ -1,0 +1,82 @@
+---
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
+
+  ############################################################
+  # Security groups
+
+  - name: IDR FTP external access security group
+    os_security_group:
+      description: External access to IDR FTP (managed by Ansible)
+      name: "{{ idr_environment_idr }}-ftp-external"
+      state: present
+
+  - name: IDR FTP external access security group rules
+    os_security_group_rule:
+      direction: ingress
+      port_range_min: "{{ item.min }}"
+      port_range_max: "{{ item.max }}"
+      protocol: tcp
+      remote_ip_prefix: 0.0.0.0/0
+      security_group: "{{ idr_environment_idr }}-ftp-external"
+      state: present
+    with_items:
+    - min: 22
+      max: 22
+    - min: 32021
+      max: 32031
+
+
+  roles:
+
+  ############################################################
+  # Keypairs
+
+  - role: IDR.openstack-idr-keypairs
+
+
+  ############################################################
+  # Networks
+
+  - role: IDR.openstack-idr-network
+    idr_network_name: "{{ idr_environment_idr }}"
+    idr_network_subnet: "{{ idr_environment_idr_subnet }}"
+
+
+  ############################################################
+  # Instances
+
+  - role: IDR.openstack-idr-instance
+    idr_environment: "{{ idr_environment_idr }}"
+    idr_vm_name: "{{ idr_environment_idr }}-ftp"
+    idr_vm_image: "{{ vm_image }}"
+    idr_vm_flavour: "{{ vm_flavour }}"
+    idr_vm_assign_floating_ip: True
+    idr_vm_bastion: True
+    idr_vm_extra_groups:
+    - "{{ idr_environment_idr }}-ftp-hosts"
+    - "{{ idr_environment_idr }}-data-hosts"
+    - ftp-hosts
+    idr_vm_networks:
+    - net-name: "{{ idr_environment_idr }}"
+    idr_vm_security_groups:
+    - default
+    - "{{ idr_environment_idr }}-ftp-external"
+
+
+  ############################################################
+  # Volumes
+
+  - role: openmicroscopy.openstack-volume-storage
+    openstack_volume_size: 1024
+    openstack_volume_vmname: "{{ idr_environment_idr }}-ftp"
+    openstack_volume_name: ftpdata
+    openstack_volume_device: /dev/vdb

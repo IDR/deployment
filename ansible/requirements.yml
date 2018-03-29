@@ -9,6 +9,9 @@
 - src: openmicroscopy.analysis-tools
   version: 1.0.0
 
+- src: openmicroscopy.anonymous-ftp
+  version: 0.1.0
+
 - src: openmicroscopy.basedeps
   version: 1.0.0
 

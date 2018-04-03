@@ -74,7 +74,7 @@
         {{ _idr_kubernetes_admin_conf.content | b64decode |
            regex_replace(
              'server: https://.+:6443',
-             'server: https://test-k8s-train.openmicroscopy.org:6451')
+             'server: https://idr-training.openmicroscopy.org:6451')
         }}
       dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-train.kubeconfig"
     delegate_to: localhost

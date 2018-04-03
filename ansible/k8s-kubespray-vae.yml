@@ -74,7 +74,7 @@
         {{ _idr_kubernetes_admin_conf.content | b64decode |
            regex_replace(
              'server: https://.+:6443',
-             'server: https://test-k8s-vae.openmicroscopy.org:6450')
+             'server: https://idr-analysis.openmicroscopy.org:6450')
         }}
       dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-vae.kubeconfig"
     delegate_to: localhost
@@ -83,27 +83,3 @@
 - hosts: localhost
   tasks:
   - meta: refresh_inventory
-
-
-- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
-
-  roles:
-  - role: openmicroscopy.k8s-heketi-gluster
-    k8s_heketi_gluster_tolerations:
-    - key: node-role.kubernetes.io/master
-      operator: Exists
-      effect: NoSchedule
-    k8s_heketi_gluster_nodeselector:
-      node-role.kubernetes.io/master: "true"
-    k8s_heketi_gluster_storage_device: /dev/vdb
-    k8s_heketi_gluster_kubectl: /usr/local/bin/kubectl
-    run_once: true
-
-
-- hosts: "{{ idr_environment | default('idr') }}-k8svae-hosts"
-  tasks:
-  - name: Install gluster mount client
-    become: yes
-    yum:
-      name: glusterfs-fuse
-      state: present

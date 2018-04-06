@@ -76,7 +76,7 @@
              'server: https://.+:6443',
              'server: https://idr-analysis.openmicroscopy.org:6450')
         }}
-      dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-vae.kubeconfig"
+      dest: "{{ playbook_dir }}/credentials/{{ idr_environment | default('idr') }}-vae.kubeconfig"
     delegate_to: localhost
 
 

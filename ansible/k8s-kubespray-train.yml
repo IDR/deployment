@@ -76,7 +76,7 @@
              'server: https://.+:6443',
              'server: https://idr-training.openmicroscopy.org:6451')
         }}
-      dest: "{{ playbook_dir }}/{{ idr_environment | default('idr') }}-train.kubeconfig"
+      dest: "{{ playbook_dir }}/credentials/{{ idr_environment | default('idr') }}-train.kubeconfig"
     delegate_to: localhost
 
 

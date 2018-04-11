@@ -1,0 +1,13 @@
+# https://github.com/kubernetes/kubernetes/issues/40182#issuecomment-276392353
+[Unit]
+Description=Override Docker 1.13.1 iptables default forward for Kubernetes 1.7.4
+After=docker.service
+#Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/iptables -P FORWARD ACCEPT
+
+[Install]
+WantedBy=multi-user.target
+

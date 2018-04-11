@@ -7,6 +7,30 @@
     {{ idr_environment | default('idr') }}-proxy-hosts
 
 
+# Workaround this issue with Docker 1.13.1 and Kubernetes 1.7.4
+# https://github.com/kubernetes/kubernetes/issues/40182#issuecomment-276392353
+# We're going to drop these hosts so this is just a quick fix
+- hosts: >
+    {{ idr_environment | default('idr') }}-dockermanager-hosts
+    {{ idr_environment | default('idr') }}-dockerworker-hosts
+
+  tasks:
+
+  - name: Workaround iptables problem with Docker 1.13.1 Kubernetes 1.7.4
+    become: yes
+    copy:
+      src: files/docker-1.13-kube-1.7.4-iptables.service
+      dest: /etc/systemd/system/docker-1.13-kube-1.7.4-iptables.service
+
+  - name: Start and enable Docker Kubernetes Iptables workaround
+    become: yes
+    systemd:
+      daemon_reload: yes
+      name: docker-1.13-kube-1.7.4-iptables.service
+      enabled: yes
+      state: started
+
+
 - hosts: >
     {{ idr_environment | default('idr') }}-dockermanager-hosts
 

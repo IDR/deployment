@@ -66,7 +66,7 @@ backend web-train-http
     #balance roundrobin
 {% for backend in k8s_train_nodes %}
     # Internal self-signed certificate
-    server {{ 'vae-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:443 check ssl verify none
+    server {{ 'train-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:443 check ssl verify none
 {% endfor %}
     http-request set-header X-Forwarded-Port %[dst_port]
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
@@ -108,7 +108,7 @@ backend kubernetes-api-train
     balance source
     option tcplog
 {% for backend in k8s_train_masters %}
-    server {{ 'vae-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:6443 check
+    server {{ 'train-' + (backend | regex_replace('\.', '_')) }} {{ backend }}:6443 check
 {% endfor %}
     timeout connect 10s
     timeout server 10m

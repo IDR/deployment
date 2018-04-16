@@ -136,6 +136,10 @@
 ######################################################################
 # External IDR roles
 
+- name: IDR.glusterfs-kube-config
+  src: https://github.com/manics/ansible-role-glusterfs-kube-config.git
+  version: master
+
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
   version: 2.0.2
@@ -171,10 +175,6 @@
 - name: openmicroscopy.fluentd
   src: https://github.com/openmicroscopy/ansible-role-fluentd/archive/0.2.1.tar.gz
   version: 0.2.1
-
-- name: openmicroscopy.k8s-heketi-gluster
-  src: https://github.com/manics/ansible-role-k8s-heketi-gluster.git
-  version: 0.0.2
 
 - name: openmicroscopy.prometheus
   src: https://github.com/openmicroscopy/ansible-role-prometheus/archive/0.2.0.tar.gz

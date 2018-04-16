@@ -8,3 +8,5 @@
 - include: os-idr-volumes.yml
 - include: idr-dundee-nfs.yml
 - include: idr-ebi-nfs.yml
+
+- include: idr-reboot-if-kernel.yml

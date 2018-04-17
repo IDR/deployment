@@ -86,11 +86,8 @@
     when: selinux_enabled
 
   roles:
-  # Default to a self-signed certificate, to use production certificates set:
-  # ssl_certificate_content: "{{ secret_certificate_content }}"
-  # ssl_certificate_key_content: "{{ secret_certificate_key_content }}"
-  # ssl_certificate_selfsigned_create: False
+  # Default to a self-signed certificate
+  # To use production certificates see
+  # https://github.com/openmicroscopy/ansible-role-ssl-certificate/blob/0.2.0/README.md
   - role: openmicroscopy.ssl-certificate
-    ssl_certificate_path: "{{ nginx_proxy_ssl_certificate }}"
-    ssl_certificate_key_path: "{{ nginx_proxy_ssl_certificate_key }}"
   - role: openmicroscopy.nginx-proxy

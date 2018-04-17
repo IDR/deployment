@@ -4,7 +4,16 @@
 - hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   tasks:
-  - name: Create persistent journald directory
+  - name: centos-init | Install locate
+    become: yes
+    yum:
+      name: mlocate
+      state: present
+
+  - name: centos-init | Update locate db
+    command: updatedb
+
+  - name: centos-init | Create persistent journald directory
     become: yes
     file:
       path: /var/log/journal

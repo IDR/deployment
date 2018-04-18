@@ -9,6 +9,9 @@
 - src: openmicroscopy.analysis-tools
   version: 1.0.0
 
+- src: openmicroscopy.anonymous-ftp
+  version: 0.1.0
+
 - src: openmicroscopy.basedeps
   version: 1.0.0
 
@@ -28,7 +31,7 @@
   version: 3.0.0
 
 - src: openmicroscopy.hosts-populate
-  version: 0.1.1
+  version: 0.2.0
 
 - src: openmicroscopy.ice
   version: 2.1.1

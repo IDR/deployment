@@ -12,3 +12,4 @@
   - role: openmicroscopy.hosts-populate
     hosts_populate_openstack_groups:
     - "{{ idr_environment | default('idr') }}-hosts"
+    hosts_populate_regex_alias: "^[^-]+-(.+)"

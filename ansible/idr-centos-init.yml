@@ -9,15 +9,7 @@
     yum:
       name: mlocate
       state: present
-
-  - name: centos-init | Cron for updating locate db
-    become: yes
-    cron:
-        name: update locate db
-        cron_file: updatedb
-        value: updatedb
-        hour: "2"
-        minute: "0"
+    when: idr_debug | default(false) | bool
 
   - name: centos-init | Create persistent journald directory
     become: yes

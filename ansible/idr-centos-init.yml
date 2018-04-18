@@ -10,9 +10,14 @@
       name: mlocate
       state: present
 
-  - name: centos-init | Update locate db
+  - name: centos-init | Cron for updating locate db
     become: yes
-    command: updatedb
+    cron:
+        name: update locate db
+        cron_file: updatedb
+        value: updatedb
+        hour: "2"
+        minute: "0"
 
   - name: centos-init | Create persistent journald directory
     become: yes

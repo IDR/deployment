@@ -11,6 +11,7 @@
       state: present
 
   - name: centos-init | Update locate db
+    become: yes
     command: updatedb
 
   - name: centos-init | Create persistent journald directory

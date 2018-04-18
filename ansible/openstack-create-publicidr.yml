@@ -121,42 +121,6 @@
 
 
     ############################################################
-    # Analysis Instances
-
-    # Docker-manager server
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_idr }}"
-      idr_vm_name: "{{ idr_environment_idr }}-dockermanager"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_large }}"
-      idr_vm_dockermanager: True
-      idr_vm_networks:
-      - net-name: "{{ idr_environment_idr }}"
-
-    # Docker-worker server
-    - role: IDR.openstack-idr-instance
-      idr_environment: "{{ idr_environment_idr }}"
-      idr_vm_name: "{{ idr_environment_idr }}-dockerworker"
-      idr_vm_image: "{{ vm_image }}"
-      idr_vm_flavour: "{{ vm_flavour_large }}"
-      idr_vm_dockerworker: True
-      idr_vm_networks:
-      - net-name: "{{ idr_environment_idr }}"
-      idr_vm_count: 2
-
-
-    ############################################################
-    # Analysis Volumes
-
-    - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 100
-      openstack_volume_vmname: "{{ idr_environment_idr }}-dockermanager"
-      openstack_volume_name: data
-      openstack_volume_device: /dev/vdb
-      openstack_volume_source: "{{ idr_volume_dockermanager_data_src }}"
-
-
-    ############################################################
     # Management Instances
 
     # Dedicated management server

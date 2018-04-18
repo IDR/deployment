@@ -19,4 +19,4 @@ def test_omero_database_created(Command):
             "'SELECT currentpatch,currentversion FROM dbpatch "
             "ORDER BY id DESC LIMIT 1;'")
     out = Command.check_output('bash -c %s', psql)
-    assert '0|OMERO5.3' == out
+    assert '0|OMERO5.4' == out

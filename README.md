@@ -30,3 +30,5 @@ If you see lost connections you can try setting a keep-alive in your `.ssh/confi
 [idr-ansible.sh](docs/idr-ansible.sh): An example script to provision and deploy the IDR on OpenStack.
 
 [Operating procedures](docs/operating-procedures.md): Administration of the IDR
+
+[Monitoring](docs/monitoring.md): Monitoring the IDR

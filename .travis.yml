@@ -14,10 +14,16 @@ script:
       ansible/!(\
       idr-kubernetes-apply.yml|\
       idr-reset-users-groups.yml|\
+      k8s-kubespray-cluster.yml|\
+      k8s-kubespray-train.yml|\
+      k8s-kubespray-vae.yml|\
       molecule.yml|\
       ansible.cfg) \
       --exclude ansible/idr-kubernetes-apply.yml \
       --exclude ansible/idr-reset-users-groups.yml \
+      --exclude ansible/k8s-kubespray-cluster.yml \
+      --exclude ansible/k8s-kubespray-train.yml \
+      --exclude ansible/k8s-kubespray-vae.yml \
       --exclude ansible/roles/kubernetes/meta/main.yml \
       '"
   - cd ansible; molecule test

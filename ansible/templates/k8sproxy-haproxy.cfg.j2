@@ -37,7 +37,7 @@ defaults
 
 frontend web-http
     bind *:80
-    bind *:443 ssl crt /etc/ssl/idr-combined.pem
+    bind *:443 ssl crt /etc/ssl/localcerts/combined.pem
     redirect scheme https if !{ ssl_fc }
     #default_backend web-vae-http
     acl host_vae hdr(host) -i idr-analysis.openmicroscopy.org

@@ -49,14 +49,9 @@
 
   - role: openmicroscopy.selinux-utils
 
-  # Default to a self-signed certificate, to use production certificates set:
-  # ssl_certificate_content: "{{ secret_certificate_content }}"
-  # ssl_certificate_key_content: "{{ secret_certificate_key_content }}"
-  # ssl_certificate_selfsigned_create: False
+  # Default to a self-signed certificate, to use production certificates see
+  # https://github.com/openmicroscopy/ansible-role-ssl-certificate/blob/0.2.0/README.md
   - role: openmicroscopy.ssl-certificate
-    ssl_certificate_path: /etc/ssl/idr-fullchain.pem
-    ssl_certificate_key_path: /etc/ssl/idr-privkey.pem
-    ssl_certificate_combined_path: /etc/ssl/idr-combined.pem
 
   # TODO: Restart haproxy when certificate changes
   - role: openmicroscopy.haproxy

@@ -72,9 +72,6 @@
 - src: openmicroscopy.nginx-proxy
   version: 1.5.2
 
-- src: openmicroscopy.nginx-ssl-selfsigned
-  version: 1.0.0
-
 - src: openmicroscopy.omero-common
   version: 0.3.0
 
@@ -119,6 +116,9 @@
 
 - src: openmicroscopy.selinux-utils
   version: 1.0.3
+
+- src: openmicroscopy.ssl-certificate
+  version: 0.2.0
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0

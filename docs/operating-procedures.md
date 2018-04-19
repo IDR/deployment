@@ -8,10 +8,9 @@ Any changes that do not involve manipulating the data stored in OMERO (such as c
 
 ## Production IDR
 
-There are three ways to access the production IDR:
+There are two ways to access the production IDR:
 - Nginx web proxy running on `idr-proxy`
-- Main back-end OMERO.web and OMERO.server running on `idr-omeroreadwrite`
-- Read-only back-end OMERO.web and OMERO.server running on each numbered `idr-omeroreadonly-N`
+- Back-end OMERO.web and OMERO.server running on `idr-omero`
 
 
 ### `idr-proxy`
@@ -26,23 +25,37 @@ In the case of large screens this may lead to a significant slowdown of the serv
 You can force a complete refresh of the cache by removing everything under `/var/cache/nginx/`.
 
 
-### `idr-omeroreadwrite`
+### `idr-omero`
 If you SSH into this server you will have full access to OMERO.server, including OMERO.web and the command-line client.
 If you need to login to OMERO you should always connect to this server.
 
 If you need to restart OMERO.server or OMERO.web, you must use `systemctl` and not `omero admin` or `omero web`.
 
 
+## Analysis IDR
+
+External users of the VAE should connect to JupyterHub via the front-end `idr-proxy`.
+For internal administration you may need to work on:
+- `idr-a-omero`: A clone of the production OMERO to ensure complex analysis queries do not affect public users of the IDR
+- `idr-a-dockermanager`: The Docker server running the individual VAEs
+
+
+### `idr-a-dockermanager`
+JupyterHub runs in a Docker container managed as a systemd service, and spawns additional Docker containers for analysis users.
+
+
 ## Backups, restores and upgrades
 
 The IDR has a well-defined separation between applications and data.
 The following directories contain data that must be backed up:
-- `idr-omeroreadwrite:/data`: The OMERO data directory
+- `idr-omero:/data`: The OMERO data directory
 - `idr-database:/var/lib/pgsql`: The PostgreSQL data directory
 
 The following directories are not essential but you may wish to also back them up:
 - `idr-proxy:/var/cache/nginx`: The front-end web cache (can be regenerated)
-- `idr-omeroreadonly-N:/data`: Read-only copies of OMERO data directory (clone of production)
+- `idr-a-omero:/data`: The analysis OMERO data directory (clone of production)
+- `idr-a-database:/var/lib/pgsql`: The PostgreSQL data directory (clone of production)
+- `idr-a-dockermanager:/data`: Jupyter notebooks (VAEs are treated as ephemeral)
 
 If you used the OpenStack provisioning playbook, these are all separate volumes that can be backed up using the OpenStack clients.
 

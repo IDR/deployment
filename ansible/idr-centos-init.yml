@@ -10,7 +10,7 @@
       path: /var/log/journal
       owner: root
       group: systemd-journal
-      mode: "u=rwx,g=rws,o=rx"
+      mode: "u=rwx,g=rxs,o=rx"
       state: directory
     notify:
     - restart systemd-journald

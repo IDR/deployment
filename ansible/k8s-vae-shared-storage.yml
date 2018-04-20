@@ -36,7 +36,7 @@
       state: present
 
   roles:
-  - role: openmicroscopy.glusterfs-kube-config
+  - role: IDR.glusterfs-kube-config
     gluster_k8s_storage_group: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
     gluster_k8s_add_bin_path: /usr/local/bin
     gluster_kubernetes_version: d86e9237328f8dd95f50cd7be84ee6675fa908de

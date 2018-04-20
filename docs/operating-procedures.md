@@ -49,7 +49,7 @@ The number of `idr-omeroreadonly*` servers may vary, check `/etc/hosts` oni `idr
 
 ## Analysis IDR
 
-The VAE (JupyterHub) is currently accessed via the `idr-dockermanager`.
+The VAE (JupyterHub) is currently accessed via `idr-dockermanager`.
 In the next release this will be moved to a separate deployment.
 
 

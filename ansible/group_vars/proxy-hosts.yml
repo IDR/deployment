@@ -224,6 +224,9 @@ nginx_proxy_direct_locations:
   redirect302: /webclient/?experimenter=-1
 - location: "= /"
   redirect302: /about
+  # Block webclient login
+- location: "^~ /webclient/login"
+  redirect302: /webclient/?experimenter=-1
 - location: "^~ /about"
   alias: /srv/www/html
 - location: "^~ /connection"

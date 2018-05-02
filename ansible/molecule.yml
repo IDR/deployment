@@ -24,6 +24,9 @@ docker:
     image: manics/centos-systemd-ip-docker
     image_version: latest
     privileged: True
+    volume_mounts:
+      # This allows NFS exports to work on Docker
+      idr-omeroreadwrite-docker-data: /data
     ansible_groups:
     - idr-omero-hosts
     - omero-hosts
@@ -163,8 +166,6 @@ openstack:
 
 ansible:
   playbook: molecule-playbook.yml
-  # TODO: Only skip when driver==docker
-  skip_tags: skip_if_molecule_docker
 
   group_vars:
 

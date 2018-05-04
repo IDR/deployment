@@ -85,7 +85,6 @@
       content: |
         config set -- omero.data.dir /data/OMERO
         config set -- omero.cluster.read_only true
-        config set -- omero.pixeldata.memoizer.dir.local /tmp/BioFormatsCache
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
     notify:

@@ -15,6 +15,11 @@ If you provisioned your servers on OpenStack with the example playbook you must 
 
 ### [`idr-01-install-idr.yml`](../ansible/idr-01-install-idr.yml)
 This is the main playbook that does almost all the work involved in setting up the IDR, including installing and setting up PostgreSQL, OMERO.server, OMERO.web, and the front-end caching Nginx proxy.
+If you have enabled other components such as FTP or the Kubernetes this will install them.
+
+### [`idr-02-services.yml`](../ansible/idr-02-services.yml)
+Applications which make use of the IDR are deployed in this playbook.
+Work is in progress to enable the independent management of these applications from the core IDR.
 
 ### [`idr-03-postinstall.yml`](../ansible/idr-03-postinstall.yml)
 This is an optional playbook to set up some OMERO users, including setting the OMERO `root` user password to a random string (stored in `/root/idr-root-ice.config`) and creating a public user for OMERO.web.
@@ -22,7 +27,7 @@ This playbook is *not* idempotent.
 
 ### [`idr-09-monitoring.yml`](../ansible/idr-09-monitoring.yml)
 This is an optional playbook to set up monitoring of the IDR and OMERO.server.
-This includes configuring all servers with [Munin](http://munin-monitoring.org/), and enabling Slack notifications for OMERO.server errors.
+This includes configuring all servers with [Munin](http://munin-monitoring.org/), setting up centralised logging with [fluentd](https://www.fluentd.org/)/, and enabling Slack notifications errors.
 You will need to provide a secret Slack token for Slack notifications.
 
 
@@ -41,9 +46,12 @@ The main changes are:
 This inventory will attempt to automatically route all SSH access via `idr-proxy`, using metadata attached to the servers in the [IDR openstack-idr-instance](https://github.com/IDR/ansible-role-openstack-idr-instance) role.
 
 ### Static inventory
-This is recommended if you have provisioned the servers yourself, or if you are unfamiliar with setting up an Ansible dynamic inventory.
+Use this if you have provisioned the servers yourself, or if you are unfamiliar with setting up an Ansible dynamic inventory.
 Modify the `Hosts` section in the [example static inventory](../inventories/ansible-hosts).
 You should not need to change the `Host groups` section.
+
+Note we do not currently test this as we always use Ansible for provisioning resources.
+
 
 ## Ansible deployment example
 
@@ -55,9 +63,11 @@ If you are using a static inventory run:
 
 If you provisioned your servers using the OpenStack playbook and are using the IDR dynamic inventory run:
 
-    ansible-playbook -i ../inventories/openstack-idr.py --diff -u centos idr-00-preinstall.yml idr-01-install-idr.yml idr-03-postinstall.yml
+    ansible-playbook -i ../inventories/openstack-idr.py --diff -u centos idr-00-preinstall.yml idr-01-install-idr.yml idr-02-services.yml idr-03-postinstall.yml
 
 If this completes successfully you should be able to access a public OMERO.web at the IP of the `idr-proxy` server.
+If an update requires a reboot of a server the Ansible connection will be interrupted.
+Simply wait for the server to restart, and rerun the above command.
 
 
 ### Advanced deployment options

@@ -6,13 +6,12 @@ The IDR contains two main groups of servers:
 
 The production (public-facing) IDR (3 servers):
 - Database
-- OMERO.server
+- OMERO.servers
 - Nginx gateway
 
 The virtual analysis environment (VAE) IDR (3 servers):
-- Database
-- OMERO.server
-- Docker Manager
+- Kubernetes master
+- Kubernetes workers
 
 
 ## Ansible prerequisites
@@ -42,35 +41,18 @@ Network: `idr`
 
 Instances:
 - `idr-database`: PostgreSQL database server
-- `idr-omero`: OMERO.server, including OMERO.web
+- `idr-omeroreadwrite`: Read-write OMERO.server including OMERO.web
+- `idr-omeroreadonly*`: Read-only OMERO.servers including OMERO.web
 - `idr-proxy`: Nginx gateway with custom caching configuration
 
 Volumes:
 - `idr-database-db`: PostgreSQL data directory
-- `idr-omero-data`: OMERO data directory
+- `idr-omeroreadwrite-data`: OMERO data directory
 - `idr-proxy-nginxcache`: Nginx cache directory
 
 
-### Analysis IDR
-Network: `idr-a`
-
-Instances:
-- `idr-a-database`: PostgreSQL database server
-- `idr-a-omero`: OMERO.server
-- `idr-a-dockermanager`: A Docker server for running VAEs
-
-Volumes:
-- `idr-a-database-db`: PostgreSQL data directory
-- `idr-a-omero-data`: OMERO data directory
-- `idr-a-dockermanager-jupyter`: Files created by the VAE
-
-Note `idr-proxy` is also connected to the `idr-a` network to provide access to the analysis platform.
-
-Separate networks are used to provide segregation between the restricted public-facing IDR, and the internal analysis IDR.
-
-
 ### Additional resources
-- `idr-management`: An instance running Munin for monitoring the production IDR platform (attached to `idr` and `idr-a` networks).
+- `idr-management`: An instance running Munin for monitoring the production IDR platform
 - Security rules to restrict external access.
 - Ansible hostgroup metadata is set on each instance to ensure the playbooks automatically run against the correct hosts.
 - One floating IP attached to `idr-proxy`.

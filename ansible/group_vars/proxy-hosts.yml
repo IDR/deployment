@@ -56,28 +56,6 @@ _nginx_proxy_backends_omero:
   location: /
   server: http://omeroreadonly
 
-# docker_services_host_ansible may not exist, so just use a dummy value
-_nginx_proxy_backends_jupyter:
-- name: jupyter
-  location: "^~ /jupyter/"
-  server: "http://{{ docker_services_host_ansible | default('localhost') }}:31800"
-  websockets: True
-  read_timeout: 86400
-  # `proxy_set_header Host $host` is already set in the parent `server` scope,
-  # but there seems to be a issue which means it also needs to be set at the
-  # `location` scope when websockets are used
-  host_header: "$host"
-
-_nginx_proxy_backends_mineotaur:
-- name: mineotaur
-  location: "^~ /mineotaur"
-  server: "http://{{ docker_services_host_ansible | default('localhost') }}:31900"
-  read_timeout: 86400
-  # `proxy_set_header Host $host` is already set in the parent `server` scope,
-  # but there seems to be a issue which means it also needs to be set at the
-  # `location` scope when websockets are used
-  host_header: "$host"
-
 _nginx_proxy_backends_grafana_render:
 - name: grafanarender
   location: "^~ /grafana/"
@@ -86,8 +64,6 @@ _nginx_proxy_backends_grafana_render:
 
 nginx_proxy_backends: >
   {{ _nginx_proxy_backends_omero +
-    _nginx_proxy_backends_jupyter +
-    _nginx_proxy_backends_mineotaur +
     _nginx_proxy_backends_grafana_render
   }}
 
@@ -229,6 +205,10 @@ nginx_proxy_direct_locations:
   redirect302: /webclient/?experimenter=-1
 - location: "^~ /about"
   alias: /srv/www/html
+- location: "^~ /mineotaur"
+  redirect302: /about/mineotaur
+- location: "^~ /jupyter"
+  redirect302: https://idr-analysis.openmicroscopy.org
 - location: "^~ /connection"
   alias: /srv/www/connection
 - location: "^~ /.well-known/acme-challenge"

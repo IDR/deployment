@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.4.7"
+idr_omero_release: "0.5.0"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -169,7 +169,7 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- "omero-mapr==0.2.2"
+- "omero-mapr==0.2.3"
 omero_web_apps_names:
 - omero_mapr
 

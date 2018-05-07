@@ -75,3 +75,5 @@ The `idr_environment` variable can be used to run multiple copies of the IDR alo
 See the `hosts` section of each playbook for examples of how this is used.
 
 Only change this to something other than the effective default `idr_environment=idr` if you know exactly what you are doing.
+
+The `idr_debug` variable can be set to install various tools across the IDR instances which may simplify debugging.

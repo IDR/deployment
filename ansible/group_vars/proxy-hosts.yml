@@ -206,7 +206,7 @@ nginx_proxy_direct_locations:
 - location: "^~ /about"
   alias: /srv/www/html
 - location: "^~ /mineotaur"
-  redirect302: /about/mineotaur
+  redirect302: /about/mineotaur.html
 - location: "^~ /jupyter"
   redirect302: https://idr-analysis.openmicroscopy.org
 - location: "^~ /connection"

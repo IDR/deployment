@@ -76,7 +76,7 @@
   # Volumes
 
   - role: openmicroscopy.openstack-volume-storage
-    openstack_volume_size: 1024
+    openstack_volume_size: 5000
     openstack_volume_vmname: "{{ idr_environment_idr }}-ftp"
     openstack_volume_name: ftpdata
     openstack_volume_device: /dev/vdb

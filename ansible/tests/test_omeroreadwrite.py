@@ -1,7 +1,6 @@
 import testinfra.utils.ansible_runner
 import pytest
 
-# TODO: This should be 'omero-hosts' if we get it deployed in docker
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     '.molecule/ansible_inventory').get_hosts('omeroreadwrite-hosts')
 
@@ -20,8 +19,8 @@ def test_nginx_port_listening(Socket):
 @pytest.mark.parametrize("port", [4063, 4064])
 def test_omero_port_listening(Socket, port):
     # For some reason OMERO may listen on ipv6 instead of ipv4
-    assert (Socket("tcp://0.0.0.0:%d" % port).is_listening or
-            Socket("tcp://:::%d" % port).is_listening)
+    assert (Socket("tcp://127.0.0.1:%d" % port).is_listening or
+            Socket("tcp://::1%d" % port).is_listening)
 
 
 def test_registry_port_listening(Socket):

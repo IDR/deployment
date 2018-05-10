@@ -188,5 +188,7 @@
 
   roles:
   - role: openmicroscopy.omero-server
+    when: not (TRAVIS | default(False))
+
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

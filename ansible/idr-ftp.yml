@@ -13,6 +13,7 @@
     anonymous_ftp_banner_text: |
       Welcome to the IDR upload service.
       Please upload files into "incoming/".
+    anonymous_ftp_pasv_max_port: 32222
     #anonymous_ftp_incoming_group:
     #anonymous_ftp_emails:
     #anonymous_ftp_public_address:

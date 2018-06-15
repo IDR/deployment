@@ -29,6 +29,8 @@
   - role: openmicroscopy.omero-prometheus-exporter
     omero_prometheus_exporter_omero_user: public
     omero_prometheus_exporter_omero_password: "{{ idr_secret_public_password | default('public') }}"
+    # Disable the extra count queries to reduce load
+    omero_prometheus_exporter_counts_query_files: []
 
   - role: openmicroscopy.omero-web-django-prometheus
 

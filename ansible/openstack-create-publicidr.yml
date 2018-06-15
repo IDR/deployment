@@ -132,3 +132,14 @@
       idr_vm_management: True
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
+
+
+    ############################################################
+    # Management Volume (do not copy when upgrading)
+
+    - role: openmicroscopy.openstack-volume-storage
+      openstack_volume_size: 100
+      openstack_volume_vmname: "{{ idr_environment_idr }}-management"
+      openstack_volume_name: data
+      openstack_volume_device: /dev/vdb
+      openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"

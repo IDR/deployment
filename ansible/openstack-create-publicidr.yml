@@ -130,6 +130,8 @@
       idr_vm_image: "{{ vm_image }}"
       idr_vm_flavour: "{{ vm_flavour_medium }}"
       idr_vm_management: True
+      idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-data-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
 
@@ -142,4 +144,3 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-management"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb
-      openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"

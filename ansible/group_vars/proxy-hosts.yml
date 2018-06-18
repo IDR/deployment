@@ -62,9 +62,16 @@ _nginx_proxy_backends_grafana_render:
   server: "http://{{ management_host_ansible | default('localhost') }}:3000/render/dashboard/db/"
   cache_validity: 1m
 
+_nginx_proxy_backends_prometheus_federate:
+- name: prometheusfederate
+  location: "^~ /prometheus/federate"
+  server: "http://{{ management_host_ansible | default('localhost') }}:9090/federate"
+  cache_validity: 15s
+
 nginx_proxy_backends: >
   {{ _nginx_proxy_backends_omero +
-    _nginx_proxy_backends_grafana_render
+    _nginx_proxy_backends_grafana_render +
+    _nginx_proxy_backends_prometheus_federate
   }}
 
 

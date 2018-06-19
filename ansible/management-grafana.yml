@@ -9,19 +9,21 @@
   - name: Run docker grafana
     become: yes
     docker_container:
-      image: grafana/grafana
+      image: grafana/grafana:5.1.3
       env:
         # Enable anonymous login
         GF_AUTH_ANONYMOUS_ENABLED: true
       links:
       - prometheus:prometheus
       name: grafana
+      networks:
+      - name: monitoring
       published_ports:
       - "3000:3000"
       state: started
       restart_policy: always
       volumes:
-      - /data/grafana:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
 
   - name: Wait for grafana
     wait_for:

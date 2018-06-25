@@ -7,6 +7,22 @@ import shade
 import sys
 
 
+DESCRIPTION = """\
+Delete OpenStack IDR resources.
+
+Resources are found based on the supplied prefix. A subset of resource
+types can be chosen, use "all" to delete all resources. The list of
+resources to be deleted will always be displayed out. Confirmation will be
+requested before the deletion proceeds.
+
+The script waits for each individual deletion to complete to avoid
+problems with dependent resources, so it may take a while. If you're
+impatient pass --nowait and when it fails rerun.
+
+Prefixes which don't begin with "test" require an additional confirmation
+step.
+"""
+
 def is_in_idrenv(idrenv, obj):
     return (obj.name.startswith('%s-' % idrenv) or obj.name == idrenv)
 
@@ -159,7 +175,7 @@ def parse_args(args):
         'secgroup',
         'all',
     )
-    p = argparse.ArgumentParser(description='Delete OpenStack IDR resources')
+    p = argparse.ArgumentParser(description=DESCRIPTION)
     p.add_argument('idrenv', help='IDR Environment', type=idrenv_validate)
     p.add_argument(
         '--type', '-t', action='append', choices=resource_types,

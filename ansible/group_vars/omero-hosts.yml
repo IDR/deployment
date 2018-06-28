@@ -57,6 +57,8 @@ omero_server_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 omero_server_config_set:
   omero.db.poolsize: 25
   omero.jvmcfg.heap_size.blitz: "24G"
+  omero.pixeldata.max_plane_width: 5100
+  omero.pixeldata.max_plane_height: 5100
   # public user doesn;t share omero session between visitors
   #omero.sessions.timeout: 3600000
   omero.policy.binary_access: "+read,+write,-image,-plate"

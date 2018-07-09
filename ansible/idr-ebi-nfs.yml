@@ -4,15 +4,16 @@
 
   tasks:
 
-  - name: Mount NFS share
+  - name: Mount NFS shares
     become: yes
     mount:
       fstype: nfs
-      name: "{{ nfs_mountpoint }}"
+      name: "{{ item.dst }}"
       # Removed rsize=8192,wsize=8192, this should be auto-negotiated
       opts: timeo=14,intr,nolock
-      src: 10.35.106.250:/ivol_bioimage_sm
+      src: "{{ item.src }}"
       state: mounted
+    with_items: "{{ ebi_nfs_mounts | default([]) }}"
 
   - name: Create filesets parent dir
     become: yes
@@ -36,6 +37,5 @@
 
 
   vars:
-    nfs_mountpoint: /nfs/bioimage
     nfs_filesets_dir: /nfs/bioimage/drop/complete
     local_filesets_sym: /uod/idr/filesets

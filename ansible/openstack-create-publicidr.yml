@@ -51,6 +51,7 @@
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_omeroreadwrite: True
       idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
       - "{{ idr_vm_storage_group }}"
       idr_vm_networks: >
         {{ [ {'net-name': idr_environment_idr} ] +
@@ -68,6 +69,7 @@
       # TODO: Could we use the fileserver as an NFS proxy instead and
       # get rid of the need for the additional network?
       idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
       - "{{ idr_vm_storage_group }}"
       idr_vm_networks: >
         {{ [ {'net-name': idr_environment_idr} ] +

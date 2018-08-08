@@ -2,36 +2,14 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 
-  pre_tasks:
-
-  # This seems complicated because the config file needs to exist before
-  # jekyll-build, but we also want to notify jekyll-build of changes which
-  # can't be done until after the jekyll-build role
-
-  - name: create jekyll config directory
-    become: yes
-    file:
-      path: "{{ jekyll_build_config.0 | dirname }}"
-      recurse: yes
-      state: directory
-
-  - name: create dummy jekyll config
-    become: yes
-    copy:
-      content: ''
-      dest: "{{ jekyll_build_config.0 }}"
-      # Only create if it doesn't exist
-      force: no
-
   roles:
-  - role: openmicroscopy.jekyll-build
+  - role: openmicroscopy.deploy_archive
+    become: yes
 
   tasks:
-  - name: create jekyll config
+  - name: Set website displayed version
     become: yes
     copy:
-      content: "{{ idr_openmicroscopy_org_config | to_nice_yaml }}"
-      dest: "{{ jekyll_build_config.0 }}"
+      content: "{{ idr_openmicroscopy_org_config.idr_deployment_version }}"
+      dest: "{{ idr_website_version_file }}"
       force: yes
-    notify:
-    - jekyll build

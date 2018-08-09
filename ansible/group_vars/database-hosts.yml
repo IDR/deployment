@@ -36,15 +36,5 @@ idr_omero_readonly_database:
 
 postgresql_install_extensions: True
 
-# TODO: add a variable to easily enable/disable
-# TESTING ONLY!
-#postgresql_server_conf:
-#pg_stat_staments?
-#  shared_preload_libraries: "'pg_stat_statements'"
-#  pg_stat_statements.max: 20000
-#Database tuning?
-#  default_statistics_target = 1000
-#  maintenance_work_mem = 256MB
-#  checkpoint_completion_target = 0.9
-#  effective_cache_size = "{{ (ansible_memtotal_mb / 2) | int }}MB"
-#  work_mem = 64MB
+postgresql_server_conf:
+  shared_buffers: 1GB

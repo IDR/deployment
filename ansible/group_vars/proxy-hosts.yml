@@ -327,7 +327,7 @@ deploy_archive_src_url: http://users.openmicroscopy.org.uk/~spli/idr/{{ idr_open
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: 32ddcd688381c9af66f1ff2f8d3534f21066d249bbb46c16cb4db50d2e963843
+deploy_archive_sha256: 01301f2cf4e5be55aa53976b35b989b96f4547c3a12746f781be4d45f11331fe
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

@@ -37,4 +37,4 @@ idr_omero_readonly_database:
 postgresql_install_extensions: True
 
 postgresql_server_conf:
-  shared_buffers: 1GB
+  shared_buffers: "{{ (ansible_memtotal_mb / 4) | int }}MB"

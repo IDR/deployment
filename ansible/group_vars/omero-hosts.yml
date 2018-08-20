@@ -59,7 +59,7 @@ omero_server_config_set:
   omero.jvmcfg.heap_size.blitz: "24G"
   omero.pixeldata.max_plane_width: 5300
   omero.pixeldata.max_plane_height: 5300
-  omero.fs.repo.path: "%user%_%userId%//%year%-%month%/%day%/%time%-%hash%"
+  omero.fs.repo.path: "%user%_%userId%//%year%-%month%/%day%/%time%/%hash%"
   # public user doesn;t share omero session between visitors
   #omero.sessions.timeout: 3600000
   omero.policy.binary_access: "+read,+write,-image,-plate"

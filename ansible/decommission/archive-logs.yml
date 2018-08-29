@@ -11,52 +11,66 @@
 
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+  vars:
+    services:
+      - nginx
+      - haproxy
   tasks:
 
-  - name: Archive proxy nginx logs
+  - name: Archive proxy logs
     become: yes
     archive:
-      dest: /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+      dest: /tmp/{{ decommission_archive_prefix }}-{{ item }}.tar.gz
       format: gz
-      path: /var/log/nginx
-    register: _decommission_archive_nginx
+      path: /var/log/{{item}}
+    register: _decommission_archive_proxy
+    with_items: "{{ services }}"
 
-  - name: Fetch proxy nginx logs archive
+  - name: Fetch proxy logs archive
     become: yes
     fetch:
       dest: /tmp/
       flat: yes
-      src: /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+      src: /tmp/{{ decommission_archive_prefix }}-{{ item }}.tar.gz
+    with_items: "{{ services }}"
 
   - name: Print archive information
     debug:
       msg: >
-        Archived {{ _decommission_archive_nginx.archived | length }} files
-        from {{ ansible_hostname }}:{{ _decommission_archive_nginx.expanded_paths | join(',') }}
+        Archived {{ item.archived | length }} files
+        from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
         to /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+    with_items: "{{_decommission_archive_proxy.results}}"
 
 
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+  vars:
+    services:
+      - { name: 'munin', path: '/var/lib/munin' }
+      - { name: 'prometheus', path: '/var/lib/docker/volumes/prometheus-data' }
   tasks:
 
-  - name: Archive managment munin logs
+  - name: Archive managment logs
     become: yes
     archive:
-      dest: /tmp/{{ decommission_archive_prefix }}-munin.tar.gz
+      dest: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
       format: gz
-      path: /var/lib/munin
-    register: _decommission_archive_munin
+      path: "{{ item.path }}"
+    register: _decommission_archive_management
+    with_items: "{{ services }}"
 
-  - name: Fetch management munin logs archive
+  - name: Fetch management logs archive
     become: yes
     fetch:
       dest: /tmp/
       flat: yes
-      src: /tmp/{{ decommission_archive_prefix }}-munin.tar.gz
+      src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
+    with_items: "{{ services }}"
 
   - name: Print archive information
     debug:
       msg: >
-        Archived {{ _decommission_archive_munin.archived | length }} files
-        from {{ ansible_hostname }}:{{ _decommission_archive_munin.expanded_paths | join(',') }}
+        Archived {{ item.archived | length }} files
+        from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
         to /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+    with_items: "{{_decommission_archive_management.results}}"

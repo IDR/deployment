@@ -33,7 +33,6 @@ for vol in \
         database-db \
         omeroreadwrite-data \
         proxy-nginxcache \
-        dockermanager-data \
         ; do
     volume="$vm_prefix-$vol"
     echo "Snapshotting volume $volume"

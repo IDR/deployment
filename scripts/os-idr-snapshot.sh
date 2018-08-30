@@ -19,7 +19,6 @@ for vm in \
         database \
         omeroreadwrite \
         proxy \
-        dockermanager \
         management \
         ; do
     server="$vm_prefix-$vm"

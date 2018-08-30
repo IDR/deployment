@@ -12,27 +12,27 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
   vars:
-    services:
-      - nginx
-      - haproxy
+    logs:
+      - { name: 'nginx', path: '/var/log/nginx' }
+      - { name: 'haproxy', path: '/var/log/haproxy' }
   tasks:
 
   - name: Archive proxy logs
     become: yes
     archive:
-      dest: /tmp/{{ decommission_archive_prefix }}-{{ item }}.tar.gz
+      dest: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
       format: gz
-      path: /var/log/{{item}}
+      path: "{{ item.path }}"
     register: _decommission_archive_proxy
-    with_items: "{{ services }}"
+    with_items: "{{ logs }}"
 
   - name: Fetch proxy logs archive
     become: yes
     fetch:
       dest: /tmp/
       flat: yes
-      src: /tmp/{{ decommission_archive_prefix }}-{{ item }}.tar.gz
-    with_items: "{{ services }}"
+      src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
+    with_items: "{{ logs }}"
 
   - name: Print archive information
     debug:
@@ -45,7 +45,7 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
   vars:
-    services:
+    logs:
       - { name: 'munin', path: '/var/lib/munin' }
       - { name: 'prometheus', path: '/var/lib/docker/volumes/prometheus-data' }
   tasks:
@@ -57,7 +57,7 @@
       format: gz
       path: "{{ item.path }}"
     register: _decommission_archive_management
-    with_items: "{{ services }}"
+    with_items: "{{ logs }}"
 
   - name: Fetch management logs archive
     become: yes
@@ -65,12 +65,12 @@
       dest: /tmp/
       flat: yes
       src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
-    with_items: "{{ services }}"
+    with_items: "{{ logs }}"
 
   - name: Print archive information
     debug:
       msg: >
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
-        to /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+        to /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
     with_items: "{{_decommission_archive_management.results}}"

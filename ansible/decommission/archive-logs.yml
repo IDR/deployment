@@ -47,7 +47,8 @@
   vars:
     logs:
       - { name: 'munin', path: '/var/lib/munin' }
-      - { name: 'prometheus', path: '/var/lib/docker/volumes/prometheus-data' }
+      # Prometheus logs are large and cause Ansible to timeout
+      # - { name: 'prometheus', path: '/var/lib/docker/volumes/prometheus-data' }
   tasks:
 
   - name: Archive managment logs

@@ -258,9 +258,9 @@ omero_web_apps_ui_metadata_panes:
 omero_web_apps_config_append:
   omero.web.middleware:
   - index: 0.5
-    class": "corsheaders.middleware.CorsMiddleware"
+    class: "corsheaders.middleware.CorsMiddleware"
   - index: 10
-    class": "corsheaders.middleware.CorsPostCsrfMiddleware"
+    class: "corsheaders.middleware.CorsPostCsrfMiddleware"
 # set...
 omero_web_apps_config_set:
   omero.web.mapr.config:

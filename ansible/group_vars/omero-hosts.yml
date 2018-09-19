@@ -163,9 +163,6 @@ omero_web_config_set:
   omero.web.public.cache.timeout: 60
   omero.web.page_size: 500
 
-  # NB: See additional CORS config below
-  omero.web.cors_origin_allow_all: True
-
 ######################################################################
 # Plugins and additional web configuration
 
@@ -264,6 +261,7 @@ omero_web_apps_config_append:
     class: "corsheaders.middleware.CorsPostCsrfMiddleware"
 # set...
 omero_web_apps_config_set:
+  omero.web.cors_origin_allow_all: True
   omero.web.mapr.config:
   - menu: "gene"
     config:

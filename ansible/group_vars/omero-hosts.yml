@@ -163,7 +163,8 @@ omero_web_config_set:
   omero.web.public.cache.timeout: 60
   omero.web.page_size: 500
 
-
+  # NB: See additional CORS config below
+  omero.web.cors_origin_allow_all: True
 
 ######################################################################
 # Plugins and additional web configuration

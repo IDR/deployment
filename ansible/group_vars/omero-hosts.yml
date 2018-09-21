@@ -69,6 +69,9 @@ omero_server_config_set:
   # Tree display
   omero.client.ui.tree.type_order: False
   omero.client.ui.tree.orphans.enabled: False
+  # Maximum plane size
+  omero.pixeldata.max_plane_width: 5300
+  omero.pixeldata.max_plane_height: 5300
 
 
 ######################################################################

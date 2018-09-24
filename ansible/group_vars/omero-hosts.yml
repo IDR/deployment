@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.5.0"
+idr_omero_release: "0.5.1"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -57,6 +57,7 @@ omero_server_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 omero_server_config_set:
   omero.db.poolsize: 25
   omero.jvmcfg.heap_size.blitz: "24G"
+  omero.fs.repo.path: "%user%_%userId%/%thread%//%year%-%month%/%day%/%time%"
   # public user doesn;t share omero session between visitors
   #omero.sessions.timeout: 3600000
   omero.policy.binary_access: "+read,+write,-image,-plate"

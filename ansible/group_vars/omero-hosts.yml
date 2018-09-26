@@ -165,15 +165,15 @@ omero_web_config_set:
   omero.web.public.cache.timeout: 60
   omero.web.page_size: 500
 
-
-
 ######################################################################
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
 - "omero-mapr==0.2.3"
+- "django-cors-headers"
 omero_web_apps_names:
 - omero_mapr
+- corsheaders
 
 omero_web_apps_top_links:
 - label: Studies
@@ -253,9 +253,17 @@ omero_web_apps_ui_metadata_panes:
   label: "Others"
   index: 6
 
-# Additional plugin config (append)
-#omero_web_apps_config_append:
+# Additional plugin config
+# append...
+omero_web_apps_config_append:
+  omero.web.middleware:
+  - index: 0.5
+    class: "corsheaders.middleware.CorsMiddleware"
+  - index: 10
+    class: "corsheaders.middleware.CorsPostCsrfMiddleware"
+# set...
 omero_web_apps_config_set:
+  omero.web.cors_origin_allow_all: True
   omero.web.mapr.config:
   - menu: "gene"
     config:

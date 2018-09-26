@@ -12,7 +12,7 @@ idr_omero_ice_version: "3.6"
 idr_omero_upgrade: False
 # The IDR version system doesn't match the OMERO.server version
 omero_server_checkupgrade_comparator: '!='
-omero_web_checkupgrade_comparator = '!='
+omero_web_checkupgrade_comparator: '!='
 
 idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
 # If you want to speed up Ice installation use a precompiled IcePy:

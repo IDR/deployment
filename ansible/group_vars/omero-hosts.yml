@@ -100,6 +100,7 @@ idr_omero_web_public_url_filters_webclient_exclude:
 - figure_script
 
 idr_omero_web_public_url_filters:
+- api/
 - webadmin/myphoto/
 - mapr/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))

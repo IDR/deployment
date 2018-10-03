@@ -1,11 +1,11 @@
-# Kubespray includes a playbook with it's own set of groups.
+# Kubespray includes a playbook with its own set of groups.
 # We can either copy and modify the playbook to match our group name,
 # or dynamically add hosts to the required kubespray groups.
 # This does the latter.
 #
 # Requires Ansible 2.4.
 #
-# We don't need kubespray's bastion handling because our custo openstack
+# We don't need kubespray's bastion handling because our custom openstack
 # dynamic inventory will automatically setup the SSH ProxyCommand
 #
 # WARNING: Since we have two separate clusters we must clear the

@@ -59,3 +59,12 @@
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True
     haproxy_syslog_enable: True
+
+  handlers:
+
+  - name: restart haproxy when certificates changed
+    listen: ssl certificate changed
+    become: yes
+    service:
+      name: haproxy
+      state: restarted

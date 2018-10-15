@@ -5,7 +5,8 @@ services:
   - docker
 
 install:
-  - pip install ansible==2.6.4 docker==3.5.0 molecule==2.18.0
+  # https://github.com/openmicroscopy/ome-ansible-molecule-dependencies/pull/13
+  - pip install https://github.com/openmicroscopy/ome-ansible-molecule-dependencies/archive/d5601fc60d2cae5fcf608cc045f6340ca7dd8c24.zip
 
 script:
   # TODO: molecule will only run ansible-lint on the target playbook,

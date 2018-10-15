@@ -117,8 +117,9 @@
 - src: openmicroscopy.selinux-utils
   version: 1.0.3
 
-- src: openmicroscopy.ssl-certificate
-  version: 0.2.0
+- name: openmicroscopy.ssl-certificate
+  src: https://github.com/openmicroscopy/ansible-role-ssl-certificate/archive/f36523ddc9eb8f71d32a4fa3f1438be609ce9c77.tar.gz
+  version: f36523ddc9eb8f71d32a4fa3f1438be609ce9c77
 
 - src: openmicroscopy.storage-volume-initialise
   version: 1.0.0

@@ -74,3 +74,11 @@
   # https://github.com/openmicroscopy/ansible-role-ssl-certificate/blob/0.2.0/README.md
   - role: openmicroscopy.ssl-certificate
   - role: openmicroscopy.nginx-proxy
+
+  handlers:
+  - name: restart nginx when certificates changed
+    listen: ssl certificate changed
+    become: yes
+    service:
+      name: nginx
+      state: restarted

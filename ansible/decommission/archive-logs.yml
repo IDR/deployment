@@ -39,7 +39,7 @@
       msg: >
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
-        to /tmp/{{ decommission_archive_prefix }}-nginx.tar.gz
+        to /tmp/{{ item.dest | basename }}
     with_items: "{{_decommission_archive_proxy.results}}"
 
 
@@ -73,5 +73,5 @@
       msg: >
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
-        to /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
+        to /tmp/{{ item.dest | basename }}
     with_items: "{{_decommission_archive_management.results}}"

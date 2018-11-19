@@ -159,12 +159,12 @@ omero_web_config_set:
   omero.web.ui.top_links: []
   omero.web.ui.metadata_panes: []
   omero.web.wsgi_timeout: "{{ idr_omero_web_timeout | default(60) }}"
-
 # TODO: This needs careful review of the code
 # https://github.com/openmicroscopy/openmicroscopy/blob/v5.4.0-m2/components/tools/OmeroWeb/omeroweb/decorators.py#L305
   omero.web.public.cache.enabled: True
   omero.web.public.cache.timeout: 60
   omero.web.page_size: 500
+  omero.web.user_dropdown: "{{ idr_omero_web_user_dropdown | default(true) }}"
 
 ######################################################################
 # Plugins and additional web configuration

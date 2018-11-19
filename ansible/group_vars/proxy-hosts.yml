@@ -42,6 +42,8 @@ _nginx_proxy_omero_locations:
 - /webclient/api/*
 - /webclient/search/*
 - /mapr/*
+# TODO: Does iviewer need to be cached?
+#- /iviewer/*
 
 _nginx_proxy_backends_omero:
 - name: omerocached

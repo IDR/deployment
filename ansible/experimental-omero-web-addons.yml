@@ -28,24 +28,3 @@
       dest: "{{ omero_common_basedir }}/web/config/fpbioimage.omero"
     notify:
     - restart omero-web
-
-  - name: omero-web iviewer install
-    become: yes
-    pip:
-      name: omero-iviewer
-      state: present
-      version: 0.2.0
-      virtualenv: "{{ omero_common_basedir }}/web/venv"
-      virtualenv_site_packages: yes
-    notify:
-    - restart omero-web
-
-  - name: omero-web iviewer configure
-    become: yes
-    copy:
-      content: |
-        config append -- omero.web.apps '"omero_iviewer"'
-        config append -- omero.web.open_with '["omero_iviewer", "omero_iviewer_index", {"script_url": "omero_iviewer/openwith.js", "supported_objects":["image"], "label": "OMERO.iviewer"}]'
-      dest: "{{ omero_common_basedir }}/web/config/iviewer.omero"
-    notify:
-    - restart omero-web

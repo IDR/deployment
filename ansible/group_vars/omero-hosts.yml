@@ -171,9 +171,11 @@ omero_web_config_set:
 
 omero_web_apps_packages:
 - "omero-mapr==0.2.3"
+- "omero-iviewer==0.6.0"
 - "django-cors-headers"
 omero_web_apps_names:
 - omero_mapr
+- omero_iviewer
 - corsheaders
 
 omero_web_apps_top_links:
@@ -262,6 +264,14 @@ omero_web_apps_config_append:
     class: "corsheaders.middleware.CorsMiddleware"
   - index: 10
     class: "corsheaders.middleware.CorsPostCsrfMiddleware"
+  omero.web.open_with:
+  - - omero_iviewer
+    - omero_iviewer_index
+    - script_url: omero_iviewer/openwith.js
+      supported_objects:
+      - image
+      label: OMERO.iviewer
+
 # set...
 omero_web_apps_config_set:
   omero.web.cors_origin_allow_all: True

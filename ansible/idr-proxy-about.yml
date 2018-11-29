@@ -5,4 +5,3 @@
   roles:
   - role: openmicroscopy.deploy_archive
     become: yes
-

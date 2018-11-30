@@ -1,3 +1,0 @@
-docker
-ansible>=2.2.1,<2.3
-molecule>=1.21,<1.22

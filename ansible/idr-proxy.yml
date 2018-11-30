@@ -15,7 +15,7 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
   roles:
-  - openmicroscopy.selinux-utils
+  - role: openmicroscopy.selinux-utils
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 

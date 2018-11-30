@@ -1,0 +1,43 @@
+# Shared dynamic storage for the VAE
+
+# The gluster client is required for the two stage heketi storage setup
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-hosts"
+  tasks:
+  - name: Install gluster mount client
+    become: yes
+    yum:
+      name: glusterfs-fuse
+      state: present
+
+
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
+  become: yes
+
+  pre_tasks:
+
+  - name: Create LVM gluster reset script
+    copy:
+      content: |
+        #!/usr/bin/bash
+        export PATH=/usr/local/bin:$PATH
+        cd ~/gluster-kubernetes/deploy
+        ./gk-deploy -n gluster --abort -g -y
+        kubectl delete storageclass gluster
+        vgremove -f -y $(vgs --noheadings | awk '{print $1}')
+        pvremove -f -y /dev/vdb
+        rm -f ~/gk-deployed.flag
+      dest: ~/lvm-reset.sh
+      mode: 0755
+
+  - name: Install LVM2 tools (useful for investigating problems)
+    become: yes
+    yum:
+      name: lvm2
+      state: present
+
+  roles:
+  - role: IDR.glusterfs-kube-config
+    gluster_k8s_storage_group: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
+    gluster_k8s_add_bin_path: /usr/local/bin
+    gluster_kubernetes_version: d86e9237328f8dd95f50cd7be84ee6675fa908de
+    gluster_kubernetes_repo: "https://github.com/manics/gluster-kubernetes.git"

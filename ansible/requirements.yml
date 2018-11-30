@@ -136,6 +136,10 @@
 ######################################################################
 # External IDR roles
 
+- name: IDR.glusterfs-kube-config
+  src: https://github.com/IDR/ansible-role-glusterfs-kube-config.git
+  version: 0.1.1
+
 - name: IDR.idr-jupyter
   src: https://github.com/IDR/ansible-role-idr-jupyter.git
   version: 2.0.2

@@ -1,0 +1,85 @@
+# Kubespray includes a playbook with its own set of groups.
+# We can either copy and modify the playbook to match our group name,
+# or dynamically add hosts to the required kubespray groups.
+# This does the latter.
+#
+# Requires Ansible 2.4.
+#
+# We don't need kubespray's bastion handling because our custom openstack
+# dynamic inventory will automatically setup the SSH ProxyCommand
+#
+# WARNING: Since we have two separate clusters we must clear the
+# dynamically created groups before running kubespray on other clusters
+
+
+- hosts: localhost
+  tasks:
+  - meta: refresh_inventory
+
+
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
+  tasks:
+  - name: Create kubespray kube-master group
+    add_host:
+      name: "{{ item }}"
+      groups:
+      - k8s-cluster
+      - kube-master
+      - etcd
+    with_items: "{{ play_hosts }}"
+
+
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-node-hosts"
+  tasks:
+  - name: Create kubespray kube-node group
+    add_host:
+      name: "{{ item }}"
+      groups:
+      - k8s-cluster
+      - kube-node
+    with_items: "{{ play_hosts }}"
+
+
+- hosts: localhost
+  tasks:
+  - debug:
+      msg: "{{ item }}: {{ groups[item] }}"
+    with_items:
+    - kube-master
+    - kube-node
+    - etcd
+    - k8s-cluster
+
+
+# This should be a symlink to the kubespray/cluster.yml playbook
+- include: k8s-kubespray-cluster.yml
+# Group vars are in group_vars/k8svae-hosts.yml and are based on
+# kubespray/inventory/sample/group_vars/k8s-cluster.yml
+
+
+- hosts: "{{ idr_environment | default('idr') }}-k8svae-master-hosts"
+  run_once: true
+
+  tasks:
+
+  - name: Load Kubernetes admin.conf file
+    become: yes
+    slurp:
+      src: /etc/kubernetes/admin.conf
+    register: _idr_kubernetes_admin_conf
+
+  - name: Update server and save kubeconfig locally
+    copy:
+      content: >-
+        {{ _idr_kubernetes_admin_conf.content | b64decode |
+           regex_replace(
+             'server: https://.+:6443',
+             'server: https://idr-analysis.openmicroscopy.org:6450')
+        }}
+      dest: "{{ playbook_dir }}/credentials/{{ idr_environment | default('idr') }}-vae.kubeconfig"
+    delegate_to: localhost
+
+
+- hosts: localhost
+  tasks:
+  - meta: refresh_inventory

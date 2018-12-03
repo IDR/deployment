@@ -90,6 +90,5 @@ scenario:
 
 verifier:
   name: testinfra
-  directory: ../../tests
   lint:
     name: flake8

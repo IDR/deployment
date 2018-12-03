@@ -1,0 +1,59 @@
+# Dump and fetch a database
+
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+  tasks:
+
+  - name: Get archive prefix
+    set_fact:
+      decommission_archive_prefix: "{{ ansible_hostname }}-{{ ansible_date_time.date | replace('-', '') }}"
+
+  # postgresql_db dump is not idempotent
+  - name: Check if dump exists
+    stat:
+      path: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+    with_items:
+    - "{{ postgresql_databases }}"
+    register: database_pgdump_st
+
+  # Requires ansible 2.4
+  - name: Dump database
+    become: yes
+    become_user: postgres
+    postgresql_db:
+      name: "{{ item.item.name }}"
+      state: dump
+      target: /tmp/{{ decommission_archive_prefix }}-database-{{ item.item.name }}.pg_dump.tmp
+      # Custom format, parallel dump not supported
+      # parallel restore is supported
+      target_opts: "-Fc --exclude-table-data password --exclude-table-data eventlog"
+    when: not item.stat.exists
+    with_items:
+    #- "{{ postgresql_databases }}"
+    - "{{ database_pgdump_st.results }}"
+
+  - name: Rename .tmp file
+    become: yes
+    command: mv /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump.tmp /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+    args:
+      creates: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+    with_items:
+    - "{{ postgresql_databases }}"
+
+  - name: Fetch database dumps
+    # Using become will read the file into memory
+    # http://docs.ansible.com/ansible/latest/fetch_module.html#notes
+    become: no
+    fetch:
+      dest: /tmp/
+      flat: yes
+      src: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+    with_items:
+    - "{{ postgresql_databases }}"
+
+  - name: Print dump information
+    debug:
+      msg: >
+        Archived database {{ ansible_hostname }}:{{ item.name }}
+        to {{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+    with_items:
+    - "{{ postgresql_databases }}"

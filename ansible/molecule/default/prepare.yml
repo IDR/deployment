@@ -1,0 +1,25 @@
+---
+
+- name: Prepare all
+  hosts: all
+  tasks:
+  - name: Install netstat
+    yum:
+      pkg:
+        # Required for Ansible network vars, missing from Docker image
+        - iproute
+        # Required for tests
+        - net-tools
+      state: present
+
+
+# TODO: Refactor the openmicroscopy.haproxy role so that rsyslog is separate
+# syslog isn't included in the docker image
+- name: Prepare idr-proxy
+  hosts: idr-proxy-docker
+  tasks:
+  - name: Install rsyslog
+    yum:
+      # Required by openmicroscopy.haproxy role, missing from Docker image
+      pkg: rsyslog
+      state: present

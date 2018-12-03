@@ -1,0 +1,94 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+
+driver:
+  name: docker
+
+lint:
+  name: yamllint
+  enabled: False
+
+platforms:
+  - name: idr-database-docker
+    image: centos/systemd:latest
+    command: /sbin/init
+    privileged: True
+    groups:
+    - idr-database-hosts
+    - database-hosts
+    - idr-hosts
+
+  - name: idr-omeroreadwrite-docker
+    image: centos/systemd:latest
+    command: /sbin/init
+    privileged: True
+    groups:
+    - idr-omero-hosts
+    - omero-hosts
+    - idr-omeroreadwrite-hosts
+    - omeroreadwrite-hosts
+    - idr-hosts
+
+    ######################################################################
+    # WARNING:
+    # At present idr-omero-readonly.yml is excluded because it requires
+    # NFS shares which don't work on Docker.
+    # However idr-proxy.yml needs an omeroreadonly server IP for the
+    # proxy config so we fake this by creating a server that's not
+    # fully deployed (i.e. the read-only deployment is never tested)
+    # TODO: Test idr-omero-readonly.yml
+    ######################################################################
+  - name: idr-omeroreadonly-docker
+    image: centos/systemd:latest
+    command: /sbin/init
+    privileged: True
+    groups:
+    - idr-omero-hosts
+    - omero-hosts
+    - idr-omeroreadonly-hosts
+    - omeroreadonly-hosts
+    - idr-hosts
+
+  - name: idr-proxy-docker
+    image: centos/systemd:latest
+    command: /sbin/init
+    privileged: True
+    groups:
+    - idr-proxy-hosts
+    - proxy-hosts
+    - idr-hosts
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  playbooks:
+    prepare: prepare.yml
+    converge: ../../idr-01-install-idr.yml
+  options:
+    diff: True
+    skip-tags: skip_if_molecule_docker
+  inventory:
+    group_vars:
+      omero-hosts:
+        omero_server_systemd_require_network: False
+
+scenario:
+  name: default
+  # To speed up development where converge may be run repeatedly move
+  # some tasks to create instead
+  # https://molecule.readthedocs.io/en/latest/configuration.html#scenario
+  create_sequence:
+    - create
+    - prepare
+    - dependency
+  converge_sequence:
+    - converge
+
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

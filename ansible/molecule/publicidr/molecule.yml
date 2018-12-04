@@ -77,7 +77,7 @@ provisioner:
         omero_server_systemd_require_network: False
 
 scenario:
-  name: default
+  name: publicidr
   # To speed up development where converge may be run repeatedly move
   # some tasks to create instead
   # https://molecule.readthedocs.io/en/latest/configuration.html#scenario

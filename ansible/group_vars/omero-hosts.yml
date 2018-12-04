@@ -116,6 +116,7 @@ omero_web_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 
 omero_web_config_set:
   # web
+  omero.web.api.max_limit: 1000
   omero.web.application_server: wsgi-tcp
   omero.web.application_server.max_requests: 30000
   omero.web.wsgi_workers: 25

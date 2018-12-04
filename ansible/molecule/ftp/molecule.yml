@@ -1,0 +1,63 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+
+driver:
+  name: docker
+
+lint:
+  name: yamllint
+  enabled: False
+
+platforms:
+  - name: idr-ftp
+    image: centos/systemd:latest
+    command: /sbin/init
+    privileged: True
+    groups:
+    - idr-ftp-hosts
+    - ftp-hosts
+    - docker-hosts
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  playbooks:
+    prepare: prepare.yml
+    converge: ../../idr-01-install-idr.yml
+  options:
+    diff: True
+    skip-tags: skip_if_molecule_docker
+  inventory:
+    group_vars:
+      docker-hosts:
+        # This should allow docker-in-docker to work
+        docker_storage_driver: vfs
+        # Versions 17.12.1.ce-1.el7.centos to latest (18.09.0-3.el7.x86_64)
+        # have a bug that prevents testing on travis:
+        # https://github.com/docker/for-linux/issues/219
+        docker_version: 17.09.1.ce-1.el7.centos
+      idr-ftp-hosts:
+        # Override configuration for testing
+        anonymous_ftp_emails:
+          - allowed@example.org
+        anonymous_ftp_public_address: 127.0.0.1
+scenario:
+  name: ftp
+  # To speed up development where converge may be run repeatedly move
+  # some tasks to create instead
+  # https://molecule.readthedocs.io/en/latest/configuration.html#scenario
+  create_sequence:
+    - create
+    - prepare
+    - dependency
+  converge_sequence:
+    - converge
+
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

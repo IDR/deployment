@@ -17,3 +17,29 @@
     #anonymous_ftp_incoming_group:
     #anonymous_ftp_emails:
     #anonymous_ftp_public_address:
+
+  tasks:
+
+  - name: ftp | create alternate upload group
+    become: yes
+    group:
+      gid: "{{ idrftp_alternate_user_id | default(omit) }}"
+      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      state: present
+      system: no
+
+  - name: ftp | create alternate upload user
+    become: yes
+    user:
+      append: no
+      createhome: yes
+      group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      groups: ""
+      home: /data/"{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      # Lock account, it will be manually enabled when needed
+      password: "!"
+      state: present
+      uid: "{{ idrftp_alternate_user_id | default(omit) }}"
+      # Change to always to always lock the account when this playbook is run
+      update_password: on_create

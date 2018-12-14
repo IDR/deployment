@@ -271,6 +271,8 @@ omero_web_apps_config_append:
     - script_url: omero_iviewer/openwith.js
       supported_objects:
       - image
+      - dataset
+      - well
       label: OMERO.iviewer
 
 # set...

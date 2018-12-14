@@ -24,7 +24,7 @@
     become: yes
     group:
       gid: "{{ idrftp_alternate_user_id | default(omit) }}"
-      name: "{{ idrftp_alternate_user_name | default('test') }}"
+      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       state: present
       system: no
 
@@ -33,10 +33,10 @@
     user:
       append: no
       createhome: yes
-      group: "{{ idrftp_alternate_user_name | default('test') }}"
+      group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       groups: ""
-      home: /data/"{{ idrftp_alternate_user_name | default('test') }}"
-      name: "{{ idrftp_alternate_user_name | default('test') }}"
+      home: /data/"{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       # Lock account, it will be manually enabled when needed
       password: "!"
       state: present

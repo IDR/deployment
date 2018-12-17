@@ -1,0 +1,4 @@
+---
+- include: archive-db.yml
+- include: archive-instance-services.yml
+- include: archive-logs.yml

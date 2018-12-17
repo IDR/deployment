@@ -1,0 +1,22 @@
+- name: Prepare ftp
+  hosts: all
+  tasks:
+
+  - name: Install packages
+    become: true
+    yum:
+      name:
+        # Required for Ansible network vars, missing from Docker image
+        - iproute
+        # Required for tests
+        - net-tools
+        # FTP client used by tests
+        - ftp
+      state: present
+
+  - name: Copy test script
+    become: true
+    copy:
+      src: tests/upload_test.sh
+      dest: /upload_test.sh
+      mode: 0755

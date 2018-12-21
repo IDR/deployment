@@ -78,7 +78,7 @@ backend web-train-http
 # certificates
 
 frontend kubernetes-api-vae
-    bind *:6450
+    bind localhost:6450
     mode tcp
     default_backend kubernetes-api-vae
     option tcplog
@@ -86,7 +86,7 @@ frontend kubernetes-api-vae
     log 127.0.0.1 {{ haproxy_syslog_dest_tcp }}
 
 frontend kubernetes-api-train
-    bind *:6451
+    bind localhost:6451
     mode tcp
     default_backend kubernetes-api-train
     option tcplog

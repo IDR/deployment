@@ -329,6 +329,8 @@ deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/d
 # versioned directories.
 deploy_archive_sha256: e10529bdbf81a5aba02375ee19e82ce382192a004b3bbae90cb136b14d452122
 deploy_archive_symlink: /srv/www/html
+idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
+idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"
 
 
 ######################################################################

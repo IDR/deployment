@@ -1,4 +1,26 @@
 ---
+
+# Check this isn't accidentally run against current production
+- hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
+  tasks:
+
+    - name: Get IPs for idr and proxy
+      set_fact:
+        floating_ip: "{{ hostvars[inventory_hostname].openstack.public_v4 }}"
+        # Requires dnspython module on host running Ansible
+        idr_prod_ip: "{{ lookup('dig', 'idr.openmicroscopy.org.') }}"
+
+    - name: Check IPs were found
+      fail:
+        msg: 'Unable to get IPs'
+      when: (not floating_ip) or (not idr_prod_ip)
+
+    - name: Abort if this is the current production!
+      fail:
+        msg: 'ERROR: This is the current production server!!!'
+      when: floating_ip == idr_prod_ip
+
+
 - include: archive-db.yml
 - include: archive-instance-services.yml
 - include: archive-logs.yml

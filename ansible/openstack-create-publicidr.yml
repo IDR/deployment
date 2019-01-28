@@ -108,7 +108,7 @@
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
 
     - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 500
+      openstack_volume_size: 1000
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb

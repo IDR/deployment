@@ -101,7 +101,7 @@
     # IDR Volumes
 
     - role: openmicroscopy.openstack-volume-storage
-      openstack_volume_size: 250
+      openstack_volume_size: 500
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb

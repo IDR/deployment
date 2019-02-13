@@ -100,7 +100,6 @@ nginx_proxy_cache_key_map:
 nginx_proxy_cache_ignore_headers: '"Set-Cookie" "Vary" "Expires"'
 nginx_proxy_cache_hide_headers:
 - Set-Cookie
-nginx_proxy_debug_cache_headers: True
 
 nginx_proxy_cache_match_uri:
 #- '"~webclient/api/paths_to_object*"'

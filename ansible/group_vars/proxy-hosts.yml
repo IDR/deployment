@@ -49,11 +49,11 @@ _nginx_proxy_backends_omero:
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
-  cache_validity: 180d
+  cache_validity: 1d
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
-  cache_validity: 30d
+  cache_validity: 1d
 - name: omero
   location: /
   server: http://omeroreadonly
@@ -242,13 +242,13 @@ _nginx_proxy_sites:
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite
@@ -262,13 +262,13 @@ _nginx_proxy_sites:
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite

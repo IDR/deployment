@@ -49,11 +49,11 @@ _nginx_proxy_backends_omero:
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
-  cache_validity: 1d
+  cache_validity: 15m
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
-  cache_validity: 1d
+  cache_validity: 15m
 - name: omero
   location: /
   server: http://omeroreadonly

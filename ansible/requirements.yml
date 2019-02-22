@@ -69,10 +69,10 @@
 - src: openmicroscopy.nginx
   version: 1.0.0
 
-# https://github.com/openmicroscopy/ansible-role-nginx-proxy/pull/21/commits/e7c410179e47b73f430fa24dcd8bf874c6fcdf96
+# https://github.com/openmicroscopy/ansible-role-nginx-proxy/pull/21
 - name: openmicroscopy.nginx-proxy
-  src: https://github.com/openmicroscopy/ansible-role-nginx-proxy/archive/1cf2ef1e7c6005a9466743eb654bd6fbd8c433dd.tar.gz
-  version: 1cf2ef1e7c6005a9466743eb654bd6fbd8c433dd
+  src: https://github.com/openmicroscopy/ansible-role-nginx-proxy/archive/c40457e10201df03d5f3ecf81670e09e06cf9f8c.tar.gz
+  version: c40457e10201df03d5f3ecf81670e09e06cf9f8c
 
 - src: openmicroscopy.omero-common
   version: 0.3.0

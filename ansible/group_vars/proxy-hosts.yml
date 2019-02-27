@@ -42,6 +42,7 @@ _nginx_proxy_omero_locations:
 - /webclient/api/*
 - /webclient/search/*
 - /mapr/*
+- /studies/*
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
 
@@ -108,6 +109,7 @@ nginx_proxy_cache_match_uri:
 - '"~webclient/api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
+- '"~studies/*"'
 - '"~grafana/*"'
 
 #nginx_proxy_cache_match_arg:
@@ -157,6 +159,12 @@ nginx_proxy_caches:
   inactive: 180d
   match:
   - '"~mapr/*"'
+- name: omerostudies
+  maxsize: 200m
+  keysize: 1m
+  inactive: 180d
+  match:
+  - '"~studies/*"'
 - name: grafana
   maxsize: 100m
   keysize: 1m

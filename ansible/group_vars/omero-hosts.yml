@@ -177,7 +177,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - "omero-mapr==0.2.3"
 - "omero-iviewer==0.6.0"
-- https://gitlab.com/openmicroscopy/incubator/omero-idirector/-/archive/master/omero-idirector-master.tar.gz
+- https://gitlab.com/openmicroscopy/incubator/omero-idirector/-/archive/v0.2.0/omero-idirector-v0.2.0.tar.gz
 - "django-cors-headers==2.4.1"
 omero_web_apps_names:
 - omero_mapr

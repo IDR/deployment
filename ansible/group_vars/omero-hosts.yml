@@ -103,6 +103,7 @@ idr_omero_web_public_url_filters:
 - api/
 - webadmin/myphoto/
 - mapr/
+- studies/
 - iviewer/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
@@ -176,10 +177,12 @@ omero_web_config_set:
 omero_web_apps_packages:
 - "omero-mapr==0.2.3"
 - "omero-iviewer==0.6.0"
+- https://gitlab.com/openmicroscopy/incubator/omero-idirector/-/archive/master/omero-idirector-master.tar.gz
 - "django-cors-headers==2.4.1"
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
+- omero_idirector
 - corsheaders
 
 omero_web_apps_top_links:
@@ -419,3 +422,9 @@ omero_web_apps_config_set:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
   omero.web.viewer.view: omero_iviewer.views.index
+  omero.web.idirector.prefix: studies
+  omero.web.idirector.types:
+    - Project
+    - Screen
+  omero.web.idirector.validre: 'idr\d{4}$'
+  omero.web.idirector.match: '{u}-%'

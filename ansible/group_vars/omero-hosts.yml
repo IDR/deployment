@@ -6,15 +6,14 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.6.0"
+idr_omero_release: "5.4.10"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
-# The IDR version system doesn't match the OMERO.server version
-omero_server_checkupgrade_comparator: '!='
-omero_web_checkupgrade_comparator: '!='
 
-idr_omero_omego_additional_args: "--downloadurl https://downloads.openmicroscopy.org/idr"
+idr_bf_release: "0.5.3"
+idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
+
 # If you want to speed up Ice installation use a precompiled IcePy:
 ice_python_wheel: https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.1.0/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
 # If you're using a CI build you might need to disable omego SSL verification
@@ -52,8 +51,6 @@ omero_server_datadir: /data/OMERO
 omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
-
-omero_server_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 
 omero_server_config_set:
   omero.db.poolsize: 25
@@ -112,7 +109,6 @@ omero_web_release: "{{ idr_omero_release }}"
 # Upgrades are normally disabled, uncomment if you want to upgrade OMERO:
 omero_web_upgrade: "{{ idr_omero_upgrade }}"
 omero_web_ice_version: "{{ idr_omero_ice_version }}"
-omero_web_omego_additional_args: "{{ idr_omero_omego_additional_args }}"
 
 omero_web_config_set:
   # web

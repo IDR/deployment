@@ -54,5 +54,15 @@
 
   roles:
   - role: openmicroscopy.omero-server
+  tasks:
+    - name: Override Bio-Formats artifacts
+      get_url:
+        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
+        dest: "/opt/omero/server/OMERO.server/lib/server/{{ item }}.jar"
+      with_items:
+        - formats-gpl
+        - formats-api
+        - formats-bsd
+      notify: restart server
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

@@ -189,6 +189,7 @@
       get_url:
         url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
         dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/server/{{ item }}.jar"
+        force: yes
       with_items: "{{ idr_bf_components }}"
       notify: omero-server restart omero-server
     - name: Remove OMERO scripts

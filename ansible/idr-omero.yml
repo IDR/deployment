@@ -58,7 +58,16 @@
     - name: Override Bio-Formats artifacts
       get_url:
         url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
-        dest: "/opt/omero/server/OMERO.server/lib/server/{{ item }}.jar"
+        dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/server/{{ item }}.jar"
+      with_items:
+        - formats-gpl
+        - formats-api
+        - formats-bsd
+      notify: restart server
+    - name: Override Bio-Formats artifacts
+      get_url:
+        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
+        dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/client/{{ item }}.jar"
       with_items:
         - formats-gpl
         - formats-api

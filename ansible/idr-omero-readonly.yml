@@ -184,5 +184,18 @@
 
   roles:
   - role: openmicroscopy.omero-server
+  tasks:
+    - name: Override Bio-Formats artifacts in lib/server
+      get_url:
+        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
+        dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/server/{{ item }}.jar"
+      with_items: "{{ idr_bf_components }}"
+      notify: restart server
+    - name: Remove OMERO scripts
+      file:
+        path: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/scripts/omero"
+        state: absent
+      notify: restart server
+
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

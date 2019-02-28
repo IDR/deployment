@@ -11,6 +11,11 @@ idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
 
+# IDR Bio-Formats JARs to overrid
+idr_bf_components:
+  - formats-api
+  - formats-bsd
+  - formats-gpl
 idr_bf_release: "0.5.3"
 idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 

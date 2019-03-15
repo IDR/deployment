@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "0.6.0"
+idr_omero_release: "0.6.1"
 idr_omero_ice_version: "3.6"
 # Upgrades are normally disabled, set to True upgrade OMERO:
 idr_omero_upgrade: False
@@ -167,6 +167,8 @@ omero_web_config_set:
   omero.web.public.cache.timeout: 60
   omero.web.page_size: 500
   omero.web.user_dropdown: "{{ idr_omero_web_user_dropdown | default(true) }}"
+  # Feedback
+  omero.web.feedback.comment.enabled: False
 
 ######################################################################
 # Plugins and additional web configuration

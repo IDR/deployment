@@ -41,7 +41,7 @@ _nginx_proxy_omero_locations:
 - /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
-- /mapr/*
+# /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
 
@@ -50,6 +50,10 @@ _nginx_proxy_backends_omero:
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
   cache_validity: 1d
+- name: omeromapr
+  location: ~ /mapr/*
+  server: http://omeroreadonly
+  cache_validity: 180d
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
@@ -240,7 +244,7 @@ _nginx_proxy_sites:
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
       cache_validity: 1d
       # For populating the cache we need to increase the default timeout
@@ -260,7 +264,7 @@ _nginx_proxy_sites:
     nginx_proxy_ssl: False
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
       cache_validity: 1d
       # For populating the cache we need to increase the default timeout

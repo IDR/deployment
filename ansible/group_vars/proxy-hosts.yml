@@ -41,7 +41,7 @@ _nginx_proxy_omero_locations:
 - /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
-- /mapr/*
+# /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
 
@@ -49,11 +49,15 @@ _nginx_proxy_backends_omero:
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
+  cache_validity: 1d
+- name: omeromapr
+  location: ~ /mapr/*
+  server: http://omeroreadonly
   cache_validity: 180d
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
-  cache_validity: 30d
+  cache_validity: 1d
 - name: omero
   location: /
   server: http://omeroreadonly
@@ -240,15 +244,15 @@ _nginx_proxy_sites:
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite
@@ -260,15 +264,15 @@ _nginx_proxy_sites:
     nginx_proxy_ssl: False
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite

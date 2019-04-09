@@ -70,7 +70,7 @@
   version: 1.0.0
 
 - src: openmicroscopy.nginx-proxy
-  version: 1.7.0
+  version: 1.9.0
 
 - src: openmicroscopy.omero-common
   version: 0.3.0
@@ -103,7 +103,7 @@
   version: 3.0.1
 
 - src: openmicroscopy.python-pydata
-  version: 1.0.0
+  version: 1.1.0
 
 - src: openmicroscopy.reboot-server
   version: 0.1.1

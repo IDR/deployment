@@ -47,4 +47,10 @@ fi
 if [ $vol_errors -ne 0 ]; then
     echo "ERROR: $vol_errors volume snapshots failed"
 fi
-exit $errors
+if [ $errors -ne 0 ]; then
+    exit $errors
+fi
+
+while openstack image list --private -f json | jq ".[] | select((.Name|test(\"${vm_prefix}-\")) and (.Status != \"active\"))"; do
+    sleep 30
+done

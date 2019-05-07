@@ -1,4 +1,5 @@
 import os
+import re
 import testinfra.utils.ansible_runner
 import pytest
 
@@ -24,3 +25,28 @@ def test_omero_port_listening(host, port):
 def test_html_index(host, address):
     out = host.check_output('curl -kL %s' % address)
     assert '<title>IDR: Image Data Resource</title>' in out
+
+
+@pytest.mark.parametrize("curl_args,expected_header", [
+    ("http://localhost/api/v0/",
+     "Access-Control-Allow-Origin: *"),
+    ("-H 'Origin: http://example.org' http://localhost/api/v0/",
+     "Access-Control-Allow-Origin: http://example.org"),
+    ("-H 'Origin: http://example.com' http://localhost/api/v0/",
+     "Access-Control-Allow-Origin: http://example.com"),
+])
+def test_curl_headers(host, curl_args, expected_header):
+    out = host.check_output('curl -I %s' % curl_args)
+    assert expected_header in out.splitlines()
+
+
+@pytest.mark.parametrize("path", [
+    "/api/v0/",
+    "/static/webgateway/img/ome.ico",
+])
+def test_is_cached(host, path):
+    # Request twice to ensure it's cached
+    host.check_output('curl http://localhost%s' % path)
+    host.check_output('curl http://localhost%s' % path)
+    log = host.file("/var/log/nginx/access.log").content
+    assert re.search('"GET %s HTTP/1.1" 200 .+ HIT -' % path, log)

@@ -229,6 +229,18 @@ nginx_proxy_direct_locations:
   alias: /srv/www/letsencrypt/challenge
 
 
+# CORS: basically allow any cross-site since this is public read-only
+# Always set a header:
+# - Return the client's header (should be the requesting domain) if one given
+# - "*" otherwise
+nginx_proxy_additional_maps:
+- from: $http_origin
+  to: $allow_origin
+  mapvalues:
+  - "default *"
+  - "~. $http_origin"
+
+
 ######################################################################
 # Additional sites/virtualhosts
 _nginx_proxy_sites:
@@ -236,6 +248,9 @@ _nginx_proxy_sites:
   # This enables the default site (configured using the global
   # nginx_proxy_* variables):
   - nginx_proxy_is_default: True
+    # Only add this CORS header to the default public site
+    nginx_proxy_additional_directives:
+    - "add_header Access-Control-Allow-Origin $allow_origin"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:

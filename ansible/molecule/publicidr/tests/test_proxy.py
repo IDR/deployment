@@ -48,5 +48,5 @@ def test_is_cached(host, path):
     # Request twice to ensure it's cached
     host.check_output('curl http://localhost%s' % path)
     host.check_output('curl http://localhost%s' % path)
-    log = host.file("/var/log/nginx/access.log").content
+    log = host.file("/var/log/nginx/access.log").content.decode()
     assert re.search('"GET %s HTTP/1.1" 200 .+ HIT -' % path, log)

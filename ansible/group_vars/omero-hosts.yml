@@ -176,11 +176,9 @@ omero_web_config_set:
 omero_web_apps_packages:
 - "omero-mapr==0.2.3"
 - "omero-iviewer==0.6.0"
-- "django-cors-headers==2.4.1"
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
-- corsheaders
 
 omero_web_apps_top_links:
 - label: Studies
@@ -263,11 +261,6 @@ omero_web_apps_ui_metadata_panes:
 # Additional plugin config
 # append...
 omero_web_apps_config_append:
-  omero.web.middleware:
-  - index: 0.5
-    class: "corsheaders.middleware.CorsMiddleware"
-  - index: 10
-    class: "corsheaders.middleware.CorsPostCsrfMiddleware"
   omero.web.open_with:
   - - omero_iviewer
     - omero_iviewer_index
@@ -280,7 +273,6 @@ omero_web_apps_config_append:
 
 # set...
 omero_web_apps_config_set:
-  omero.web.cors_origin_allow_all: True
   omero.web.mapr.config:
   - menu: "gene"
     config:

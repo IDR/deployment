@@ -41,6 +41,7 @@ _nginx_proxy_omero_locations:
 - /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
+- /api/*
 # /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
@@ -154,7 +155,7 @@ nginx_proxy_caches:
   keysize: 320m
   inactive: 180d
   match:
-  - '"~webclient/api/*"'
+  - '"~(webclient/)?api/*"'
 - name: omeromapr
   maxsize: 5g
   keysize: 100m

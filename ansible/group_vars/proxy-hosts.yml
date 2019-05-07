@@ -110,7 +110,7 @@ nginx_proxy_cache_match_uri:
 #- '"~webclient/api/paths_to_object*"'
 - '"~web(client|gateway)/(metadata|render)_*"'
 - '"~web(client|gateway)/get_thumbnail*"'
-- '"~webclient/api/*"'
+- '"~(webclient/)?api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
 - '"~grafana/*"'

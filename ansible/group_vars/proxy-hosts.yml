@@ -238,7 +238,11 @@ nginx_proxy_additional_maps:
   to: $allow_origin
   mapvalues:
   - "default *"
-  - "~. $http_origin"
+# For now unconditionally return "*" in the Origin header
+# Replace with this line to return the provided header (but be aware it may be
+# necessary to return addiitonal headers)
+#  - "~. $http_origin"
+  - "~. *"
 
 
 ######################################################################

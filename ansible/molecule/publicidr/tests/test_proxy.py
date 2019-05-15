@@ -31,9 +31,9 @@ def test_html_index(host, address):
     ("http://localhost/api/v0/",
      "Access-Control-Allow-Origin: *"),
     ("-H 'Origin: http://example.org' http://localhost/api/v0/",
-     "Access-Control-Allow-Origin: http://example.org"),
+     "Access-Control-Allow-Origin: *"),
     ("-H 'Origin: http://example.com' http://localhost/api/v0/",
-     "Access-Control-Allow-Origin: http://example.com"),
+     "Access-Control-Allow-Origin: *"),
 ])
 def test_curl_headers(host, curl_args, expected_header):
     out = host.check_output('curl -I %s' % curl_args)

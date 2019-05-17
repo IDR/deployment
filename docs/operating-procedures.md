@@ -62,7 +62,7 @@ script will return a list of all the IDs for the first Image in each Fileset:
                   as r where r.x = 1) to stdout;" > first_image_per_fileset.sql
 
 For large databases, cache regeneration should be run in a parallelized manner
-across the available OMERO servers (read-write and rea-only):
+across the available OMERO servers (read-write and read-only):
 
     $ grep -oE 'omero[^ ]+$' /etc/hosts > nodes
 

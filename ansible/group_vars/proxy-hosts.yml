@@ -41,6 +41,7 @@ _nginx_proxy_omero_locations:
 - /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
+- /api/*
 # /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
@@ -109,7 +110,7 @@ nginx_proxy_cache_match_uri:
 #- '"~webclient/api/paths_to_object*"'
 - '"~web(client|gateway)/(metadata|render)_*"'
 - '"~web(client|gateway)/get_thumbnail*"'
-- '"~webclient/api/*"'
+- '"~(webclient/)?api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
 - '"~grafana/*"'
@@ -154,7 +155,7 @@ nginx_proxy_caches:
   keysize: 320m
   inactive: 180d
   match:
-  - '"~webclient/api/*"'
+  - '"~(webclient/)?api/*"'
 - name: omeromapr
   maxsize: 5g
   keysize: 100m
@@ -228,6 +229,22 @@ nginx_proxy_direct_locations:
   alias: /srv/www/letsencrypt/challenge
 
 
+# CORS: basically allow any cross-site since this is public read-only
+# Always set a header:
+# - Return the client's header (should be the requesting domain) if one given
+# - "*" otherwise
+nginx_proxy_additional_maps:
+- from: $http_origin
+  to: $allow_origin
+  mapvalues:
+  - "default *"
+# For now unconditionally return "*" in the Origin header
+# Replace with this line to return the provided header (but be aware it may be
+# necessary to return addiitonal headers)
+#  - "~. $http_origin"
+  - "~. *"
+
+
 ######################################################################
 # Additional sites/virtualhosts
 _nginx_proxy_sites:
@@ -235,6 +252,9 @@ _nginx_proxy_sites:
   # This enables the default site (configured using the global
   # nginx_proxy_* variables):
   - nginx_proxy_is_default: True
+    # Only add this CORS header to the default public site
+    nginx_proxy_additional_directives:
+    - "add_header Access-Control-Allow-Origin $allow_origin"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:

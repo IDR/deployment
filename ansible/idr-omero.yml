@@ -18,7 +18,7 @@
   #     state: present
 
 
-# There are two OMERO rw and database servers, and multiple OMERO ro.
+# There is an OMERO rw server, a database server, and multiple OMERO ro.
 # The next two plays set a hostvar so that the OMERO servers connect to
 # the correct database
 

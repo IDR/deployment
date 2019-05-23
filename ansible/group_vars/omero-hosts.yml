@@ -104,6 +104,7 @@ idr_omero_web_public_url_filters:
 - webadmin/myphoto/
 - mapr/
 - iviewer/
+- gallery/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
 

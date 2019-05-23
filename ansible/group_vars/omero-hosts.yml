@@ -180,6 +180,7 @@ omero_web_apps_packages:
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
+- omero_gallery
 
 omero_web_apps_top_links:
 - label: Studies

@@ -177,7 +177,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - "omero-mapr==0.3.0a2"
 - "omero-iviewer==0.6.0"
-- "git+git://github.com/snoopycrimecop/omero-gallery.git@master_merge_daily#egg=omero-gallery"
+- omero-gallery==3.2.0a3
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer

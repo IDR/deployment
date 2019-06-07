@@ -1,0 +1,21 @@
+diff --git a/components/tools/OmeroWeb/omeroweb/urls.py b/components/tools/OmeroWeb/omeroweb/urls.py
+index 8e10516e918..cad9195b8c2 100755
+--- a/components/tools/OmeroWeb/omeroweb/urls.py
++++ b/components/tools/OmeroWeb/omeroweb/urls.py
+@@ -85,9 +85,15 @@ def redirect_urlpatterns():
+     except ImportError:
+         pass
+     else:
+-        regex = '^(?i)%s/' % label
++        # see https://stackoverflow.com
++        #                 /questions/7580220/django-urls-how-to-map-root-to-app
++        if label == 'gallery':
++            regex = r'^'
++        else:
++            regex = '^(?i)%s/' % label
+         urlpatterns += patterns('', (regex, include(urlmodule)),)
+ 
++
+ urlpatterns += patterns(
+     '',
+     (r'^favicon\.ico$',

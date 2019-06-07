@@ -213,11 +213,11 @@ nginx_proxy_direct_locations:
 - location: "= /webclient"
   redirect302: /webclient/?experimenter=-1
 - location: "= /"
-  redirect302: /gallery/
-- location: "~ ^/cell(/|$)"
-  redirect302: /gallery/cell/
-- location: "~ ^/tissue(/|$)"
-  redirect302: /gallery/tissue/
+  redirect302: /gallery
+- location: "= /cell"
+  redirect302: /gallery/cell
+- location: "= /tissue"
+  redirect302: /gallery/tissue
 # Block webclient login
 - location: "^~ /webclient/login"
   redirect302: /webclient/?experimenter=-1

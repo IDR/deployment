@@ -104,6 +104,7 @@ idr_omero_web_public_url_filters:
 - webadmin/myphoto/
 - mapr/
 - iviewer/
+- gallery/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
 
@@ -174,11 +175,13 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- "omero-mapr==0.2.3"
-- "omero-iviewer==0.6.0"
+- "omero-mapr==0.3.0a3"
+- "omero-iviewer==0.7.1"
+- omero-gallery==3.2.0a5
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
+- omero_gallery
 
 omero_web_apps_top_links:
 - label: Studies
@@ -411,3 +414,61 @@ omero_web_apps_config_set:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
   omero.web.viewer.view: omero_iviewer.views.index
+  omero.web.gallery.category_queries:
+    latest:
+      label: "Most Recent"
+      index: 0
+      query: "LAST10:date"
+    timelapse:
+      label: "Time-lapse imaging"
+      index: 1
+      query: "Study Type:time OR Study Type:5D OR Study Type:3D-tracking"
+    lightsheet:
+      label: "Light sheet fluorescence microscopy"
+      index: 2
+      query: "Study Type:light sheet"
+    proteinlocalization:
+      label: "Protein localization studies"
+      index: 3
+      query: "Study Type:protein localization"
+    histology:
+      label: "Digital pathology imaging"
+      index: 4
+      query: "Study Type:histology"
+    yeast:
+      label: "Yeast studies"
+      index: 5
+      query: "Organism: Saccharomyces cerevisiae OR Organism:Schizosaccharomyces pombe"
+    humancellscreen:
+      label: "High-content screening (human)"
+      index: 6
+      query: "Organism:Homo sapiens AND Study Type:high content screen"
+  omero.web.gallery.filter_keys:
+  - label: "Name (IDR number)"
+    value: "Name"
+  - "Imaging Method"
+  - "License"
+  - "Organism"
+  - "Publication Authors"
+  - "Publication Title"
+  - "Screen Technology Type"
+  - "Screen Type"
+  - "Study Type"
+  omero.web.gallery.filter_mapr_keys:
+  - "antibody"
+  - "cellline"
+  - "gene"
+  - "phenotype"
+  - "sirna"
+  omero.web.gallery.super_categories:
+    cell:
+      label: "Cell - IDR"
+      title: "Welcome to Cell-IDR"
+      query: "Sample Type:cell"
+      image: "https://idr.openmicroscopy.org/webgateway/render_image/122770/0/0/"
+    tissue:
+      label: "Tissue - IDR"
+      title: "Welcome to Tissue-IDR"
+      query: "Sample Type:tissue"
+      image: "https://idr.openmicroscopy.org/webgateway/render_image_region/5470164/0/0/?region=1024,1024,696,520"
+  omero.web.gallery.title: "Welcome to IDR"

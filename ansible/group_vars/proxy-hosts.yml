@@ -212,9 +212,7 @@ nginx_proxy_direct_locations:
 # TODO: change to 301 when we're happy
 - location: "= /webclient"
   redirect302: /webclient/?experimenter=-1
-- location: "= /"
-  redirect302: /about
-  # Block webclient login
+# Block webclient login
 - location: "^~ /webclient/login"
   redirect302: /webclient/?experimenter=-1
 - location: "^~ /about"

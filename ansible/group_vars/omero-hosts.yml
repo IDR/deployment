@@ -177,7 +177,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - "omero-mapr==0.3.0a3"
 - "omero-iviewer==0.7.1"
-- omero-gallery==3.2.0a5
+- omero-gallery==3.2.0a6
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer

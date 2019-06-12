@@ -45,6 +45,8 @@ _nginx_proxy_omero_locations:
 # /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
+# Gallery is hosted at /
+- /gallery-api/*
 
 _nginx_proxy_backends_omero:
 - name: omerocached
@@ -113,6 +115,7 @@ nginx_proxy_cache_match_uri:
 - '"~(webclient/)?api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
+- '"~gallery-api/*"'
 - '"~grafana/*"'
 
 #nginx_proxy_cache_match_arg:

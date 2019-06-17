@@ -31,6 +31,9 @@ platforms:
     - idr-omeroreadwrite-hosts
     - omeroreadwrite-hosts
     - idr-hosts
+    volumes:
+    # This allows NFS exports to work on Docker
+    - "idr-omeroreadwrite-docker-data:/data"
 
     ######################################################################
     # WARNING:

@@ -21,7 +21,7 @@
       # WARNING: This makes /data the root for all exports from this server
       /data:
       - host: "*"
-        options: 'ro,fsid=0'
+        options: 'fsid=0'
       /data/OMERO:
       - host: "*"
         options: 'ro'

@@ -2,9 +2,8 @@ import os
 import testinfra.utils.ansible_runner
 import pytest
 
-# TODO: This should be 'omero-hosts' if we get it deployed in docker
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('omeroreadwrite-hosts')
+    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('omeroreadonly-hosts')
 
 
 @pytest.mark.parametrize("name", ["omero-server", "omero-web", "nginx"])

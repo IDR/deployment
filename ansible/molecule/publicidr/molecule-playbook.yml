@@ -10,4 +10,4 @@
     when: TRAVIS
 
 
-- include: idr-01-install-idr.yml
+- include: ../../idr-01-install-idr.yml

@@ -1,0 +1,13 @@
+- hosts: all
+  tasks:
+
+  - name: If running in travis skip some tasks to reduce resource usage
+    set_fact:
+      TRAVIS: "{{ lookup('env', 'TRAVIS') == 'true' }}"
+
+  - debug:
+      msg: "Running in travis, disabling some tasks to reduce resource usage"
+    when: TRAVIS
+
+
+- include: idr-01-install-idr.yml

@@ -37,12 +37,9 @@ platforms:
 
     ######################################################################
     # WARNING:
-    # At present idr-omero-readonly.yml is excluded because it requires
-    # NFS shares which don't work on Docker.
-    # However idr-proxy.yml needs an omeroreadonly server IP for the
-    # proxy config so we fake this by creating a server that's not
-    # fully deployed (i.e. the read-only deployment is never tested)
-    # TODO: Test idr-omero-readonly.yml
+    # At present OMERO read-only is not deployed in Travis due to resource
+    # constraints.
+    # The full tests should instead be run locally
     ######################################################################
   - name: idr-omeroreadonly-docker
     image: centos/systemd:latest
@@ -70,7 +67,7 @@ provisioner:
     name: ansible-lint
   playbooks:
     prepare: prepare.yml
-    converge: ../../idr-01-install-idr.yml
+    converge: molecule-playbook.yml
   options:
     diff: True
     skip-tags: skip_if_molecule_docker

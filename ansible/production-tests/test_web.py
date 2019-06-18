@@ -18,7 +18,7 @@ HOST = os.getenv('HOST', 'https://idr.openmicroscopy.org')
 
 
 @pytest.mark.parametrize('uri,expect', [
-    ('', '/about'),
+
     ('/about', '/about/'),
 ])
 def test_about_redirect(uri, expect):
@@ -28,6 +28,7 @@ def test_about_redirect(uri, expect):
 
 
 @pytest.mark.parametrize('uri,expect', [
+    ('', 'The Image Data Resource (IDR) is a public repository'),
     ('/about/', 'The IDR makes datasets that have never previously been'),
     ('/about/experiments.html', 'When submitting data to the IDR, you'),
 ])

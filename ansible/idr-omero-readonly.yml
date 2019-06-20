@@ -16,7 +16,7 @@
 
   roles:
 
-  - role: openmicroscopy.nfs-share
+  - role: ome.nfs-share
     nfs_shares:
       # WARNING: This makes /data the root for all exports from this server
       /data:
@@ -59,7 +59,7 @@
 
   roles:
   # Use the same paths as on the omeorreadwrite server to reduce confusion
-  - role: openmicroscopy.nfs-mount
+  - role: ome.nfs-mount
     nfs_share_mounts:
     - path: /data/OMERO-readonly
       location: "{{ omero_fileserver_host_ansible }}:/OMERO"

@@ -32,7 +32,7 @@
 
   roles:
   - role: openmicroscopy.versioncontrol-utils
-  - role: openmicroscopy.nfs-share
+  - role: ome.nfs-share
     nfs_shares:
       /data/mineotaur:
       - host: "*"

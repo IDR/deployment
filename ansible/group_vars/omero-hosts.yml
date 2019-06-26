@@ -414,6 +414,38 @@ omero_web_apps_config_set:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
   omero.web.viewer.view: omero_iviewer.views.index
+  omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
+  omero.web.gallery.top_left_logo:
+    src: "http://idr.openmicroscopy.org/about/img/logos/logo-idr.svg"
+  omero.web.gallery.top_right_links:
+    - text: "About"
+      href: "https://idr.openmicroscopy.org/about/index.html"
+      submenu:
+        - text: "Overview"
+          href: "https://idr.openmicroscopy.org/about/index.html"
+        - text: "Published studies"
+          href: "https://idr.openmicroscopy.org/about/studies.html"
+        - text: "API Access"
+          href: "https://idr.openmicroscopy.org/about/api.html"
+        - text: "Data download"
+          href: "https://idr.openmicroscopy.org/about/download.html"
+        - text: "Image Tools Resource (ITR)"
+          href: "https://idr.openmicroscopy.org/about/itr.html"
+        - text: "Virtual Analysis Environment (VAE)"
+          href: "https://idr.openmicroscopy.org/jupyter"
+        - text: "Deployment"
+          href: "https://idr.openmicroscopy.org/about/deployment.html"
+    - text: "Submissions"
+      href: "https://idr.openmicroscopy.org/about/submission.html"
+      submenu:
+        - text: "Overview"
+          href: "https://idr.openmicroscopy.org/about/submission.html"
+        - text: "Screens"
+          href: "https://idr.openmicroscopy.org/about/screens.html"
+        - text: "Experiments"
+          href: "https://idr.openmicroscopy.org/about/experiments.html"
+  omero.web.gallery.subheading_html: "The Image Data Resource (IDR) is a public repository of image datasets from published scientific studies,<br/>where the community can submit, search and access high-quality bio-image data."
+  omero.web.gallery.footer_html: "IDR"
   omero.web.gallery.category_queries:
     latest:
       label: "Most Recent"

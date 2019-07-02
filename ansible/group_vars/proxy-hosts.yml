@@ -3,7 +3,7 @@
 
 ######################################################################
 # Maintenance flag and URI
-omero_maintenance_flag: /srv/omero-maintenance.flag
+omero_maintenance_flag: /srv/www/omero-maintenance.flag
 omero_maintenance_uri: /about/omero-maintenance.html
 
 

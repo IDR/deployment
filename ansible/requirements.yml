@@ -100,8 +100,8 @@
   version: 1.1.0
 
 - name: openmicroscopy.postgresql
-  src: https://github.com/ome/ansible-role-postgresql/archive/6bf986821df5ada912080ae7bfa10e6e480b78b0.tar.gz
-  version: 6bf986821df5ada912080ae7bfa10e6e480b78b0
+  src: https://github.com/ome/ansible-role-postgresql
+  version: 3.2.0
 
 - src: openmicroscopy.python-pydata
   version: 1.1.0

@@ -75,6 +75,11 @@ provisioner:
     group_vars:
       omero-hosts:
         omero_server_systemd_require_network: False
+      database-hosts:
+        # Since the molecule test initialises a new OMERO database it fails:
+        # https://forum.image.sc/t/fyi-not-possible-to-create-new-omero-instance-with-latest-postgresql-versions/26929
+        # This isn't a problem on IDR production since it already exists
+        postgresql_package_version: "9.6.13"
 
 scenario:
   name: publicidr

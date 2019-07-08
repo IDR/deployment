@@ -99,8 +99,9 @@
 - src: openmicroscopy.openstack-volume-storage
   version: 1.1.0
 
-- src: openmicroscopy.postgresql
-  version: 3.0.1
+- name: openmicroscopy.postgresql
+  src: https://github.com/ome/ansible-role-postgresql
+  version: 3.2.0
 
 - src: openmicroscopy.python-pydata
   version: 1.1.0

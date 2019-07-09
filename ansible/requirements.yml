@@ -69,8 +69,14 @@
 - src: openmicroscopy.nginx
   version: 1.0.0
 
-- src: openmicroscopy.nginx-proxy
-  version: 1.10.0
+# Updated nginx-proxy role requires ome.nginx
+- name: ome.nginx
+  src: openmicroscopy.nginx
+  version: 1.0.0
+
+- name: openmicroscopy.nginx-proxy
+  src: https://github.com/ome/ansible-role-nginx-proxy
+  version: 1.11.0
 
 - src: openmicroscopy.omero-common
   version: 0.3.0
@@ -116,6 +122,11 @@
   version: 1.0.0
 
 - src: openmicroscopy.selinux-utils
+  version: 1.0.3
+
+# Updated nginx-proxy role requires ome.selinux_utils
+- name: ome.selinux_utils
+  src: openmicroscopy.selinux-utils
   version: 1.0.3
 
 - src: openmicroscopy.ssl-certificate

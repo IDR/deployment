@@ -1,6 +1,11 @@
 # Parameters for the front-end IDR web proxy
 # This includes OMERO.web and Jupyter
 
+######################################################################
+# Maintenance flag and URI
+omero_maintenance_flag: /srv/www/omero-maintenance.flag
+omero_maintenance_uri: /about/omero-maintenance.html
+
 
 ######################################################################
 # nginx and SSL
@@ -53,10 +58,14 @@ _nginx_proxy_backends_omero:
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
   cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omeromapr
   location: ~ /mapr/*
   server: http://omeroreadonly
   cache_validity: 180d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
@@ -64,6 +73,8 @@ _nginx_proxy_backends_omero:
 - name: omero
   location: /
   server: http://omeroreadonly
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 
 _nginx_proxy_backends_grafana_render:
 - name: grafanarender
@@ -346,13 +357,13 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2019.07.04
+idr_openmicroscopy_org_version: 2019.07.09
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: 6be617fa3fb7a8b4af959457ce0c57e72ff793674660a637fac28d0e75a50f97
+deploy_archive_sha256: 392983dcf3b5754f4510e9ac404a48983d4f0b7a5f2870243de4084d97030803
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

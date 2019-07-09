@@ -75,8 +75,8 @@
   version: 1.0.0
 
 - name: openmicroscopy.nginx-proxy
-  src: https://github.com/ome/ansible-role-nginx-proxy/archive/28f36634ae95e04baba50cec955c5d7d5b9132f8.tar.gz
-  version: 28f36634ae95e04baba50cec955c5d7d5b9132f8
+  src: https://github.com/ome/ansible-role-nginx-proxy
+  version: 1.11.0
 
 - src: openmicroscopy.omero-common
   version: 0.3.0

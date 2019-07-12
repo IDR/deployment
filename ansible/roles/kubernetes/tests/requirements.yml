@@ -1,2 +1,2 @@
-- src: openmicroscopy.docker
-- src: openmicroscopy.selinux-utils
+- src: ome.docker
+- src: ome.selinux_utils

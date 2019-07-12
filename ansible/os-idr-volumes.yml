@@ -4,20 +4,20 @@
 - hosts: >
     {{ idr_environment | default('idr') }}-database-hosts
   roles:
-  - role: openmicroscopy.storage-volume-initialise
+  - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ database_db_vol_dev | default('/dev/vdb') }}"
     storage_volume_initialise_mount: /var/lib/pgsql
 
 - hosts: >
     {{ idr_environment | default('idr') }}-omeroreadwrite-hosts
   roles:
-  - role: openmicroscopy.storage-volume-initialise
+  - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ omero_data_vol_dev | default('/dev/vdb') }}"
     storage_volume_initialise_mount: /data
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
   roles:
-  - role: openmicroscopy.storage-volume-initialise
+  - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ gateway_nginxcache_vol_dev | default('/dev/vdb') }}"
     storage_volume_initialise_mount: /var/cache/nginx
 
@@ -25,6 +25,6 @@
 - hosts: >
     {{ idr_environment | default('idr') }}-data-hosts
   roles:
-  - role: openmicroscopy.storage-volume-initialise
+  - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ data_vol_dev | default('/dev/vdb') }}"
     storage_volume_initialise_mount: /data

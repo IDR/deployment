@@ -9,7 +9,7 @@
     idr_mountpoint: /uod/idr
 
   roles:
-  - role: openmicroscopy.nfs-mount
+  - role: ome.nfs_mount
     nfs_share_mounts:
     - path: "{{ idr_mountpoint }}"
       location: idr-data.openmicroscopy.org:/uod/idr

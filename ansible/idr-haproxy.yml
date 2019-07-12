@@ -40,8 +40,8 @@
         }}
 
   roles:
-  - role: openmicroscopy.selinux-utils
-  - role: openmicroscopy.haproxy
+  - role: ome.selinux_utils
+  - role: ome.haproxy
     haproxy_cfg_template: "{{ playbook_dir }}/templates/haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True

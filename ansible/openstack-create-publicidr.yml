@@ -100,21 +100,21 @@
     ############################################################
     # IDR Volumes
 
-    - role: openmicroscopy.openstack-volume-storage
+    - role: ome.openstack_volume_storage
       openstack_volume_size: 500
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
 
-    - role: openmicroscopy.openstack-volume-storage
+    - role: ome.openstack_volume_storage
       openstack_volume_size: 1000
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
 
-    - role: openmicroscopy.openstack-volume-storage
+    - role: ome.openstack_volume_storage
       openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_idr }}-proxy"
       openstack_volume_name: nginxcache
@@ -141,7 +141,7 @@
     ############################################################
     # Management Volume (do not copy when upgrading)
 
-    - role: openmicroscopy.openstack-volume-storage
+    - role: ome.openstack_volume_storage
       openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_idr }}-management"
       openstack_volume_name: data

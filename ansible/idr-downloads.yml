@@ -11,7 +11,7 @@
 
   roles:
 
-  - role: openmicroscopy.rsync-server
+  - role: ome.rsync_server
     rsync_server_shares:
     - name: omero
       path: /data/OMERO

@@ -6,143 +6,131 @@
 # TODO: check ordering of these dependencies to ensure nested dependencies
 # are managed by this file and not the role
 
-- src: openmicroscopy.analysis-tools
-  version: 1.0.0
-
-- src: openmicroscopy.anonymous-ftp
-  version: 0.1.1
-
-- src: openmicroscopy.basedeps
-  version: 1.0.0
-
-- src: openmicroscopy.cadvisor
-  version: 0.2.0
-
-- src: openmicroscopy.cli-utils
-  version: 1.0.0
-
-- src: openmicroscopy.deploy_archive
-  version: 0.1.2
-
-- src: openmicroscopy.docker
-  version: 2.3.0
-
-- src: openmicroscopy.docker-tools
-  version: 1.0.0
-
-- src: openmicroscopy.haproxy
-  version: 3.2.0
-
-- src: openmicroscopy.hosts-populate
-  version: 0.2.0
-
-- src: openmicroscopy.ice
-  version: 2.1.1
-
-- src: openmicroscopy.java
-  version: 2.0.1
-
-- src: openmicroscopy.local-accounts
+- src: ome.analysis_tools
   version: 1.0.1
 
-- src: openmicroscopy.logrotate
-  version: 1.0.0
+- src: ome.anonymous_ftp
+  version: 0.1.2
 
-- src: openmicroscopy.lvm-partition
+- src: ome.basedeps
   version: 1.1.0
 
-- src: openmicroscopy.munin
-  version: 1.1.3-openmicroscopy1
+- src: ome.cadvisor
+  version: 0.3.1
 
-- src: openmicroscopy.munin-node
-  version: 1.2.1-openmicroscopy1
-
-- src: openmicroscopy.network-cloud-interfaces
-  version: 1.2.1
-
-- src: openmicroscopy.nfs-mount
+- src: ome.cli_utils
   version: 1.1.0
 
-- src: openmicroscopy.nfs-share
+- src: ome.deploy_archive
+  version: 0.1.3
+
+- src: ome.docker
+  version: 3.0.2
+
+- src: ome.docker_tools
+  version: 1.0.1
+
+- src: ome.haproxy
+  version: 3.2.2
+
+- src: ome.hosts_populate
+  version: 0.2.1
+
+- src: ome.ice
+  version: 3.0.0
+
+- src: ome.java
+  version: 2.0.3
+
+- src: ome.local_accounts
   version: 1.0.2
 
-- src: openmicroscopy.nginx
-  version: 1.0.0
+- src: ome.logrotate
+  version: 1.0.1
 
-# Updated nginx-proxy role requires ome.nginx
-- name: ome.nginx
-  src: openmicroscopy.nginx
-  version: 1.0.0
+- src: ome.lvm_partition
+  version: 1.1.1
 
-- name: openmicroscopy.nginx-proxy
-  src: https://github.com/ome/ansible-role-nginx-proxy
+- src: ome.munin
+  version: 1.1.3-openmicroscopy1
+
+- src: ome.munin_node
+  version: 1.2.1-openmicroscopy1
+
+- src: ome.network_cloud_interfaces
+  version: 1.2.2
+
+- src: ome.nfs_mount
+  version: 1.2.1
+
+- src: ome.nfs_share
+  version: 1.0.3
+
+- src: ome.nginx
+  version: 1.1.1
+
+- src: ome.nginx_proxy
   version: 1.11.0
 
-- src: openmicroscopy.omero-common
-  version: 0.3.0
+- src: ome.omero_common
+  version: 0.3.2
 
-- src: openmicroscopy.omego
-  version: 0.1.1
+- src: ome.omego
+  version: 0.1.3
 
-- src: openmicroscopy.omero-logmonitor
-  version: 2.1.0
+- src: ome.omero_logmonitor
+  version: 2.1.1
 
-- src: openmicroscopy.omero-python-deps
-  version: 1.1.0
-
-- src: openmicroscopy.omero-server
-  version: 2.0.5
-
-- src: openmicroscopy.omero-user
-  version: 0.1.1
-
-- src: openmicroscopy.omero-web
+- src: ome.omero_python_deps
   version: 2.0.1
 
-- src: openmicroscopy.omero-web-apps
-  version: 0.1.1
+- src: ome.omero_server
+  version: 2.0.6
 
-- src: openmicroscopy.openstack-volume-storage
-  version: 1.1.0
+- src: ome.omero_user
+  version: 0.1.2
 
-- name: openmicroscopy.postgresql
-  src: https://github.com/ome/ansible-role-postgresql
+- src: ome.omero_web
+  version: 2.0.2
+
+- src: ome.omero_web_apps
+  version: 0.1.2
+
+- src: ome.openstack_volume_storage
+  version: 1.1.1
+
+- src: ome.postgresql
   version: 3.2.0
 
-- src: openmicroscopy.python-pydata
-  version: 1.1.0
+- src: ome.python_pydata
+  version: 1.1.1
 
-- src: openmicroscopy.reboot-server
-  version: 0.1.1
+- src: ome.reboot_server
+  version: 0.1.2
 
-- src: openmicroscopy.redis
-  version: 1.1.0
+- src: ome.redis
+  version: 1.1.1
 
-- src: openmicroscopy.rsync-server
-  version: 1.0.0
+- src: ome.rsync_server
+  version: 1.0.1
 
-- src: openmicroscopy.selinux-utils
+- src: ome.selinux_utils
   version: 1.0.3
 
-# Updated nginx-proxy role requires ome.selinux_utils
-- name: ome.selinux_utils
-  src: openmicroscopy.selinux-utils
-  version: 1.0.3
+- src: ome.ssl_certificate
+  version: 0.3.2
 
-- src: openmicroscopy.ssl-certificate
-  version: 0.3.0
+- src: ome.storage_volume_initialise
+  version: 1.0.1
 
-- src: openmicroscopy.storage-volume-initialise
-  version: 1.0.0
+- src: ome.sudoers
+  version: 1.0.1
 
-- src: openmicroscopy.sudoers
-  version: 1.0.0
+- src: ome.upgrade_distpackages
+  version: 1.1.1
 
-- src: openmicroscopy.upgrade-distpackages
-  version: 1.1.0
-
-- src: openmicroscopy.versioncontrol-utils
-  version: 1.0.0
+- src: ome.versioncontrol_utils
+  version: 1.0.2
 
 
 ######################################################################
@@ -180,34 +168,26 @@
 ######################################################################
 # External development roles
 
-- name: openmicroscopy.docker-slack-notifier
-  src: https://github.com/openmicroscopy/ansible-role-docker-slack-notifier/archive/0.0.2.tar.gz
-  version: 0.0.2
+- src: ome.docker_slack_notifier
+  version: 0.0.4
 
-- name: openmicroscopy.fluentd
-  src: https://github.com/openmicroscopy/ansible-role-fluentd/archive/0.2.1.tar.gz
+- src: ome.fluentd
+  version: 0.2.2
+
+- src: ome.omero_prometheus_exporter
   version: 0.2.1
 
-- name: openmicroscopy.omero-prometheus-exporter
-  src: https://github.com/openmicroscopy/ansible-role-omero-prometheus-exporter/archive/0.1.0.tar.gz
-  version: 0.1.0
+- src: ome.omero_web_django_prometheus
+  version: 0.2.1
 
-- name: openmicroscopy.omero-web-django-prometheus
-  src: https://github.com/openmicroscopy/ansible-role-omero-web-django-prometheus/archive/0.2.0.tar.gz
-  version: 0.2.0
+- src: ome.prometheus
+  version: 0.3.1
 
-- name: openmicroscopy.prometheus
-  src: openmicroscopy.ansible-role-prometheus
-  version: 0.3.0
+- name: ome.prometheus_jmx
+  version: 0.2.1
 
-- name: openmicroscopy.prometheus-jmx
-  src: openmicroscopy.ansible-role-prometheus-jmx
-  version: 0.2.0
+- src: ome.prometheus_node
+  version: 0.2.1
 
-- name: openmicroscopy.prometheus-node
-  src: openmicroscopy.ansible-role-prometheus-node
-  version: 0.2.0
-
-- name: openmicroscopy.prometheus-postgres
-  src: openmicroscopy.ansible-role-prometheus-postgres
-  version: 0.2.0
+- src: ome.prometheus_postgres
+  version: 0.2.1

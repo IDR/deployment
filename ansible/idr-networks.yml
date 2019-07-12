@@ -6,12 +6,12 @@
 # other servers
 - hosts: "{{ idr_environment | default('idr') }}-bastion-hosts"
   roles:
-  - role: openmicroscopy.network-cloud-interfaces
+  - role: ome.network_cloud_interfaces
     network_cloud_interface_regex: '^eth.*'
 
 # All other hosts (e.g. those requiring NFS access on a separate network)
 - hosts: >
     {{ idr_environment | default('idr') }}-hosts
   roles:
-  - role: openmicroscopy.network-cloud-interfaces
+  - role: ome.network_cloud_interfaces
     network_cloud_interface_regex: '^eth.*'

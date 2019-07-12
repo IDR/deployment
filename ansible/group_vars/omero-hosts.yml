@@ -506,5 +506,5 @@ omero_web_apps_config_set:
   omero.web.gallery.title: "Welcome to IDR"
   omero.web.gallery.study_short_name:
   - key: "Name"
-  - regex: "^(.*?)-.*?(.)$"
-  - template: "{{1}}{{2}}"
+    regex: "^(.*?)-.*?(.)$"
+    template: "\{\{1}}\{\{2}}"

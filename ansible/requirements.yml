@@ -94,7 +94,7 @@
   version: 2.0.2
 
 - src: ome.omero_web_apps
-  version: 0.1.2
+  version: 0.2.0
 
 - src: ome.openstack_volume_storage
   version: 1.1.1

@@ -184,6 +184,7 @@
 
   roles:
   - role: openmicroscopy.omero-server
+
   tasks:
     - name: Override Bio-Formats artifacts in lib/server
       become: yes

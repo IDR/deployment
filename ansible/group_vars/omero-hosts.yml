@@ -8,10 +8,9 @@
 
 idr_omero_release: "5.5.1"
 idr_omero_ice_version: "3.6"
-# Upgrades are normally disabled, set to True upgrade OMERO:
-idr_omero_upgrade: False
+idr_omero_upgrade: True
 
-# IDR Bio-Formats JARs to overrid
+# The IDR OMERO server uses a custom IDR build
 idr_bf_components:
   - formats-api
   - formats-bsd

@@ -16,7 +16,7 @@ idr_bf_components:
   - formats-api
   - formats-bsd
   - formats-gpl
-idr_bf_release: "0.5.3"
+idr_bf_release: "0.6.0"
 idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 
 # If you want to speed up Ice installation use a precompiled IcePy:

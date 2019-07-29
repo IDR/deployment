@@ -11,4 +11,4 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-- src: openmicroscopy.selinux-utils
+- role: ome.selinux_utils

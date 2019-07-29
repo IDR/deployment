@@ -4,10 +4,10 @@
 
   roles:
 
-  - role: openmicroscopy.docker
+  - role: ome.docker
     docker_use_ipv4_nic_mtu: True
 
-  - role: openmicroscopy.anonymous-ftp
+  - role: ome.anonymous_ftp
     anonymous_ftp_incoming_data_dir: /data/idrftp-incoming
     anonymous_ftp_port: 32021
     anonymous_ftp_banner_text: |

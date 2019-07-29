@@ -4,9 +4,9 @@
 - hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
 
   roles:
-  - role: openmicroscopy.redis
-  - role: openmicroscopy.omero-web
-  - role: openmicroscopy.omero-web-apps
+  - role: ome.redis
+  - role: ome.omero_web
+  - role: ome.omero_web_apps
 
   # Vars are in group_vars/omero-hosts.yml
 

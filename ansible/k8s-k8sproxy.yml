@@ -47,14 +47,14 @@
 
   roles:
 
-  - role: openmicroscopy.selinux-utils
+  - role: ome.selinux_utils
 
   # Default to a self-signed certificate, to use production certificates see
   # https://github.com/openmicroscopy/ansible-role-ssl-certificate/blob/0.2.0/README.md
-  - role: openmicroscopy.ssl-certificate
+  - role: ome.ssl_certificate
 
   # TODO: Restart haproxy when certificate changes
-  - role: openmicroscopy.haproxy
+  - role: ome.haproxy
     haproxy_cfg_template: "{{ playbook_dir }}/templates/k8sproxy-haproxy.cfg.j2"
     # haproxy needs some special setup to log to a file
     haproxy_syslog_configure_udp: True

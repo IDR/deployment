@@ -185,7 +185,7 @@
     when: _td_agent_st.stat.exists
 
   roles:
-  - role: openmicroscopy.fluentd
+  - role: ome.fluentd
 
   vars:
     fluentd_server_address: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"

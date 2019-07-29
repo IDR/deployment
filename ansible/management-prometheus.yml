@@ -4,12 +4,12 @@
     {{ idr_environment | default('idr') }}-hosts
 
   roles:
-  - role: openmicroscopy.prometheus-node
+  - role: ome.prometheus_node
 
 
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
   roles:
-  - role: openmicroscopy.prometheus-postgres
+  - role: ome.prometheus_postgres
     prometheus_postgres_dbname: idr
     prometheus_postgres_query_filenames:
     - queries-default.yml
@@ -21,18 +21,18 @@
 
   roles:
 
-  - role: openmicroscopy.prometheus-jmx
+  - role: ome.prometheus_jmx
 
   # Needed for handlers
-  - role: openmicroscopy.omero-common
+  - role: ome.omero_common
 
-  - role: openmicroscopy.omero-prometheus-exporter
+  - role: ome.omero_prometheus_exporter
     omero_prometheus_exporter_omero_user: public
     omero_prometheus_exporter_omero_password: "{{ idr_secret_public_password | default('public') }}"
     # Disable the extra count queries to reduce load
     omero_prometheus_exporter_counts_query_files: []
 
-  - role: openmicroscopy.omero-web-django-prometheus
+  - role: ome.omero_web_django_prometheus
 
   tasks:
 
@@ -58,17 +58,17 @@
 
   roles:
 
-  - role: openmicroscopy.cadvisor
+  - role: ome.cadvisor
 
 
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
   roles:
 
-  - role: openmicroscopy.docker
+  - role: ome.docker
     docker_use_ipv4_nic_mtu: True
 
-  - role: openmicroscopy.prometheus
+  - role: ome.prometheus
     prometheus_docker_network: monitoring
 
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"

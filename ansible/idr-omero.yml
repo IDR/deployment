@@ -6,7 +6,7 @@
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
 
   roles:
-  - role: openmicroscopy.postgresql
+  - role: ome.postgresql
 
   # tasks:
   # - name: postgres idr pg_stat_statements extension
@@ -43,16 +43,16 @@
 - hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
 
   roles:
-  - role: openmicroscopy.basedeps
-  - role: openmicroscopy.cli-utils
-  - role: openmicroscopy.versioncontrol-utils
-  - role: openmicroscopy.python-pydata
-  - role: openmicroscopy.analysis-tools
+  - role: ome.basedeps
+  - role: ome.cli_utils
+  - role: ome.versioncontrol_utils
+  - role: ome.python_pydata
+  - role: ome.analysis_tools
 
 
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
   roles:
-  - role: openmicroscopy.omero-server
+  - role: ome.omero_server
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

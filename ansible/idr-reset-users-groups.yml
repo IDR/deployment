@@ -28,7 +28,7 @@
     register: random_root_pass
 
   roles:
-  - openmicroscopy.omero-user
+  - role: ome.omero_user
 
   post_tasks:
 

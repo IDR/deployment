@@ -49,37 +49,9 @@
   - role: ome.python_pydata
   - role: ome.analysis_tools
 
-
 - hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
 
   roles:
   - role: ome.omero_server
-
-  tasks:
-    - name: Override Bio-Formats artifacts in lib/server
-      become: yes
-      become_user: "{{ omero_server_system_user }}"
-      get_url:
-        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
-        dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/server/{{ item }}.jar"
-        force: yes
-      with_items: "{{ idr_bf_components }}"
-      notify: omero-server restart omero-server
-    - name: Override Bio-Formats artifacts in lib/client
-      become: yes
-      become_user: "{{ omero_server_system_user }}"
-      get_url:
-        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
-        dest: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/client/{{ item }}.jar"
-        force: yes
-      with_items: "{{ idr_bf_components }}"
-      notify: omero-server restart omero-server
-    - name: Remove OMERO scripts
-      become: yes
-      become_user: "{{ omero_server_system_user }}"
-      file:
-        path: "{{ omero_server_basedir }}/{{ omero_server_symlink }}/lib/scripts/omero"
-        state: absent
-      notify: omero-server restart omero-server
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

@@ -55,3 +55,38 @@
   - role: ome.omero_server
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
+
+# There are two custom IDR modifications departing from a vanilla OMERO.server:
+# - OMERO.scripts are deleted
+# - an IDR-specific version of Bio-Formats is installed
+
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
+
+  roles:
+  - role: ome.omero_common
+
+  tasks:
+    - name: Override Bio-Formats artifacts in lib/server
+      become: yes
+      get_url:
+        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/{{ item }}.jar"
+        force: yes
+      with_items: "{{ idr_bf_components }}"
+      notify: restart omero-server
+
+    - name: Override Bio-Formats artifacts in lib/client
+      become: yes
+      get_url:
+        url: "{{ idr_bf_baseurl }}/{{ item }}/{{ idr_bf_release }}/{{ item }}-{{ idr_bf_release }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/{{ item }}.jar"
+        force: yes
+      with_items: "{{ idr_bf_components }}"
+      notify: restart omero-server
+
+    - name: Remove OMERO scripts
+      become: yes
+      file:
+        path: "{{ omero_common_basedir }}/server/OMERO.server/lib/scripts/omero"
+        state: absent
+      notify: restart omero-server

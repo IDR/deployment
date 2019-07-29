@@ -13,8 +13,6 @@
   # Requires NFS shares which can't be configured in Docker
   - skip_if_molecule_docker
 
-- include: idr-bio-formats.yml
-
 - include: idr-docker.yml
 
 - include: idr-proxy.yml

@@ -105,6 +105,7 @@ idr_omero_web_public_url_filters:
 - webadmin/myphoto/
 - mapr/
 - iviewer/
+- gallery-api/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
 
@@ -174,13 +175,13 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- "omero-mapr==0.2.3"
-- "omero-iviewer==0.6.0"
-- "django-cors-headers==2.4.1"
+- omero-mapr==0.3.0
+- omero-iviewer==0.7.1
+- omero-gallery==3.2.0a7
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
-- corsheaders
+- omero_gallery
 
 omero_web_apps_top_links:
 - label: Studies
@@ -263,11 +264,6 @@ omero_web_apps_ui_metadata_panes:
 # Additional plugin config
 # append...
 omero_web_apps_config_append:
-  omero.web.middleware:
-  - index: 0.5
-    class: "corsheaders.middleware.CorsMiddleware"
-  - index: 10
-    class: "corsheaders.middleware.CorsPostCsrfMiddleware"
   omero.web.open_with:
   - - omero_iviewer
     - omero_iviewer_index
@@ -280,7 +276,6 @@ omero_web_apps_config_append:
 
 # set...
 omero_web_apps_config_set:
-  omero.web.cors_origin_allow_all: True
   omero.web.mapr.config:
   - menu: "gene"
     config:
@@ -419,3 +414,93 @@ omero_web_apps_config_set:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
   omero.web.viewer.view: omero_iviewer.views.index
+  omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
+  omero.web.gallery.top_left_logo:
+    src: "http://idr.openmicroscopy.org/about/img/logos/logo-idr.svg"
+  omero.web.gallery.top_right_links:
+    - text: "About"
+      href: "https://idr.openmicroscopy.org/about/index.html"
+      submenu:
+        - text: "Overview"
+          href: "https://idr.openmicroscopy.org/about/index.html"
+        - text: "Published studies"
+          href: "https://idr.openmicroscopy.org/about/studies.html"
+        - text: "API Access"
+          href: "https://idr.openmicroscopy.org/about/api.html"
+        - text: "Data download"
+          href: "https://idr.openmicroscopy.org/about/download.html"
+        - text: "Image Tools Resource (ITR)"
+          href: "https://idr.openmicroscopy.org/about/itr.html"
+        - text: "Virtual Analysis Environment (VAE)"
+          href: "https://idr.openmicroscopy.org/jupyter"
+        - text: "Deployment"
+          href: "https://idr.openmicroscopy.org/about/deployment.html"
+    - text: "Submissions"
+      href: "https://idr.openmicroscopy.org/about/submission.html"
+      submenu:
+        - text: "Overview"
+          href: "https://idr.openmicroscopy.org/about/submission.html"
+        - text: "Screens"
+          href: "https://idr.openmicroscopy.org/about/screens.html"
+        - text: "Experiments"
+          href: "https://idr.openmicroscopy.org/about/experiments.html"
+  omero.web.gallery.subheading_html: "The Image Data Resource (IDR) is a public repository of image datasets from published scientific studies,<br/>where the community can submit, search and access high-quality bio-image data."
+  omero.web.gallery.footer_html: "IDR"
+  omero.web.gallery.category_queries:
+    latest:
+      label: "Most Recent"
+      index: 0
+      query: "LAST10:date"
+    timelapse:
+      label: "Time-lapse imaging"
+      index: 1
+      query: "Study Type:time OR Study Type:5D OR Study Type:3D-tracking"
+    lightsheet:
+      label: "Light sheet fluorescence microscopy"
+      index: 2
+      query: "Study Type:light sheet"
+    proteinlocalization:
+      label: "Protein localization studies"
+      index: 3
+      query: "Study Type:protein localization"
+    histology:
+      label: "Digital pathology imaging"
+      index: 4
+      query: "Study Type:histology"
+    yeast:
+      label: "Yeast studies"
+      index: 5
+      query: "Organism: Saccharomyces cerevisiae OR Organism:Schizosaccharomyces pombe"
+    humancellscreen:
+      label: "High-content screening (human)"
+      index: 6
+      query: "Organism:Homo sapiens AND Study Type:high content screen"
+  omero.web.gallery.filter_keys:
+  - label: "Name (IDR number)"
+    value: "Name"
+  - "Imaging Method"
+  - "License"
+  - "Organism"
+  - "Publication Authors"
+  - "Publication Title"
+  - "Screen Technology Type"
+  - "Screen Type"
+  - "Study Type"
+  omero.web.gallery.filter_mapr_keys:
+  - "antibody"
+  - "cellline"
+  - "gene"
+  - "phenotype"
+  - "sirna"
+  omero.web.gallery.super_categories:
+    cell:
+      label: "Cell - IDR"
+      title: "Welcome to Cell-IDR"
+      query: "Sample Type:cell"
+      image: "https://idr.openmicroscopy.org/webgateway/render_image/122770/0/0/"
+    tissue:
+      label: "Tissue - IDR"
+      title: "Welcome to Tissue-IDR"
+      query: "Sample Type:tissue"
+      image: "https://idr.openmicroscopy.org/webgateway/render_image_region/5470164/0/0/?region=1024,1024,696,520"
+  omero.web.gallery.title: "Welcome to IDR"

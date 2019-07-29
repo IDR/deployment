@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Snapshot IDR OpenStack volumes and instances
+# Snapshot IDR OpenStack volumes
 
 # Attempt to continue on error
 #set -e
@@ -12,21 +12,7 @@ fi
 
 vm_prefix="$1"
 today=$(date +%Y%m%d)
-vm_errors=0
 vol_errors=0
-
-for vm in \
-        database \
-        omeroreadwrite \
-        proxy \
-        management \
-        ; do
-    server="$vm_prefix-$vm"
-    echo "Snapshotting server $server"
-    openstack server image create --name "$server-$today" "$server" -f yaml
-    [ $? -eq 0 ] || let vm_errors++
-    echo
-done
 
 for vol in \
         database-db \
@@ -40,11 +26,7 @@ for vol in \
     echo
 done
 
-let errors=($vm_errors + $vol_errors)
-if [ $vm_errors -ne 0 ]; then
-    echo "ERROR: $vm_errors server snapshots failed"
-fi
 if [ $vol_errors -ne 0 ]; then
     echo "ERROR: $vol_errors volume snapshots failed"
+    exit $vol_errors
 fi
-exit $errors

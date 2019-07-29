@@ -9,7 +9,7 @@
     {{ idr_environment | default('idr') }}-bastion-hosts
 
   roles:
-  - role: openmicroscopy.hosts-populate
+  - role: ome.hosts_populate
     hosts_populate_openstack_groups:
     - "{{ idr_environment | default('idr') }}-hosts"
     hosts_populate_regex_alias: "^[^-]+-(.+)"

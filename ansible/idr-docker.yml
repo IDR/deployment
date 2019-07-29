@@ -5,7 +5,7 @@
     {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
-    - role: openmicroscopy.docker
+    - role: ome.docker
       # Upstream requires additional kubernetes configuration
       docker_install_upstream: False
       docker_use_ipv4_nic_mtu: True
@@ -31,8 +31,8 @@
     - volumes
 
   roles:
-  - role: openmicroscopy.versioncontrol-utils
-  - role: openmicroscopy.nfs-share
+  - role: ome.versioncontrol_utils
+  - role: ome.nfs_share
     nfs_shares:
       /data/mineotaur:
       - host: "*"

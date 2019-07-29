@@ -16,7 +16,7 @@
 
   roles:
 
-  - role: openmicroscopy.nfs-share
+  - role: ome.nfs_share
     nfs_shares:
       /data/OMERO:
       - host: "*"
@@ -30,7 +30,7 @@
         options: 'ro'
 
   # Include restart handlers
-  - role: openmicroscopy.omero-common
+  - role: ome.omero_common
 
   tasks:
   # Lock down the read-write node in the read-only cluster
@@ -55,7 +55,7 @@
 
   roles:
   # Use the same paths as on the omeorreadwrite server to reduce confusion
-  - role: openmicroscopy.nfs-mount
+  - role: ome.nfs_mount
     nfs_share_mounts:
     - path: /data/OMERO-readonly
       location: "{{ omero_fileserver_host_ansible }}:/data/OMERO"
@@ -68,7 +68,7 @@
       opts: ro,soft
 
   # Include restart handlers
-  - role: openmicroscopy.omero-common
+  - role: ome.omero_common
 
   tasks:
 
@@ -183,7 +183,7 @@
     {{ idr_environment | default('idr') }}-omeroreadonly-hosts
 
   roles:
-  - role: openmicroscopy.omero-server
+  - role: ome.omero_server
 
   tasks:
     - name: Override Bio-Formats artifacts in lib/server

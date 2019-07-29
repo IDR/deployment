@@ -1,6 +1,11 @@
 # Parameters for the front-end IDR web proxy
 # This includes OMERO.web and Jupyter
 
+######################################################################
+# Maintenance flag and URI
+omero_maintenance_flag: /srv/www/omero-maintenance.flag
+omero_maintenance_uri: /about/omero-maintenance.html
+
 
 ######################################################################
 # nginx and SSL
@@ -41,22 +46,35 @@ _nginx_proxy_omero_locations:
 - /webgateway/get_thumbnail*
 - /webclient/api/*
 - /webclient/search/*
-- /mapr/*
+- /api/*
+# /mapr/* is handled separately due to timeouts
 # TODO: Does iviewer need to be cached?
 #- /iviewer/*
+# Gallery is hosted at /
+- /gallery-api/*
 
 _nginx_proxy_backends_omero:
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
+  cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
+- name: omeromapr
+  location: ~ /mapr/*
+  server: http://omeroreadonly
   cache_validity: 180d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly
-  cache_validity: 30d
+  cache_validity: 1d
 - name: omero
   location: /
   server: http://omeroreadonly
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 
 _nginx_proxy_backends_grafana_render:
 - name: grafanarender
@@ -105,9 +123,10 @@ nginx_proxy_cache_match_uri:
 #- '"~webclient/api/paths_to_object*"'
 - '"~web(client|gateway)/(metadata|render)_*"'
 - '"~web(client|gateway)/get_thumbnail*"'
-- '"~webclient/api/*"'
+- '"~(webclient/)?api/*"'
 - '"~static/*"'
 - '"~mapr/*"'
+- '"~gallery-api/*"'
 - '"~grafana/*"'
 
 #nginx_proxy_cache_match_arg:
@@ -150,7 +169,7 @@ nginx_proxy_caches:
   keysize: 320m
   inactive: 180d
   match:
-  - '"~webclient/api/*"'
+  - '"~(webclient/)?api/*"'
 - name: omeromapr
   maxsize: 5g
   keysize: 100m
@@ -207,9 +226,7 @@ nginx_proxy_direct_locations:
 # TODO: change to 301 when we're happy
 - location: "= /webclient"
   redirect302: /webclient/?experimenter=-1
-- location: "= /"
-  redirect302: /about
-  # Block webclient login
+# Block webclient login
 - location: "^~ /webclient/login"
   redirect302: /webclient/?experimenter=-1
 - location: "^~ /about"
@@ -224,6 +241,22 @@ nginx_proxy_direct_locations:
   alias: /srv/www/letsencrypt/challenge
 
 
+# CORS: basically allow any cross-site since this is public read-only
+# Always set a header:
+# - Return the client's header (should be the requesting domain) if one given
+# - "*" otherwise
+nginx_proxy_additional_maps:
+- from: $http_origin
+  to: $allow_origin
+  mapvalues:
+  - "default *"
+# For now unconditionally return "*" in the Origin header
+# Replace with this line to return the provided header (but be aware it may be
+# necessary to return addiitonal headers)
+#  - "~. $http_origin"
+  - "~. *"
+
+
 ######################################################################
 # Additional sites/virtualhosts
 _nginx_proxy_sites:
@@ -231,6 +264,9 @@ _nginx_proxy_sites:
   # This enables the default site (configured using the global
   # nginx_proxy_* variables):
   - nginx_proxy_is_default: True
+    # Only add this CORS header to the default public site
+    nginx_proxy_additional_directives:
+    - "add_header Access-Control-Allow-Origin $allow_origin"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:
@@ -240,15 +276,15 @@ _nginx_proxy_sites:
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite
@@ -260,15 +296,15 @@ _nginx_proxy_sites:
     nginx_proxy_ssl: False
     nginx_proxy_backends:
     - name: omerocached
-      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
+      location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite
-      cache_validity: 180d
+      cache_validity: 1d
       # For populating the cache we need to increase the default timeout
       read_timeout: 600
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
-      cache_validity: 30d
+      cache_validity: 1d
     - name: omero
       location: /
       server: http://omeroreadwrite
@@ -321,13 +357,13 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2019.02.26
+idr_openmicroscopy_org_version: 2019.07.09
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: f9a51480e0d4bbda6088448f5da9e51ea87fffcd31ef0ba5944c3fb700c8c6f0
+deploy_archive_sha256: 392983dcf3b5754f4510e9ac404a48983d4f0b7a5f2870243de4084d97030803
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

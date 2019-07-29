@@ -3,7 +3,7 @@
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 
   roles:
-  - role: openmicroscopy.deploy_archive
+  - role: ome.deploy_archive
     become: yes
 
   tasks:

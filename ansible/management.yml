@@ -9,8 +9,8 @@
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
   roles:
-  - role: openmicroscopy.basedeps  # munin requires EPEL
-  - role: openmicroscopy.munin
+  - role: ome.basedeps  # munin requires EPEL
+  - role: ome.munin
     munin_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
     munin_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
     munin_slack_username: "{{ idr_environment | default('idr') }} Munin Notification"
@@ -56,8 +56,8 @@
     {{ idr_environment | default('idr') }}-dockerworker-hosts
     {{ idr_environment | default('idr') }}-management-hosts
   roles:
-  - role: openmicroscopy.basedeps  # munin-node requires EPEL
-  - role: openmicroscopy.munin-node
+  - role: ome.basedeps  # munin-node requires EPEL
+  - role: ome.munin_node
     munin_node_allowed_ips:
     - '^192\.168\.\d+\.\d+$'
 
@@ -79,7 +79,7 @@
       omero_logmonitor_server_name: "{{ short_hostname.stdout }}"
 
   roles:
-  - role: openmicroscopy.omero-logmonitor
+  - role: ome.omero_logmonitor
     omero_logmonitor_slack_token: "{{ idr_secret_omero_logmonitor_slack_token | default(None) }}"
     omero_logmonitor_slack_channel: idr-logs-{{ idr_environment | default('idr') }}
 
@@ -90,7 +90,7 @@
     {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
-  - role: openmicroscopy.docker-slack-notifier
+  - role: ome.docker_slack_notifier
     docker_slack_notifier_channel: "#idr-logs-{{ idr_environment | default('idr') }}"
     docker_slack_notifier_username: "{{ ansible_hostname }}"
     docker_slack_notifier_icon: ":docker:"

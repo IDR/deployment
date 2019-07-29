@@ -7,8 +7,6 @@
 # Shared variables
 
 idr_omero_release: "5.5.1"
-idr_omero_ice_version: "3.6"
-idr_omero_upgrade: True
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -38,9 +36,6 @@ fluentd_source_configs:
 
 # This refers to a custom IDR release URL, not an official OMERO version
 omero_server_release: "{{ idr_omero_release }}"
-# Upgrades are normally disabled, uncomment if you want to upgrade OMERO:
-omero_server_upgrade: "{{ idr_omero_upgrade }}"
-omero_server_ice_version: "{{ idr_omero_ice_version }}"
 
 # Must be defined outside
 omero_server_dbhost: "{{ omero_db_host_ansible }}"
@@ -111,9 +106,6 @@ idr_omero_web_public_url_filters:
 
 
 omero_web_release: "{{ idr_omero_release }}"
-# Upgrades are normally disabled, uncomment if you want to upgrade OMERO:
-omero_web_upgrade: "{{ idr_omero_upgrade }}"
-omero_web_ice_version: "{{ idr_omero_ice_version }}"
 
 omero_web_config_set:
   # web

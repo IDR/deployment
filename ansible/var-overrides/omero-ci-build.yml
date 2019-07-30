@@ -4,5 +4,4 @@
 ######################################################################
 
 idr_omero_release: OMERO-build
-idr_omero_upgrade: True
 idr_omero_omego_additional_args: "--ci https://idr-ci.openmicroscopy.org/jenkins/"

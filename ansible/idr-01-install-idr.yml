@@ -2,8 +2,7 @@
 # environment. This does not run any storage/networking/cloud specific
 # tasks, nor does it run playbooks requiring private configuration
 
-- include: idr-local-users.yml
-- include: idr-bastion.yml
+- include: idr-hosts.yml
 
 - include: idr-omero.yml
 - include: idr-omero-web.yml

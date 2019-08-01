@@ -6,11 +6,11 @@
 - hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   roles:
+  - role: ome.sudoers
+
+  - role: ome.local_accounts
+
   - role: ome.hosts_populate
     hosts_populate_openstack_groups:
     - "{{ idr_environment | default('idr') }}-hosts"
     hosts_populate_regex_alias: "^[^-]+-(.+)"
-
-  - role: ome.sudoers
-
-  - role: ome.local_accounts

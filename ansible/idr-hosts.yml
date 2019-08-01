@@ -14,3 +14,7 @@
     hosts_populate_openstack_groups:
     - "{{ idr_environment | default('idr') }}-hosts"
     hosts_populate_regex_alias: "^[^-]+-(.+)"
+    tags:
+      # Updating /etc/hosts in Docker leads to 'Device or resource busy' error
+      # https://docs.docker.com/network/links/#updating-the-etchosts-file
+      - skip_if_molecule_docker

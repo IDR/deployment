@@ -1,12 +1,10 @@
-# Tasks specific to bastion hosts
+# Tasks populating the hosts file
 
-- hosts: >
-    {{ idr_environment | default('idr') }}-hosts
+- hosts: "{{ idr_environment | default('idr') }}-hosts"
 # Load hostvars
 
 # Setup /etc/hosts on bastion hosts
-- hosts: >
-    {{ idr_environment | default('idr') }}-bastion-hosts
+- hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   roles:
   - role: ome.hosts_populate

@@ -1,9 +1,8 @@
-# Tasks populating the hosts file
+# Tasks setting up the hosts (/etc/hosts, sudoers, local users)
 
 - hosts: "{{ idr_environment | default('idr') }}-hosts"
 # Load hostvars
 
-# Setup /etc/hosts on bastion hosts
 - hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   roles:
@@ -11,3 +10,7 @@
     hosts_populate_openstack_groups:
     - "{{ idr_environment | default('idr') }}-hosts"
     hosts_populate_regex_alias: "^[^-]+-(.+)"
+
+  - role: ome.sudoers
+
+  - role: ome.local_accounts

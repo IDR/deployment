@@ -33,6 +33,9 @@ nginx_proxy_upstream_servers:
 - name: omeroreadonly
   balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
+- name: omeroreadonlywebsockets
+  balance: ip_hash
+  servers: "{{ omero_omeroreadonly_hosts_reserved | map('regex_replace', '^(.*)$', '\\1:4065') | sort }}"
 - name: omeroreadwrite
   servers: "{{ omero_omeroreadwrite_hosts }}"
 
@@ -76,6 +79,13 @@ _nginx_proxy_backends_omero:
   maintenance_flag: "{{ omero_maintenance_flag }}"
   maintenance_uri: "{{ omero_maintenance_uri }}"
 
+_nginx_proxy_backends_omerowebsockets:
+- name: omerowebsockets
+  location: = /omero-ws
+  server: http://omeroreadonlywebsockets
+  websockets: True
+  read_timeout: 86400
+
 _nginx_proxy_backends_grafana_render:
 - name: grafanarender
   location: "^~ /grafana/"
@@ -90,8 +100,9 @@ _nginx_proxy_backends_prometheus_federate:
 
 nginx_proxy_backends: >
   {{ _nginx_proxy_backends_omero +
-    _nginx_proxy_backends_grafana_render +
-    _nginx_proxy_backends_prometheus_federate
+     _nginx_proxy_backends_omerowebsockets +
+     _nginx_proxy_backends_grafana_render +
+     _nginx_proxy_backends_prometheus_federate
   }}
 
 

@@ -153,7 +153,7 @@ def append_hostvars(hostvars, groups, key, server, namegroup=False):
     except KeyError:
         pass
 
-    for network, ports in server['addresses'].iteritems():
+    for network, ports in server['addresses'].items():
         if ansible_ssh_host:
             break
         for port in ports:
@@ -233,7 +233,7 @@ def update_ssh_proxy_host(hostvars):
     ssh_proxy_fmt = '-o ProxyCommand="ssh %s -W %%h:%%p -q %%r@%s"'
     ssh_proxy_ssh_args = os.getenv('OS_PROXY_SSH_ARGS', '')
 
-    for (h, server) in hostvars.iteritems():
+    for (h, server) in hostvars.items():
         networks = get_network_names(server)
         for network in networks:
             try:
@@ -247,7 +247,7 @@ def update_ssh_proxy_host(hostvars):
                 if ssh_ip:
                     network_ssh_proxy[network] = ssh_ip
 
-    for (h, server) in hostvars.iteritems():
+    for (h, server) in hostvars.items():
         if not is_ssh_proxy_host_required(server):
             continue
 

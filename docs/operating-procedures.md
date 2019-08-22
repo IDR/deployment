@@ -79,20 +79,21 @@ distribute the cache regeneration at the level of plates and datasets. The
 following SQL will generate a file `ids.txt` containing a list of all the
 objects:
 
-    $ bin/omero hql --limit -1 --ids-only --style csv 'select MIN(field.image.id) FROM WellSample AS field GROUP BY field.well.plate' > plates.txt
-    $ bin/omero hql --limit -1 --ids-only --style csv 'select d.id from Dataset d' > datasets_ids.txt
-    $ cat first_ids_per_plate.txt | cut -d ',' -f2 | sed -e 's/^/Image:/' > ids.txt 
-    $ cat datasets_ids.txt | cut -d ',' -f2 | sed -e 's/^/Dataset:/' >> ids.txt
+    $ /opt/omero/server/OMERO.server/bin/omero login public@localhost -w public
+    $ /opt/omero/server/OMERO.server/bin/omero hql --limit -1 --ids-only --style csv 'select MIN(field.image.id) FROM WellSample AS field GROUP BY field.well.plate' > plates.txt
+    $ /opt/omero/server/OMERO.server/bin/omero hql --limit -1 --ids-only --style csv 'select d.id from Dataset d' > datases.txt
+    $ cat plates.txt | cut -d ',' -f2 | sed -e 's/^/Image:/' > ids.txt 
+    $ cat datasets.txt | cut -d ',' -f2 | sed -e 's/^/Dataset:/' >> ids.txt
 
 The cache file regeneration can be started using the GNU parallel utility 
-using the following command:
+within a screen environment using the following command:
 
-    $ parallel --eta --sshloginfile nodes -a ids.txt --results /tmp/cache/ -j10 '/opt/omero/server/OMERO.server/bin/omero render -s localhost -u public -w public test --force'
+    $ screen -dmS cache parallel --eta --sshloginfile nodes -a ids.txt --results /tmp/cache/ -j10 '/opt/omero/server/OMERO.server/bin/omero render -s localhost -u public -w public test --force'
 
 If using a recent version of GNU parallel with the BDB-CSV module, it is
 possible to create a CSV output of the results:
 
-    $ parallel --eta --sshloginfile nodes -a ids.txt --results /tmp/cache/ --sqlandworker csv:////%2Ftmp%2Fcache.csv -j10 '/opt/omero/server/OMERO.server/bin/omero render -s localhost -u public -w public test --force'
+    $ screen -dmS cache parallel --eta --sshloginfile nodes -a ids.txt --results /tmp/cache/ --sqlandworker csv:////%2Ftmp%2Fcache.csv -j10 '/opt/omero/server/OMERO.server/bin/omero render -s localhost -u public -w public test --force'
 
 ## Analysis IDR
 

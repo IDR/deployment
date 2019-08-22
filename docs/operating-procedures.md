@@ -71,8 +71,7 @@ Bio-Formats cache regeneration makes use of the
 
 The existing Bio-Formats cache can be moved from the read-write server as:
 
-    $ sudo mkdir /data/BioFormatsCache/backup
-    $ sudo mv /data/BioFormatsCache/* /data/BioFormatsCache/backup
+    $ sudo rm -rf /data/BioFormatsCache/*
 
 For very large databases with millions of filesets, it is preferable to
 distribute the cache regeneration at the level of plates and datasets. The

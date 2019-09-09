@@ -171,7 +171,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - omero-mapr==0.3.0
 - omero-iviewer==0.7.1
-- omero-gallery==3.2.0a7
+- omero-gallery==3.2.0a8
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
@@ -410,7 +410,7 @@ omero_web_apps_config_set:
   omero.web.viewer.view: omero_iviewer.views.index
   omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
   omero.web.gallery.top_left_logo:
-    src: "http://idr.openmicroscopy.org/about/img/logos/logo-idr.svg"
+    src: "https://idr.openmicroscopy.org/about/img/logos/logo-idr.svg"
   omero.web.gallery.top_right_links:
     - text: "About"
       href: "https://idr.openmicroscopy.org/about/index.html"
@@ -497,4 +497,9 @@ omero_web_apps_config_set:
       title: "Welcome to Tissue-IDR"
       query: "Sample Type:tissue"
       image: "https://idr.openmicroscopy.org/webgateway/render_image_region/5470164/0/0/?region=1024,1024,696,520"
-  omero.web.gallery.title: "Welcome to IDR"
+  omero.web.gallery.title: "IDR: Image Data Resource"
+  omero.web.gallery.heading: "Welcome to IDR"
+  omero.web.gallery.study_short_name:
+  - key: "Name"
+    regex: "^(.*?)-.*?(.)$"
+    template: "$1$2"

@@ -87,7 +87,6 @@
       idr_vm_flavour: "{{ vm_flavour }}"
       idr_vm_proxy: True
       idr_vm_bastion: True
-      idr_vm_assign_floating_ip: True
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
       idr_vm_security_groups:

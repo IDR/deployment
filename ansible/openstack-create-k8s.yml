@@ -139,7 +139,6 @@
       idr_vm_flavour: "{{ vm_flavour }}"
       #idr_vm_proxy: True
       idr_vm_bastion: True
-      idr_vm_assign_floating_ip: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-k8sproxy-hosts"
       - "{{ idr_environment_idr }}-hosts"

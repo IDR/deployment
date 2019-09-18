@@ -5,7 +5,7 @@ services:
   - docker
 
 install:
-  - pip install "ome-ansible-molecule<0.5"
+  - pip install "ome-ansible-molecule<0.5" testinfra==2.1.0
 
 script:
   # TODO: molecule will only run ansible-lint on the target playbook,

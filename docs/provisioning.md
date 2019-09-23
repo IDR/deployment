@@ -72,7 +72,7 @@ Ensure you can login to OpenStack from the command line using [an OpenStack RC f
 
     ansible-playbook -i localhost, --diff openstack-create-infrastructure.yml
 
-This playbook will create a set of VMs on the OpenStack cloud. You can
+This playbook will create a set of VMs on the OpenStack cloud. You must
 associate the proxy host to a floating IP either usin the OpenStack UI or via
 the `openstack` command-line interface:
 

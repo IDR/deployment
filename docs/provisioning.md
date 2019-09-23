@@ -72,14 +72,18 @@ Ensure you can login to OpenStack from the command line using [an OpenStack RC f
 
     ansible-playbook -i localhost, --diff openstack-create-infrastructure.yml
 
+This playbook will create a set of VMs on the OpenStack cloud. You can
+associate the proxy host to a floating IP either usin the OpenStack UI or via
+the `openstack` command-line interface:
+
+    $ openstack floating ip list
+    $ openstack server add floating ip <proxy_server_name> <ip>
+
 Ensure this playbook successfully runs to completion before [deploying the IDR](deployment.md).
 
 Warning: At present the `nova` command may be used to [attach additional network interfaces to instances](https://github.com/IDR/ansible-role-openstack-idr-instance-network).
 `nova` does not support [`clouds.yaml`](http://docs.openstack.org/developer/os-client-config/).
 This will be fixed when the `openstack` command-line client supports this feature.
-
-Occasionally you may see misleading such as `Quota exceeded for resources: ['floatingip'].`
-If this happens manually associate a floating IP with the idr-proxy server, and re-run the playbook.
 
 
 ## Other platforms

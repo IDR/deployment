@@ -59,7 +59,6 @@
     idr_vm_name: "{{ idr_environment_idr }}-ftp"
     idr_vm_image: "{{ vm_image }}"
     idr_vm_flavour: "{{ vm_flavour }}"
-    idr_vm_assign_floating_ip: True
     idr_vm_bastion: True
     idr_vm_extra_groups:
     - "{{ idr_environment_idr }}-ftp-hosts"

@@ -51,6 +51,11 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
 
+omero_server_virtualenv: true
+omero_server_python_addons:
+- omero-cli-render==0.4.3
+- omero-metadata==0.4.1
+
 omero_server_config_set:
   omero.db.poolsize: 25
   omero.jvmcfg.heap_size.blitz: "24G"

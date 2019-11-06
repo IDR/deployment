@@ -114,8 +114,8 @@ if __name__ == '__main__':
               '  (have you snapshotted the instances and volumes?): ')
     if r == 'yes':
         for c in commands:
-            print c
+            print(c)
             c()
     else:
-        print 'Aborting'
+        print('Aborting')
         sys.exit(1)

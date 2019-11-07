@@ -6,7 +6,8 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "5.5.1"
+idr_omero_release: OMERO-build
+omero_server_omego_additional_args: "--ci merge-ci"
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:

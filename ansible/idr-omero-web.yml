@@ -11,15 +11,15 @@
   # Vars are in group_vars/omero-hosts.yml
 
   tasks:
-  - name: Patch OMERO.web so root / goes to gallery
-    become: yes
-    patch:
-      basedir: "{{ omero_web_basedir }}/OMERO.web/lib/python"
-      # https://patch-diff.githubusercontent.com/raw/openmicroscopy/openmicroscopy/pull/6046.diff
-      src: files/patches/pr6046-omeroweb-urls.patch
-      strip: 4
-    notify:
-    - restart omero-web
+    # - name: Patch OMERO.web so root / goes to gallery
+    # become: yes
+    # patch:
+    #   basedir: "{{ omero_web_basedir }}/OMERO.web/lib/python"
+    #   # https://patch-diff.githubusercontent.com/raw/openmicroscopy/openmicroscopy/pull/6046.diff
+    #   src: files/patches/pr6046-omeroweb-urls.patch
+    #   strip: 4
+    # notify:
+    # - restart omero-web
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
 

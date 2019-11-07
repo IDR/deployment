@@ -36,8 +36,9 @@
 - src: ome.hosts_populate
   version: 0.2.1
 
-- src: ome.ice
-  version: 3.0.0
+- name: ome.ice
+  src: https://github.com/ome/ansible-role-ice/archive/811c373c804c9405ff1fe138682358f1f7412a02.tar.gz
+  version: 811c373c804c9405ff1fe138682358f1f7412a02
 
 - src: ome.iptables_raw
   version: 0.2.1
@@ -90,17 +91,23 @@
 - src: ome.omero_python_deps
   version: 2.0.1
 
-- src: ome.omero_server
-  version: 2.1.1
+# https://github.com/ome/ansible-role-omero-server/pull/40
+- name: ome.omero_server
+  src: https://github.com/ome/ansible-role-omero-server/archive/06bd02493b0afd5ee2c74f773fbb08b550ed82a2.tar.gz
+  version: 06bd02493b0afd5ee2c74f773fbb08b550ed82a2
 
 - src: ome.omero_user
   version: 0.1.2
 
-- src: ome.omero_web
-  version: 2.0.4
+# https://github.com/ome/ansible-role-omero-web/pull/26
+- name: ome.omero_web
+  src: https://github.com/ome/ansible-role-omero-web/archive/455e0965fad4a7e4023f263375a567c0d0629d9c.tar.gz
+  version: 455e0965fad4a7e4023f263375a567c0d0629d9c
 
-- src: ome.omero_web_apps
-  version: 0.2.0
+# https://github.com/ome/ansible-role-omero-web-apps/pull/7
+- name: ome.omero_web_apps
+  src: https://github.com/ome/ansible-role-omero-web-apps/archive/c684f7c15c99b7cf3aed87f36a321ba6f5cb9010.tar.gz
+  version: c684f7c15c99b7cf3aed87f36a321ba6f5cb9010
 
 - src: ome.openstack_volume_storage
   version: 1.1.1

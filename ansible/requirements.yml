@@ -85,13 +85,13 @@
   version: 2.0.1
 
 - src: ome.omero_server
-  version: 2.0.6
+  version: 2.1.1
 
 - src: ome.omero_user
   version: 0.1.2
 
 - src: ome.omero_web
-  version: 2.0.2
+  version: 2.0.4
 
 - src: ome.omero_web_apps
   version: 0.2.0

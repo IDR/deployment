@@ -2,6 +2,6 @@
 # Some of this requires private configuration information
 
 - include: management.yml
-- include: management-prometheus.yml
-- include: management-grafana.yml
+# - include: management-prometheus.yml
+# - include: management-grafana.yml
 - include: management-fluentd.yml

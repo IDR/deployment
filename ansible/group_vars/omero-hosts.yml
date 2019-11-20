@@ -6,8 +6,8 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: OMERO-build
-omero_server_omego_additional_args: "--ci merge-ci"
+idr_omero_server_release: 5.6.0-m1
+idr_omero_web_release: 5.6.dev4
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -19,8 +19,6 @@ idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 
 ice_install_devel: false
 ice_install_python: false
-# If you want to speed up Ice installation use a precompiled IcePy:
-ice_python_wheel: https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.1.0/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
 # If you're using a CI build you might need to disable omego SSL verification
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
@@ -37,8 +35,7 @@ fluentd_source_configs:
 ######################################################################
 # openmicroscopy.omero-server role vars
 
-# This refers to a custom IDR release URL, not an official OMERO version
-omero_server_release: "{{ idr_omero_release }}"
+omero_server_release: "{{ idr_omero_server_release }}"
 
 omero_server_python3: true
 
@@ -56,7 +53,6 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
 
-omero_server_virtualenv: true
 omero_server_python_addons:
 - omero-cli-render==0.4.3
 - omero-metadata==0.4.1
@@ -119,7 +115,7 @@ idr_omero_web_public_url_filters:
 - webgateway/(?!(archived_files|download_as))
 
 
-omero_web_release: "{{ idr_omero_release }}"
+omero_web_release: "{{ idr_omero_web_release }}"
 
 omero_web_config_set:
   # web
@@ -185,11 +181,11 @@ omero_web_config_set:
 
 omero_web_apps_packages:
 - omero-mapr==0.3.2
-# - omero-iviewer==0.8.1
-- omero-gallery==3.2.0a8
+- omero-iviewer==0.9.0dev1
+- omero-gallery==3.3.dev1
 omero_web_apps_names:
 - omero_mapr
-# - omero_iviewer
+- omero_iviewer
 - omero_gallery
 
 omero_web_apps_top_links:
@@ -272,16 +268,16 @@ omero_web_apps_ui_metadata_panes:
 
 # Additional plugin config
 # append...
-# omero_web_apps_config_append:
-#   omero.web.open_with:
-#   - - omero_iviewer
-#     - omero_iviewer_index
-#     - script_url: omero_iviewer/openwith.js
-#       supported_objects:
-#       - image
-#       - dataset
-#       - well
-#       label: OMERO.iviewer
+omero_web_apps_config_append:
+  omero.web.open_with:
+  - - omero_iviewer
+    - omero_iviewer_index
+    - script_url: omero_iviewer/openwith.js
+      supported_objects:
+      - image
+      - dataset
+      - well
+      label: OMERO.iviewer
 
 # set...
 omero_web_apps_config_set:
@@ -431,7 +427,7 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
-  # omero.web.viewer.view: omero_iviewer.views.index
+  omero.web.viewer.view: omero_iviewer.views.index
   omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
   omero.web.gallery.top_left_logo:
     src: "https://idr.openmicroscopy.org/about/img/logos/logo-idr.svg"

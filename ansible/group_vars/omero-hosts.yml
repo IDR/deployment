@@ -180,7 +180,7 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.3.2
+- omero-mapr==0.4.dev1
 - omero-iviewer==0.9.0dev1
 - omero-gallery==3.3.dev1
 omero_web_apps_names:

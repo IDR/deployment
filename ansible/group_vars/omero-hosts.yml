@@ -6,8 +6,8 @@
 ######################################################################
 # Shared variables
 
-idr_omero_server_release: 5.6.0-m1
-idr_omero_web_release: 5.6.dev4
+idr_omero_server_release: 5.6.0-m2
+idr_omero_web_release: 5.6.dev5
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:

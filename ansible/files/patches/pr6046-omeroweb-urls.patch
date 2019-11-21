@@ -1,8 +1,8 @@
-diff --git a/components/tools/OmeroWeb/omeroweb/urls.py b/components/tools/OmeroWeb/omeroweb/urls.py
-index 8e10516e918..cad9195b8c2 100755
---- a/components/tools/OmeroWeb/omeroweb/urls.py
-+++ b/components/tools/OmeroWeb/omeroweb/urls.py
-@@ -85,9 +85,15 @@ def redirect_urlpatterns():
+diff --git a/omeroweb/urls.py b/omeroweb/urls.py
+index 71b2e05e8..48e5ae387 100755
+--- a/omeroweb/urls.py
++++ b/omeroweb/urls.py
+@@ -84,7 +84,12 @@ for app in settings.ADDITIONAL_APPS:
      except ImportError:
          pass
      else:
@@ -13,9 +13,6 @@ index 8e10516e918..cad9195b8c2 100755
 +            regex = r'^'
 +        else:
 +            regex = '^(?i)%s/' % label
-         urlpatterns += patterns('', (regex, include(urlmodule)),)
+         urlpatterns.append(url(regex, include(urlmodule)))
  
-+
- urlpatterns += patterns(
-     '',
-     (r'^favicon\.ico$',
+ urlpatterns += [

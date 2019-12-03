@@ -35,7 +35,7 @@ nginx_proxy_upstream_servers:
   servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
 - name: omeroreadonlywebsockets
   balance: ip_hash
-  servers: "{{ omero_omeroreadonly_hosts_reserved | map('regex_replace', '^(.*)$', '\\1:4065') | sort }}"
+  servers: "{{ omero_omeroreadonly_hosts_external | map('regex_replace', '^(.*)$', '\\1:4065') | sort }}"
 - name: omeroreadwrite
   servers: "{{ omero_omeroreadwrite_hosts }}"
 

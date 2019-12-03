@@ -21,15 +21,30 @@
 
   pre_tasks:
 
+
+
+  - name: Get all omeroreadonly IP
+    set_fact:
+      _omero_omeroreadonly_hosts: >-
+        {{
+          groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
+          map('extract', hostvars,
+            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
+        }}
+
   - name: Get omero IP
     set_fact:
       omero_omeroreadonly_hosts_reserved: >-
         {{
-          (
-          groups[idr_environment | default('idr') + '-omeroreadonly-hosts'] |
-          map('extract', hostvars,
-            ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | sort
-          )[:idr_backend_reserved_offset]
+          _omero_omeroreadonly_hosts[:idr_backend_reserved_offset]
+        }}
+      omero_omeroreadonly_hosts_external: >-
+        {{
+          _omero_omeroreadonly_hosts[
+            ([
+              idr_backend_reserved_offset,
+              _omero_omeroreadonly_hosts | length - 1
+            ] | min):]
         }}
       omero_omeroreadwrite_hosts: >-
         {{

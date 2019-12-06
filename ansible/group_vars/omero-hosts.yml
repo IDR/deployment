@@ -157,6 +157,9 @@ omero_web_config_set:
     omero: "@openmicroscopy"
   omero.web.sharing.opengraph:
     omero: "Open Microscopy"
+  # top-left logo
+  omero.web.top_logo: /about/img/logos/logo-idr-webclient.png
+  omero.web.top_logo_link: https://idr.openmicroscopy.org/
   # Clear the top links and metadata (They will be set later)
   omero.web.ui.top_links: []
   omero.web.ui.metadata_panes: []

@@ -53,4 +53,4 @@ def test_get_image_nocache():
     assert r.status_code == 200
     assert r.headers['Content-Type'] == 'image/jpeg'
     assert len(r.content) > 50000
-    assert r.content[:2] == '\xff\xd8'
+    assert r.content[:2] == b'\xff\xd8'

@@ -56,6 +56,21 @@ scenario:
     - dependency
   converge_sequence:
     - converge
+  # lint needs dependency for iptables_raw_25 module
+  # Although it's not used by the ftp deployment it's still automatically
+  # linted
+  test_sequence:
+    - destroy
+    - dependency
+    - lint
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - destroy
 
 verifier:
   name: testinfra

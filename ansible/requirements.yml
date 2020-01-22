@@ -39,6 +39,9 @@
 - src: ome.ice
   version: 3.0.0
 
+- src: ome.iptables_raw
+  version: 0.2.1
+
 - src: ome.java
   version: 2.0.3
 

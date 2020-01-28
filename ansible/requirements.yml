@@ -75,8 +75,9 @@
 - src: ome.nginx
   version: 1.1.1
 
-- src: ome.nginx_proxy
-  version: 1.11.0
+- name: ome.nginx_proxy
+  src: https://github.com/manics/ansible-role-nginx-proxy.git
+  version: 178d379f964a79813d702a51c986f835449631fe
 
 - src: ome.omero_common
   version: 0.3.2

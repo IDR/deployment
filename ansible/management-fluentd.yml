@@ -113,7 +113,7 @@
       cleanup: True
       env:
         OLDER_THAN_IN_DAYS: "{{ elasticsearch_expire_logs_days }}"
-        INTERVAL_IN_HOURS: 24
+        INTERVAL_IN_HOURS: "24"
       networks:
       - name: fluent-es-kb
       state: started
@@ -124,10 +124,10 @@
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
     fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
     fluentd_elasticsearch_host: elasticsearch
-    fluentd_uid: 1010
+    fluentd_uid: "1010"
     elasticsearch_docker_image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"
     elasticsearch_curator_docker_image: "openmicroscopy/elasticsearch-curator:5.4.1"
-    elasticsearch_expire_logs_days: 14
+    elasticsearch_expire_logs_days: "14"
     fluentd_docker_image: "openmicroscopy/fluentd:0.1.0"
     kibana_docker_image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
 

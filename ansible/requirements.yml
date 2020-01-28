@@ -175,9 +175,6 @@
 ######################################################################
 # External development roles
 
-- src: ome.docker_slack_notifier
-  version: 0.0.4
-
 - src: ome.fluentd
   version: 0.2.2
 

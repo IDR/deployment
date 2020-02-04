@@ -6,11 +6,11 @@
 ######################################################################
 # Shared variables
 
-idr_omero_server_release: 5.6.0-m2
-idr_omero_web_release: 5.6.dev5
+idr_omero_server_release: 5.6.0
+idr_omero_web_release: 5.6.1
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
-  - omero-py>=5.6.dev5
+  - omero-py==5.6.0
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -57,8 +57,8 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
-- omero-cli-render==0.4.3
-- omero-metadata==0.4.1
+- omero-cli-render==0.5.0
+- omero-metadata==0.5.0
 
 omero_server_config_set:
   omero.db.poolsize: 25
@@ -83,6 +83,8 @@ omero_server_config_set:
 ######################################################################
 # Other dependent role vars
 
+java_versions:
+  - "11"
 # Install JDK to provide jstack
 java_jdk_install: True
 
@@ -183,9 +185,9 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.4.dev1
-- omero-iviewer==0.9.0dev1
-- omero-gallery==3.3.dev1
+- omero-mapr==0.4.0
+- omero-iviewer==0.9.0
+- omero-gallery==3.3.0
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer

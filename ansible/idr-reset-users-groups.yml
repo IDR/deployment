@@ -19,6 +19,15 @@
     set_fact:
       omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
 
+  # TODO: Remove when https://github.com/ome/omero-py/pull/175 is released
+  - name: Patch OMERO.py db password
+    become: yes
+    patch:
+      basedir: /opt/omero/server/venv3/lib/python3.6/site-packages
+      # https://patch-diff.githubusercontent.com/raw/openmicroscopy/openmicroscopy/pull/6046.diff
+      src: files/patches/pr175-omeropy-dbpassword.patch
+      strip: 1
+
   - name: Get omero public password
     set_fact:
       omero_user_web_public_password: "{{ idr_secret_public_password | default('public') }}"

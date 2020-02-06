@@ -82,16 +82,3 @@
   - role: ome.omero_logmonitor
     omero_logmonitor_slack_token: "{{ idr_secret_omero_logmonitor_slack_token | default(None) }}"
     omero_logmonitor_slack_channel: idr-logs-{{ idr_environment | default('idr') }}
-
-
-# Docker slack notifications
-- hosts: >
-    {{ idr_environment | default('idr') }}-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-dockerworker-hosts
-
-  roles:
-  - role: ome.docker_slack_notifier
-    docker_slack_notifier_channel: "#idr-logs-{{ idr_environment | default('idr') }}"
-    docker_slack_notifier_username: "{{ ansible_hostname }}"
-    docker_slack_notifier_icon: ":docker:"
-    docker_slack_notifier_token: "{{ idr_secret_management_slack_webhook | default(None) }}"

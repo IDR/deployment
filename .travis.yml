@@ -16,6 +16,7 @@ script:
     --exclude ./roles/kubernetes/
     --exclude ./vendor/
     --exclude ../kubespray/
+    --exclude idr-firewall.yml
     --exclude idr-kubernetes-apply.yml
     --exclude idr-reset-users-groups.yml
   - cd ansible; molecule test -s $SCENARIO

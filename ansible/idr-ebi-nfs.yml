@@ -1,19 +1,15 @@
-# Self-contained Ansible playbook for setting up the Embassy IDR NFS shares
+# Setup Embassy IDR NFS shares
 - hosts: >
     {{ idr_environment | default('idr') }}-ebi-nfs
 
-  tasks:
+  roles:
 
-  - name: Mount NFS shares
-    become: yes
-    mount:
-      fstype: nfs
-      name: "{{ item.dst }}"
-      # Removed rsize=8192,wsize=8192, this should be auto-negotiated
-      opts: timeo=14,intr,nolock
-      src: "{{ item.src }}"
-      state: mounted
-    with_items: "{{ ebi_nfs_mounts | default([]) }}"
+  - role: ome.nfs_mount
+    nfs_version: 3
+    nfs_mount_opts: timeo=14,intr,nolock,ro
+    nfs_share_mounts: "{{ ebi_nfs_mounts }}"
+
+  tasks:
 
   - name: Create storage base directory
     become: yes

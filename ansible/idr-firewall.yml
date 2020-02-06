@@ -1,0 +1,76 @@
+# Firewall configuration
+# The VMWare CentOS image has firewalld enabled by default
+
+- hosts: "{{ idr_environment | default('idr') }}-hosts"
+  tasks:
+
+    # This should allow all network traffic
+    - name: Disable firewalld
+      become: yes
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+      when: iptables_raw_disable_firewalld | default(True)
+
+
+- hosts: "{{ idr_environment | default('idr') }}-bastion-hosts"
+
+  roles:
+
+    - role: ome.iptables_raw
+
+  tasks:
+    # Allow:
+    # - all established/related in/out
+    # - all internal localhost connections
+    # - all internal traffic
+    # - ICMP echo (ping)
+    # - ssh incoming connections
+    # - Public IDR ports
+    - name: Iptables ssh and related
+      become: yes
+      iptables_raw_25:
+        name: default_and_idr_external
+        keep_unmanaged: no
+        rules: |
+          -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+          -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+          -A INPUT -i lo -j ACCEPT
+          -A INPUT -p tcp -s 10.0.0.0/8 -j ACCEPT
+          -A INPUT -p udp -s 10.0.0.0/8 -j ACCEPT
+          -A INPUT -p tcp -s 192.168.0.0/16 -j ACCEPT
+          -A INPUT -p udp -s 192.168.0.0/16 -j ACCEPT
+          -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+          -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+          -A INPUT -p tcp -m multiport --dports {{ idr_external_tcp_ports | join(',' ) }} -j ACCEPT
+        state: present
+        # Highest priority
+        weight: 0
+
+    # Use a low priority REJECT rule so that clients can detect when
+    # they've been rejected
+    # The alternative of setting a default DROP policy will leave them
+    # hanging until they timeout, though this may be preferable for public
+    # servers:
+    # http://www.chiark.greenend.org.uk/~peterb/network/drop-vs-reject
+    - name: Iptables default
+      become: yes
+      iptables_raw_25:
+        name: default_reject
+        rules: |
+          -A INPUT -j REJECT
+          -A FORWARD -j REJECT
+          -A OUTPUT -j ACCEPT
+        state: present
+        # Lowest priority
+        weight: 99
+
+  vars:
+    idr_external_tcp_ports:
+      - 80
+      - 443
+      - 873
+      - 4063
+      - 4064
+      - "14060:14079"

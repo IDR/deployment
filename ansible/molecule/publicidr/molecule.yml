@@ -87,6 +87,21 @@ scenario:
     - dependency
   converge_sequence:
     - converge
+  # lint needs dependency for iptables_raw_25 module
+  # Fixed in newer molecule: https://github.com/ansible/molecule/pull/2215
+  # https://github.com/ansible/molecule/blob/2.19/molecule/scenario.py#L63-L74
+  test_sequence:
+    - destroy
+    - dependency
+    - lint
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - destroy
 
 verifier:
   name: testinfra

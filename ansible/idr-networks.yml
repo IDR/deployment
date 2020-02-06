@@ -8,6 +8,7 @@
   roles:
   - role: ome.network_cloud_interfaces
     network_cloud_interface_regex: '^eth.*'
+    when: 'idr_provision_networks | default(True)'
 
 # All other hosts (e.g. those requiring NFS access on a separate network)
 - hosts: >
@@ -15,3 +16,4 @@
   roles:
   - role: ome.network_cloud_interfaces
     network_cloud_interface_regex: '^eth.*'
+    when: 'idr_provision_networks | default(True)'

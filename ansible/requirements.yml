@@ -40,7 +40,7 @@
   version: 4.0.0
 
 - src: ome.iptables_raw
-  version: 0.2.1
+  version: 0.3.0
 
 - src: ome.java
   version: 2.1.0

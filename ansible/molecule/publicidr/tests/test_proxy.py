@@ -45,8 +45,13 @@ def test_curl_headers(host, curl_args, expected_header):
     "/static/webgateway/img/ome.ico",
 ])
 def test_is_cached(host, path):
-    # Request twice to ensure it's cached
-    host.check_output('curl http://localhost%s' % path)
-    host.check_output('curl http://localhost%s' % path)
+    # Request twice to ensure it's cached.
+    # Can't use check_output because it attempts to decode result
+    r = host.run('curl -sSf http://localhost%s' % path)
+    assert r.rc == 0
+    assert len(r.stdout_bytes) > 500
+    r = host.run('curl -sSf http://localhost%s' % path)
+    assert r.rc == 0
+    assert len(r.stdout_bytes) > 500
     log = host.file("/var/log/nginx/access.log").content.decode()
     assert re.search('"GET %s HTTP/1.1" 200 .+ HIT -' % path, log)

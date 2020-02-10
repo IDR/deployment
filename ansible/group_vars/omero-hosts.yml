@@ -115,9 +115,12 @@ idr_omero_web_public_url_filters:
 - webadmin/myphoto/
 - mapr/
 - iviewer/
-- gallery-api/
 # Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
 - '$'
+- gallery-api/
+- gallery_settings/
+- cell/
+- tissue/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
 

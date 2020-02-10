@@ -75,6 +75,17 @@ provisioner:
     group_vars:
       omero-hosts:
         omero_server_systemd_require_network: False
+        # Need a valid account for testing web
+        idr_secret_public_user: root
+        idr_secret_public_password: omero
+    host_vars:
+      idr-omeroreadonly-docker:
+        # Insufficient resources to run two OMERO.server on travis so force
+        # the read-only OMERO.web to connect to the readwrite OMERO.server
+        idr_omeroreadonly_web_omero: >-
+          {{
+            hostvars[groups['idr-omeroreadwrite-hosts'].0].ansible_eth0.ipv4.address
+          }}
 
 scenario:
   name: publicidr

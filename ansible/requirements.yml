@@ -92,7 +92,7 @@
 
 # https://github.com/ome/ansible-role-omero-server/pull/40
 - src: ome.omero_server
-  version: 3.0.0
+  version: 3.1.0
 
 - src: ome.omero_user
   version: 0.1.2

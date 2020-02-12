@@ -90,14 +90,12 @@
 - src: ome.omero_python_deps
   version: 2.0.1
 
-# https://github.com/ome/ansible-role-omero-server/pull/40
 - src: ome.omero_server
   version: 3.1.0
 
 - src: ome.omero_user
   version: 0.1.2
 
-# https://github.com/ome/ansible-role-omero-web/pull/26
 - src: ome.omero_web
   version: 3.0.1
 

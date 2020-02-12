@@ -10,7 +10,7 @@
   # Vars are in group_vars/omero-hosts.yml
 
   tasks:
-  # TODO: port https://github.com/ome/openmicroscopy/pull/6094
+  # TODO: https://github.com/ome/omero-web/pull/123
   - name: Patch OMERO.web so root / goes to gallery
     become: yes
     patch:

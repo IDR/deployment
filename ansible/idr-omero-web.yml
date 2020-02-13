@@ -6,43 +6,19 @@
   roles:
   - role: ome.redis
   - role: ome.omero_web
-  - role: ome.omero_web_apps
 
   # Vars are in group_vars/omero-hosts.yml
 
   tasks:
+  # TODO: https://github.com/ome/omero-web/pull/123
   - name: Patch OMERO.web so root / goes to gallery
     become: yes
     patch:
-      basedir: "{{ omero_web_basedir }}/OMERO.web/lib/python"
+      basedir: "{{ omero_web_basedir }}/venv3/lib/python3.6/site-packages"
       # https://patch-diff.githubusercontent.com/raw/openmicroscopy/openmicroscopy/pull/6046.diff
       src: files/patches/pr6046-omeroweb-urls.patch
-      strip: 4
+      strip: 1
     notify:
     - restart omero-web
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
-
-
-# TODO: Replace with a template using
-# https://github.com/openmicroscopy/openmicroscopy/pull/5387
-- hosts: "{{ idr_environment | default('idr') }}-omeroreadwrite-hosts"
-
-  tasks:
-  - name: Set Nginx proxy timeout
-    become: yes
-    lineinfile:
-      insertafter: 'server\s*{'
-      path: /etc/nginx/conf.d/omero-web.conf
-      line: proxy_read_timeout {{ idr_omero_web_timeout }};
-      regexp: proxy_read_timeout\s+.*
-      state: present
-    notify:
-    - restart nginx
-
-  handlers:
-  - name: restart nginx
-    become: yes
-    service:
-      name: nginx
-      state: restarted

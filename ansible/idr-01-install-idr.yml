@@ -5,9 +5,6 @@
 - include: idr-hosts.yml
 
 - include: idr-firewall.yml
-  # TODO: enable this on extcloud05
-  # Currently only enabled for VMWare temporary tenancy
-  when: 'idr_enable_iptables_firewall | default(false)'
 
 - include: idr-omero.yml
 - include: idr-omero-web.yml

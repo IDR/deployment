@@ -6,7 +6,15 @@
 ######################################################################
 # Shared variables
 
-idr_omero_release: "5.5.1"
+idr_omero_server_release: 5.6.0
+idr_omero_web_release: 5.6.1
+# omero-web depends on omero-py but may not pin the latest release
+omero_web_python_addons:
+  - omero-py==5.6.0
+# ome.omero_server role installs omero-py but this may not be the latest release
+# TODO: This is an internal role variable, replace when we have a proper way
+# https://github.com/ome/ansible-role-omero-server/blob/3.1.0/defaults/main.yml#L89
+_omero_py_version: ==5.6.1
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -16,8 +24,8 @@ idr_bf_components:
 idr_bf_release: "0.6.1"
 idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 
-# If you want to speed up Ice installation use a precompiled IcePy:
-ice_python_wheel: https://github.com/ome/zeroc-ice-py-centos7/releases/download/0.1.0/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
+ice_install_devel: false
+ice_install_python: false
 # If you're using a CI build you might need to disable omego SSL verification
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
@@ -34,8 +42,9 @@ fluentd_source_configs:
 ######################################################################
 # openmicroscopy.omero-server role vars
 
-# This refers to a custom IDR release URL, not an official OMERO version
-omero_server_release: "{{ idr_omero_release }}"
+omero_server_release: "{{ idr_omero_server_release }}"
+
+omero_server_python3: true
 
 # Must be defined outside
 omero_server_dbhost: "{{ omero_db_host_ansible }}"
@@ -51,10 +60,9 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 
 omero_server_systemd_limit_nofile: 16384
 
-omero_server_virtualenv: true
 omero_server_python_addons:
-- omero-cli-render==0.4.3
-- omero-metadata==0.4.1
+- omero-cli-render==0.5.0
+- omero-metadata==0.5.0
 
 omero_server_config_set:
   omero.db.poolsize: 25
@@ -79,6 +87,8 @@ omero_server_config_set:
 ######################################################################
 # Other dependent role vars
 
+java_versions:
+  - "11"
 # Install JDK to provide jstack
 java_jdk_install: True
 
@@ -95,6 +105,8 @@ omero_user_system: omero-server
 ######################################################################
 # openmicroscopy.omero-web role vars
 
+omero_web_python3: true
+
 idr_omero_web_public_url_filters_webclient_exclude:
 - action
 - annotate_(file|tags|comment|rating|map)
@@ -107,12 +119,17 @@ idr_omero_web_public_url_filters:
 - webadmin/myphoto/
 - mapr/
 - iviewer/
+# Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
+- '$'
 - gallery-api/
+- gallery_settings/
+- cell/
+- tissue/
 - webclient/(?!({{ idr_omero_web_public_url_filters_webclient_exclude | join('|') }}))
 - webgateway/(?!(archived_files|download_as))
 
 
-omero_web_release: "{{ idr_omero_release }}"
+omero_web_release: "{{ idr_omero_web_release }}"
 
 omero_web_config_set:
   # web
@@ -128,10 +145,15 @@ omero_web_config_set:
   omero.web.secure_proxy_ssl_header:
     - HTTP_X_FORWARDED_PROTO_OMERO_WEB
     - https
+  omero.web.server_list:
+    # This is overridden in the molecule test, see molecule/publicidr/molecule.yml
+    - - "{{ idr_omeroreadonly_web_omero | default('localhost') }}"
+      - 4064
+      - omero
   # public user
   omero.web.public.enabled: True
   omero.web.public.server_id: 1
-  omero.web.public.user: public
+  omero.web.public.user: "{{ idr_secret_public_user | default('public') }}"
   omero.web.public.password: "{{ idr_secret_public_password | default('public') }}"
   omero.web.public.url_filter: "^/({{ idr_omero_web_public_url_filters | join('|') }})"
   omero.web.login_redirect:
@@ -172,14 +194,17 @@ omero_web_config_set:
   omero.web.user_dropdown: "{{ idr_omero_web_user_dropdown | default(true) }}"
   # Feedback
   omero.web.feedback.comment.enabled: False
+  # Nginx extra omero-web config
+  omero.web.nginx_server_extra_config: "{{ idr_omero_web_nginx_server_extra_config | default([]) }}"
+
 
 ######################################################################
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.3.2
-- omero-iviewer==0.8.1
-- omero-gallery==3.2.0a8
+- omero-mapr==0.4.0
+- omero-iviewer==0.9.0
+- omero-gallery==3.3.0
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer

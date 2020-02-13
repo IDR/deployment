@@ -1,23 +1,36 @@
 # Firewall configuration
-# The VMWare CentOS image has firewalld enabled by default
 
-- hosts: "{{ idr_environment | default('idr') }}-hosts"
+- hosts: >
+    {{ idr_environment | default('idr') }}-hosts
+    !bastion-hosts
+    !management-hosts
+
+  roles:
+    - role: ome.iptables_raw
+
   tasks:
-
-    # This should allow all network traffic
-    - name: Disable firewalld
+    - name: Iptables internal hosts allow all
       become: yes
-      service:
-        name: firewalld
-        state: stopped
-        enabled: no
-      when: iptables_raw_disable_firewalld | default(True)
+      iptables_raw_25:
+        name: default_accept
+        keep_unmanaged: no
+        rules: |
+          -A INPUT -j ACCEPT
+          -A FORWARD -j ACCEPT
+          -A OUTPUT -j ACCEPT
+        state: present
+        # Highest priority
+        weight: 0
+
+
+# Docker sets up its own rules, don't overwrite
+# - hosts: >
+#     {{ idr_environment | default('idr') }}-management-hosts
 
 
 - hosts: "{{ idr_environment | default('idr') }}-bastion-hosts"
 
   roles:
-
     - role: ome.iptables_raw
 
   tasks:

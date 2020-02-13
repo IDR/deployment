@@ -15,5 +15,4 @@
     become: yes
     file:
       path: /uod/idr
-      recurse: yes
       state: directory

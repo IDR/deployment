@@ -3,5 +3,5 @@
 #   -e @var-overrides/omero-ci-build.yml
 ######################################################################
 
-idr_omero_release: OMERO-build
+idr_omero_server_release: OMERO-build
 idr_omero_omego_additional_args: "--ci https://idr-ci.openmicroscopy.org/jenkins/"

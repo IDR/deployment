@@ -134,6 +134,7 @@ omero_web_release: "{{ idr_omero_web_release }}"
 omero_web_config_set:
   # web
   omero.web.api.max_limit: 1000
+  omero.web.api.absolute_url: https://idr.openmicroscopy.org/
   omero.web.application_server: wsgi-tcp
   omero.web.application_server.max_requests: 30000
   omero.web.wsgi_workers: 25

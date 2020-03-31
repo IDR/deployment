@@ -11,6 +11,9 @@
   roles:
   - role: ome.nfs_mount
     nfs_share_mounts:
-    - path: "{{ idr_mountpoint }}"
-      location: idr-data.openmicroscopy.org:/uod/idr
+    - path: "{{ idr_mountpoint }}/filesets"
+      location: idr-data.openmicroscopy.org:/uod/idr/filesets
+      opts: ro
+    - path: "{{ idr_mountpoint }}/incoming"
+      location: idr-data.openmicroscopy.org:/uod/idr/incoming
       opts: ro

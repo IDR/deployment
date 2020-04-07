@@ -175,6 +175,8 @@ omero_web_config_set:
     default:
       BACKEND: django_redis.cache.RedisCache
       LOCATION: redis://{{ omero_redis_host_ansible | default('127.0.0.1') }}:6379/0
+  # / goes to gallery
+  omero.web.root_application: gallery
   # social media
   omero.web.sharing.twitter:
     omero: "@openmicroscopy"

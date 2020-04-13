@@ -21,7 +21,7 @@ idr_bf_components:
   - formats-api
   - formats-bsd
   - formats-gpl
-idr_bf_release: "0.6.1"
+idr_bf_release: "0.6.3"
 idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 
 ice_install_devel: false

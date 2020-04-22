@@ -18,3 +18,8 @@
       # Updating /etc/hosts in Docker leads to 'Device or resource busy' error
       # https://docs.docker.com/network/links/#updating-the-etchosts-file
       - skip_if_molecule_docker
+
+  - role: ome.cli_utils
+
+  # This only affects the database hosts, the other hosts end up getting this as a dependency of other roles
+  - role: ome.selinux_utils

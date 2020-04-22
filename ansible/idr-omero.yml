@@ -44,7 +44,6 @@
 
   roles:
   - role: ome.basedeps
-  - role: ome.cli_utils
   - role: ome.versioncontrol_utils
   - role: ome.python_pydata
   - role: ome.analysis_tools

@@ -62,7 +62,7 @@
       opts: ro,soft
     - path: /data/BioFormatsCache
       location: "{{ omero_fileserver_host_ansible }}:/data/BioFormatsCache"
-      opts: rw,,soft,sync
+      opts: "{{ idr_bioformatscache_writeable | default('rw') }},soft,sync"
     - path: /data/idr-metadata
       location: "{{ omero_fileserver_host_ansible }}:/data/idr-metadata"
       opts: ro,soft

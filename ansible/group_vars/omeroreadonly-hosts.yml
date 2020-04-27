@@ -8,3 +8,7 @@ omero_server_dbpassword: "{{ idr_secret_postgresql_password_ro | default('omero'
 
 omero_server_datadir_manage: False
 idr_omero_web_user_dropdown: false
+
+# Set this to 'ro' to mount /data/BioFormatsCache on read-only servers as
+# read-only, default is 'rw'
+# idr_bioformatscache_readwrite:

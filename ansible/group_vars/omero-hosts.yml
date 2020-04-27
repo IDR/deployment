@@ -6,15 +6,19 @@
 ######################################################################
 # Shared variables
 
+# Force a downgrade from 5.6.1
+# https://github.com/ome/omero-server/issues/93
 idr_omero_server_release: 5.6.0
-idr_omero_web_release: 5.6.1
+omero_server_checkupgrade_comparator: '!='
+
+idr_omero_web_release: 5.6.3
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
-  - omero-py==5.6.0
+  - omero-py==5.6.2
 # ome.omero_server role installs omero-py but this may not be the latest release
 # TODO: This is an internal role variable, replace when we have a proper way
 # https://github.com/ome/ansible-role-omero-server/blob/3.1.0/defaults/main.yml#L89
-_omero_py_version: ==5.6.1
+_omero_py_version: ==5.6.2
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -175,6 +179,8 @@ omero_web_config_set:
     default:
       BACKEND: django_redis.cache.RedisCache
       LOCATION: redis://{{ omero_redis_host_ansible | default('127.0.0.1') }}:6379/0
+  # / goes to gallery
+  omero.web.root_application: gallery
   # social media
   omero.web.sharing.twitter:
     omero: "@openmicroscopy"
@@ -205,7 +211,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - omero-mapr==0.4.0
 - omero-iviewer==0.9.1
-- omero-gallery==3.3.0
+- omero-gallery==3.3.1
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
@@ -488,29 +494,33 @@ omero_web_apps_config_set:
       label: "Most Recent"
       index: 0
       query: "LAST10:date"
+    infection:
+      label: "Infection studies"
+      index: 1
+      query: "Study Type:infection"
     timelapse:
       label: "Time-lapse imaging"
-      index: 1
+      index: 2
       query: "Study Type:time OR Study Type:5D OR Study Type:3D-tracking"
     lightsheet:
       label: "Light sheet fluorescence microscopy"
-      index: 2
+      index: 3
       query: "Study Type:light sheet"
     proteinlocalization:
       label: "Protein localization studies"
-      index: 3
+      index: 4
       query: "Study Type:protein localization"
     histology:
       label: "Digital pathology imaging"
-      index: 4
+      index: 5
       query: "Study Type:histology"
     yeast:
       label: "Yeast studies"
-      index: 5
+      index: 6
       query: "Organism: Saccharomyces cerevisiae OR Organism:Schizosaccharomyces pombe"
     humancellscreen:
       label: "High-content screening (human)"
-      index: 6
+      index: 7
       query: "Organism:Homo sapiens AND Study Type:high content screen"
   omero.web.gallery.filter_keys:
   - label: "Name (IDR number)"

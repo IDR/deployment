@@ -488,29 +488,33 @@ omero_web_apps_config_set:
       label: "Most Recent"
       index: 0
       query: "LAST10:date"
+    infection:
+      label: "Infection studies"
+      index: 1
+      query: "Study Type:infection"
     timelapse:
       label: "Time-lapse imaging"
-      index: 1
+      index: 2
       query: "Study Type:time OR Study Type:5D OR Study Type:3D-tracking"
     lightsheet:
       label: "Light sheet fluorescence microscopy"
-      index: 2
+      index: 3
       query: "Study Type:light sheet"
     proteinlocalization:
       label: "Protein localization studies"
-      index: 3
+      index: 4
       query: "Study Type:protein localization"
     histology:
       label: "Digital pathology imaging"
-      index: 4
+      index: 5
       query: "Study Type:histology"
     yeast:
       label: "Yeast studies"
-      index: 5
+      index: 6
       query: "Organism: Saccharomyces cerevisiae OR Organism:Schizosaccharomyces pombe"
     humancellscreen:
       label: "High-content screening (human)"
-      index: 6
+      index: 7
       query: "Organism:Homo sapiens AND Study Type:high content screen"
   omero.web.gallery.filter_keys:
   - label: "Name (IDR number)"

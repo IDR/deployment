@@ -51,8 +51,8 @@ _nginx_proxy_omero_locations:
 - /webclient/search/*
 - /api/*
 # /mapr/* is handled separately due to timeouts
-# TODO: Does iviewer need to be cached?
-#- /iviewer/*
+- /webclient/img_detail/*
+- /iviewer/*
 # Gallery is hosted at /
 - /gallery-api/*
 
@@ -138,6 +138,8 @@ nginx_proxy_cache_match_uri:
 - '"~static/*"'
 - '"~mapr/*"'
 - '"~gallery-api/*"'
+- '"~webclient/img_detail/*"'
+- '"~iviewer/*"'
 - '"~grafana/*"'
 
 #nginx_proxy_cache_match_arg:
@@ -187,6 +189,13 @@ nginx_proxy_caches:
   inactive: 180d
   match:
   - '"~mapr/*"'
+- name: omeroviewers  # Metadata for viewers and related UI
+  maxsize: 1g
+  keysize: 1m
+  inactive: 180d
+  match:
+  - '"~webclient/img_detail/*"'
+  - '"~iviewer/*"'
 - name: grafana
   maxsize: 100m
   keysize: 1m

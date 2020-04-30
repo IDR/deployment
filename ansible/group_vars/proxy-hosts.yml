@@ -375,7 +375,7 @@ nginx_proxy_streams: >
 #   external OMERO API access. At least one backend will always be
 #   assigned as an external proxy; if necessary it will overlap with
 #   OMERO.web
-idr_backend_reserved_offset: 2
+idr_backend_reserved_offset: 3
 idr_haproxy_frontend_omero_offset: 14060
 idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 

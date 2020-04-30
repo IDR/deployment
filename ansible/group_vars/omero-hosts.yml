@@ -67,6 +67,7 @@ omero_server_systemd_limit_nofile: 16384
 omero_server_python_addons:
 - omero-cli-render==0.5.0
 - omero-metadata==0.5.0
+- omero-upload==0.3.0
 
 omero_server_config_set:
   omero.db.poolsize: 25

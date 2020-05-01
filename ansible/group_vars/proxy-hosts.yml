@@ -236,9 +236,15 @@ nginx_proxy_redirect_map:
 - match: ~/pgpc
   dest: /webclient/?show=screen-1151
 
+- match: /study/idr0083/figure/4i
+  dest: /webclient/img_detail/9822151/?dataset=10201&x=34105&y=84808&zm=25&c=1|318:9927$808080&m=g
+  dest: /webclient/?show=screen-1151
+- match: /study/idr0083/figure/4r
+  dest: /webclient/img_detail/9822152/?dataset=10201&x=80560&y=77440&zm=66&c=1|495:9204$808080&m=g
+
 nginx_proxy_redirect_map_locations:
 # TODO: change to 301 when we're happy
-- location: "~ ^/(mito|tara|pgpc)($|/)"
+- location: "~ ^/(mito|tara|pgpc|study)($|/)"
   code: 302
 
 # "= /" has higher priority than "/" in the proxy config

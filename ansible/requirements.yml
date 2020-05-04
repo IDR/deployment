@@ -90,8 +90,10 @@
 - src: ome.omero_python_deps
   version: 2.0.1
 
-- src: ome.omero_server
-  version: 3.1.0
+# https://github.com/ome/ansible-role-omero-server/pull/51
+- name: ome.omero_server
+  src: https://github.com/ome/ansible-role-omero-server/archive/138e0e9cb392cd81ed1cd3d44c2ab8d89c994d06.tar.gz
+  version: 138e0e9cb392cd81ed1cd3d44c2ab8d89c994d06
 
 - src: ome.omero_user
   version: 0.1.2
@@ -103,7 +105,10 @@
   version: 1.1.1
 
 - src: ome.postgresql
-  version: 4.0.0
+  version: 5.0.0
+
+- src: ome.postgresql_client
+  version: 0.1.0
 
 - src: ome.python_pydata
   version: 1.1.1

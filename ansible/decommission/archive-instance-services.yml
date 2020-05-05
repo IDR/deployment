@@ -19,6 +19,7 @@
     - httpd
     - nginx
     - postgresql-9.6
+    - postgresql-11
     - prometheus-node-exporter
     - prometheus-omero-py
     - docker

@@ -537,6 +537,7 @@ omero_web_apps_config_set:
   omero.web.gallery.filter_mapr_keys:
   - "antibody"
   - "cellline"
+  - "compound"
   - "gene"
   - "phenotype"
   - "sirna"

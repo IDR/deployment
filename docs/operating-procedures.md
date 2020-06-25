@@ -80,9 +80,9 @@ objects:
 
     $ /opt/omero/server/OMERO.server/bin/omero login public@localhost -w public
     $ /opt/omero/server/OMERO.server/bin/omero hql --limit -1 --ids-only --style csv 'select MIN(field.image.id) FROM WellSample AS field GROUP BY field.well.plate' > plates.txt
-    $ /opt/omero/server/OMERO.server/bin/omero hql --limit -1 --ids-only --style csv 'select d.id from Dataset d' > datases.txt
-    $ cat plates.txt | cut -d ',' -f2 | sed -e 's/^/Image:/' > ids.txt 
-    $ cat datasets.txt | cut -d ',' -f2 | sed -e 's/^/Dataset:/' >> ids.txt
+    $ /opt/omero/server/OMERO.server/bin/omero hql --limit -1 --ids-only --style csv 'select d.id from Dataset d' > datasets.txt
+    $ cut -d ',' -f2 plates.txt | sed -e 's/^/Image:/' > ids.txt
+    $ cut -d ',' -f2 datasets.txt | sed -e 's/^/Dataset:/' >> ids.txt
 
 The cache file regeneration can be started using the GNU parallel utility 
 within a screen environment using the following command:

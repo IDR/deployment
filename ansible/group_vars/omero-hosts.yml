@@ -480,6 +480,8 @@ omero_web_apps_config_set:
           href: "https://idr.openmicroscopy.org/jupyter"
         - text: "Deployment"
           href: "https://idr.openmicroscopy.org/about/deployment.html"
+        - text: "FAQ"
+          href: "https://idr.openmicroscopy.org/about/faq/"
     - text: "Submissions"
       href: "https://idr.openmicroscopy.org/about/submission.html"
       submenu:

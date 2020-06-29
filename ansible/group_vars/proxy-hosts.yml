@@ -388,7 +388,7 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2020.06.20
+idr_openmicroscopy_org_version: 2020.06.29
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never

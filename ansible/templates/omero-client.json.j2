@@ -3,5 +3,7 @@
 {%- for backend in omero_omeroreadonly_hosts_external -%}
 :ssl -p {{ idr_haproxy_frontend_omero_offset + loop.index0 | int }} -h @omero.host@
 {%- endfor -%}",
-"--Ice.Default.Router.EndpointSelection=Random"
+"--Ice.Default.Router.EndpointSelection=Random",
+"--omero.user=public",
+"--omero.pass=public"
 ]

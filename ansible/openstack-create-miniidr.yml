@@ -1,0 +1,55 @@
+---
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
+
+  roles:
+
+    ############################################################
+    # Keypairs
+
+    - role: IDR.openstack-idr-keypairs
+
+
+    ############################################################
+    # Security groups
+
+    - role: IDR.openstack-idr-security-groups
+
+
+    ############################################################
+    # Networks
+
+    - role: IDR.openstack-idr-network
+      idr_network_name: "{{ idr_environment_idr }}"
+      idr_network_subnet: "{{ idr_environment_idr_subnet }}"
+
+
+    ############################################################
+    # IDR Instances
+
+    # Proxy server, doubles up as a bastion server
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-proxy"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour }}"
+      idr_vm_bastion: True
+      idr_vm_extra_groups:
+        - "{{ idr_environment_idr }}-miniidrproxy-hosts"
+        - "{{ idr_environment_idr }}-miniidr-hosts"
+        - "{{ idr_environment_idr }}-hosts"
+      idr_vm_networks:
+        - net-name: "{{ idr_environment_idr }}"
+      idr_vm_security_groups:
+        - default
+        - idr-bastion-external
+        - idr-omero-external
+        - idr-web-external

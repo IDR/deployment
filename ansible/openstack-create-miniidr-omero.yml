@@ -1,0 +1,47 @@
+---
+# This assumes idr_parent_environment has already been provisioned
+
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
+  roles:
+
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_database: True
+      idr_vm_omeroreadwrite: True
+      idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+      # This extra group will let us setup /etc/hosts on the proxy
+      # without adding it to the parent environment
+      - "{{ idr_parent_environment }}-miniidr-hosts"
+      - "{{ idr_vm_storage_group }}"
+      idr_vm_networks: >
+        {{ [ {'net-name': idr_parent_environment} ] +
+          ((idr_network_storage | length > 0) |
+            ternary([{'net-name': idr_network_storage}], []))
+        }}
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 500
+      openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
+      openstack_volume_name: db
+      openstack_volume_device: /dev/vdb
+      openstack_volume_source: "{{ idr_volume_database_db_src }}"
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 1000
+      openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
+      openstack_volume_name: data
+      openstack_volume_device: /dev/vdc
+      openstack_volume_source: "{{ idr_volume_omero_data_src }}"

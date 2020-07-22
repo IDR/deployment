@@ -51,3 +51,10 @@
     package:
       name:
         - rclone
+
+  - name: aspera transfer script
+    become: yes
+    template:
+      src: files/idrftp/idrftp-aspera-sh.j2
+      dest: /data/idrftp-aspera.sh
+      mode: 0555

@@ -4,6 +4,8 @@
 
   roles:
 
+  - role: ome.cli_utils
+
   - role: ome.docker
     docker_use_ipv4_nic_mtu: True
 
@@ -43,3 +45,9 @@
       uid: "{{ idrftp_alternate_user_id | default(omit) }}"
       # Change to always to always lock the account when this playbook is run
       update_password: on_create
+
+  - name: file transfer utilities
+    become: yes
+    packages:
+      name:
+        - rclone

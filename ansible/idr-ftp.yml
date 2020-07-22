@@ -48,6 +48,6 @@
 
   - name: file transfer utilities
     become: yes
-    packages:
+    package:
       name:
         - rclone

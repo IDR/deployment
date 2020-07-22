@@ -37,7 +37,7 @@
       createhome: yes
       group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       groups: ""
-      home: /data/"{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      home: "/data/{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       # Lock account, it will be manually enabled when needed
       password: "!"

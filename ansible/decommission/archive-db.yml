@@ -40,9 +40,6 @@
     - "{{ postgresql_databases }}"
 
   - name: Fetch database dumps
-    # Using become will read the file into memory
-    # http://docs.ansible.com/ansible/latest/fetch_module.html#notes
-    become: no
     fetch:
       dest: /tmp/
       flat: yes

@@ -4,6 +4,8 @@
 
   roles:
 
+  - role: ome.cli_utils
+
   - role: ome.docker
     docker_use_ipv4_nic_mtu: True
 
@@ -35,7 +37,7 @@
       createhome: yes
       group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       groups: ""
-      home: /data/"{{ idrftp_alternate_user_name | default('ftp-upload') }}"
+      home: "/data/{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       # Lock account, it will be manually enabled when needed
       password: "!"
@@ -43,3 +45,16 @@
       uid: "{{ idrftp_alternate_user_id | default(omit) }}"
       # Change to always to always lock the account when this playbook is run
       update_password: on_create
+
+  - name: file transfer utilities
+    become: yes
+    package:
+      name:
+        - rclone
+
+  - name: aspera transfer script
+    become: yes
+    template:
+      src: files/idrftp/idrftp-aspera-sh.j2
+      dest: /data/idrftp-aspera.sh
+      mode: 0555

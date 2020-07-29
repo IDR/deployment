@@ -65,7 +65,7 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
-- omero-cli-render==0.5.0
+- omero-cli-render==0.6.0
 - omero-metadata==0.5.0
 - omero-upload==0.3.0
 - omero-rois==0.3.0

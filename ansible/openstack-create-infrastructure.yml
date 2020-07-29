@@ -5,12 +5,12 @@
   when: 'idr_enable_publicidr | default(True)'
 
 # Mini IDR: Gateway proxy + network infrastructure for all OMERO servers
-- include: openstack-create-miniidr.yml
-  when: 'idr_enable_miniidr | default(False)'
+- include: openstack-create-pilotidr.yml
+  when: 'idr_enable_pilotidr | default(False)'
 
 # Mini IDR: single OMERO
-- include: openstack-create-miniidr-omero.yml
-  when: 'idr_enable_miniidr_omero | default(False)'
+- include: openstack-create-pilotidr-omero.yml
+  when: 'idr_enable_pilotidr_omero | default(False)'
 
 # Independent anonymous FTP server
 - include: openstack-create-ftp.yml

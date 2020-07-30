@@ -4,11 +4,11 @@
 - include: openstack-create-publicidr.yml
   when: 'idr_enable_publicidr | default(True)'
 
-# Mini IDR: Gateway proxy + network infrastructure for all OMERO servers
+# Pilot IDR: Gateway proxy + network infrastructure for all OMERO servers
 - include: openstack-create-pilotidr.yml
   when: 'idr_enable_pilotidr | default(False)'
 
-# Mini IDR: single OMERO
+# Pilot IDR: single OMERO
 - include: openstack-create-pilotidr-omero.yml
   when: 'idr_enable_pilotidr_omero | default(False)'
 

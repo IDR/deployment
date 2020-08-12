@@ -21,3 +21,4 @@
 - include: idr-haproxy.yml
 
 - include: idr-ftp.yml
+- include: idr-s3gateway.yml

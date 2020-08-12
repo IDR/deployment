@@ -1,0 +1,44 @@
+# IDR submission S3 gateway server
+
+- hosts: "{{ idr_environment | default('idr') }}-ftp-hosts"
+
+  # Assumes docker is already installed (in idr-ftp.yml)
+
+  roles:
+
+    - role: ome.minio_s3_gateway
+      minio_s3_gateway_remote_endpoint: "https://s3.embassy.ebi.ac.uk"
+      minio_s3_gateway_bucket: "{{ idr_minio_s3_gateway_bucket | default('example') }}"
+      minio_s3_gateway_access_key: "{{ idr_secret_minio_s3_gateway_access_key | default('minio') }}"
+      minio_s3_gateway_secret_key: "{{ idr_secret_minio_s3_gateway_secret_key | default('minio123') }}"
+      minio_s3_gateway_placeholder_content: >
+        Please upload your IDR submission here and email
+        idr@openmicroscopy.org when ready.
+
+    # Default to a self-signed certificate
+    # To use production certificates see
+    # https://github.com/ome/ansible-role-ssl-certificate/blob/0.3.2/README.md
+    - role: ome.ssl_certificate
+    - role: ome.nginx_proxy
+      nginx_stable_repo: true
+      nginx_proxy_worker_processes: 4
+      nginx_proxy_buffers: 32 16k
+      nginx_proxy_ssl: true
+      nginx_proxy_ssl_certificate: /etc/ssl/localcerts/bundled.crt
+      nginx_proxy_ssl_certificate_key: /etc/ssl/localcerts/server.key
+      nginx_proxy_http2: true
+      nginx_proxy_force_ssl: true
+      # nginx_proxy_hsts_age: 31536000
+      nginx_proxy_backends:
+        - name: s3gateway
+          location: "~ ^/{{ idr_minio_s3_gateway_bucket | default('example') }}(/.*)?$"
+          server: "http://localhost:9000"
+
+  handlers:
+
+    - name: restart nginx when certificates changed
+      listen: ssl certificate changed
+      become: yes
+      service:
+        name: nginx
+        state: restarted

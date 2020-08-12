@@ -21,6 +21,7 @@
     - role: ome.ssl_certificate
     - role: ome.nginx_proxy
       nginx_stable_repo: true
+      nginx_proxy_worker_processes: 4
       nginx_proxy_ssl: true
       nginx_proxy_ssl_certificate: /etc/ssl/localcerts/bundled.crt
       nginx_proxy_ssl_certificate_key: /etc/ssl/localcerts/server.key

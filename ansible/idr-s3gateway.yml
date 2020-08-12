@@ -21,8 +21,6 @@
     - role: ome.ssl_certificate
     - role: ome.nginx_proxy
       nginx_stable_repo: true
-      nginx_proxy_worker_processes: 4
-      nginx_proxy_buffers: 32 16k
       nginx_proxy_ssl: true
       nginx_proxy_ssl_certificate: /etc/ssl/localcerts/bundled.crt
       nginx_proxy_ssl_certificate_key: /etc/ssl/localcerts/server.key
@@ -33,6 +31,13 @@
         - name: s3gateway
           location: "~ ^/{{ idr_minio_s3_gateway_bucket | default('example') }}(/.*)?$"
           server: "http://localhost:9000"
+      # Disable buffering and allow unlimited file sizes
+      # https://serverfault.com/a/818090
+      nginx_proxy_additional_directives:
+        - client_max_body_size 0
+        - proxy_http_version 1.1
+        - proxy_request_buffering off
+        - proxy_buffering off
 
   handlers:
 

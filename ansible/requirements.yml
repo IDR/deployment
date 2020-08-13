@@ -54,9 +54,8 @@
 - src: ome.lvm_partition
   version: 1.1.1
 
-- name: ome.minio_s3_gateway
-  src: https://github.com/manics/ansible-role-minio-s3-gateway/archive/6d1618a808f29a039f5149b02957c80ee569f1ca.tar.gz
-  version: 6d1618a808f29a039f5149b02957c80ee569f1ca
+- src: ome.minio_s3_gateway
+  version: 0.1.0
 
 - src: ome.munin
   version: 1.1.3-openmicroscopy2

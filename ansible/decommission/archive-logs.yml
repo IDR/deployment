@@ -27,7 +27,6 @@
     with_items: "{{ logs }}"
 
   - name: Fetch proxy logs archive
-    become: yes
     fetch:
       dest: /tmp/
       flat: yes
@@ -61,7 +60,6 @@
     with_items: "{{ logs }}"
 
   - name: Fetch management logs archive
-    become: yes
     fetch:
       dest: /tmp/
       flat: yes

@@ -193,3 +193,15 @@
 
 - src: ome.prometheus_postgres
   version: 0.3.0
+
+# https://github.com/ome/ansible-role-prometheus/pull/7/commits/fdcfaf93604b86fa753a2ae6d69d20d91c1292d1
+- name: ome.prometheus_new
+  src:
+    https://github.com/ome/ansible-role-prometheus/archive/fdcfaf93604b86fa753a2ae6d69d20d91c1292d1.tar.gz
+  version: fdcfaf93604b86fa753a2ae6d69d20d91c1292d1
+
+# https://github.com/ome/ansible-role-prometheus-node/pull/4
+- name: ome.prometheus_node_new
+  src:
+    https://github.com/ome/ansible-role-prometheus-node/archive/07a0ef66d66ca03e4056c1e6e3e2b1a645be04fb.tar.gz
+  version: 07a0ef66d66ca03e4056c1e6e3e2b1a645be04fb

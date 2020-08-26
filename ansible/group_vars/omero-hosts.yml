@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.6.3
+idr_omero_web_release: 5.7.0
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
   - omero-py==5.7.1
@@ -212,7 +212,7 @@ omero_web_config_set:
 
 omero_web_apps_packages:
 - omero-mapr==0.4.0
-- omero-iviewer==0.9.1
+- omero-iviewer==0.10.1
 - omero-gallery==3.3.3
 omero_web_apps_names:
 - omero_mapr

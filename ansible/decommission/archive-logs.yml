@@ -32,13 +32,13 @@
       flat: yes
       src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
     with_items: "{{ logs }}"
+    when: 'download_dump | default(False)'
 
   - name: Print archive information
     debug:
       msg: >
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
-        to /tmp/{{ item.dest | basename }}
     with_items: "{{_decommission_archive_proxy.results}}"
 
 
@@ -65,11 +65,11 @@
       flat: yes
       src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
     with_items: "{{ logs }}"
+    when: 'download_dump | default(False)'
 
   - name: Print archive information
     debug:
       msg: >
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
-        to /tmp/{{ item.dest | basename }}
     with_items: "{{_decommission_archive_management.results}}"

@@ -295,7 +295,14 @@ _nginx_proxy_sites:
     # Study redirects
     - "if ($request_uri ~ /search/\\?query=Name:idr0068) {
        return 302 /about/download.html;}"
-
+    - "if ($request_uri ~ /search/\\?query=Name:idr0078) {
+       return 302 /about/download.html;}"
+    - "if ($request_uri ~ /search/\\?query=Name:idr0089) {
+       return 302 /about/download.html;}"
+    - "if ($request_uri ~ /search/\\?query=Name:idr0090) {
+       return 302 /about/download.html;}"
+    - "if ($request_uri ~ /search/\\?query=Name:idr0094) {
+       return 302 /about/download.html;}"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:

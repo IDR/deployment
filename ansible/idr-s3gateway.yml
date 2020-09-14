@@ -7,7 +7,7 @@
   roles:
 
     - role: ome.minio_s3_gateway
-      minio_s3_gateway_remote_endpoint: "https://s3.embassy.ebi.ac.uk"
+      minio_s3_gateway_remote_endpoint: "{{ idr_s3_gateway_remote_endpoint }}"
       minio_s3_gateway_bucket: "{{ idr_minio_s3_gateway_bucket | default('example') }}"
       minio_s3_gateway_access_key: "{{ idr_secret_minio_s3_gateway_access_key | default('minio') }}"
       minio_s3_gateway_secret_key: "{{ idr_secret_minio_s3_gateway_secret_key | default('minio123') }}"
@@ -48,7 +48,7 @@
           nginx_proxy_backends:
             - name: s3-embassy-idr
               location: "~ ^/idr(/.*)?$"
-              server: "https://s3.embassy.ebi.ac.uk"
+              server: "{{ idr_s3_gateway_remote_endpoint }}"
           # Disable buffering
           # https://serverfault.com/a/818090
           nginx_proxy_additional_directives:
@@ -72,3 +72,6 @@
       service:
         name: nginx
         state: restarted
+
+  vars:
+    idr_s3_gateway_remote_endpoint: "https://s3.embassy.ebi.ac.uk"

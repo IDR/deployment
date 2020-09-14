@@ -49,7 +49,7 @@
             - name: s3-embassy-idr
               location: "~ ^/idr(/.*)?$"
               server: "https://s3.embassy.ebi.ac.uk"
-          # Disable buffering and allow unlimited file sizes
+          # Disable buffering
           # https://serverfault.com/a/818090
           nginx_proxy_additional_directives:
             - proxy_http_version 1.1

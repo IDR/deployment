@@ -12,9 +12,9 @@
       state: stopped
       enabled: False
     with_items:
+    - omero-logmonitor
     - omero-server
     - omero-web
-    - omero-logmonitor
     - redis
     - httpd
     - nginx

@@ -46,6 +46,7 @@
       src: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
     with_items:
     - "{{ postgresql_databases }}"
+    when: 'download_dump | default(False)'
 
   - name: Print dump information
     debug:

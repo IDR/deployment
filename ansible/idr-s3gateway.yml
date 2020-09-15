@@ -7,7 +7,7 @@
   roles:
 
     - role: ome.minio_s3_gateway
-      minio_s3_gateway_remote_endpoint: "https://s3.embassy.ebi.ac.uk"
+      minio_s3_gateway_remote_endpoint: "{{ idr_s3_gateway_remote_endpoint }}"
       minio_s3_gateway_bucket: "{{ idr_minio_s3_gateway_bucket | default('example') }}"
       minio_s3_gateway_access_key: "{{ idr_secret_minio_s3_gateway_access_key | default('minio') }}"
       minio_s3_gateway_secret_key: "{{ idr_secret_minio_s3_gateway_secret_key | default('minio123') }}"
@@ -28,17 +28,41 @@
       nginx_proxy_http2: true
       nginx_proxy_force_ssl: true
       # nginx_proxy_hsts_age: 31536000
-      nginx_proxy_backends:
-        - name: s3gateway
-          location: "~ ^/{{ idr_minio_s3_gateway_bucket | default('example') }}(/.*)?$"
-          server: "http://localhost:9000"
-      # Disable buffering and allow unlimited file sizes
-      # https://serverfault.com/a/818090
-      nginx_proxy_additional_directives:
-        - client_max_body_size 0
-        - proxy_http_version 1.1
-        - proxy_request_buffering off
-        - proxy_buffering off
+      nginx_proxy_sites:
+        # idr-ftp.openmicroscopy.org: S3 read-write /idr-upload only
+        - nginx_proxy_server_name: idr-ftp.openmicroscopy.org
+          nginx_proxy_backends:
+            - name: s3gateway
+              location: "~ ^/{{ idr_minio_s3_gateway_bucket | default('example') }}(/.*)?$"
+              server: "http://localhost:9000"
+          # Disable buffering and allow unlimited file sizes
+          # https://serverfault.com/a/818090
+          nginx_proxy_additional_directives:
+            - client_max_body_size 0
+            - proxy_http_version 1.1
+            - proxy_request_buffering off
+            - proxy_buffering off
+        # idr-s3.openmicroscopy.org: S3 read-only public /idr with CORS
+        # other buckets can be added
+        - nginx_proxy_server_name: idr-s3.openmicroscopy.org
+          nginx_proxy_backends:
+            - name: s3-embassy-idr
+              location: "~ ^/idr(/.*)?$"
+              server: "{{ idr_s3_gateway_remote_endpoint }}"
+          # Disable buffering
+          # https://serverfault.com/a/818090
+          nginx_proxy_additional_directives:
+            - proxy_http_version 1.1
+            - proxy_request_buffering off
+            - proxy_buffering off
+            # CORS: basically allow any cross-site since this is public
+            # read-only. Always set a header including on 404 responses
+            - "add_header Access-Control-Allow-Origin * always"
+        # all other hostnames: redirect to https://idr.openmicroscopy.org/
+        - nginx_proxy_is_default: True
+          nginx_proxy_direct_locations:
+            - location: /
+              redirect302: "https://idr.openmicroscopy.org/"
 
   handlers:
 
@@ -48,3 +72,6 @@
       service:
         name: nginx
         state: restarted
+
+  vars:
+    idr_s3_gateway_remote_endpoint: "https://s3.embassy.ebi.ac.uk"

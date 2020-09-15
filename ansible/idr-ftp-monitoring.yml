@@ -1,0 +1,23 @@
+# Temporary monitoring configuration
+# This will move to a central management server
+# https://github.com/IDR/deployment/issues/264
+- hosts: "{{ idr_environment | default('idr') }}-ftp-hosts"
+
+  roles:
+  - role: ome.prometheus_node_0_3_0
+
+  - role: ome.prometheus_0_4_0
+    prometheus_docker_network: monitoring
+
+    prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
+    prometheus_alertmanager_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
+
+    prometheus_targets:
+    - groupname: nodes
+      groups:
+      - "{{ idr_environment | default('idr') + '-hosts' }}"
+      port: 9100
+      jobname: node-exporter
+      iface: "{{ idr_net_iface | default('eth0') }}"
+
+    prometheus_additional_rules_template: idrftp-alert-rules-yml.j2

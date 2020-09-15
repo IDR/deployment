@@ -193,3 +193,13 @@
 
 - src: ome.prometheus_postgres
   version: 0.3.0
+
+- name: ome.prometheus_0_4_0
+  src:
+    https://github.com/ome/ansible-role-prometheus/archive/0.4.0.tar.gz
+  version: 0.4.0
+
+- name: ome.prometheus_node_0_3_0
+  src:
+    https://github.com/ome/ansible-role-prometheus-node/archive/0.3.0.tar.gz
+  version: 0.3.0

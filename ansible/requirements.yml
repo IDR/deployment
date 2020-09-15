@@ -192,7 +192,7 @@
   version: 0.2.2
 
 - src: ome.prometheus_postgres
-  version: 0.3.0
+  version: 0.4.0
 
 - name: ome.prometheus_0_4_0
   src:

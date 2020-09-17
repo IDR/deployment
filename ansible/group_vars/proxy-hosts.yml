@@ -293,13 +293,15 @@ _nginx_proxy_sites:
     nginx_proxy_additional_directives:
     - "add_header Access-Control-Allow-Origin $allow_origin"
     # Study redirects
-    - "if ($request_uri ~ /search/\\?query=Name:(idr00)?68) {
+    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?68) {
        return 302 /about/download.html;}"
-    - "if ($request_uri ~ /search/\\?query=Name:(idr00)?89) {
+    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?89) {
        return 302 /about/download.html;}"
-    - "if ($request_uri ~ /search/\\?query=Name:(idr00)?90) {
+    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?90) {
        return 302 /about/download.html;}"
-    - "if ($request_uri ~ /search/\\?query=Name:(idr00)?94) {
+    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?94) {
+       return 302 /about/download.html;}"
+    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?95) {
        return 302 /about/download.html;}"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with

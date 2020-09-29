@@ -314,7 +314,7 @@ _nginx_proxy_sites:
       server: http://omeroreadwrite
       cache_validity: 1d
       # For populating the cache we need to increase the default timeout
-      read_timeout: 600
+      read_timeout: 900
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite
@@ -325,6 +325,7 @@ _nginx_proxy_sites:
 
   # This is a duplicate of the main OMERO.web proxy configuration, but
   # connecting to the read-write host for internal use
+  # TODO: Delete this, port 9000 already goes to omeroreadwrite
   - nginx_proxy_server_name: omeroreadwrite
     nginx_proxy_listen_http: 8009
     nginx_proxy_ssl: False
@@ -334,7 +335,7 @@ _nginx_proxy_sites:
       server: http://omeroreadwrite
       cache_validity: 1d
       # For populating the cache we need to increase the default timeout
-      read_timeout: 600
+      read_timeout: 900
     - name: omerostatic
       location: ~ /static/*
       server: http://omeroreadwrite

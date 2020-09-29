@@ -391,13 +391,13 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2020.09.03
+idr_openmicroscopy_org_version: 2020.09.28
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: 57dcd50011b36eec1b9f394669a3cfa7c703aaab328d22646f60ac14cd8abee5
+deploy_archive_sha256: bb5313cc5f066a9bf021fe52083436aa6d94e925a076baa81b816f80dbfd8675
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

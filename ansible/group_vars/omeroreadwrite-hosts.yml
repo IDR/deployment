@@ -6,7 +6,7 @@
 omero_server_dbuser: omero
 omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }}"
 
-idr_omero_web_timeout: 600
+idr_omero_web_timeout: 900
 
 idr_omero_web_nginx_server_extra_config:
-  - 'proxy_read_timeout 600;'
+  - 'proxy_read_timeout {{ idr_omero_web_timeout }};'

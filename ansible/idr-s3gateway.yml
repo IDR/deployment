@@ -45,18 +45,12 @@
         # idr-s3.openmicroscopy.org: S3 read-only public /idr with CORS
         # other buckets can be added
         - nginx_proxy_server_name: idr-s3.openmicroscopy.org
-          nginx_proxy_backends:
-            - name: s3-embassy-idr
-              location: "~ ^/idr(/.*)?$"
-              server: "{{ idr_s3_gateway_remote_endpoint }}"
-          # Disable buffering
-          # https://serverfault.com/a/818090
+          nginx_proxy_direct_locations:
+            - location: /
+              redirect301: "{{ idr_s3_gateway_remote_endpoint }}$request_uri"
           nginx_proxy_additional_directives:
-            - proxy_http_version 1.1
-            - proxy_request_buffering off
-            - proxy_buffering off
             # CORS: basically allow any cross-site since this is public
-            # read-only. Always set a header including on 404 responses
+            # read-only. Always set a header.
             - "add_header Access-Control-Allow-Origin * always"
         # all other hostnames: redirect to https://idr.openmicroscopy.org/
         - nginx_proxy_is_default: True

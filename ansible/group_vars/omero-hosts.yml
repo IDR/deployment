@@ -89,6 +89,8 @@ omero_server_config_set:
   omero.client.ui.tree.orphans.enabled: False
   # Websockets (no wss for now to avoid dealing with certificates)
   omero.client.icetransports: ssl,tcp,ws
+  # Disable Indexer
+  omero.search.cron: ""
 
 
 ######################################################################

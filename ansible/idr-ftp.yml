@@ -23,7 +23,7 @@
   - role: ome.nfs_mount
     nfs_version: 3
     nfs_mount_opts: timeo=14,intr,nolock,ro
-    nfs_share_mounts: "{{ ebi_nfs_mounts }}"
+    nfs_share_mounts: "{{ ebi_nfs_mounts | default([]) }}"
 
   tasks:
 

@@ -66,11 +66,18 @@
     - "{{ idr_environment_idr }}-ftp-hosts"
     - "{{ idr_environment_idr }}-data-hosts"
     - ftp-hosts
+    - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+    - "{{ idr_vm_storage_group }}"
     idr_vm_networks:
     - net-name: "{{ idr_environment_idr }}"
     idr_vm_security_groups:
     - default
     - "{{ idr_environment_idr }}-ftp-external"
+    idr_vm_networks: >
+      {{ [ {'net-name': idr_environment_idr} ] +
+         ((idr_network_storage | length > 0) |
+           ternary([{'net-name': idr_network_storage}], []))
+      }}
 
 
   ############################################################

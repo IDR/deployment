@@ -78,8 +78,10 @@
 - src: ome.nginx
   version: 2.0.1
 
-- src: ome.nginx_proxy
-  version: 1.12.1
+# https://github.com/ome/ansible-role-nginx-proxy/pull/29
+- name: ome.nginx_proxy
+  src: https://github.com/ome/ansible-role-nginx-proxy/archive/539199d795d0284d660bb57bec1982a0c49fd9f4.tar.gz
+  version: 539199d795d0284d660bb57bec1982a0c49fd9f4
 
 - src: ome.omego
   version: 0.2.0

@@ -84,6 +84,7 @@ _nginx_proxy_backends_omerowebsockets:
   location: = /omero-ws
   server: http://omeroreadonlywebsockets
   websockets: True
+  websocketsonly: True
   read_timeout: 86400
 
 _nginx_proxy_backends_grafana_render:

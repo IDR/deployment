@@ -79,7 +79,7 @@
   version: 2.0.1
 
 - src: ome.nginx_proxy
-  version: 1.12.1
+  version: 1.13.0
 
 - src: ome.omego
   version: 0.2.0

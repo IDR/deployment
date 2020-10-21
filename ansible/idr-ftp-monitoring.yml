@@ -21,3 +21,10 @@
       iface: "{{ idr_net_iface | default('eth0') }}"
 
     prometheus_additional_rules_template: idrftp-alert-rules-yml.j2
+
+  tasks:
+  - name: idr-ftp monitoring | Install dstat
+    become: yes
+    yum:
+      name: dstat
+      state: present

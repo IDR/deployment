@@ -261,6 +261,8 @@ nginx_proxy_direct_locations:
   redirect302: /about/mineotaur.html
 - location: "^~ /jupyter"
   redirect302: https://idr-analysis.openmicroscopy.org
+- location: "= /curation-workflow"
+  redirect302: https://github.com/IDR/SubmissionWorkflow
 - location: "^~ /connection"
   alias: /srv/www/connection
 - location: "^~ /.well-known/acme-challenge"

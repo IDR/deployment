@@ -262,7 +262,7 @@ nginx_proxy_direct_locations:
 - location: "^~ /jupyter"
   redirect302: https://idr-analysis.openmicroscopy.org
 - location: "= /curation-workflow"
-  redirect302: https://github.com/IDR/SubmissionWorkflow
+  redirect302: /about/curation-workflow
 - location: "^~ /connection"
   alias: /srv/www/connection
 - location: "^~ /.well-known/acme-challenge"

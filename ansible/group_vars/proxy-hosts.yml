@@ -261,6 +261,8 @@ nginx_proxy_direct_locations:
   redirect302: /about/mineotaur.html
 - location: "^~ /jupyter"
   redirect302: https://idr-analysis.openmicroscopy.org
+- location: "= /curation-workflow"
+  redirect302: /about/curation-workflow.html
 - location: "^~ /connection"
   alias: /srv/www/connection
 - location: "^~ /.well-known/acme-challenge"
@@ -370,13 +372,13 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2020.10.05
+idr_openmicroscopy_org_version: 2020.11.03
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: f49f1b1421b5c38b8000bbc94e00dc8c9c9c01fb9e170312545786af45a62fcd
+deploy_archive_sha256: 43eaab176141713e7d7a3d53c6fa6cffa37cd44b95494a3f7b574d9c924a9003
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

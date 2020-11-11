@@ -31,6 +31,7 @@
           ((idr_network_storage | length > 0) |
             ternary([{'net-name': idr_network_storage}], []))
         }}
+      when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 500
@@ -38,6 +39,7 @@
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
+      when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 1200
@@ -45,3 +47,35 @@
       openstack_volume_name: data
       openstack_volume_device: /dev/vdc
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
+      when: idr_enable_pilotidr_omero | default(False)
+
+
+    ############################################################
+    # OME dev server
+
+    - role: IDR.openstack-idr-instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-dev"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_dockermanager: True
+      idr_vm_extra_groups:
+      - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+      # This extra group will let us setup /etc/hosts on the proxy
+      # without adding it to the parent environment
+      - "{{ idr_parent_environment }}-pilotidr-hosts"
+      - "{{ idr_vm_storage_group }}"
+      - "{{ idr_environment_idr }}-data-hosts"
+      idr_vm_networks: >
+        {{ [ {'net-name': idr_parent_environment} ] +
+          ((idr_network_storage | length > 0) |
+            ternary([{'net-name': idr_network_storage}], []))
+        }}
+      when: idr_enable_pilotidr_devserver | default(False)
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 1500
+      openstack_volume_vmname: "{{ idr_environment_idr }}-dev"
+      openstack_volume_name: data
+      openstack_volume_device: /dev/vdb
+      when: idr_enable_pilotidr_devserver | default(False)

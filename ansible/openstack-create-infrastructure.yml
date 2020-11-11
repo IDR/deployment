@@ -8,9 +8,11 @@
 - include: openstack-create-pilotidr.yml
   when: 'idr_enable_pilotidr | default(False)'
 
-# Pilot IDR: single OMERO
-- include: openstack-create-pilotidr-omero.yml
-  when: 'idr_enable_pilotidr_omero | default(False)'
+# Pilot IDR: various testing servers include single OMERO and dev docker
+- include: openstack-create-pilotidr-servers.yml
+  when: >-
+    (idr_enable_pilotidr_omero | default(False)) or
+    (idr_enable_pilotidr_devserver | default(False))
 
 # Independent anonymous FTP server
 - include: openstack-create-ftp.yml

@@ -1,0 +1,31 @@
+# The port that the microservice will listen on
+port: 8080
+# OMERO server that the microservice will communicate with (as a client)
+omero:
+  host: "{{ omero_host_ip }}"
+  port: 4064
+# OMERO.web configuration
+omero.web:
+  # see group_vars/omero-hosts.yml
+  session_cookie_name: "sessionid_{{ idr_environment | default('idr') }}"
+# Information about the session store.
+session-store:
+  #type is either "postgres" or "redis"
+  type: "redis"
+  #synchronicity is either "sync" or "async"
+  synchronicity: "async"
+  #uri for either postgres db or redis
+  # * https://jdbc.postgresql.org/documentation/80/connect.html
+  # * https://github.com/lettuce-io/lettuce-core/wiki/Redis-URI-and-connection-details
+  # uri: "jdbc:postgresql://database:5432/omero?user=omero&password=omero"
+  # Currently each omero node runs its own OMERO.server, OMERO.web, Redis
+  uri: "redis://{{ omero_host_ip }}:6379/0"
+
+# Configuration for zipkin http tracing
+# http-tracing:
+#   enabled: true
+#   zipkin-url: "http://localhost:9411/api/v2/spans"
+
+# Enable JMX Prometheus Metrics
+jmx-metrics:
+  enabled: true

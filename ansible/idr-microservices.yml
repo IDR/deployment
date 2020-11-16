@@ -1,0 +1,65 @@
+# IDR initial test of microservices
+
+
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+# Load hostvars for subsequent playbooks
+
+
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  # pre_tasks:
+  #   - debug: var=inventory_hostname
+  #   - debug: msg="{{ hostvars[inventory_hostname] | to_yaml }}"
+  #   - fail: msg=stopping
+
+  roles:
+
+    - role: ome.docker
+      docker_use_ipv4_nic_mtu: True
+
+  tasks:
+
+    - name: Install docker-python
+      become: true
+      yum:
+        name: docker-python
+        state: present
+
+    - name: Get IPs of hosts
+      set_fact:
+        omero_host_ip: >-
+          {{ hostvars[inventory_hostname]['ansible_' + (idr_net_iface |
+             default('eth0'))]['ipv4']['address']
+          }}
+        omero_db_host_ansible: >-
+          {{ hostvars[groups[idr_environment |
+             default('idr') + '-database-hosts'][0]][
+             'ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+          }}
+
+    - name: omero-ms-thumbnail config directory
+      become: true
+      file:
+        path: /etc/omero-ms-thumbnail
+        state: directory
+
+    - name: omero-ms-thumbnail config file
+      become: true
+      template:
+        src: templates/omero-ms-thumbnail-config.yml.j2
+        dest: /etc/omero-ms-thumbnail/config.yml
+
+    - name: Run docker omero-ms-thumbnail
+      become: true
+      docker_container:
+        image: openmicroscopy/omero-ms-thumbnail:0.5.2
+        name: omero-ms-thumbnail
+        published_ports:
+          - "{{ omero_ms_thumbnail_port }}:8080"
+        state: started
+        restart_policy: always
+        volumes:
+          - "/etc/omero-ms-thumbnail/config.yml:/opt/ms/conf/config.yaml:ro"
+
+  vars:
+    omero_ms_thumbnail_port: "8085"

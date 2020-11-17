@@ -16,24 +16,3 @@
     yum:
       name: docker-python
       state: present
-
-
-- hosts: "{{ idr_environment | default('idr') }}-dockermanager-hosts"
-
-  pre_tasks:
-  - name: create NFS export directories
-    become: yes
-    file:
-      path: /data/{{ item }}
-      state: directory
-    with_items:
-    - mineotaur
-    - volumes
-
-  roles:
-  - role: ome.versioncontrol_utils
-  - role: ome.nfs_share
-    nfs_shares:
-      /data/mineotaur:
-      - host: "*"
-        options: 'rw'

@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+grep imageregion /etc/group || addgroup -g {{ idrnfs_groupid | default(1000) }} imageregion
+grep imageregion /etc/passwd || adduser -D -u 1000 -G imageregion imageregion
+
+exec su imageregion -c "cd /opt/ms; /opt/ms/bin/omero-ms-image-region $@"

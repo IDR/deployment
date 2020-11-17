@@ -38,6 +38,11 @@ postgresql_version: "11"
 
 
 ######################################################################
+# redis (for OMERO.web and microservices)
+redis_listen: 0.0.0.0
+
+
+######################################################################
 # openmicroscopy.fluentd vars
 fluentd_source_configs:
 - files/fluentd/omero.conf

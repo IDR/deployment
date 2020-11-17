@@ -30,6 +30,22 @@ nginx_proxy_log_format: main_timed_cache_upstream
 nginx_proxy_websockets_enable: True
 
 nginx_proxy_upstream_servers:
+- name: omeromsthumbnailreadonly
+  balance: ip_hash
+  servers: "{{ omeroreadonly_omeromsthumbnail_hosts | sort }}"
+- name: omeromsthumbnailreadwrite
+  servers: "{{ omeroreadwrite_omeromsthumbnail_hosts }}"
+- name: omeromsimageregionreadonly
+  balance: ip_hash
+  servers: "{{ omeroreadonly_omeromsimageregion_hosts | sort }}"
+- name: omeromsimageregionreadwrite
+  servers: "{{ omeroreadwrite_omeromsimageregion_hosts }}"
+- name: omeromszarrreadonly
+  balance: ip_hash
+  servers: "{{ omeroreadonly_omeromszarr_hosts | sort }}"
+- name: omeromszarrreadwrite
+  servers: "{{ omeroreadwrite_omeromszarr_hosts }}"
+
 - name: omeroreadonly
   balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
@@ -56,7 +72,48 @@ _nginx_proxy_omero_locations:
 # Gallery is hosted at /
 - /gallery-api/*
 
+_nginx_proxy_omeromsthumbnail_locations:
+- /webgateway/render_thumbnail/*
+- /webclient/render_thumbnail/*
+- /webgateway/render_birds_eye_view/*
+- /webclient/render_birds_eye_view/*
+- /webgateway/get_thumbnails/*
+- /webclient/get_thumbnails/*
+
+_nginx_proxy_omeromsimageregion_locations:
+- /webgateway/render_image_region/*
+- /webgateway/render_image/*
+- /webclient/render_image_region/*
+- /webclient/render_image/*
+- /webgateway/render_shape_mask/*
+
+_nginx_proxy_omeromszarr_locations:
+- /idr/zarr/*
+
+
+# Order is important since we want the longer omeroms*cached
+# locations to have precedence over the shorter omerocached ones
+# https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms
 _nginx_proxy_backends_omero:
+- name: omeromsthumbnailscached
+  location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
+  server: http://omeromsthumbnailreadonly
+  cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
+- name: omeromsimagregioncached
+  location: ~ {{ _nginx_proxy_omeromsimageregion_locations | join('|') }}
+  server: http://omeromsimageregionreadonly
+  cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
+- name: omeromszarr
+  location: ~ {{ _nginx_proxy_omeromszarr_locations | join('|') }}
+  server: http://omeromszarrreadonly
+  # Don't cache, files are too large
+  # cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
@@ -292,9 +349,11 @@ _nginx_proxy_sites:
   # This enables the default site (configured using the global
   # nginx_proxy_* variables):
   - nginx_proxy_is_default: True
-    # Only add this CORS header to the default public site
+
     nginx_proxy_additional_directives:
-    - "add_header Access-Control-Allow-Origin $allow_origin"
+    # Only add this CORS header to the default public site
+    # Always set a header including on 404 responses
+    - "add_header Access-Control-Allow-Origin $allow_origin always"
     # Study redirects
     - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?68) {
        return 302 /about/download.html;}"
@@ -310,6 +369,19 @@ _nginx_proxy_sites:
     nginx_proxy_ssl: False
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:
+    - name: omeromsthumbnailscached
+      location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
+      server: http://omeromsthumbnailreadwrite
+      cache_validity: 1d
+    - name: omeromsimageregioncached
+      location: ~ {{ _nginx_proxy_omeromsimageregion_locations | join('|') }}
+      server: http://omeromsimageregionreadwrite
+      cache_validity: 1d
+    - name: omeromszarr
+      location: ~ {{ _nginx_proxy_omeromszarr_locations | join('|') }}
+      server: http://omeromszarrreadwrite
+      # Don't cache, files are too large
+      # cache_validity: 1d
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite

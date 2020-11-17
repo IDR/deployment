@@ -1,0 +1,131 @@
+# IDR initial test of microservices
+
+
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+# Load hostvars for subsequent playbooks
+
+
+- hosts: "{{ idr_environment | default('idr') }}-omero-hosts"
+
+  # pre_tasks:
+  #   - debug: var=inventory_hostname
+  #   - debug: msg="{{ hostvars[inventory_hostname] | to_yaml }}"
+  #   - fail: msg=stopping
+
+  roles:
+
+    - role: ome.docker
+      docker_use_ipv4_nic_mtu: True
+
+  tasks:
+
+    - name: Install docker-python
+      become: true
+      yum:
+        name: docker-python
+        state: present
+
+    - name: Get IPs of hosts
+      set_fact:
+        omero_host_ip: >-
+          {{ hostvars[inventory_hostname]['ansible_' + (idr_net_iface |
+             default('eth0'))]['ipv4']['address']
+          }}
+        omero_db_host_ansible: >-
+          {{ hostvars[groups[idr_environment |
+             default('idr') + '-database-hosts'][0]][
+             'ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+          }}
+
+    - name: omero-ms config directories
+      become: true
+      file:
+        path: /etc/omero-ms-{{ item }}
+        state: directory
+      with_items:
+        - thumbnail
+        - imageregion
+        - zarr
+
+    - name: omero-ms config files
+      become: true
+      template:
+        src: templates/omero-ms-{{ item }}-config.yml.j2
+        dest: /etc/omero-ms-{{ item }}/config.yml
+      with_items:
+        - thumbnail
+        - imageregion
+
+    - name: omero-ms custom entrypoints
+      become: true
+      template:
+        src: templates/omero-ms-{{ item }}-entrypoint.sh.j2
+        dest: /etc/omero-ms-{{ item }}/omero-ms-{{ item }}-entrypoint.sh
+        mode: u=rwx,g=rx,o=rx
+      with_items:
+        - imageregion
+        - zarr
+
+    - name: Run docker omero-ms-thumbnail
+      become: true
+      docker_container:
+        image: openmicroscopy/omero-ms-thumbnail:0.5.2
+        name: omero-ms-thumbnail
+        published_ports:
+          - "{{ omero_ms_thumbnail_port }}:8080"
+        state: started
+        restart_policy: always
+        volumes:
+          - "/etc/omero-ms-thumbnail/config.yml:/opt/ms/conf/config.yaml:ro"
+
+    - name: Run docker omero-ms-imageregion
+      become: true
+      docker_container:
+        image: manics/docker-example-omero-microservices-imageregion:0.5.2-0
+        name: omero-ms-imageregion
+        # Override the entrypoint to create a fixed UID and GID
+        entrypoint: /opt/ms/bin/omero-ms-imageregion-entrypoint.sh
+        published_ports:
+          - "{{ omero_ms_imageregion_port }}:8080"
+        state: started
+        restart_policy: always
+        volumes:
+          - "/etc/omero-ms-imageregion/config.yml:/opt/ms/conf/config.yaml:ro"
+          - "/etc/omero-ms-imageregion/omero-ms-imageregion-entrypoint.sh:/opt/ms/bin/omero-ms-imageregion-entrypoint.sh:ro"
+          - "/data:/data:ro"
+          - "/opt/omero/server/OMERO.server/lib/scripts:/opt/omero/server/OMERO.server/lib/scripts:ro"
+          - "/uod/idr:/uod/idr:ro"
+          - "/nfs/bioimage:/nfs/bioimage:ro"
+          - "/nfs/biostudies:/nfs/biostudies:ro"
+
+    - name: Run docker omero-ms-zarr
+      become: true
+      docker_container:
+        image: openmicroscopy/omero-ms-zarr:0.1.6
+        name: omero-ms-zarr
+        # Override the entrypoint to create a fixed UID and GID
+        entrypoint: /usr/local/bin/omero-ms-zarr-entrypoint.sh
+        env:
+          CONFIG_omero_data_dir: /data/OMERO
+          CONFIG_omero_db_host: "{{ omero_db_host_ansible }}"
+          CONFIG_omero_db_user: "{{ omero_server_dbuser }}"
+          CONFIG_omero_db_pass: "{{ omero_server_dbpassword }}"
+          CONFIG_omero_db_name: "{{ omero_server_dbname }}"
+          CONFIG_omero_ms_zarr_net_path_image: /idr/zarr/v0.1/{image}.zarr/
+        published_ports:
+          - "{{ omero_ms_zarr_port }}:8080"
+        state: started
+        restart_policy: always
+        groups:
+          - "{{ idrnfs_groupid | default(0) }}"
+        volumes:
+          - "/etc/omero-ms-zarr/omero-ms-zarr-entrypoint.sh:/usr/local/bin/omero-ms-zarr-entrypoint.sh:ro"
+          - "/data:/data:ro"
+          - "/uod/idr:/uod/idr:ro"
+          - "/nfs/bioimage:/nfs/bioimage:ro"
+          - "/nfs/biostudies:/nfs/biostudies:ro"
+
+  vars:
+    omero_ms_thumbnail_port: "8085"
+    omero_ms_imageregion_port: "8086"
+    omero_ms_zarr_port: "8087"

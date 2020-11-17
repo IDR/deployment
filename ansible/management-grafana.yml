@@ -9,7 +9,7 @@
   - name: Run docker grafana
     become: yes
     docker_container:
-      image: grafana/grafana:5.1.3
+      image: grafana/grafana:7.2.0
       env:
         # Enable anonymous login
         GF_AUTH_ANONYMOUS_ENABLED: "true"
@@ -39,7 +39,7 @@
       status_code: [200, 404]
     register: grafana_get_user
     check_mode: no
-    until: grafana_get_user | succeeded
+    until: grafana_get_user is succeeded
     retries: 5
     delay: 5
 

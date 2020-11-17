@@ -80,7 +80,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(100 - (avg by (instance) (irate(node_cpu{mode=\"idle\", instance=~\".*$servergroup.*\"}[5m])) * 100)) * on(instance)  (count(node_cpu{mode=\"idle\", instance=~\".*$servergroup.*\"}) without (cpu, mode))",
+              "expr": "(100 - (avg by (instance) (irate(node_cpu_seconds_total{mode=\"idle\", instance=~\".*$servergroup.*\"}[5m])) * 100)) * on(instance)  (count(node_cpu_seconds_total{mode=\"idle\", instance=~\".*$servergroup.*\"}) without (cpu, mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -173,7 +173,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "node_memory_Active{instance=~\".*$servergroup.*\"} / 1024 / 1024 / 2014",
+              "expr": "node_memory_Active_bytes{instance=~\".*$servergroup.*\"} / 1024 / 1024 / 2014",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -182,7 +182,7 @@
               "step": 600
             },
             {
-              "expr": "node_memory_Active{instance=~\".*$servergroup.*\"} / node_memory_MemTotal{instance=~\".*$servergroup.*\"} * 100",
+              "expr": "node_memory_Active_bytes{instance=~\".*$servergroup.*\"} / node_memory_MemTotal_bytes{instance=~\".*$servergroup.*\"} * 100",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -355,7 +355,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum (irate(node_network_receive_bytes{instance=~\".*$servergroup.*\"}[1m])) by (instance) / 1024 / 1024",
+              "expr": "sum (irate(node_network_receive_bytes_total{instance=~\".*$servergroup.*\"}[1m])) by (instance) / 1024 / 1024",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -365,7 +365,7 @@
               "step": 600
             },
             {
-              "expr": "- sum (irate(node_network_transmit_bytes{instance=~\".*$servergroup.*\"}[1m])) by (instance) / 1024 / 1024",
+              "expr": "- sum (irate(node_network_transmit_bytes_total{instance=~\".*$servergroup.*\"}[1m])) by (instance) / 1024 / 1024",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -428,12 +428,10 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
-          "text": "omero + database + docker",
+          "text": "omero + database",
           "value": [
             "omero",
-            "database",
-            "docker"
+            "database"
           ]
         },
         "hide": 0,
@@ -451,14 +449,9 @@
             "selected": true,
             "text": "database",
             "value": "database"
-          },
-          {
-            "selected": true,
-            "text": "docker",
-            "value": "docker"
           }
         ],
-        "query": "omero, database, docker",
+        "query": "omero, database",
         "type": "custom"
       }
     ]

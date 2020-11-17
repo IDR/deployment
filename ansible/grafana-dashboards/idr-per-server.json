@@ -78,7 +78,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(1 - node_filesystem_free{fstype!~\"(nfs|nfs4|overlay|rootfs|rpc_pipefs|tmpfs)\", instance=\"$hostname\"} / node_filesystem_size{fstype!~\"(nfs|nfs4|overlay|rootfs|rpc_pipefs|tmpfs)\", instance=\"$hostname\"}) * 100",
+              "expr": "(1 - node_filesystem_free_bytes{fstype!~\"(nfs|nfs4|overlay|rootfs|rpc_pipefs|tmpfs)\", instance=\"$hostname\"} / node_filesystem_size_bytes{fstype!~\"(nfs|nfs4|overlay|rootfs|rpc_pipefs|tmpfs)\", instance=\"$hostname\"}) * 100",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{mountpoint}} ({{device}})",

@@ -180,26 +180,16 @@
   version: 0.3.0
 
 - src: ome.omero_web_django_prometheus
-  version: 0.3.0
+  version: 0.4.0
 
 - src: ome.prometheus
-  version: 0.3.1
+  version: 0.4.0
 
 - name: ome.prometheus_jmx
   version: 0.2.2
 
 - src: ome.prometheus_node
-  version: 0.2.2
+  version: 0.3.0
 
 - src: ome.prometheus_postgres
   version: 0.4.0
-
-- name: ome.prometheus_0_4_0
-  src:
-    https://github.com/ome/ansible-role-prometheus/archive/0.4.0.tar.gz
-  version: 0.4.0
-
-- name: ome.prometheus_node_0_3_0
-  src:
-    https://github.com/ome/ansible-role-prometheus-node/archive/0.3.0.tar.gz
-  version: 0.3.0

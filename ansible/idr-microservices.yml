@@ -37,17 +37,23 @@
              'ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
           }}
 
-    - name: omero-ms-thumbnail config directory
+    - name: omero-ms config directories
       become: true
       file:
-        path: /etc/omero-ms-thumbnail
+        path: /etc/omero-ms-{{ item }}
         state: directory
+      with_items:
+        - thumbnail
+        - imageregion
 
-    - name: omero-ms-thumbnail config file
+    - name: omero-ms config files
       become: true
       template:
-        src: templates/omero-ms-thumbnail-config.yml.j2
-        dest: /etc/omero-ms-thumbnail/config.yml
+        src: templates/omero-ms-{{ item }}-config.yml.j2
+        dest: /etc/omero-ms-{{ item }}/config.yml
+      with_items:
+        - thumbnail
+        - imageregion
 
     - name: Run docker omero-ms-thumbnail
       become: true
@@ -61,5 +67,35 @@
         volumes:
           - "/etc/omero-ms-thumbnail/config.yml:/opt/ms/conf/config.yaml:ro"
 
+    - name: omero-ms-imageregion user group setup entrypoint
+      become: true
+      template:
+        src: templates/omero-ms-imageregion-entrypoint.sh.j2
+        dest: /etc/omero-ms-imageregion/omero-ms-imageregion-entrypoint.sh
+        mode: u=rwx,g=rx,o=rx
+
+    - name: Run docker omero-ms-imageregion
+      become: true
+      docker_container:
+        image: manics/docker-example-omero-microservices-imageregion:0.5.2-0
+        name: omero-ms-imageregion
+        # Override the entrypoint to create a fixed UID and GID
+        entrypoint: /opt/ms/bin/omero-ms-imageregion-entrypoint.sh
+        published_ports:
+          - "{{ omero_ms_imageregion_port }}:8080"
+        state: started
+        restart_policy: always
+        groups:
+          - "{{ idrnfs_groupid | default(0) }}"
+        volumes:
+          - "/etc/omero-ms-imageregion/config.yml:/opt/ms/conf/config.yaml:ro"
+          - "/etc/omero-ms-imageregion/omero-ms-imageregion-entrypoint.sh:/opt/ms/bin/omero-ms-imageregion-entrypoint.sh:ro"
+          - "/data:/data:ro"
+          - "/opt/omero/server/OMERO.server/lib/scripts:/opt/omero/server/OMERO.server/lib/scripts:ro"
+          - "/uod/idr:/uod/idr:ro"
+          - "/nfs/bioimage:/nfs/bioimage:ro"
+          - "/nfs/biostudies:/nfs/biostudies:ro"
+
   vars:
     omero_ms_thumbnail_port: "8085"
+    omero_ms_imageregion_port: "8086"

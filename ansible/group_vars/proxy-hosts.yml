@@ -30,6 +30,11 @@ nginx_proxy_log_format: main_timed_cache_upstream
 nginx_proxy_websockets_enable: True
 
 nginx_proxy_upstream_servers:
+- name: omeromsthumbnailreadonly
+  balance: ip_hash
+  servers: "{{ omeroreadonly_omeromsthumbnail_hosts | sort }}"
+- name: omeromsthumbnailreadwrite
+  servers: "{{ omeroreadwrite_omeromsthumbnail_hosts }}"
 - name: omeroreadonly
   balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
@@ -56,7 +61,25 @@ _nginx_proxy_omero_locations:
 # Gallery is hosted at /
 - /gallery-api/*
 
+_nginx_proxy_omeromsthumbnail_locations:
+- /webgateway/render_thumbnail/*
+- /webclient/render_thumbnail/*
+- /webgateway/render_birds_eye_view/*
+- /webclient/render_birds_eye_view/*
+- /webgateway/get_thumbnails/*
+- /webclient/get_thumbnails/*
+
+
+# Order is important since we want the longer omeromsthumbnailscached
+# locations to have precedence over the shorter omerocached ones
+# https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms
 _nginx_proxy_backends_omero:
+- name: omeromsthumbnailscached
+  location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
+  server: http://omeromsthumbnailreadonly
+  cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omerocached
   location: ~ {{ _nginx_proxy_omero_locations | join('|') }}
   server: http://omeroreadonly
@@ -310,6 +333,10 @@ _nginx_proxy_sites:
     nginx_proxy_ssl: False
     nginx_proxy_cachebuster_enabled: True
     nginx_proxy_backends:
+    - name: omeromsthumbnailscached
+      location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
+      server: http://omeromsthumbnailreadwrite
+      cache_validity: 1d
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*
       server: http://omeroreadwrite

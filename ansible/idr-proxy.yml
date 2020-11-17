@@ -83,6 +83,18 @@
           map('regex_replace', '^(.*)$', '\1:8086') |
           list
         }}
+      omeroreadonly_omeromszarr_hosts: >-
+        {{
+          omero_omeroreadonly_hosts_reserved |
+          map('regex_replace', '^(.*)$', '\1:8087') |
+          list
+        }}
+      omeroreadwrite_omeromszarr_hosts: >-
+        {{
+          omero_omeroreadwrite_hosts |
+          map('regex_replace', '^(.*)$', '\1:8087') |
+          list
+        }}
 
   - name: Get rsync IP
     # TODO: get all readonly

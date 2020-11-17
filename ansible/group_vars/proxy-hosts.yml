@@ -35,6 +35,11 @@ nginx_proxy_upstream_servers:
   servers: "{{ omeroreadonly_omeromsthumbnail_hosts | sort }}"
 - name: omeromsthumbnailreadwrite
   servers: "{{ omeroreadwrite_omeromsthumbnail_hosts }}"
+- name: omeromsimageregionreadonly
+  balance: ip_hash
+  servers: "{{ omeroreadonly_omeromsimageregion_hosts | sort }}"
+- name: omeromsimageregionreadwrite
+  servers: "{{ omeroreadwrite_omeromsimageregion_hosts }}"
 - name: omeroreadonly
   balance: ip_hash
   servers: "{{ omero_omeroreadonly_hosts_reserved | sort }}"
@@ -69,14 +74,27 @@ _nginx_proxy_omeromsthumbnail_locations:
 - /webgateway/get_thumbnails/*
 - /webclient/get_thumbnails/*
 
+_nginx_proxy_omeromsimageregion_locations:
+- /webgateway/render_image_region/*
+- /webgateway/render_image/*
+- /webclient/render_image_region/*
+- /webclient/render_image/*
+- /webgateway/render_shape_mask/*
 
-# Order is important since we want the longer omeromsthumbnailscached
+
+# Order is important since we want the longer omeroms*cached
 # locations to have precedence over the shorter omerocached ones
 # https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms
 _nginx_proxy_backends_omero:
 - name: omeromsthumbnailscached
   location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
   server: http://omeromsthumbnailreadonly
+  cache_validity: 1d
+  maintenance_flag: "{{ omero_maintenance_flag }}"
+  maintenance_uri: "{{ omero_maintenance_uri }}"
+- name: omeromsimagregioncached
+  location: ~ {{ _nginx_proxy_omeromsimageregion_locations | join('|') }}
+  server: http://omeromsimageregionreadonly
   cache_validity: 1d
   maintenance_flag: "{{ omero_maintenance_flag }}"
   maintenance_uri: "{{ omero_maintenance_uri }}"
@@ -336,6 +354,10 @@ _nginx_proxy_sites:
     - name: omeromsthumbnailscached
       location: ~ {{ _nginx_proxy_omeromsthumbnail_locations | join('|') }}
       server: http://omeromsthumbnailreadwrite
+      cache_validity: 1d
+    - name: omeromsimageregioncached
+      location: ~ {{ _nginx_proxy_omeromsimageregion_locations | join('|') }}
+      server: http://omeromsimageregionreadwrite
       cache_validity: 1d
     - name: omerocached
       location: ~ {{ _nginx_proxy_omero_locations | join('|') }}|/mapr/*

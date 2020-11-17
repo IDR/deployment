@@ -45,6 +45,7 @@
       with_items:
         - thumbnail
         - imageregion
+        - zarr
 
     - name: omero-ms config files
       become: true
@@ -54,6 +55,16 @@
       with_items:
         - thumbnail
         - imageregion
+
+    - name: omero-ms custom entrypoints
+      become: true
+      template:
+        src: templates/omero-ms-{{ item }}-entrypoint.sh.j2
+        dest: /etc/omero-ms-{{ item }}/omero-ms-{{ item }}-entrypoint.sh
+        mode: u=rwx,g=rx,o=rx
+      with_items:
+        - imageregion
+        - zarr
 
     - name: Run docker omero-ms-thumbnail
       become: true
@@ -67,13 +78,6 @@
         volumes:
           - "/etc/omero-ms-thumbnail/config.yml:/opt/ms/conf/config.yaml:ro"
 
-    - name: omero-ms-imageregion user group setup entrypoint
-      become: true
-      template:
-        src: templates/omero-ms-imageregion-entrypoint.sh.j2
-        dest: /etc/omero-ms-imageregion/omero-ms-imageregion-entrypoint.sh
-        mode: u=rwx,g=rx,o=rx
-
     - name: Run docker omero-ms-imageregion
       become: true
       docker_container:
@@ -85,8 +89,6 @@
           - "{{ omero_ms_imageregion_port }}:8080"
         state: started
         restart_policy: always
-        groups:
-          - "{{ idrnfs_groupid | default(0) }}"
         volumes:
           - "/etc/omero-ms-imageregion/config.yml:/opt/ms/conf/config.yaml:ro"
           - "/etc/omero-ms-imageregion/omero-ms-imageregion-entrypoint.sh:/opt/ms/bin/omero-ms-imageregion-entrypoint.sh:ro"
@@ -96,6 +98,34 @@
           - "/nfs/bioimage:/nfs/bioimage:ro"
           - "/nfs/biostudies:/nfs/biostudies:ro"
 
+    - name: Run docker omero-ms-zarr
+      become: true
+      docker_container:
+        image: openmicroscopy/omero-ms-zarr:0.1.6
+        name: omero-ms-zarr
+        # Override the entrypoint to create a fixed UID and GID
+        entrypoint: /usr/local/bin/omero-ms-zarr-entrypoint.sh
+        env:
+          CONFIG_omero_data_dir: /data/OMERO
+          CONFIG_omero_db_host: "{{ omero_db_host_ansible }}"
+          CONFIG_omero_db_user: "{{ omero_server_dbuser }}"
+          CONFIG_omero_db_pass: "{{ omero_server_dbpassword }}"
+          CONFIG_omero_db_name: "{{ omero_server_dbname }}"
+          CONFIG_omero_ms_zarr_net_path_image: /idr/zarr/v0.1/{image}.zarr/
+        published_ports:
+          - "{{ omero_ms_zarr_port }}:8080"
+        state: started
+        restart_policy: always
+        groups:
+          - "{{ idrnfs_groupid | default(0) }}"
+        volumes:
+          - "/etc/omero-ms-zarr/omero-ms-zarr-entrypoint.sh:/usr/local/bin/omero-ms-zarr-entrypoint.sh:ro"
+          - "/data:/data:ro"
+          - "/uod/idr:/uod/idr:ro"
+          - "/nfs/bioimage:/nfs/bioimage:ro"
+          - "/nfs/biostudies:/nfs/biostudies:ro"
+
   vars:
     omero_ms_thumbnail_port: "8085"
     omero_ms_imageregion_port: "8086"
+    omero_ms_zarr_port: "8087"

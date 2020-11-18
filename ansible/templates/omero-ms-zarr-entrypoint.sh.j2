@@ -1,7 +1,9 @@
 #!/bin/sh
 set -eu
 
+# NFS access is controlled by group membership
 grep omerozarr /etc/group || addgroup -g {{ idrnfs_groupid | default(1000) }} omerozarr
+# Use a non-root user (any should do)
 grep omerozarr /etc/passwd || adduser -D -u 1000 -G omerozarr omerozarr
 
 # https://github.com/ome/omero-ms-zarr/blob/v0.1.6/Dockerfile#L20

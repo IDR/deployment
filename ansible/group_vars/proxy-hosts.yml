@@ -352,7 +352,8 @@ _nginx_proxy_sites:
 
     nginx_proxy_additional_directives:
     # Only add this CORS header to the default public site
-    # Always set a header including on 404 responses
+    # Always set a header including on 404 responses to support clients such
+    # as vizarr
     - "add_header Access-Control-Allow-Origin $allow_origin always"
     # Study redirects
     - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?68) {

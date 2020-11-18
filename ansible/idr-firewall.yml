@@ -12,6 +12,8 @@
       become: yes
       iptables_raw_25:
         name: default_accept
+        # Docker doesn't play well with fixed iptables rules
+        # So keep whatever happens to already be defined
         keep_unmanaged: yes
         rules: |
           -A INPUT -j ACCEPT

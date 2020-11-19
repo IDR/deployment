@@ -22,7 +22,7 @@ jobs:
     name: Test
     needs:
       - list-scenarios
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     strategy:
       # Keep running so we can see if other tests pass
       fail-fast: false
@@ -30,11 +30,7 @@ jobs:
         scenario: ${{fromJson(needs.list-scenarios.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
-      - name: action requires ./molecule to be under ${{ github.repository }}
-        run: |
-          mkdir -p ${{ github.repository }}
-          mv ansible/* ${{ github.repository }}
-      - name: molecule
-        uses: manics/ome-ansible-molecule@2556175
+      - uses: manics/ome-ansible-molecule@action-nodocker
         with:
           scenario: ${{ matrix.scenario }}
+          subdir: ansible

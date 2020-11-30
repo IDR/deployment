@@ -4,9 +4,9 @@
 - hosts: "{{ idr_environment | default('idr') }}-ftp-hosts"
 
   roles:
-  - role: ome.prometheus_node_0_3_0
+  - role: ome.prometheus_node
 
-  - role: ome.prometheus_0_4_0
+  - role: ome.prometheus
     prometheus_docker_network: monitoring
 
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"

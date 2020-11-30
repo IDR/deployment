@@ -103,6 +103,11 @@ def get_groups_from_server(server_vars, namegroup=True):
     for extra_group in metadata.get('groups', '').split(','):
         if extra_group:
             groups.append(extra_group.strip())
+    # Metadata properties are limited to 255 characters, so add in groups from
+    # a second property
+    for extra_group in metadata.get('groups2', '').split(','):
+        if extra_group:
+            groups.append(extra_group.strip())
 
     groups.append('instance-%s' % server_vars['id'])
     if namegroup:

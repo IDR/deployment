@@ -86,7 +86,7 @@
     prometheus_targets:
     - groupname: nodes
       groups:
-      - "{{ idr_environment | default('idr') + '-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_all_prefix + '-hosts' }}"
       port: 9100
       jobname: node-exporter
       iface: "{{ idr_net_iface | default('eth0') }}"
@@ -169,6 +169,16 @@
     - idr.openmicroscopy.org:873
 
   vars:
+    # If this is the pilot management server we need to scrape:
+    #   hosts in the individual pilot deployments <idrenv>-pilot-hosts
+    #   hosts in parent environment <idrenv>-hosts
+    # In this case there is a special group <idrenv>-pilotidr-hosts
+    # instead of the usual <idrenv>-hosts
+    monitoring_all_prefix: >-
+      {{
+        (idr_enable_pilotidr | default(False)) |
+          ternary('-pilotidr', '')
+      }}
     # If this is the pilot management server we need to scrape
     # hosts in the individual pilot deployments
     monitoring_group_prefix: >-

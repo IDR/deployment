@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: listscenarios
-        uses: manics/action-ansible-molecule-list-scenarios@main
+        uses: ome/action-ansible-molecule-list-scenarios@main
         with:
           subdir: ansible
 
@@ -30,7 +30,7 @@ jobs:
         scenario: ${{fromJson(needs.list-scenarios.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
-      - uses: manics/ome-ansible-molecule@action-nodocker
+      - uses: ome/action-ome-ansible-molecule@main
         with:
           scenario: ${{ matrix.scenario }}
           subdir: ansible

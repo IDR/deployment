@@ -22,10 +22,14 @@
       idr_vm_omeroreadwrite: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+      - "{{ idr_vm_storage_group }}"
       # This extra group will let us setup /etc/hosts on the proxy
       # without adding it to the parent environment
       - "{{ idr_parent_environment }}-pilotidr-hosts"
-      - "{{ idr_vm_storage_group }}"
+      # These extra groups allow monitoring in the parent environment to find
+      # these hosts in the individual pilot environments
+      - "{{ idr_parent_environment }}-pilotomero-hosts"
+      - "{{ idr_parent_environment }}-pilotdatabase-hosts"
       idr_vm_networks: >
         {{ [ {'net-name': idr_parent_environment} ] +
           ((idr_network_storage | length > 0) |

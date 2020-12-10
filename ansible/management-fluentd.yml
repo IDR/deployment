@@ -132,6 +132,11 @@
     kibana_docker_image: "docker.elastic.co/kibana/kibana-oss:6.1.1"
 
 
+# Load hostvars for management server
+- hosts: >-
+    {{ idr_environment | default('idr') }}-management-hosts
+    {{ idr_parent_environment | default('idr') }}-management-hosts
+
 
 - hosts: >
     {{ idr_environment | default('idr') }}-proxy-hosts
@@ -188,5 +193,6 @@
   - role: ome.fluentd
 
   vars:
-    fluentd_server_address: "{{ hostvars[groups[idr_environment | default('idr') + '-management-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
+    _monitoring_idr_environment: "{{ idr_parent_environment | default(idr_environment | default('idr')) + '-management-hosts' }}"
+    fluentd_server_address: "{{ hostvars[groups[_monitoring_idr_environment][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}"
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"

@@ -100,7 +100,7 @@
     # IDR Volumes
 
     - role: ome.openstack_volume_storage
-      openstack_volume_size: 500
+      openstack_volume_size: 800
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb

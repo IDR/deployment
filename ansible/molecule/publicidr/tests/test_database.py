@@ -12,6 +12,8 @@ def test_services_running_and_enabled(host):
 
 
 def test_postgres_port_listening(host):
+    out = host.check_output('ss --numeric --listening --tcp')
+    print(out)
     assert host.socket("tcp://0.0.0.0:5432").is_listening
 
 

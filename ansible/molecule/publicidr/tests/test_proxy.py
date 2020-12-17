@@ -15,6 +15,8 @@ def test_services_running_and_enabled(host):
 
 @pytest.mark.parametrize("port", [80, 443, 9000])
 def test_omero_port_listening(host, port):
+    out = host.check_output('ss --numeric --listening --tcp')
+    print(out)
     assert host.socket("tcp://0.0.0.0:%d" % port).is_listening
 
 

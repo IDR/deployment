@@ -15,6 +15,8 @@ def test_services_running_and_enabled(host, name):
 
 
 def test_nginx_port_listening(host):
+    out = host.check_output('ss --numeric --listening --tcp')
+    print(out)
     assert host.socket("tcp://0.0.0.0:80").is_listening
 
 

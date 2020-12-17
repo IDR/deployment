@@ -18,7 +18,10 @@ def test_omero_port_listening(host, port):
     out = host.check_output('ss --numeric --listening --tcp')
     print(out)
     assert (host.socket(f"tcp://0.0.0.0:{port}").is_listening or
-            host.socket(f"tcp://:::{port}").is_listening)
+            host.socket(f"tcp://:::{port}").is_listening or
+            # Current version of testinfra converts [::] to :: but the version
+            # we're using is ancient
+            host.socket(f"tcp://[::]:{port}").is_listening)
 
 
 @pytest.mark.parametrize("address", [

@@ -18,7 +18,10 @@ def test_nginx_port_listening(host):
     out = host.check_output('ss --numeric --listening --tcp')
     print(out)
     assert (host.socket(f"tcp://0.0.0.0:80").is_listening or
-            host.socket(f"tcp://:::80").is_listening)
+            host.socket(f"tcp://:::80").is_listening or
+            # Current version of testinfra converts [::] to :: but the version
+            # we're using is ancient
+            host.socket(f"tcp://[::]:80").is_listening)
 
 
 @pytest.mark.parametrize("port", [4063, 4064])
@@ -26,9 +29,15 @@ def test_omero_port_listening(host, port):
     out = host.check_output('ss --numeric --listening --tcp')
     print(out)
     assert (host.socket(f"tcp://0.0.0.0:{port}").is_listening or
-            host.socket(f"tcp://:::{port}").is_listening)
+            host.socket(f"tcp://:::{port}").is_listening or
+            # Current version of testinfra converts [::] to :: but the version
+            # we're using is ancient
+            host.socket(f"tcp://[::]:{port}").is_listening)
 
 
 def test_registry_port_listening(host):
     assert (host.socket(f"tcp://0.0.0.0:4061").is_listening or
-            host.socket(f"tcp://:::4061").is_listening)
+            host.socket(f"tcp://:::4061").is_listening or
+            # Current version of testinfra converts [::] to :: but the version
+            # we're using is ancient
+            host.socket(f"tcp://[::]:4061").is_listening)

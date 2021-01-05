@@ -15,13 +15,7 @@ def test_services_running_and_enabled(host):
 
 @pytest.mark.parametrize("port", [80, 443, 9000])
 def test_omero_port_listening(host, port):
-    out = host.check_output('ss --numeric --listening --tcp')
-    print(out)
-    assert (host.socket(f"tcp://0.0.0.0:{port}").is_listening or
-            host.socket(f"tcp://:::{port}").is_listening or
-            # Current version of testinfra converts [::] to :: but the version
-            # we're using is ancient
-            host.socket(f"tcp://[::]:{port}").is_listening)
+    assert host.socket("tcp://0.0.0.0:%d" % port).is_listening
 
 
 @pytest.mark.parametrize("address", [

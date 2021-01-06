@@ -1,0 +1,48 @@
+---
+name: Molecule
+# yamllint disable-line rule:truthy
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  list-scenarios:
+    runs-on: ubuntu-20.04
+    outputs:
+      matrix: ${{ steps.listscenarios.outputs.scenarios }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: listscenarios
+        uses: ome/action-ansible-molecule-list-scenarios@main
+        with:
+          subdir: ansible
+
+  test:
+    name: Test
+    needs:
+      - list-scenarios
+    runs-on: ubuntu-20.04
+    strategy:
+      # Keep running so we can see if other tests pass
+      fail-fast: false
+      matrix:
+        scenario: ${{fromJson(needs.list-scenarios.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v2
+      # We're using an old version of molecule with an old testinfra version
+      # We need this bugfix
+      # https://github.com/pytest-dev/pytest-testinfra/commit/dd1c40281d5d8d048f51a6e5ecc28471899b1056
+      # So we can't rely on the ome/action-ome-ansible-molecule defaults
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install ome-ansible-molecule
+        run: python -mpip install 'ome-ansible-molecule==0.4.*'
+      - name: Upgrade testinfra
+        run: python -mpip install testinfra==2.1.0
+      - uses: ome/action-ome-ansible-molecule@main
+        with:
+          manage-virtualenv: "false"
+          scenario: ${{ matrix.scenario }}
+          subdir: ansible

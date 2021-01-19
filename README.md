@@ -31,4 +31,6 @@ If you see lost connections you can try setting a keep-alive in your `.ssh/confi
 
 [Operating procedures](docs/operating-procedures.md): Administration of the IDR
 
+[IDR upload server](docs/idr-ftp-s3.md): Information on how the IDR upload server is run.
+
 [Monitoring](docs/monitoring.md): Monitoring the IDR

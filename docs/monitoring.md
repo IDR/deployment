@@ -1,6 +1,6 @@
 # IDR Monitoring
 
-Each IDR deployment has it's own monitoring system.
+Each IDR deployment has its own monitoring system.
 
 ## Metrics
 

@@ -36,15 +36,20 @@ Limitations:
 - Logs are kept for two weeks.
 
 
+## IDR Pilot Monitoring
+
+All IDR pilot test instances are currently monitored by a single monitoring server.
+This is accessed using the same commands as above, using `idr-pilot` as the proxy.
+
+
 ## IDR FTP Monitoring
 
 The IDR FTP server has limited Prometheus monitoring running on the same server with alerts for low available disk space.
 
 
-## IDR Pilot Monitoring
+## Long term log analysis
 
-All IDR pilot test instances are currently monitored by a single monitoring server.
-This is accessed using the same commands as above, using `idr-pilot` as the proxy.
+More structure analysis of archived IDR access logs across multiple releases is handled in https://github.com/IDR/idr-log-analysis
 
 
 ## Deployment
@@ -69,8 +74,3 @@ The playbook automatically configures Grafana and uploads some pre-created dashb
 
 ElasticSearch, Kibana and the Fluentd server are run in Docker and [deployed by a playbook](../ansible/management-fluentd.yml).
 This playbook also deploys the Fluentd logging agents that collect the logs on the OMERO and proxy servers, and forward them to the central Fluentd server.
-
-
-## Long term log analysis
-
-More structure analysis of archived IDR access logs across multiple releases is handled in https://github.com/IDR/idr-log-analysis

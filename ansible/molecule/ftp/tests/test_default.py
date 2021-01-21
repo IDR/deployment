@@ -24,5 +24,5 @@ def test_upload(host):
     # If this test fails it's probably due to a failure in upload_test.sh.
     # An FTP error in that script doesn't exit with an error code
     assert f.exists
-    assert f.content_string.endswith('# IDR FTP molecule test script')
+    assert f.content_string.rstrip().endswith('# IDR FTP molecule test script')
     assert out == ''

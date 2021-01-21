@@ -53,11 +53,12 @@
     become: yes
     file:
       path: /srv/www/connection
-      recurse: yes
       state: directory
+      mode: 0755
 
   - name: Create client autoconfiguration file
     become: yes
     template:
       src: templates/omero-client.json.j2
       dest: /srv/www/connection/omero-client.json
+      mode: 0644

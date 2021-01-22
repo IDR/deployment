@@ -14,11 +14,11 @@ omero_server_checkupgrade_comparator: '!='
 idr_omero_web_release: 5.8.1
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
-  - omero-py==5.8.2
+  - omero-py==5.9.0
 # ome.omero_server role installs omero-py but this may not be the latest release
 # TODO: This is an internal role variable, replace when we have a proper way
 # https://github.com/ome/ansible-role-omero-server/blob/3.1.0/defaults/main.yml#L89
-_omero_py_version: ==5.9.0rc1
+_omero_py_version: ==5.9.0
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
@@ -65,7 +65,7 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
-- omero-cli-render==0.6.0
+- omero-cli-render==0.7.0
 - omero-metadata==0.7.0
 - omero-upload==0.3.0
 - omero-rois==0.3.0

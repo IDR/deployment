@@ -5,8 +5,6 @@
 
   roles:
     - role: ome.docker
-      # Upstream requires additional kubernetes configuration
-      docker_install_upstream: False
       docker_use_ipv4_nic_mtu: True
 
   tasks:

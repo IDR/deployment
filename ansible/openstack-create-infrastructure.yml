@@ -17,7 +17,3 @@
 # Independent anonymous FTP server
 - include: openstack-create-ftp.yml
   when: 'idr_enable_ftp | default(True)'
-
-# Independent Kubernetes clusters
-- include: openstack-create-k8s.yml
-  when: 'idr_enable_k8s | default(True)'

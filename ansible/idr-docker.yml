@@ -2,7 +2,6 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
     - role: ome.docker

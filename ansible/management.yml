@@ -27,7 +27,6 @@
     - "{{ idr_environment | default('idr') }}-proxy-hosts"
     - "{{ idr_environment | default('idr') }}-bastion-hosts"
     - "{{ idr_environment | default('idr') }}-dockermanager-hosts"
-    - "{{ idr_environment | default('idr') }}-dockerworker-hosts"
     - "{{ idr_environment | default('idr') }}-management-hosts"
 
   post_tasks:
@@ -53,7 +52,6 @@
     {{ idr_environment | default('idr') }}-proxy-hosts
     {{ idr_environment | default('idr') }}-bastion-hosts
     {{ idr_environment | default('idr') }}-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-dockerworker-hosts
     {{ idr_environment | default('idr') }}-management-hosts
   roles:
   - role: ome.basedeps  # munin-node requires EPEL

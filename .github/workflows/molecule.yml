@@ -30,7 +30,7 @@ jobs:
         scenario: ${{fromJson(needs.list-scenarios.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
-      - uses: sbesson/action-ome-ansible-molecule@ome-ansible-molecule_0.5.0
+      - uses: ome/action-ome-ansible-molecule@main
         with:
           scenario: ${{ matrix.scenario }}
           subdir: ansible

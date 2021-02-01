@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: jupyterhub-envvars
-  namespace: default
-data:
-  # For available environment variables see
-  # https://github.com/IDR/jupyterhub-githubauth/blob/master/jupyterhub_config.py

@@ -145,10 +145,6 @@
 ######################################################################
 # External IDR roles
 
-- name: IDR.glusterfs-kube-config
-  src: https://github.com/IDR/ansible-role-glusterfs-kube-config.git
-  version: 0.1.1
-
 - name: IDR.openstack-idr-instance
   src: https://github.com/IDR/ansible-role-openstack-idr-instance.git
   version: 3.0.0

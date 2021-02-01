@@ -1,6 +1,6 @@
 # Parent provisioning playbook
 
-# This manages the traditional all-in-one IDR + VAE
+# This manages the production IDR servers
 - include: openstack-create-publicidr.yml
   when: 'idr_enable_publicidr | default(True)'
 

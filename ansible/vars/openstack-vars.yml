@@ -11,7 +11,6 @@ vm_flavour_large: m1.xlarge
 vm_flavour_medium: m1.medium
 
 # Copy these volumes for the production IDR
-# The analysis instances will be copied from the current production
 # The default is to initialise new volumes
 idr_volume_database_db_src: "{{ omit }}"
 idr_volume_omero_data_src: "{{ omit }}"

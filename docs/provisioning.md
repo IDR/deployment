@@ -9,11 +9,6 @@ The production (public-facing) IDR (3 servers):
 - OMERO.servers
 - Nginx gateway
 
-The virtual analysis environment (VAE) IDR (3 servers):
-- Kubernetes master
-- Kubernetes workers
-
-
 ## Ansible prerequisites
 
 Almost all of the provisioning and deployment in the IDR is done using Ansible 2.1.
@@ -32,8 +27,6 @@ The [`ansible.cfg`](../ansible/ansible.cfg) configuration file will install the 
 
 The IDR is currently hosted on OpenStack, see below for an example Ansible playbook for provisioning compute, storage and networking.
 The Ansible openstack modules require the `shade` python module.
-
-This playbook will create two networks `idr` and `idr-a` for the production and analysis servers, and multiple instances and storage volumes.
 
 
 ### Production IDR

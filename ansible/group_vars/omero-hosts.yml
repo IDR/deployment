@@ -460,6 +460,15 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
+  - menu: "notebook"
+    config:
+      default:
+        - "Study Notebook"
+      all:
+        - "Study Notebook"
+      ns:
+        - "openmicroscopy.org/idr/analysis/notebook"
+      label: "Analysis Notebook"
   omero.web.viewer.view: omero_iviewer.views.index
   omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
   omero.web.gallery.top_left_logo:

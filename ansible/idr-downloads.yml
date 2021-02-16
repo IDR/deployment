@@ -18,7 +18,7 @@
       comment: /OMERO directory from the IDR
     - name: sql
       path: /srv/omero-sql
-      comment: PostgreSQL 9.4 database dump of the IDR
+      comment: "PostgreSQL {{ postgresql_version }} database dump of the IDR"
 
   tasks:
 

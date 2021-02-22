@@ -22,10 +22,10 @@
 
 - hosts: localhost
 
-  # TODO: IDR.openstack-idr-network always connects an external network, but
+  # TODO: idr.openstack_idr_network always connects an external network, but
   # we only want an internal router
   roles:
-  - role: IDR.openstack-idr-network
+  - role: idr.openstack_idr_network
     idr_network_name: "{{ archive_network_name }}"
     idr_network_subnet: "{{ archive_network_subnet }}"
     idr_network_external_name: "{{ idr_network_route_external }}"
@@ -52,7 +52,7 @@
 
   - name: Attach instances to archive network
     include_role:
-      name: IDR.openstack-idr-instance-network
+      name: idr.openstack_idr_instance_network
     vars:
       idr_instance_network_networks:
       - "{{ archive_network_name }}"

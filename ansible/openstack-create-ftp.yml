@@ -42,13 +42,13 @@
   ############################################################
   # Keypairs
 
-  - role: IDR.openstack-idr-keypairs
+  - role: idr.openstack_idr_keypairs
 
 
   ############################################################
   # Networks
 
-  - role: IDR.openstack-idr-network
+  - role: idr.openstack_idr_network
     idr_network_name: "{{ idr_environment_idr }}"
     idr_network_subnet: "{{ idr_environment_idr_subnet }}"
 
@@ -56,7 +56,7 @@
   ############################################################
   # Instances
 
-  - role: IDR.openstack-idr-instance
+  - role: idr.openstack_idr_instance
     idr_environment: "{{ idr_environment_idr }}"
     idr_vm_name: "{{ idr_environment_idr }}-ftp"
     idr_vm_image: "{{ vm_image }}"

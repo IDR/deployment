@@ -15,19 +15,19 @@
     ############################################################
     # Keypairs
 
-    - role: IDR.openstack-idr-keypairs
+    - role: idr.openstack_idr_keypairsw
 
 
     ############################################################
     # Security groups
 
-    - role: IDR.openstack-idr-security-groups
+    - role: idr.openstack_idr_security_groups
 
 
     ############################################################
     # Networks
 
-    - role: IDR.openstack-idr-network
+    - role: idr.openstack_idr_network
       idr_network_name: "{{ idr_environment_idr }}"
       idr_network_subnet: "{{ idr_environment_idr_subnet }}"
 
@@ -36,7 +36,7 @@
     # IDR Instances
 
     # Proxy server, doubles up as a bastion server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-proxy"
       idr_vm_image: "{{ vm_image }}"
@@ -59,7 +59,7 @@
     # Management Instances
 
     # Dedicated management server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-management"
       idr_vm_image: "{{ vm_image }}"

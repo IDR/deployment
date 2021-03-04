@@ -13,7 +13,7 @@
 
   roles:
 
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"
       idr_vm_image: "{{ vm_image }}"
@@ -57,7 +57,7 @@
     ############################################################
     # OME dev server
 
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-dev"
       idr_vm_image: "{{ vm_image }}"

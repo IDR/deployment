@@ -3,7 +3,7 @@
 
 import argparse
 from builtins import input
-import shade
+import openstack
 import sys
 
 
@@ -28,8 +28,8 @@ def is_in_idrenv(idrenv, obj):
 
 
 class DeleteResource(object):
-    def __init__(self, cloud, wait):
-        self.cloud = cloud
+    def __init__(self, conn, wait):
+        self.conn = conn
         self.wait = wait
 
     def __str__(self):
@@ -37,9 +37,9 @@ class DeleteResource(object):
 
 
 class DeleteServers(DeleteResource):
-    def __init__(self, cloud, idrenv, wait=True):
-        super(DeleteServers, self).__init__(cloud, wait)
-        self.servers = [s for s in cloud.list_servers()
+    def __init__(self, conn, idrenv, wait=True):
+        super(DeleteServers, self).__init__(conn, wait)
+        self.servers = [s for s in conn.list_servers()
                         if is_in_idrenv(idrenv, s)]
 
         self.description = (
@@ -50,16 +50,16 @@ class DeleteServers(DeleteResource):
 
     def __call__(self):
         for s in self.servers:
-            self.cloud.delete_server(s.id, wait=self.wait)
+            self.conn.delete_server(s.id, wait=self.wait)
 
 
 class DeleteVolumes(DeleteResource):
-    def __init__(self, cloud, idrenv, wait=True):
-        super(DeleteVolumes, self).__init__(cloud, wait)
-        self.volumes = [v for v in cloud.list_volumes()
+    def __init__(self, conn, idrenv, wait=True):
+        super(DeleteVolumes, self).__init__(conn, wait)
+        self.volumes = [v for v in conn.list_volumes()
                         if is_in_idrenv(idrenv, v)]
         volume_ids = set(v.id for v in self.volumes)
-        self.volume_snapshots = [s for s in cloud.list_volume_snapshots()
+        self.volume_snapshots = [s for s in conn.list_volume_snapshots()
                                  if s.volume_id in volume_ids]
 
         self.description = (
@@ -72,17 +72,17 @@ class DeleteVolumes(DeleteResource):
 
     def __call__(self):
         for s in self.volume_snapshots:
-            cloud.delete_volume_snapshot(s.id, wait=self.wait)
+            conn.delete_volume_snapshot(s.id, wait=self.wait)
         for v in self.volumes:
-            self.cloud.delete_volume(v.id, wait=self.wait)
+            self.conn.delete_volume(v.id, wait=self.wait)
 
 
 class DeleteNetworks(DeleteResource):
-    def __init__(self, cloud, idrenv, wait=True):
-        super(DeleteNetworks, self).__init__(cloud, wait)
-        self.routers = [r for r in cloud.list_routers()
+    def __init__(self, conn, idrenv, wait=True):
+        super(DeleteNetworks, self).__init__(conn, wait)
+        self.routers = [r for r in conn.list_routers()
                         if is_in_idrenv(idrenv, r)]
-        self.networks = [n for n in cloud.list_networks()
+        self.networks = [n for n in conn.list_networks()
                          if is_in_idrenv(idrenv, n)]
         self.subnet_ids = []
         for n in self.networks:
@@ -91,7 +91,7 @@ class DeleteNetworks(DeleteResource):
         self.ports = {}
         self.router_map = dict((r.id, r) for r in self.routers)
         for n in self.networks:
-            for p in cloud.list_ports({
+            for p in conn.list_ports({
                 'device_owner': 'network:router_interface',
                 'network_id': n.id
             }):
@@ -102,7 +102,7 @@ class DeleteNetworks(DeleteResource):
                         self.ports[p.device_id] = set([p.id])
 
         # Fetch subnet metadata for display
-        subnet_dict = dict((s.id, s) for s in cloud.list_subnets())
+        subnet_dict = dict((s.id, s) for s in conn.list_subnets())
 
         self.description = (
             ['Deleting Networks'] +
@@ -119,20 +119,20 @@ class DeleteNetworks(DeleteResource):
     def __call__(self):
         for (router_id, port_ids) in self.ports.items():
             for p in port_ids:
-                self.cloud.remove_router_interface(
+                self.conn.remove_router_interface(
                     self.router_map[router_id], port_id=p)
         for r in self.routers:
-            self.cloud.delete_router(r.id)
+            self.conn.delete_router(r.id)
         for s in self.subnet_ids:
-            self.cloud.delete_subnet(s)
+            self.conn.delete_subnet(s)
         for n in self.networks:
-            self.cloud.delete_network(n.id)
+            self.conn.delete_network(n.id)
 
 
 class DeleteSecurityGroups(DeleteResource):
-    def __init__(self, cloud, idrenv, wait=True):
-        super(DeleteSecurityGroups, self).__init__(cloud, wait)
-        self.security_groups = [g for g in cloud.list_security_groups()
+    def __init__(self, conn, idrenv, wait=True):
+        super(DeleteSecurityGroups, self).__init__(conn, wait)
+        self.security_groups = [g for g in conn.list_security_groups()
                                 if is_in_idrenv(idrenv, g)]
 
         self.description = (
@@ -143,21 +143,21 @@ class DeleteSecurityGroups(DeleteResource):
 
     def __call__(self):
         for g in self.security_groups:
-            self.cloud.delete_security_group(g.id)
+            self.conn.delete_security_group(g.id)
 
 
-def delete(cloud, idrenv, resource_types, wait):
+def delete(conn, idrenv, resource_types, wait):
     commands = []
     delete_all = 'all' in resource_types
 
     if delete_all or 'server' in resource_types:
-        commands.append(DeleteServers(cloud, idrenv, wait))
+        commands.append(DeleteServers(conn, idrenv, wait))
     if delete_all or 'volume' in resource_types:
-        commands.append(DeleteVolumes(cloud, idrenv, wait))
+        commands.append(DeleteVolumes(conn, idrenv, wait))
     if delete_all or 'network' in resource_types:
-        commands.append(DeleteNetworks(cloud, idrenv, wait))
+        commands.append(DeleteNetworks(conn, idrenv, wait))
     if delete_all or 'secgroup' in resource_types:
-        commands.append(DeleteSecurityGroups(cloud, idrenv, wait))
+        commands.append(DeleteSecurityGroups(conn, idrenv, wait))
 
     return commands
 
@@ -198,8 +198,8 @@ if __name__ == '__main__':
             print('Environment does not match, aborting')
             sys.exit(2)
 
-    cloud = shade.openstack_cloud()
-    commands = delete(cloud, args.idrenv, args.type, not args.nowait)
+    conn = openstack.connection.from_config()
+    commands = delete(conn, args.idrenv, args.type, not args.nowait)
     for c in commands:
         print(c)
 

@@ -15,29 +15,29 @@
 #    target's previous IP to that server (i.e. swap the IPs)
 
 from builtins import input
-import shade
+import openstack
 import socket
 import sys
 
 
 class DetachFloatingIP(object):
-    def __init__(self, cloud, floatingips, server):
-        self.cloud = cloud
+    def __init__(self, conn, floatingips, server):
+        self.conn = conn
         fip = floatingips[server.accessIPv4]
         self.kwargs = dict(server_id=server.id, floating_ip_id=fip.id)
         self.description = 'Detaching IP {0} from {1} ({2})'.format(
             fip.floating_ip_address, server.name, fip.fixed_ip_address)
 
     def __call__(self):
-        cloud.detach_ip_from_server(**self.kwargs)
+        conn.detach_ip_from_server(**self.kwargs)
 
     def __str__(self):
         return self.description
 
 
 class AttachFloatingIP(object):
-    def __init__(self, cloud, floatingips, server, targetip):
-        self.cloud = cloud
+    def __init__(self, conn, floatingips, server, targetip):
+        self.conn = conn
         fip = floatingips[server.accessIPv4]
         if targetip not in floatingips:
             raise ValueError(
@@ -52,17 +52,17 @@ class AttachFloatingIP(object):
             targetip, server.name, fip.fixed_ip_address)
 
     def __call__(self):
-        cloud.add_ip_list(**self.kwargs)
+        conn.add_ip_list(**self.kwargs)
 
     def __str__(self):
         return self.description
 
 
-def swapip(cloud, targetname, targetdns):
+def swapip(conn, targetname, targetdns):
     targetip = socket.gethostbyname(targetdns)
-    servers = cloud.list_servers()
+    servers = conn.list_servers()
     floatingips = dict((fip.floating_ip_address, fip)
-                       for fip in cloud.list_floating_ips())
+                       for fip in conn.list_floating_ips())
 
     target = None
     current = None
@@ -90,14 +90,14 @@ def swapip(cloud, targetname, targetdns):
             break
 
     commands = []
-    commands.append(DetachFloatingIP(cloud, floatingips, target))
+    commands.append(DetachFloatingIP(conn, floatingips, target))
     if current:
-        commands.append(DetachFloatingIP(cloud, floatingips, current))
+        commands.append(DetachFloatingIP(conn, floatingips, current))
 
-    commands.append(AttachFloatingIP(cloud, floatingips, target, targetip))
+    commands.append(AttachFloatingIP(conn, floatingips, target, targetip))
     if current:
         commands.append(AttachFloatingIP(
-            cloud, floatingips, current, oldfloatingip))
+            conn, floatingips, current, oldfloatingip))
 
     return commands
 
@@ -106,8 +106,8 @@ if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) != 2:
         raise ValueError('Required parameters: server-name target-ip-or-dns')
-    cloud = shade.openstack_cloud()
-    commands = swapip(cloud, args[0], args[1])
+    conn = openstack.connection.from_config()
+    commands = swapip(conn, args[0], args[1])
     for c in commands:
         print(c)
     r = input('Enter "yes" to continue with these changes\n'

@@ -8,14 +8,14 @@
       decommission_archive_prefix: "{{ ansible_hostname }}-{{ ansible_date_time.date | replace('-', '') }}"
 
   # postgresql_db dump is not idempotent
-  - name: Check if dump exists
+  - name: Check if gzipped dump exists
     stat:
-      path: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump
+      path: /tmp/{{ decommission_archive_prefix }}-database-{{ item.name }}.pg_dump.gz
     with_items:
     - "{{ postgresql_databases }}"
     register: database_pgdump_st
 
-  - name: Creates directory
+  - name: Create dump directory
     become: yes
     become_user: postgres
     file:
@@ -26,7 +26,7 @@
     with_items:
       - "{{ database_pgdump_st.results }}"
 
-  - name: Dump database
+  - name: Dump database (parallel)
     become: yes
     become_user: postgres
     postgresql_db:
@@ -43,6 +43,7 @@
     become_user: postgres
     archive:
       path: /tmp/{{ decommission_archive_prefix }}-database-{{ item.item.name }}.pg_dump
+      dest: /tmp/{{ decommission_archive_prefix }}-database-{{ item.item.name }}.pg_dump.gz
       remove: yes
     when: not item.stat.exists
     with_items:

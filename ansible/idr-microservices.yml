@@ -101,7 +101,7 @@
     - name: Run docker omero-ms-zarr
       become: true
       docker_container:
-        image: openmicroscopy/omero-ms-zarr:0.1.6
+        image: openmicroscopy/omero-ms-zarr:0.2.0
         name: omero-ms-zarr
         # Override the entrypoint to create a fixed UID and GID
         entrypoint: /usr/local/bin/omero-ms-zarr-entrypoint.sh

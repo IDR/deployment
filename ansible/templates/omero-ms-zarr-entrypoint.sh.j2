@@ -6,5 +6,5 @@ grep omerozarr /etc/group || addgroup -g {{ idrnfs_groupid | default(1000) }} om
 # Use a non-root user (any should do)
 grep omerozarr /etc/passwd || adduser -D -u 1000 -G omerozarr omerozarr
 
-# https://github.com/ome/omero-ms-zarr/blob/v0.1.6/Dockerfile#L20
-exec su omerozarr -c "java -cp /lib/omero-ms-zarr-0.1.6-all.jar org.openmicroscopy.ms.zarr.ConfigEnv $@"
+# https://github.com/ome/omero-ms-zarr/blob/v0.2.0/Dockerfile#L20
+exec su omerozarr -c "java -cp /lib/omero-ms-zarr-0.2.0-all.jar org.openmicroscopy.ms.zarr.ConfigEnv $@"

@@ -69,7 +69,7 @@
     - name: Run docker omero-ms-thumbnail
       become: true
       docker_container:
-        image: openmicroscopy/omero-ms-thumbnail:0.5.2
+        image: openmicroscopy/omero-ms-thumbnail:0.5.3
         name: omero-ms-thumbnail
         published_ports:
           - "{{ omero_ms_thumbnail_port }}:8080"

@@ -13,7 +13,7 @@
 
   roles:
 
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"
       idr_vm_image: "{{ vm_image }}"
@@ -22,10 +22,14 @@
       idr_vm_omeroreadwrite: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+      - "{{ idr_vm_storage_group }}"
       # This extra group will let us setup /etc/hosts on the proxy
       # without adding it to the parent environment
       - "{{ idr_parent_environment }}-pilotidr-hosts"
-      - "{{ idr_vm_storage_group }}"
+      # These extra groups allow monitoring in the parent environment to find
+      # these hosts in the individual pilot environments
+      - "{{ idr_parent_environment }}-pilotomero-hosts"
+      - "{{ idr_parent_environment }}-pilotdatabase-hosts"
       idr_vm_networks: >
         {{ [ {'net-name': idr_parent_environment} ] +
           ((idr_network_storage | length > 0) |
@@ -34,7 +38,7 @@
       when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
-      openstack_volume_size: 500
+      openstack_volume_size: 800
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb
@@ -53,7 +57,7 @@
     ############################################################
     # OME dev server
 
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-dev"
       idr_vm_image: "{{ vm_image }}"

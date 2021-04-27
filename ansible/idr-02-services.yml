@@ -4,18 +4,3 @@
 - include: idr-downloads.yml
 
 - include: idr-microservices.yml
-
-- include: idr-kubernetes.yml
-# TODO: Not idempotent
-- include: idr-kubernetes-apply.yml
-### TODO: END
-
-# It should be fine to always run these since if no hosts match nothing
-# will happen but to save time wrap the Kubernetes playbooks
-- include: k8s-k8sproxy.yml
-- include: k8s-kubespray-vae.yml
-  when: 'idr_enable_k8s | default(True)'
-- include: k8s-kubespray-train.yml
-  when: 'idr_enable_k8s | default(True)'
-- include: k8s-vae-shared-storage.yml
-  when: 'idr_enable_k8s | default(True)'

@@ -94,11 +94,6 @@ possible to create a CSV output of the results:
 
     $ screen -dmS cache parallel --eta --sshloginfile nodes -a ids.txt --results /tmp/cache/ --sqlandworker csv:////%2Ftmp%2Fcache.csv -j10 '/opt/omero/server/OMERO.server/bin/omero render -s localhost -u public -w public test --force'
 
-## Analysis IDR
-
-The VAE (JupyterHub) is managed separately. See https://github.com/IDR/k8s-analysis-deploy.
-
-
 ## Backups, restores and upgrades
 
 The IDR has a well-defined separation between applications and data.

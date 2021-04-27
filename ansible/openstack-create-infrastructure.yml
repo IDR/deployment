@@ -1,6 +1,6 @@
 # Parent provisioning playbook
 
-# This manages the traditional all-in-one IDR + VAE
+# This manages the production IDR servers
 - include: openstack-create-publicidr.yml
   when: 'idr_enable_publicidr | default(True)'
 
@@ -17,7 +17,3 @@
 # Independent anonymous FTP server
 - include: openstack-create-ftp.yml
   when: 'idr_enable_ftp | default(True)'
-
-# Independent Kubernetes clusters
-- include: openstack-create-k8s.yml
-  when: 'idr_enable_k8s | default(True)'

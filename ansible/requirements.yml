@@ -10,34 +10,34 @@
   version: 1.0.1
 
 - src: ome.anonymous_ftp
-  version: 0.1.2
+  version: 0.1.3
 
 - src: ome.basedeps
   version: 1.1.0
 
 - src: ome.cadvisor
-  version: 0.3.1
+  version: 0.3.3
 
 - src: ome.cli_utils
   version: 1.1.0
 
 - src: ome.deploy_archive
-  version: 0.1.3
+  version: 0.1.4
 
 - src: ome.docker
-  version: 3.0.2
+  version: 3.1.1
 
 - src: ome.docker_tools
   version: 1.0.1
 
 - src: ome.haproxy
-  version: 3.2.2
+  version: 3.2.3
 
 - src: ome.hosts_populate
-  version: 0.2.1
+  version: 0.2.3
 
 - src: ome.ice
-  version: 4.0.0
+  version: 4.3.0
 
 - src: ome.iptables_raw
   version: 0.3.1
@@ -46,97 +46,94 @@
   version: 2.1.0
 
 - src: ome.local_accounts
-  version: 1.0.2
+  version: 1.0.3
 
 - src: ome.logrotate
-  version: 1.0.1
+  version: 1.0.2
 
 - src: ome.lvm_partition
   version: 1.1.1
 
 - src: ome.minio_s3_gateway
-  version: 0.1.0
+  version: 0.1.1
 
 - src: ome.munin
-  version: 1.1.3-openmicroscopy2
+  version: 1.1.3-openmicroscopy3
 
 - src: ome.munin_node
   version: 1.2.1-openmicroscopy2
 
 - src: ome.network_cloud_interfaces
-  version: 1.2.2
+  version: 1.2.3
 
 - src: ome.network
-  version: 1.1.3
+  version: 1.1.4
 
 - src: ome.nfs_mount
-  version: 1.2.1
+  version: 1.3.0
 
 - src: ome.nfs_share
-  version: 1.0.3
+  version: 1.0.4
 
 - src: ome.nginx
-  version: 2.0.1
-
-- src: ome.nginx_proxy
-  version: 1.13.0
-
-- src: ome.omego
-  version: 0.2.0
-
-- src: ome.omero_common
-  version: 0.3.2
-
-- src: ome.omero_logmonitor
   version: 2.1.1
 
-- src: ome.omero_python_deps
-  version: 2.0.1
+- src: ome.nginx_proxy
+  version: 1.15.1
+
+- src: ome.omero_common
+  version: 0.3.4
+
+- src: ome.omero_logmonitor
+  version: 3.0.1
 
 - src: ome.omero_server
-  version: 3.2.0
+  version: 4.0.0
 
 - src: ome.omero_user
   version: 0.3.0
 
 - src: ome.omero_web
-  version: 3.0.1
+  version: 4.0.0
 
 - src: ome.openstack_volume_storage
   version: 1.1.1
 
 - src: ome.postgresql
-  version: 5.0.0
+  version: 5.0.2
 
 - src: ome.postgresql_client
-  version: 0.1.0
+  version: 0.1.2
+
+- src: ome.python3_virtualenv
+  version: 0.1.2
 
 - src: ome.python_pydata
   version: 1.1.1
 
 - src: ome.reboot_server
-  version: 0.1.2
+  version: 0.1.3
 
 - src: ome.redis
   version: 1.1.1
 
 - src: ome.rsync_server
-  version: 1.0.1
+  version: 1.0.2
 
 - src: ome.selinux_utils
-  version: 2.0.1
+  version: 2.0.2
 
 - src: ome.ssl_certificate
-  version: 0.3.2
+  version: 0.3.3
 
 - src: ome.storage_volume_initialise
-  version: 1.0.1
+  version: 1.0.2
 
 - src: ome.sudoers
-  version: 1.0.1
+  version: 1.0.3
 
 - src: ome.upgrade_distpackages
-  version: 1.1.1
+  version: 1.1.3
 
 - src: ome.versioncontrol_utils
   version: 1.0.2
@@ -145,61 +142,42 @@
 ######################################################################
 # External IDR roles
 
-- name: IDR.glusterfs-kube-config
-  src: https://github.com/IDR/ansible-role-glusterfs-kube-config.git
-  version: 0.1.1
+- name: idr.openstack_idr_instance
+  version: 3.0.2
 
-- name: IDR.openstack-idr-instance
-  src: https://github.com/IDR/ansible-role-openstack-idr-instance.git
-  version: 2.0.0
+- name: idr.openstack_idr_instance_network
+  version: 1.1.2
 
-- name: IDR.openstack-idr-instance-network
-  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network.git
+- name: idr.openstack_idr_keypairs
   version: 1.1.1
 
-- name: IDR.openstack-idr-keypairs
-  src: https://github.com/IDR/ansible-role-openstack-idr-keypairs.git
-  version: 1.1.0
+- name: idr.openstack_idr_network
+  version: 3.0.1
 
-- name: IDR.openstack-idr-network
-  src: https://github.com/IDR/ansible-role-openstack-idr-network.git
-  version: 3.0.0
-
-- name: IDR.openstack-idr-security-groups
-  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups.git
-  version: 1.2.0
+- name: idr.openstack_idr_security_groups
+  version: 1.2.1
 
 
 ######################################################################
 # External development roles
 
 - src: ome.fluentd
-  version: 0.2.2
+  version: 0.2.3
 
 - src: ome.omero_prometheus_exporter
-  version: 0.3.0
-
-- src: ome.omero_web_django_prometheus
-  version: 0.3.0
-
-- src: ome.prometheus
   version: 0.3.1
 
+- src: ome.omero_web_django_prometheus
+  version: 0.4.1
+
+- src: ome.prometheus
+  version: 0.5.1
+
 - name: ome.prometheus_jmx
-  version: 0.2.2
+  version: 0.3.1
 
 - src: ome.prometheus_node
-  version: 0.2.2
+  version: 0.3.1
 
 - src: ome.prometheus_postgres
-  version: 0.4.0
-
-- name: ome.prometheus_0_4_0
-  src:
-    https://github.com/ome/ansible-role-prometheus/archive/0.4.0.tar.gz
-  version: 0.4.0
-
-- name: ome.prometheus_node_0_3_0
-  src:
-    https://github.com/ome/ansible-role-prometheus-node/archive/0.3.0.tar.gz
-  version: 0.3.0
+  version: 0.4.2

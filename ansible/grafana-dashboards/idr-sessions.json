@@ -309,7 +309,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(django_http_responses_total_by_status[$quantileint])) without (instance)",
+              "expr": "sum(rate(django_http_responses_total_by_status_total[$quantileint])) without (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{status}}",

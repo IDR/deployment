@@ -11,21 +11,21 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.8.1
+idr_omero_web_release: 5.9.1
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
-  - omero-py==5.8.2
+  - omero-py==5.9.0
 # ome.omero_server role installs omero-py but this may not be the latest release
 # TODO: This is an internal role variable, replace when we have a proper way
 # https://github.com/ome/ansible-role-omero-server/blob/3.1.0/defaults/main.yml#L89
-_omero_py_version: ==5.8.2
+_omero_py_version: ==5.9.0
 
 # The IDR OMERO server uses a custom IDR build
 idr_bf_components:
   - formats-api
   - formats-bsd
   - formats-gpl
-idr_bf_release: "0.6.4"
+idr_bf_release: "0.6.6"
 idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
 
 ice_install_devel: false
@@ -70,8 +70,8 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
-- omero-cli-render==0.6.0
-- omero-metadata==0.5.0
+- omero-cli-render==0.7.0
+- omero-metadata==0.7.0
 - omero-upload==0.3.0
 - omero-rois==0.3.0
 - pandas==1.1.0
@@ -94,6 +94,8 @@ omero_server_config_set:
   omero.client.ui.tree.orphans.enabled: False
   # Websockets (no wss for now to avoid dealing with certificates)
   omero.client.icetransports: ssl,tcp,ws
+  # Disable all components except Blitz and Tables
+  omero.server.nodedescriptors: "master:Blitz-0,Tables-0"
 
 
 ######################################################################
@@ -454,6 +456,13 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/mapr/protein"
       label: "Protein"
+  - menu: "proteinsupplementary"
+    config:
+      default: []
+      all: []
+      ns:
+        - "openmicroscopy.org/mapr/protein/supplementary"
+      label: "Protein supplementary"
   - menu: "others"
     config:
       default:
@@ -463,6 +472,15 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/omero/bulk_annotations"
       label: "Others"
+  - menu: "notebook"
+    config:
+      default:
+        - "Study Notebook"
+      all:
+        - "Study Notebook"
+      ns:
+        - "openmicroscopy.org/idr/analysis/notebook"
+      label: "Analysis Notebook"
   omero.web.viewer.view: omero_iviewer.views.index
   omero.web.gallery.favicon: "https://idr.openmicroscopy.org/about/img/logos/favicon-idr.ico"
   omero.web.gallery.top_left_logo:

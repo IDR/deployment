@@ -105,7 +105,7 @@
             idr_environment | default('idr') + '-omeroreadwrite-hosts'][0]]
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
-    when: "{{ groups[idr_environment | default('idr') + '-omero-hosts'] is defined }}"
+    when: groups[idr_environment | default('idr') + '-omero-hosts'] is defined
 
   - name: Get management server IP
     set_fact:
@@ -115,7 +115,7 @@
             idr_environment | default('idr') + '-management-hosts'][0]]
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
-    when: "{{ groups[idr_environment | default('idr') + '-management-hosts'] is defined }}"
+    when: groups[idr_environment | default('idr') + '-management-hosts'] is defined
 
   - name: Configure rsync port in selinux
     become: yes

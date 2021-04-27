@@ -15,19 +15,19 @@
     ############################################################
     # Keypairs
 
-    - role: IDR.openstack-idr-keypairs
+    - role: idr.openstack_idr_keypairs
 
 
     ############################################################
     # Security groups
 
-    - role: IDR.openstack-idr-security-groups
+    - role: idr.openstack_idr_security_groups
 
 
     ############################################################
     # Networks
 
-    - role: IDR.openstack-idr-network
+    - role: idr.openstack_idr_network
       idr_network_name: "{{ idr_environment_idr }}"
       idr_network_subnet: "{{ idr_environment_idr_subnet }}"
 
@@ -36,7 +36,7 @@
     # IDR Instances
 
     # Dedicated database server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-database"
       idr_vm_image: "{{ vm_image }}"
@@ -44,7 +44,7 @@
       idr_vm_database: True
 
     # OMERO server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"
       idr_vm_image: "{{ vm_image }}"
@@ -60,7 +60,7 @@
         }}
 
     # OMERO readonly
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadonly"
       idr_vm_image: "{{ vm_image }}"
@@ -80,7 +80,7 @@
 
 
     # Proxy server, doubles up as a bastion server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-proxy"
       idr_vm_image: "{{ vm_image }}"
@@ -100,7 +100,7 @@
     # IDR Volumes
 
     - role: ome.openstack_volume_storage
-      openstack_volume_size: 500
+      openstack_volume_size: 800
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: db
       openstack_volume_device: /dev/vdb
@@ -125,7 +125,7 @@
     # Management Instances
 
     # Dedicated management server
-    - role: IDR.openstack-idr-instance
+    - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-management"
       idr_vm_image: "{{ vm_image }}"

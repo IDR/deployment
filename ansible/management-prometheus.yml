@@ -54,12 +54,14 @@
 
 - hosts: >
     {{ idr_environment | default('idr') }}-dockermanager-hosts
-    {{ idr_environment | default('idr') }}-dockerworker-hosts
 
   roles:
 
   - role: ome.cadvisor
 
+
+# If this is a pilot monitoring server we haven't yet loaded hostvars
+- hosts: "{{ idr_environment | default('idr') }}-pilotidr-hosts"
 
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
@@ -83,14 +85,14 @@
     prometheus_targets:
     - groupname: nodes
       groups:
-      - "{{ idr_environment | default('idr') + '-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_all_prefix + '-hosts' }}"
       port: 9100
       jobname: node-exporter
       iface: "{{ idr_net_iface | default('eth0') }}"
 
     - groupname: blitz
       groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_group_prefix + 'omero-hosts' }}"
       port: 9180
       jobname: jmx-blitz
       iface: "{{ idr_net_iface | default('eth0') }}"
@@ -113,7 +115,6 @@
     - groupname: cadvisor
       groups:
       - "{{ idr_environment | default('idr') + '-dockermanager-hosts' }}"
-      - "{{ idr_environment | default('idr') + '-dockerworker-hosts' }}"
       port: 9280
       jobname: cadvisor-docker
       iface: "{{ idr_net_iface | default('eth0') }}"
@@ -122,14 +123,14 @@
     # and one for detailed statement performance metrics
     - groupname: postgres
       groups:
-      - "{{ idr_environment | default('idr') + '-database-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_group_prefix + 'database-hosts' }}"
       port: 9187
       jobname: postgres-exporter
       iface: "{{ idr_net_iface | default('eth0') }}"
 
     - groupname: omero-web
       groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_group_prefix + 'omero-hosts' }}"
       port: 80
       jobname: django
       metrics_path: /django_prometheus/metrics
@@ -137,15 +138,18 @@
 
     - groupname: omero-sessions
       groups:
-      - "{{ idr_environment | default('idr') + '-omero-hosts' }}"
+      - "{{ idr_environment | default('idr') + monitoring_group_prefix + 'omero-hosts' }}"
       port: 9449
       jobname: omero-sessions
       iface: "{{ idr_net_iface | default('eth0') }}"
 
     prometheus_http_2xx_internal_targets: >
       {{
-        (groups[(idr_environment | default('idr')) + '-omero-hosts'] +
+        (groups[(idr_environment | default('idr')) + monitoring_group_prefix + 'omero-hosts'] +
+          (
              groups[(idr_environment | default('idr')) + '-proxy-hosts']
+             | default([])
+          )
         ) |
         map('extract', hostvars, [
             'ansible_' + (hosts_populate_iface | default('eth0')),
@@ -161,3 +165,22 @@
 
     prometheus_rsync_banner_targets:
     - idr.openmicroscopy.org:873
+
+  vars:
+    # If this is the pilot management server we need to scrape:
+    #   hosts in the individual pilot deployments <idrenv>-pilot-hosts
+    #   hosts in parent environment <idrenv>-hosts
+    # In this case there is a special group <idrenv>-pilotidr-hosts
+    # instead of the usual <idrenv>-hosts
+    monitoring_all_prefix: >-
+      {{
+        (idr_enable_pilotidr | default(False)) |
+          ternary('-pilotidr', '')
+      }}
+    # If this is the pilot management server we need to scrape
+    # hosts in the individual pilot deployments
+    monitoring_group_prefix: >-
+      {{
+        (idr_enable_pilotidr | default(False)) |
+          ternary('-pilot', '-')
+      }}

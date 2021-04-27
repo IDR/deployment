@@ -13,6 +13,7 @@
     file:
       path: /data/idr-metadata
       state: directory
+      mode: 0755
 
   roles:
 
@@ -41,6 +42,7 @@
         config set -- Ice.Default.Host 127.0.0.1
       dest: /opt/omero/server/config/omero-localhostonly-config.omero
       force: yes
+      mode: 0644
     notify:
     - restart omero-server
 
@@ -51,7 +53,10 @@
   pre_tasks:
   - name: Get fileserver host
     set_fact:
-      omero_fileserver_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-omeroreadwrite-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+      omero_fileserver_host_ansible: >-
+        {{ hostvars[groups[idr_environment | default('idr') +
+        '-omeroreadwrite-hosts'][0]][
+        'ansible_' +(idr_net_iface | default('eth0'))]['ipv4']['address'] }}
 
   roles:
   # Use the same paths as on the omeorreadwrite server to reduce confusion
@@ -78,6 +83,7 @@
       path: /opt/omero/server/config/
       recurse: yes
       state: directory
+      mode: 0755
 
   - name: OMERO.server read-only configuration
     become: yes
@@ -87,6 +93,7 @@
         config set -- omero.cluster.read_only true
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
+      mode: 0644
     notify:
     - restart omero-server if installed
 
@@ -99,6 +106,7 @@
       path: "{{ item }}"
       owner: "{{ omero_server_system_uid }}"
       state: directory
+      mode: 0755
     with_items:
     - /data/OMERO
 
@@ -176,7 +184,10 @@
   tasks:
   - name: Get database host
     set_fact:
-      omero_db_host_ansible: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+      omero_db_host_ansible: >-
+        {{ hostvars[groups[idr_environment | default('idr') +
+        '-database-hosts'][0]][
+        'ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}
 
 
 - hosts: >

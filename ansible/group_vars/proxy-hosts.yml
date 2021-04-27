@@ -358,10 +358,6 @@ _nginx_proxy_sites:
     # Study redirects
     - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?68) {
        return 302 /about/download.html;}"
-    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?90) {
-       return 302 /about/download.html;}"
-    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr00)?95) {
-       return 302 /about/download.html;}"
 
   # This is a duplicate of the main OMERO.web proxy configuration, but with
   # cache-busting:
@@ -445,13 +441,13 @@ idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 ######################################################################
 # Static webpages (/about) on proxy
 
-idr_openmicroscopy_org_version: 2020.11.03
+idr_openmicroscopy_org_version: 2021.03.16
 deploy_archive_dest_dir: /srv/www/{{ idr_openmicroscopy_org_version }}
 deploy_archive_src_url: https://github.com/IDR/idr.openmicroscopy.org/releases/download/{{ idr_openmicroscopy_org_version }}/idr.openmicroscopy.org.tar.gz
 # Optional checksum. It should be safe to omit as long as you never
 # overwrite an existing archive. This should not be a problem when using
 # versioned directories.
-deploy_archive_sha256: 43eaab176141713e7d7a3d53c6fa6cffa37cd44b95494a3f7b574d9c924a9003
+deploy_archive_sha256: d5b23933e1c3540ff2354874455d9f8ef775d2cc766304ba01f7982dc4116f2a
 deploy_archive_symlink: /srv/www/html
 idr_deployment_web_version_file: /srv/www/{{ idr_openmicroscopy_org_version }}/VERSION
 idr_deployment_web_version_value: "{{ idr_environment | default('idr') }}"

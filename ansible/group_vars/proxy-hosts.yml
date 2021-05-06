@@ -53,6 +53,7 @@ _nginx_proxy_omero_locations:
 # /mapr/* is handled separately due to timeouts
 - /webclient/img_detail/*
 - /iviewer/*
+- /figure/*
 # Gallery is hosted at /
 - /gallery-api/*
 

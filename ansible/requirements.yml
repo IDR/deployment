@@ -19,7 +19,7 @@
   version: 0.3.3
 
 - src: ome.cli_utils
-  version: 1.1.0
+  version: 1.1.1
 
 - src: ome.deploy_archive
   version: 0.1.4
@@ -130,7 +130,7 @@
   version: 1.0.2
 
 - src: ome.sudoers
-  version: 1.0.3
+  version: 1.0.4
 
 - src: ome.upgrade_distpackages
   version: 1.1.3

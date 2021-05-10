@@ -126,6 +126,7 @@ idr_omero_web_public_url_filters:
 - api/
 - webadmin/myphoto/
 - mapr/
+- figure/
 - iviewer/
 # Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
 - '$'

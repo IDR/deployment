@@ -122,7 +122,7 @@
   vars:
     fluentd_shared_key: "{{ idr_secret_fluentd_shared_key | default('fluentd') }}"
     fluentd_slack_token: "{{ idr_secret_management_slack_token | default(None) }}"
-    fluentd_slack_channel: "idr-notify-{{ idr_environment | default('idr') }}"
+    fluentd_slack_channel: "idr-logs-{{ idr_environment | default('idr') }}"
     fluentd_elasticsearch_host: elasticsearch
     fluentd_uid: "1010"
     elasticsearch_docker_image: "docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1"

@@ -20,13 +20,31 @@ omero_web_python_addons:
 # https://github.com/ome/ansible-role-omero-server/blob/3.1.0/defaults/main.yml#L89
 _omero_py_version: ==5.9.0
 
+artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
+
+# Override the lib/client JARs on the omeroreadwrite server
+# Works around the OMERO.server 5.6.3 upgrade issue - to be reverted when
+# the server is upgraded
+# See https://github.com/IDR/deployment/issues/327
+omero_client_jars:
+  - name: omero-romio
+    group: org/openmicroscopy
+    version: "5.6.2"
+  - name: omero-blitz
+    group: org/openmicroscopy
+    version: "5.5.8"
+
 # The IDR OMERO server uses a custom IDR build
-idr_bf_components:
-  - formats-api
-  - formats-bsd
-  - formats-gpl
-idr_bf_release: "0.6.6"
-idr_bf_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven/idr"
+idr_bf_jars:
+  - name: formats-api
+    group: idr
+    version: "0.6.6"
+  - name: formats-bsd
+    group: idr
+    version: "0.6.6"
+  - name: formats-gpl
+    group: idr
+    version: "0.6.6"
 
 ice_install_devel: false
 ice_install_python: false

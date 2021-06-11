@@ -45,7 +45,6 @@
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
   vars:
     logs:
-      - { name: 'munin', path: '/var/lib/munin' }
       # Prometheus service needs to be stopped before archiving the logs
       - { name: 'prometheus', path: '/var/lib/docker/volumes/prometheus-data' }
   tasks:

@@ -144,6 +144,7 @@ idr_omero_web_public_url_filters:
 - api/
 - webadmin/myphoto/
 - mapr/
+- figure/
 - iviewer/
 # Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
 - '$'
@@ -234,10 +235,12 @@ omero_web_apps_packages:
 - omero-mapr==0.4.1
 - omero-iviewer==0.10.1
 - omero-gallery==3.3.3
+- omero-figure==4.4.0
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
 - omero_gallery
+- omero_figure
 
 omero_web_apps_top_links:
 - label: Studies

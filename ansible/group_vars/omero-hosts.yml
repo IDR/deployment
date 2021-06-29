@@ -38,13 +38,13 @@ omero_client_jars:
 idr_bf_jars:
   - name: formats-api
     group: idr
-    version: "0.6.6"
+    version: "0.6.7"
   - name: formats-bsd
     group: idr
-    version: "0.6.6"
+    version: "0.6.7"
   - name: formats-gpl
     group: idr
-    version: "0.6.6"
+    version: "0.6.7"
 
 ice_install_devel: false
 ice_install_python: false

@@ -76,7 +76,7 @@
   version: 1.0.4
 
 - name: ome.nginx
-  src: https://github.com/ome/ansible-role-nginx/archive/b8410a6551de5075054a543bd11752143767c3aa.tar.gz
+  src: https://github.com/ome/ansible-role-nginx/archive/4373dfd8bb8091a37a3e2d0401ecb72cd71fca29.tar.gz
   version: 2.1.2
 
 - src: ome.nginx_proxy

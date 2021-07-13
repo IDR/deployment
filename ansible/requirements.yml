@@ -75,8 +75,7 @@
 - src: ome.nfs_share
   version: 1.0.4
 
-- name: ome.nginx
-  src: https://github.com/ome/ansible-role-nginx/archive/4373dfd8bb8091a37a3e2d0401ecb72cd71fca29.tar.gz
+- src: ome.nginx
   version: 2.1.2
 
 - src: ome.nginx_proxy

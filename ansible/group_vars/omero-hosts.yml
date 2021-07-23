@@ -84,7 +84,7 @@ omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
 - omero-cli-render==0.7.0
-- omero-metadata==0.7.0
+- omero-metadata==0.8.2
 - omero-upload==0.3.0
 - omero-rois==0.3.0
 - pandas==1.1.0
@@ -233,7 +233,7 @@ omero_web_config_set:
 
 omero_web_apps_packages:
 - omero-mapr==0.4.1
-- omero-iviewer==0.10.1
+- omero-iviewer==0.11.1
 - omero-gallery==3.3.3
 - omero-figure==4.4.0
 omero_web_apps_names:

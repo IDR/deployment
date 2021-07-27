@@ -6,7 +6,7 @@ The IDR upload VM includes FTP and S3 services for handling data submissions.
 ## IDR FTP server
 
 The IDR FTP server runs in Docker, and only allows [passive anonymous write-only uploads](https://github.com/ome/ansible-role-anonymous-ftp/).
-The server listens on port `32021`, with data connections on ports `32022-32222`.
+The server listens on port `21`, with data connections on ports `32022-32222`.
 Incoming uploads will appear on the server under `/data/idrftp-incoming/`.
 
 

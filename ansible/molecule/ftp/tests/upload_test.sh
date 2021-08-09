@@ -2,7 +2,7 @@
 set -eu
 
 cd /
-ftp -p -n 127.0.0.1 32021 << EOF
+ftp -p -n 127.0.0.1 << EOF
 user anonymous allowed@example.org
 cd incoming
 put upload_test.sh

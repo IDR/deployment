@@ -7,9 +7,9 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 @pytest.mark.parametrize("port", [
-    32021,
+    21,
     32022,
-    32221,
+    32222,
 ])
 def test_listening(host, port):
     assert host.socket('tcp://%d' % port).is_listening

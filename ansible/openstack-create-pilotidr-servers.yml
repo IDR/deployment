@@ -75,6 +75,9 @@
           ((idr_network_storage | length > 0) |
             ternary([{'net-name': idr_network_storage}], []))
         }}
+      idr_vm_security_groups:
+        - 'default'
+        - 'idr-nfs-internal'
       when: idr_enable_pilotidr_devserver | default(False)
 
     - role: ome.openstack_volume_storage

@@ -1,4 +1,8 @@
 # Runs all playbooks for setting up services built on top of the IDR
 
+### Ingress services
+- include: idr-ftp.yml
+- include: idr-s3gateway.yml
+
 ### TODO: Remove these in the next version
 - include: idr-downloads.yml

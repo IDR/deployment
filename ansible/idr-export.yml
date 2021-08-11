@@ -1,6 +1,6 @@
 # Zarr servers
 
-- hosts: "{{ idr_environment_idr }}-dev"
+- hosts: "{{ idr_environment_idr | default('idr') }}-dev"
 
   roles:
     - role: ome.cli_utils

@@ -27,7 +27,7 @@ provisioner:
     name: ansible-lint
   playbooks:
     prepare: prepare.yml
-    converge: ../../idr-01-install-idr.yml
+    converge: ../../idr-02-services.yml
   options:
     diff: True
     skip-tags: skip_if_molecule_docker

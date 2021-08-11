@@ -4,5 +4,8 @@
 - include: idr-ftp.yml
 - include: idr-s3gateway.yml
 
+### Export services
+- include: idr-export.yml
+
 ### TODO: Remove these in the next version
 - include: idr-downloads.yml

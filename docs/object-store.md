@@ -45,8 +45,8 @@ To let the world list the keys of a bucket and read all keys, create a
             "s3:GetObjectVersion",
             "s3:ListBucket"],
           "Resource":[
-            "arn:aws:s3:::idr0066/*",
-            "arn:aws:s3:::idr0066"]
+            "arn:aws:s3:::idr0000/*",
+            "arn:aws:s3:::idr0000"]
         }
       ]
     }
@@ -78,11 +78,11 @@ allow GET and HEAD data access. Create a `cors.json` file:
 
 Set the bucket CORS configuration using `s3api put-bucket-cors`:
 
-    aws --endpoint-url https://uk1s3.embassy.ebi.ac.uk s3api put-bucket-cors --bucket idr0066  --cors-configuration file://cors.json
+    aws --endpoint-url https://uk1s3.embassy.ebi.ac.uk s3api put-bucket-cors --bucket idr0000  --cors-configuration file://cors.json
 
 Optionally, inspect the bucketCORS configuration using `s3api put-bucket-cors`:
 
-    aws --endpoint-url https://uk1s3.embassy.ebi.ac.uk s3api get-bucket-cors --bucket idr0066
+    aws --endpoint-url https://uk1s3.embassy.ebi.ac.uk s3api get-bucket-cors --bucket idr0000
 
 ## Copy and list objects
 

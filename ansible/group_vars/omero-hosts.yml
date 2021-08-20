@@ -509,6 +509,8 @@ omero_web_apps_config_set:
           href: "https://idr.openmicroscopy.org/about/index.html"
         - text: "Published studies"
           href: "https://idr.openmicroscopy.org/about/studies.html"
+        - text: "Linked resources"
+          href: "https://idr.openmicroscopy.org/about/linked-resources.html"
         - text: "API Access"
           href: "https://idr.openmicroscopy.org/about/api.html"
         - text: "Data download"

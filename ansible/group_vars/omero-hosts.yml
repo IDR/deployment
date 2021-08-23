@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.9.1
+idr_omero_web_release: 5.9.2
 # omero-web depends on omero-py but may not pin the latest release
 omero_web_python_addons:
   - omero-py==5.9.0
@@ -84,7 +84,7 @@ omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
 - omero-cli-render==0.7.0
-- omero-metadata==0.8.2
+- omero-metadata==0.9.0
 - omero-upload==0.3.0
 - omero-rois==0.3.0
 - pandas==1.1.0

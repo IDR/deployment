@@ -65,10 +65,10 @@
       idr_vm_dockermanager: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
+      - "{{ idr_vm_storage_group }}"
       # This extra group will let us setup /etc/hosts on the proxy
       # without adding it to the parent environment
       - "{{ idr_parent_environment }}-pilotidr-hosts"
-      - "{{ idr_vm_storage_group }}"
       - "{{ idr_environment_idr }}-data-hosts"
       idr_vm_networks: >
         {{ [ {'net-name': idr_parent_environment} ] +

@@ -1,0 +1,14 @@
+# Zarr servers
+
+- hosts: "{{ idr_environment_idr | default('idr') }}-dev"
+
+  roles:
+    - role: ome.cli_utils
+    - role: ome.versioncontrol_utils
+
+  tasks:
+  - name: install Mesa libGL development package
+    become: yes
+    package:
+      name:
+        - mesa-libGL-devel

@@ -53,6 +53,49 @@
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
         }}
 
+  - name: Get microservice IPs
+    # For now these are the same as omero_omeroreadonly_hosts_reserved
+    # In future we may scale to additional servers separate from OMERO
+    set_fact:
+      # If you're wondering about the use of \1 here vs \\1 in other playbooks
+      # see https://github.com/ansible/ansible/issues/33202
+      omeroreadonly_omeromsthumbnail_hosts: >-
+        {{
+          omero_omeroreadonly_hosts_reserved |
+          map('regex_replace', '^(.*)$', '\1:8085') |
+          list
+        }}
+      omeroreadwrite_omeromsthumbnail_hosts: >-
+        {{
+          omero_omeroreadwrite_hosts |
+          map('regex_replace', '^(.*)$', '\1:8085') |
+          list
+        }}
+      omeroreadonly_omeromsimageregion_hosts: >-
+        {{
+          omero_omeroreadonly_hosts_reserved |
+          map('regex_replace', '^(.*)$', '\1:8086') |
+          list
+        }}
+      omeroreadwrite_omeromsimageregion_hosts: >-
+        {{
+          omero_omeroreadwrite_hosts |
+          map('regex_replace', '^(.*)$', '\1:8086') |
+          list
+        }}
+      omeroreadonly_omeromszarr_hosts: >-
+        {{
+          omero_omeroreadonly_hosts_reserved |
+          map('regex_replace', '^(.*)$', '\1:8087') |
+          list
+        }}
+      omeroreadwrite_omeromszarr_hosts: >-
+        {{
+          omero_omeroreadwrite_hosts |
+          map('regex_replace', '^(.*)$', '\1:8087') |
+          list
+        }}
+
   - name: Get rsync IP
     # TODO: get all readonly
     set_fact:

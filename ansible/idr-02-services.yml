@@ -9,3 +9,5 @@
 
 ### TODO: Remove these in the next version
 - include: idr-downloads.yml
+
+- include: idr-microservices.yml

@@ -81,8 +81,9 @@
       when: idr_enable_pilotidr_devserver | default(False)
 
     - role: ome.openstack_volume_storage
-      openstack_volume_size: 5000
+      openstack_volume_size: "{{ volume_size | default(5000) }}"
       openstack_volume_vmname: "{{ idr_environment_idr }}-dev"
       openstack_volume_name: data
       openstack_volume_device: /dev/vdb
+      openstack_volume_type: "{{ volume_type | default(omit) }}"
       when: idr_enable_pilotidr_devserver | default(False)

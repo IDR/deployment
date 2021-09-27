@@ -1,0 +1,22 @@
+# IDR anonymous FTP server
+
+- hosts: >
+    "{{ idr_environment | default('idr') }}-ftp-hosts"
+    "{{ idr_environment_idr | default('idr') }}-dev"
+
+  roles:
+    - role: ome.cli_utils
+
+  tasks:
+    - name: file transfer utilities
+      become: yes
+      package:
+        name:
+          - rclone
+
+    - name: aspera transfer script
+      become: yes
+      template:
+        src: files/idrftp/idrftp-aspera-sh.j2
+        dest: /data/idrftp-aspera.sh
+        mode: 0555

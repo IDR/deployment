@@ -334,23 +334,6 @@ nginx_proxy_block_locations:
 #nginx_proxy_set_header_host: 'idr.openmicroscopy.org'
 
 
-# omero_downloads_host_ansible may be empty
-_nginx_proxy_streams_rsync:
-- name: idrrsync
-  port: 873
-  servers:
-  - "{{ omero_downloads_host_ansible | default(None) }}:873 max_fails=3 fail_timeout=30s"
-  connect_timeout: "1s"
-  timeout: "3s"
-
-# List of backend streaming servers
-nginx_proxy_streams: >
-  {{ [] +
-     ((omero_downloads_host_ansible is defined) |
-       ternary(_nginx_proxy_streams_rsync, [])
-     ) }}
-
-
 ######################################################################
 # OMERO backend read-only servers
 

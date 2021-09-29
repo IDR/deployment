@@ -1,6 +1,6 @@
 # IDR administration
 
-If you used the OpenStack provisioning playbook, the only accessible external ports will be SSH, HTTP, HTTPS, rsync, and several OMERO ports on `idr-proxy`.
+If you used the OpenStack provisioning playbook, the only accessible external ports will be SSH, HTTP, HTTPS and several OMERO ports on `idr-proxy`.
 For all administrative OMERO operations you will first need to SSH into `idr-proxy` and/or set up a SSH tunnel for other ports and servers.
 
 Any changes that do not involve manipulating the data stored in OMERO (such as changes to the OMERO.server and OMERO.web configuration) should be done by modifying the deployment playbooks to ensure they are included in future deployments.

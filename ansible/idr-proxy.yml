@@ -53,17 +53,6 @@
             ['ansible_' + (idr_net_iface | default('eth0')), 'ipv4', 'address']) | list
         }}
 
-  - name: Get rsync IP
-    # TODO: get all readonly
-    set_fact:
-      omero_downloads_host_ansible: >-
-        {{
-          hostvars[groups[
-            idr_environment | default('idr') + '-omeroreadwrite-hosts'][0]]
-            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
-        }}
-    when: groups[idr_environment | default('idr') + '-omero-hosts'] is defined
-
   - name: Get management server IP
     set_fact:
       management_host_ansible: >-
@@ -73,15 +62,6 @@
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
     when: groups[idr_environment | default('idr') + '-management-hosts'] is defined
-
-  - name: Configure rsync port in selinux
-    become: yes
-    seport:
-      ports: 873
-      proto: tcp
-      setype: http_port_t
-      state: present
-    when: selinux_enabled
 
   roles:
   # Default to a self-signed certificate

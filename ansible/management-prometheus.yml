@@ -164,9 +164,6 @@
     - http://idr.openmicroscopy.org/about/
     - https://idr.openmicroscopy.org/about/
 
-    prometheus_rsync_banner_targets:
-    - idr.openmicroscopy.org:873
-
   vars:
     # If this is the pilot management server we need to scrape:
     #   hosts in the individual pilot deployments <idrenv>-pilot-hosts

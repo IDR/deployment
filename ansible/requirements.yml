@@ -146,7 +146,8 @@
   version: 3.0.1
 
 - name: idr.openstack_idr_security_groups
-  version: 1.3.0
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups/archive/295552392fea2ea5b9400873f39cb61fdefc9caa.tar.gz
+  version: 2.0.0
 
 
 ######################################################################

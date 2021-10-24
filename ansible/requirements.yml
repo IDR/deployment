@@ -82,13 +82,13 @@
   version: 3.0.1
 
 - src: ome.omero_server
-  version: 4.0.1
+  version: 4.0.2
 
 - src: ome.omero_user
   version: 0.3.0
 
 - src: ome.omero_web
-  version: 4.0.0
+  version: 4.0.1
 
 - src: ome.openstack_volume_storage
   version: 1.2.0
@@ -156,7 +156,7 @@
   version: 0.2.3
 
 - src: ome.omero_prometheus_exporter
-  version: 0.3.1
+  version: 0.3.2
 
 - src: ome.omero_web_django_prometheus
   version: 0.4.1

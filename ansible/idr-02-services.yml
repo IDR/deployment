@@ -9,6 +9,3 @@
 
 ### Transfer services
 - include: idr-transfer.yml
-
-### TODO: Remove these in the next version
-- include: idr-downloads.yml

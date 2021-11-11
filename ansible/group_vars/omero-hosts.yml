@@ -139,6 +139,7 @@ idr_omero_web_public_url_filters_webclient_exclude:
 - script_ui
 - ome_tiff
 - figure_script
+- render_image_download
 
 idr_omero_web_public_url_filters:
 - api/

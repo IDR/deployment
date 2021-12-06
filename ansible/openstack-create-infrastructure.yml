@@ -20,4 +20,4 @@
 
 # Independent anonymous GHA server
 - include: openstack-create-gha.yml
-  when: 'idr_enable_gha | default(True)'
+  when: 'idr_enable_gha | default(False)'

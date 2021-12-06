@@ -1,0 +1,80 @@
+---
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
+
+  ############################################################
+  # Security groups
+
+  - name: IDR GHA external access security group
+    os_security_group:
+      description: External access to IDR GHA (managed by Ansible)
+      name: idr-gha-external
+      state: present
+
+  - name: IDR GHA external access security group rules
+    os_security_group_rule:
+      direction: ingress
+      port_range_min: "{{ item.min }}"
+      port_range_max: "{{ item.max }}"
+      protocol: tcp
+      remote_ip_prefix: 0.0.0.0/0
+      security_group: idr-gha-external
+      state: present
+    with_items:
+    - min: 22
+      max: 22
+    - min: 443
+      max: 443
+
+
+  roles:
+
+  ############################################################
+  # Keypairs
+
+  - role: idr.openstack_idr_keypairs
+
+
+  ############################################################
+  # Networks
+
+  - role: idr.openstack_idr_network
+    idr_network_name: "{{ idr_environment_idr }}"
+    idr_network_subnet: "{{ idr_environment_idr_subnet }}"
+
+
+  ############################################################
+  # Instances
+
+  - role: idr.openstack_idr_instance
+    idr_environment: "{{ idr_environment_idr }}"
+    idr_vm_name: "{{ idr_environment_idr }}-gha"
+    idr_vm_image: "{{ vm_image }}"
+    idr_vm_flavour: "{{ vm_flavour }}"
+    idr_vm_bastion: True
+    idr_vm_extra_groups:
+    - "{{ idr_environment_idr }}-gha-hosts"
+    - gha-hosts
+    idr_vm_networks:
+    - net-name: "{{ idr_environment_idr }}"
+    idr_vm_security_groups:
+    - default
+    - idr-gha-external
+
+
+  ############################################################
+  # Volumes
+
+  - role: ome.openstack_volume_storage
+    openstack_volume_size: "{{ idr_environment_gha_size | default(100) }}"
+    openstack_volume_vmname: "{{ idr_environment_idr }}-gha"
+    openstack_volume_name: gha-data
+    openstack_volume_device: /dev/vdb

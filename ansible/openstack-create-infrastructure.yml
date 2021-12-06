@@ -17,3 +17,7 @@
 # Independent anonymous FTP server
 - include: openstack-create-ftp.yml
   when: 'idr_enable_ftp | default(True)'
+
+# Independent anonymous GHA server
+- include: openstack-create-gha.yml
+  when: 'idr_enable_gha | default(False)'

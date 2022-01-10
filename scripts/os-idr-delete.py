@@ -71,10 +71,10 @@ class DeleteVolumes(DeleteResource):
         )
 
     def __call__(self):
-        for s in self.volume_snapshots:
-            conn.delete_volume_snapshot(s.id, wait=self.wait)
         for v in self.volumes:
             self.conn.delete_volume(v.id, wait=self.wait)
+        for s in self.volume_snapshots:
+            conn.delete_volume_snapshot(s.id, wait=self.wait)
 
 
 class DeleteNetworks(DeleteResource):

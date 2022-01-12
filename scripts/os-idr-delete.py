@@ -58,7 +58,6 @@ class DeleteVolumes(DeleteResource):
         super(DeleteVolumes, self).__init__(conn, wait)
         self.volumes = [v for v in conn.list_volumes()
                         if is_in_idrenv(idrenv, v)]
-        volume_ids = set(v.id for v in self.volumes)
         self.volume_snapshots = [s for s in conn.list_volume_snapshots()
                                  if is_in_idrenv(idrenv, s)]
 

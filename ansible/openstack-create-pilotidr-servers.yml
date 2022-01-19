@@ -42,7 +42,6 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: "{{ idr_environment_idr }}-db"
       openstack_volume_device: /dev/vdb
-      openstack_volume_source: "{{ idr_volume_database_db_src }}"
       when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
@@ -50,7 +49,6 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: "{{ idr_environment_idr }}-omerodata"
       openstack_volume_device: /dev/vdc
-      openstack_volume_source: "{{ idr_volume_omero_data_src }}"
       when: idr_enable_pilotidr_omero | default(False)
 
 

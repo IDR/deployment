@@ -60,7 +60,7 @@ class DeleteVolumes(DeleteResource):
                         if is_in_idrenv(idrenv, v)]
         volume_ids = set(v.id for v in self.volumes)
         self.volume_snapshots = [s for s in conn.list_volume_snapshots()
-                                 if is_in_idrenv(idrenv, s)]
+                                 if s.volume_id in volume_ids]
 
         self.description = (
             ['Deleting Volumes'] +

@@ -91,7 +91,7 @@
   version: 4.0.1
 
 - name: ome.openstack_volume_storage
-  src: https://github.com/ome/ansible-role-openstack-volume-storage/archive/a3589e8606abbf7430f68ba4075d08fd91d7aee8.tar.gz
+  src: https://github.com/ome/ansible-role-openstack-volume-storage/archive/9fc6f2f3ed4b710de88e336b1bcd4d9d8a301cb4.tar.gz
   version: 2.0.0
 
 - src: ome.postgresql

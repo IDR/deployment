@@ -104,19 +104,21 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-database"
       openstack_volume_name: "{{ idr_environment_idr }}-db"
       openstack_volume_device: /dev/vdb
+      openstack_volume_source: "{{ idr_volume_database_db_src }}"
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 1200
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
       openstack_volume_name: "{{ idr_environment_idr }}-omerodata"
       openstack_volume_device: /dev/vdb
+      openstack_volume_source: "{{ idr_volume_omero_data_src }}"
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_idr }}-proxy"
       openstack_volume_name: "{{ idr_environment_idr }}-nginxcache"
       openstack_volume_device: /dev/vdb
-
+      openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"
 
     ############################################################
     # Management Instances

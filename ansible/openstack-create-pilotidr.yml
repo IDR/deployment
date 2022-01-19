@@ -78,5 +78,5 @@
     - role: ome.openstack_volume_storage
       openstack_volume_size: 100
       openstack_volume_vmname: "{{ idr_environment_idr }}-management"
-      openstack_volume_name: data
+      openstack_volume_name: "{{ idr_environment_idr }}-management-data"
       openstack_volume_device: /dev/vdb

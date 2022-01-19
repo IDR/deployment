@@ -40,7 +40,7 @@
     - role: ome.openstack_volume_storage
       openstack_volume_size: 800
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
-      openstack_volume_name: db
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-db"
       openstack_volume_device: /dev/vdb
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
       when: idr_enable_pilotidr_omero | default(False)
@@ -48,7 +48,7 @@
     - role: ome.openstack_volume_storage
       openstack_volume_size: 1200
       openstack_volume_vmname: "{{ idr_environment_idr }}-omeroreadwrite"
-      openstack_volume_name: data
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-data"
       openstack_volume_device: /dev/vdc
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
       when: idr_enable_pilotidr_omero | default(False)
@@ -83,7 +83,7 @@
     - role: ome.openstack_volume_storage
       openstack_volume_size: "{{ volume_size | default(5000) }}"
       openstack_volume_vmname: "{{ idr_environment_idr }}-dev"
-      openstack_volume_name: data
+      openstack_volume_name: "{{ idr_environment_idr }}-dev-data"
       openstack_volume_device: /dev/vdb
       openstack_volume_type: "{{ volume_type | default(omit) }}"
       when: idr_enable_pilotidr_devserver | default(False)

@@ -76,5 +76,5 @@
   - role: ome.openstack_volume_storage
     openstack_volume_size: "{{ idr_environment_gha_size | default(100) }}"
     openstack_volume_vmname: "{{ idr_environment_idr }}-gha"
-    openstack_volume_name: "{{ idr_environment_idr }}-gha-data"
+    openstack_volume_name: "{{ idr_environment_idr }}-data"
     openstack_volume_device: /dev/vdb

@@ -16,16 +16,24 @@
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 800
-      openstack_volume_name: "{{ idr_environment_idr }}-db"
+      openstack_volume_name: "{{ idr_environment_idr }}-database-db"
       openstack_volume_source: "{{ idr_volume_database_db_src }}"
+      when: idr_enable_publicidr | default(True)
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 800
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-db"
+      openstack_volume_source: "{{ idr_volume_database_db_src }}"
+      when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 1200
-      openstack_volume_name: "{{ idr_environment_idr }}-omerodata"
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-data"
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
+      when: idr_enable_publicidr | default(True)
 
     - role: ome.openstack_volume_storage
       openstack_volume_size: 100
-      openstack_volume_name: "{{ idr_environment_idr }}-nginxcache"
+      openstack_volume_name: "{{ idr_environment_idr }}-proxy-nginxcache"
       openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"
       when: idr_enable_publicidr | default(True)

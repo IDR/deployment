@@ -11,9 +11,8 @@ There is an ansible playbook (management-searchengine.yml) that has been written
   * for searchengine, http://127.0.0.1:5556/api/v2/resources/
   * for searchengine client, http://127.0.0.1:5556
   * for Elasticsearch, http://127.0.0.1:9201  
-* After deploying the apps using the playbook, it is needed to run another two playbooks:
-    * Caching playbook (run_searchengine_cache_service.yml)
-    * indexing playbook (run_searchengine_index_service.yml)
+* After deploying the apps using the playbook, it is needed to run another playbook for caching and indexing:
+    * run_searchengine_index_cache_services.yml    
     * If the Postgresql database server is located at the same machine which hosts the searchengine, it is needed to:
         * Edit pg_hba.conf file (one of the postgresql configuration files) and add two client ips (i.e. 10.11.0.10 and 10.11.0.11)
         * Reload the configuration; so the PostgreSQL accepts the connection from indexing and caching services.

@@ -1,7 +1,7 @@
-#Issue setup ip address inside the hpa config file for postgres to accept the connection from it  
+#Issue setup ip address inside the hpa config file for postgres to accept the connection from it
 - name: Deploying search engine cache and indexing
   connection: local
-  hosts: local 
+  hosts: local
   vars_files:
     searchengine_vars.yml
   tasks:
@@ -18,23 +18,23 @@
           ipv4_address: 10.11.0.10
       state: started
       volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"      
+      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
       - "{{ apps_folder }}/searchengine/searchengine/cachedata:/etc/searchengine/cachedata"
 
    - name: Get data from postgres database and insert  them to Elasticsearch index using docker searchengine
-       become: yes
-       docker_container:
-         image: "{{ searchengine_docker_image }}"
-         name: searchengine_index
-         cleanup: True
-         auto_remove: yes
-         command: "get_index_data_from_database"
-         networks:
-           - name: searchengine-net
-             ipv4_address: 10.11.0.11
-         published_ports:
-           - "5571:5577"
-         state: started
-         volumes:
-           - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"      
+     become: yes
+     docker_container:
+       image: "{{ searchengine_docker_image }}"
+       name: searchengine_index
+       cleanup: True
+       auto_remove: yes
+       command: "get_index_data_from_database"
+       networks:
+         - name: searchengine-net
+           ipv4_address: 10.11.0.11
+       published_ports:
+         - "5571:5577"
+       state: started
+       volumes:
+         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
       

@@ -1,0 +1,22 @@
+#Issue setup ip address inside the hpa config file for postgres to accept the connection from it  
+- name: Check caching
+  connection: local
+  hosts: local 
+  vars_files:
+    searchengine_vars.yml
+  tasks:  
+  - name: Get infos on container
+    docker_container_info:
+      name: "{{ searchengine_cache }}"
+    register: result
+  
+  - name: does caching data container exist?
+    debug:
+      msg: "The caching container {{ 'exists' if result.exists else 'does not exist' }}"
+  
+  - name: did Indexing finish?
+    debug: 
+      msg: "The caching container status is {{ result.container['State']['Status'] }}" 
+    when: result.exists
+
+  

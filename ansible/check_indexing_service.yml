@@ -1,0 +1,22 @@
+#Issue setup ip address inside the hpa config file for postgres to accept the connection from it  
+- name: Check  indexing
+  connection: local
+  hosts: local 
+  vars_files:
+    searchengine_vars.yml
+  tasks:
+  - name: Get infos on container
+    docker_container_info:
+      name: "{{ searchengine_index }}"
+    register: result
+  
+  - name: does Indexing exisit?
+    debug:
+      msg: "The indexing container {{ 'exists' if result.exists else 'does not exist' }}"
+      
+  - name: did Indexing finish?
+    debug: 
+      msg: "The indexing container status is {{ result.container['State']['Status'] }}"  
+    when: result.exists
+
+  

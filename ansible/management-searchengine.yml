@@ -1,27 +1,10 @@
 # Search ngine + Search Engine Client + Elasticsearch
 
-#- hosts: "{{ idr_environment | default('idr') }}-management-hosts"
-
- 
-#hosts: localhost
-#connection: local
-
-#- hosts: all
-#  remote_user: root
-#  vars_files:
-#    - /vars/external_vars.yml
-#- hosts: all
-#  vars_files:
-#    file: searchengine_vars.yml
-
 - name: Deploying search engine
-  connection: local
-  hosts: local
+  hosts:  "{{ idr_environment | default('idr') }}-management-hosts"
   vars_files:
     searchengine_vars.yml
 
-  pre_tasks:
-    - raw: sudo yum update -y
   tasks:
   - name: Create app top level directory
     become: yes

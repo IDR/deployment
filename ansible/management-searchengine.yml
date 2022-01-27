@@ -1,9 +1,7 @@
 # Search ngine + Search Engine Client + Elasticsearch
 
 - name: Deploying search engine
-  hosts:  "{{ idr_environment | default('idr') }}-management-hosts"
-  vars_files:
-    searchengine_vars.yml
+  hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
   tasks:
   - name: Create app top level directory

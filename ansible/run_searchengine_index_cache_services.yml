@@ -1,9 +1,7 @@
 #Issue setup ip address inside the hpa config file for postgres to accept the connection from it
 - name: Deploying search engine cache and indexing
-  connection: local
-  hosts: local
-  vars_files:
-    searchengine_vars.yml
+  hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+
   tasks:
    - name: Set cache data from postgres database using docker searchengine
      become: yes

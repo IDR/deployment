@@ -1,4 +1,4 @@
-apps_folder: host_data_folder
+apps_folder: /data
 database_server_url: "{{ omero_db_host_ansible }}"
 database_port: 5432
 database_name: idr

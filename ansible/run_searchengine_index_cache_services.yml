@@ -9,7 +9,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_cache
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_resource_cached_name_value"
       networks:
         - name: searchengine-net
@@ -25,7 +25,7 @@
        image: "{{ searchengine_docker_image }}"
        name: searchengine_index
        cleanup: True
-       auto_remove: yes
+       #auto_remove: yes
        command: "get_index_data_from_database"
        networks:
          - name: searchengine-net

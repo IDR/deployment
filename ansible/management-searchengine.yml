@@ -124,7 +124,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_elasticsearch
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_elasticsearch_configuration -e searchengineelasticsearch"
       #networks:
       #- name: searchengine-net
@@ -141,7 +141,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_database
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_database_configuration -u {{ database_server_url }}  -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }}"
       #networks:
       #- name: searchengine-net
@@ -157,7 +157,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_cache
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_cache_folder -c /etc/searchengine/cachedata"
       #networks:
       #- name: searchengine-net
@@ -173,7 +173,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_create_index
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: create_index
       networks:
       - name: searchengine-net
@@ -189,7 +189,7 @@
       image: "{{ searchengineclient_docker_image }}"
       name: searchengineclient_search_uri
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_searchengine_url -u http://searchengine:5577/"# http://127.0.0.1:5556/"
       #networks:
       #- name: searchengine-net

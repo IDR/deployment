@@ -4,6 +4,12 @@
   hosts: "{{ idr_environment | default('idr') }}-management-hosts"
 
   tasks:
+  - name: Get database host
+      set_fact:
+        database_server_url: >-
+          {{ hostvars[groups[idr_environment | default('idr') +
+          '-database-hosts'][0]][
+          'ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address'] }}
   - name: Create app top level directory
     become: yes
     file:

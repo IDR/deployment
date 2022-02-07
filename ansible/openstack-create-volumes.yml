@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  connection: local
+
+  pre_tasks:
+
+  # These variables can be overridden in a variables file and included
+  # on the ansible command line as -e @path/to/secret.yml
+  - name: Include default provisioning variables
+    include_vars: vars/openstack-vars.yml
+
+
+  roles:
+    ############################################################
+    # IDR Volumes
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 800
+      openstack_volume_name: "{{ idr_environment_idr }}-database-db"
+      openstack_volume_source: "{{ idr_volume_database_db_src }}"
+      openstack_volume_wait: False
+      when: idr_enable_publicidr | default(True)
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 800
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-db"
+      openstack_volume_source: "{{ idr_volume_database_db_src }}"
+      openstack_volume_wait: False
+      when: idr_enable_pilotidr_omero | default(False)
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 1200
+      openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-data"
+      openstack_volume_source: "{{ idr_volume_omero_data_src }}"
+      openstack_volume_wait: False
+      when: >
+        (idr_enable_publicidr or idr_enable_pilotidr_omero) | default(True)
+
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 100
+      openstack_volume_name: "{{ idr_environment_idr }}-proxy-nginxcache"
+      openstack_volume_source: "{{ idr_volume_proxy_nginxcache_src }}"
+      openstack_volume_wait: False
+      when: idr_enable_publicidr | default(True)

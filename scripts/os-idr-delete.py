@@ -58,8 +58,9 @@ class DeleteVolumes(DeleteResource):
         super(DeleteVolumes, self).__init__(conn, wait)
         self.volumes = [v for v in conn.list_volumes()
                         if is_in_idrenv(idrenv, v)]
+        volume_ids = set(v.id for v in self.volumes)
         self.volume_snapshots = [s for s in conn.list_volume_snapshots()
-                                 if is_in_idrenv(idrenv, s)]
+                                 if s.volume_id in volume_ids]
 
         self.description = (
             ['Deleting Volumes'] +
@@ -70,10 +71,10 @@ class DeleteVolumes(DeleteResource):
         )
 
     def __call__(self):
-        for v in self.volumes:
-            self.conn.delete_volume(v.id, wait=self.wait)
         for s in self.volume_snapshots:
             conn.delete_volume_snapshot(s.id, wait=self.wait)
+        for v in self.volumes:
+            self.conn.delete_volume(v.id, wait=self.wait)
 
 
 class DeleteNetworks(DeleteResource):

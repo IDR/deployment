@@ -11,3 +11,7 @@ searchengineclient_docker_image: khaledk2/searchengineclient:0.1
 #ansible_python_interpreter: path/to/bin/python
 searchengine_cache: searchengine_cache
 searchengine_index: searchengine_index
+cache_rows: 10000
+# I think that the following two variables should be in secret
+searchengine_secret_key: "fagfdssf3fgdnvhg56ghhgfhgfgh45f"
+searchengineclient_secret_key: "gfdgfdggregb3tyttnmnymytmasfd"

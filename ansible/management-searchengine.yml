@@ -172,7 +172,31 @@
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-      
+
+  - name: configure number of cache rows for docker searchengine
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: searchengine_cache
+      cleanup: True
+      #auto_remove: yes
+      command: "set_cache_rows_number -n {{ cache_rows }}"
+      state: started
+      volumes:
+      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
+  - name: configure secret key for docker searchengine
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: searchengine_cache
+      cleanup: True
+      #auto_remove: yes
+      command: "set_searchengine_secret_key -s {{ searchengine_secret_key }}"
+      state: started
+      volumes:
+      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
   - name: create elasticsearch all indcies for docker searchengine
     become: yes
     docker_container:
@@ -203,7 +227,19 @@
       #- "5567:5567"
       state: started
       volumes:
-      - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"    
+      - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
+
+  - name: configure secret key for search client
+    become: yes
+    docker_container:
+      image: "{{ searchengineclient_docker_image }}"
+      name: searchengineclient_search_uri
+      cleanup: True
+      #auto_remove: yes
+      command: "set_client_secret_key -s {{ searchengineclient_secret_key }}"
+      state: started
+      volumes:
+      - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
       
   - name: Run docker searchengine
     become: yes

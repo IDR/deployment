@@ -49,6 +49,15 @@
       owner: root
       group: root
 
+  - name: Create client data directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/client/app_data"
+      recurse: yes
+      state: directory
+      owner: root
+      group: root
+
   - name: Create client logs directory
     become: yes
     file:
@@ -240,7 +249,20 @@
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
-      
+
+  - name: configure app data folder for search client
+    become: yes
+    docker_container:
+      image: "{{ searchengineclient_docker_image }}"
+      name: searchengineclient_search_uri
+      cleanup: True
+      auto_remove: yes
+      command: "set_app_data_folder -a /etc/searchengineclient/app_data"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
+
+
   - name: Run docker searchengine
     become: yes
     docker_container:
@@ -274,3 +296,4 @@
       restart_policy: always
       volumes:
         - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
+        - "{{ apps_folder }}/searchengine/client/app_data:/etc/searchengineclient/app_data"

@@ -173,7 +173,7 @@
     become_user: postgres
     command: psql -c 'ALTER ROLE {{ idr_omero_readonly_database.user }} SET statement_timeout = {{ idr_omero_readonly_database.statement_timeout }};'
     when: >-
-      not (omero_readonly_statement_timeout.stdout | search(
+      not (omero_readonly_statement_timeout.stdout is search(
         '[{,]statement_timeout=' + (
           idr_omero_readonly_database.statement_timeout | string) +
         '[},]'

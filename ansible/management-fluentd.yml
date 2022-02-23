@@ -85,7 +85,7 @@
       published_ports:
       - "24224:24224/udp"
       - "24224:24224"
-      restart: "{{ fluent_conf_status | changed }}"
+      restart: "{{ fluent_conf_status is changed }}"
       state: started
       restart_policy: always
       volumes:

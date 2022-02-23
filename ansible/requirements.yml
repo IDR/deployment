@@ -57,8 +57,9 @@
 - src: ome.minio_s3_gateway
   version: 0.1.1
 
-- src: ome.network_cloud_interfaces
-  version: 1.2.3
+- name: ome.network_cloud_interfaces
+  src: https://github.com/ome/ansible-role-network-cloud-interfaces/archive/1fce0679dc44c50aa163d7b5b18fe990ea1d5818.tar.gz
+  version: 1.2.4
 
 - src: ome.network
   version: 1.1.4
@@ -84,8 +85,9 @@
 - src: ome.omero_server
   version: 4.0.2
 
-- src: ome.omero_user
-  version: 0.3.0
+- name: ome.omero_user
+  src: https://github.com/ome/ansible-role-omero-user/archive/6ec1b3012dd4cc255e84341366d76b01ae852f4f.tar.gz
+  version: 0.3.1
 
 - src: ome.omero_web
   version: 4.0.1

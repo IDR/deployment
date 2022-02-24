@@ -5,7 +5,7 @@ There is an ansible playbook (management-searchengine.yml) that has been written
 * It will config and run searchengine, Elasticsearch and searchengine client
 * It will configure and create the required folders
 * It will configure the three apps and run them
-* There is a variables file (groups_vars/management-searchengine-hosts.yml) that the user needs to edit before running the playbook
+* There is a variables file (groups_vars/management-hosts.yml) that the user needs to edit before running the playbook
     * The variable names are self-explained
 * To check that the apps have been installed and run, the user can use wget or curl to call:
   * for searchengine, http://127.0.0.1:5556/api/v2/resources/

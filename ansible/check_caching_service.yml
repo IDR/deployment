@@ -4,6 +4,7 @@
 
   tasks:  
   - name: Get infos on container
+    become: yes
     docker_container_info:
       name: "{{ searchengine_cache }}"
     register: result

@@ -255,7 +255,7 @@
       image: "{{ searchengineclient_docker_image }}"
       name: searchengineclient_search_uri
       cleanup: True
-      auto_remove: yes
+      #auto_remove: yes
       command: "set_app_data_folder -a /etc/searchengineclient/app_data"
       state: started
       volumes:

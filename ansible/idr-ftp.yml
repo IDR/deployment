@@ -12,7 +12,7 @@
       Welcome to the IDR upload service.
       Please upload files into "incoming/".
     anonymous_ftp_pasv_max_port: 32222
-    anonymous_ftp_image: openmicroscopy/vsftpd-anonymous-upload:0.2.3
+    # anonymous_ftp_image: openmicroscopy/vsftpd-anonymous-upload:0.2.3
 
   tasks:
 

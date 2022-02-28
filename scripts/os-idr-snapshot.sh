@@ -14,10 +14,6 @@ vm_prefix="$1"
 today=$(date +%Y%m%d)
 vol_errors=0
 
-# Workaround problem error with python-openstackclient 4.0.0:
-# public endpoint for volumev3 service in regionOne region not found
-export OS_VOLUME_API_VERSION=2
-
 for vol in \
         database-db \
         omeroreadwrite-data \

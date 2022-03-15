@@ -537,9 +537,9 @@ omero_web_apps_config_set:
   omero.web.gallery.footer_html: "IDR"
   omero.web.gallery.category_queries:
     latest:
-      label: "Most Recent"
+      label: "Light sheet fluorescence microscopy"
       index: 0
-      query: "LAST10:date"
+      query: "Imaging Method: light sheet fluorescence microscopy OR Imaging Method: light sheet fluorescence microscopy, SPIM"
     infection:
       label: "Infection studies"
       index: 1
@@ -568,6 +568,10 @@ omero_web_apps_config_set:
       label: "High-content screening (human)"
       index: 7
       query: "Organism:Homo sapiens AND Study Type:high content screen"
+    others:
+      label: "Others"
+      index: 8
+      query: "LAST1000:date"
   omero.web.gallery.filter_keys:
   - label: "Name (IDR number)"
     value: "Name"

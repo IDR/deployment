@@ -147,7 +147,7 @@ idr_omero_web_public_url_filters:
 - mapr/
 - figure/
 - iviewer/
-# Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
+# Needed in OMERO.web 5.6.1 to allow the root app patch (/→/idr_gallery)
 - '$'
 - search/
 - search/cell/
@@ -206,7 +206,7 @@ omero_web_config_set:
     default:
       BACKEND: django_redis.cache.RedisCache
       LOCATION: redis://{{ omero_redis_host_ansible | default('127.0.0.1') }}:6379/0
-  # / goes to gallery
+  # / goes to idr_gallery
   omero.web.root_application: idr_gallery
   # social media
   omero.web.sharing.twitter:
@@ -238,12 +238,12 @@ omero_web_config_set:
 omero_web_apps_packages:
 - omero-mapr==0.5rc1
 - omero-iviewer==0.11.3
-- omero-gallery==3.4.2
+- git+https://github.com/IDR/idr-gallery.git@refs/pull/2/head
 - omero-figure==4.4.3
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
-- omero_gallery
+- idr_gallery
 - omero_figure
 
 omero_web_apps_top_links:

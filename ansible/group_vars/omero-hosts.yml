@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.14.0.rc1
+idr_omero_web_release: 5.14.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0
@@ -236,7 +236,7 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.5rc1
+- omero-mapr==0.5.0
 - omero-iviewer==0.11.3
 - git+https://github.com/IDR/idr-gallery.git@refs/pull/2/head
 - omero-figure==4.4.3

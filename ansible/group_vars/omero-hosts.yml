@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.14.0.rc1
+idr_omero_web_release: 5.14.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0
@@ -147,8 +147,11 @@ idr_omero_web_public_url_filters:
 - mapr/
 - figure/
 - iviewer/
-# Needed in OMERO.web 5.6.1 to allow the root app patch (/→/gallery)
+# Needed in OMERO.web 5.6.1 to allow the root app patch (/→/idr_gallery)
 - '$'
+- search/
+- search/cell/
+- search/tissue/
 - gallery-api/
 - gallery_settings/
 - cell/
@@ -203,8 +206,8 @@ omero_web_config_set:
     default:
       BACKEND: django_redis.cache.RedisCache
       LOCATION: redis://{{ omero_redis_host_ansible | default('127.0.0.1') }}:6379/0
-  # / goes to gallery
-  omero.web.root_application: gallery
+  # / goes to idr_gallery
+  omero.web.root_application: idr_gallery
   # social media
   omero.web.sharing.twitter:
     omero: "@openmicroscopy"
@@ -233,14 +236,14 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.5rc1
+- omero-mapr==0.5.0
 - omero-iviewer==0.11.3
-- omero-gallery==3.4.2
+- idr-gallery==3.5.0
 - omero-figure==4.4.3
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
-- omero_gallery
+- idr_gallery
 - omero_figure
 
 omero_web_apps_top_links:
@@ -537,9 +540,9 @@ omero_web_apps_config_set:
   omero.web.gallery.footer_html: "IDR"
   omero.web.gallery.category_queries:
     latest:
-      label: "Most Recent"
+      label: "Light sheet fluorescence microscopy"
       index: 0
-      query: "LAST10:date"
+      query: "Imaging Method: light sheet fluorescence microscopy OR Imaging Method: light sheet fluorescence microscopy, SPIM"
     infection:
       label: "Infection studies"
       index: 1
@@ -568,6 +571,10 @@ omero_web_apps_config_set:
       label: "High-content screening (human)"
       index: 7
       query: "Organism:Homo sapiens AND Study Type:high content screen"
+    others:
+      label: "Others"
+      index: 8
+      query: "LAST1000:date"
   omero.web.gallery.filter_keys:
   - label: "Name (IDR number)"
     value: "Name"

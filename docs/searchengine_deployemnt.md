@@ -16,6 +16,5 @@ There is an ansible playbook (management-searchengine.yml) that has been written
     * If the Postgresql database server is located at the same machine which hosts the searchengine, it is needed to:
         * Edit pg_hba.conf file (one of the postgresql configuration files) and add two client ips (i.e. 10.11.0.10 and 10.11.0.11)
         * Reload the configuration; so the PostgreSQL accepts the connection from indexing and caching services.
-    * As the caching and indexing processes take a long time, there are another two playbooks that enable the user to check if they have finished or not:
-        * check_indexing_service.yml
-        * check_caching_service.yml
+    * As the indexing processe takes a long time, there is a playbooks that enable the user to check if it have finished or not:
+        * check_indexing_service.yml        

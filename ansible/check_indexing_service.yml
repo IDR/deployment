@@ -1,6 +1,6 @@
 #Issue setup ip address inside the hpa config file for postgres to accept the connection from it  
 - name: Check  indexing
-  hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
 
   tasks:
   - name: Get infos on container

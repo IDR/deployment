@@ -3,7 +3,7 @@
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
 
 - name: Deploying search engine
-  hosts: "{{ idr_environment | default('idr') }}-management-hosts"
+  hosts: "{{ idr_parent_environment | default('idr') }}-searchengine-hosts"
 
   tasks:
   - name: Get database host

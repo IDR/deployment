@@ -30,6 +30,8 @@
       # these hosts in the individual pilot environments
       - "{{ idr_parent_environment }}-pilotomero-hosts"
       - "{{ idr_parent_environment }}-pilotdatabase-hosts"
+      # This extra group controls the deployment of the searchengine app
+      - "{{ idr_parent_environment }}-searchengine-hosts"
       idr_vm_networks: >
         {{ [ {'net-name': idr_parent_environment} ] +
           ((idr_network_storage | length > 0) |

@@ -20,6 +20,7 @@
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_database: True
       idr_vm_omeroreadwrite: True
+      idr_vm_dockerworker: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
       - "{{ idr_vm_storage_group }}"

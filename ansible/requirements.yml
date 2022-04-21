@@ -134,7 +134,8 @@
 # External IDR roles
 
 - name: idr.openstack_idr_instance
-  version: 3.1.1
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance/archive/8e8c870a8b1b2509691dc78d4dbd76ff18921cab.tar.gz
+  version: 3.1.2
 
 - name: idr.openstack_idr_instance_network
   version: 1.1.2

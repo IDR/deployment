@@ -267,7 +267,8 @@
     docker_container:
       image: "{{ searchengine_docker_image}}"
       name: searchengine
-      cleanup: True      
+      cleanup: True
+      command: "run_app {{ searchengineurlprefix }}"
       networks:
       - name: searchengine-net
       published_ports:

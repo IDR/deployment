@@ -14,3 +14,4 @@ cache_rows: 100000
 # I think that the following two variables should be in secret
 searchengine_secret_key: "fagfdssf3fgdnvhg56ghhgfhgfgh45f"
 searchengineclient_secret_key: "gfdgfdggregb3tyttnmnymytmasfd"
+searchengineurlprefix: "searchengineapi"

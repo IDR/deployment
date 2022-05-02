@@ -1,0 +1,17 @@
+apps_folder: /data
+#database_server_url: "{{ omero_db_host_ansible }}"
+database_port: 5432
+database_name: idr
+database_username: omeroreadonly
+database_user_password:  "{{ idr_secret_postgresql_password_ro | default('omero') }}"
+searchenginecache_folder: /data/searchengine/searchengine/cacheddata/
+search_engineelasticsearch_docker_image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+searchengine_docker_image: openmicroscopy/omero-searchengine:latest
+searchengineclient_docker_image: openmicroscopy/omero-searchengineclient:latest
+#ansible_python_interpreter: path/to/bin/python
+searchengine_index: searchengine_index
+cache_rows: 100000
+# I think that the following two variables should be in secret
+searchengine_secret_key: "fagfdssf3fgdnvhg56ghhgfhgfgh45f"
+searchengineclient_secret_key: "gfdgfdggregb3tyttnmnymytmasfd"
+searchengineurlprefix: "searchengineapi"

@@ -1,20 +1,25 @@
-Searchengine installation and configuration using Ansible:
-==========================================================
+OMERO search engine installation and configuration
+==================================================
 
-There is an ansible playbook (management-searchengine.yml) that has been written to deploy the apps:
-* It will config and run searchengine, Elasticsearch and searchengine client
-* It will configure and create the required folders
-* It will configure the three apps and run them
-* There is a variables file (groups_vars/management-hosts.yml) that the user needs to edit before running the playbook
-    * The variable names are self-explained
-* To check that the apps have been installed and run, the user can use wget or curl to call:
-  * for searchengine, http://127.0.0.1:5556/api/v2/resources/
-  * for searchengine client, http://127.0.0.1:5556
+The [idr-searchengine.yml](../ansible/idr-searchengine.yml) playbook deploys the OMERO
+search engine stack:
+
+*   It will config and run the [OMERO searchengine](https://github.com/ome/omero_search_engine),
+    Elasticsearch and the [OMERO search engine client](https://github.com/ome/omero_search_engine_client/)
+*   It will configure and create the required folders
+*   It will configure the three apps and run them
+*   Additional configuration can be controlled via the
+    [group variables file](../ansible/groups_vars/searchengine-hosts.yml)
+
+To check that the apps have been installed and run, the user can use `wget` or `curl` to call:
+
+  * for the OMERO search engine, http://127.0.0.1:5577/api/v1/resources/
+  * for OMERO search engine client, http://127.0.0.1:5567
   * for Elasticsearch, http://127.0.0.1:9201  
-* After deploying the apps using the playbook, it is needed to run another playbook for caching and indexing:
-    * run_searchengine_index_cache_services.yml    
-    * If the Postgresql database server is located at the same machine which hosts the searchengine, it is needed to:
-        * Edit pg_hba.conf file (one of the postgresql configuration files) and add two client ips (i.e. 10.11.0.10 and 10.11.0.11)
-        * Reload the configuration; so the PostgreSQL accepts the connection from indexing and caching services.
-    * As the indexing processe takes a long time, there is a playbooks that enable the user to check if it have finished or not:
-        * check_indexing_service.yml        
+
+After deploying the apps using the playbook, the
+[run_searchengine_index_service.yml](../ansible/run_searchengine_index_service.yml)
+playbook needs to be executed to run the caching and indexing.
+
+As the indexing process takes a long time, the [check_indexing_service.yml](../ansible/check_indexing_service.yml)
+playbooks allows the user to check if it have finished or not.

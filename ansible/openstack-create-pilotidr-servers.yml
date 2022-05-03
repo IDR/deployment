@@ -20,6 +20,7 @@
       idr_vm_flavour: "{{ vm_flavour_large }}"
       idr_vm_database: True
       idr_vm_omeroreadwrite: True
+      idr_vm_dockerworker: True
       idr_vm_extra_groups:
       - "{{ idr_environment_idr }}-{{ idr_vm_storage_group }}"
       - "{{ idr_vm_storage_group }}"
@@ -30,6 +31,9 @@
       # these hosts in the individual pilot environments
       - "{{ idr_parent_environment }}-pilotomero-hosts"
       - "{{ idr_parent_environment }}-pilotdatabase-hosts"
+      # This extra group controls the deployment of the searchengine app
+      - searchengine-hosts
+      - "{{ idr_environment_idr }}-searchengine-hosts"
       idr_vm_networks: >
         {{ [ {'net-name': idr_parent_environment} ] +
           ((idr_network_storage | length > 0) |

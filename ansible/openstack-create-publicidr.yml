@@ -144,3 +144,28 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-management"
       openstack_volume_name: "{{ idr_environment_idr }}-management-data"
       openstack_volume_device: /dev/vdb
+
+    ############################################################
+    # Search engine instances
+
+    # Dedicated search engine server
+    - role: idr.openstack_idr_instance
+      idr_environment: "{{ idr_environment_idr }}"
+      idr_vm_name: "{{ idr_environment_idr }}-searchengine"
+      idr_vm_image: "{{ vm_image }}"
+      idr_vm_flavour: "{{ vm_flavour_large }}"
+      idr_vm_dockerworker: True
+      idr_vm_extra_groups:
+      - searchengine-hosts
+      - "{{ idr_environment_idr }}-searchengine-hosts"
+      idr_vm_networks:
+      - net-name: "{{ idr_environment_idr }}"
+
+    # Search engine Volume
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 75
+      openstack_volume_vmname: "{{ idr_environment_idr }}-searchengine"
+      openstack_volume_name: "{{ idr_environment_idr }}-searchengine-data"
+      openstack_volume_device: /dev/vdb
+      openstack_volume_source: "{{ idr_volume_searchengine_data_src | default(omit) }}"
+      openstack_volume_type: "{{ idr_volume_searchengine_data_type | default(omit) }}"

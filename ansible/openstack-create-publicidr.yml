@@ -158,6 +158,7 @@
       idr_vm_extra_groups:
       - searchengine-hosts
       - "{{ idr_environment_idr }}-searchengine-hosts"
+      - "{{ idr_environment_idr }}-data-hosts"
       idr_vm_networks:
       - net-name: "{{ idr_environment_idr }}"
 

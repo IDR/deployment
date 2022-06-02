@@ -167,5 +167,4 @@
       openstack_volume_vmname: "{{ idr_environment_idr }}-searchengine"
       openstack_volume_name: "{{ idr_environment_idr }}-searchengine-data"
       openstack_volume_device: /dev/vdb
-      openstack_volume_source: "{{ idr_volume_searchengine_data_src | default(omit) }}"
       openstack_volume_type: "{{ idr_volume_searchengine_data_type | default(omit) }}"

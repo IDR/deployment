@@ -147,6 +147,7 @@ idr_omero_web_public_url_filters:
 - mapr/
 - figure/
 - iviewer/
+- search_engine/
 # Needed in OMERO.web 5.6.1 to allow the root app patch (/→/idr_gallery)
 - '$'
 - search/
@@ -240,11 +241,14 @@ omero_web_apps_packages:
 - omero-iviewer==0.11.3
 - idr-gallery==3.6.1
 - omero-figure==4.4.3
+- git+https://github.com/ome/omero_search_engine_client
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer
 - idr_gallery
 - omero_figure
+- omero_search_engine_client
+
 
 omero_web_apps_top_links:
 - label: Studies

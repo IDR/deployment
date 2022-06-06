@@ -8,9 +8,13 @@
     {{ idr_environment | default('idr') }}-omero-hosts
 
 
-# Load hostvars (managment server)
+# Load hostvars (management server)
 - hosts: >
     {{ idr_environment | default('idr') }}-management-hosts
+
+# Load hostvars (search engine server)
+- hosts: >
+    {{ idr_environment | default('idr') }}-searchengine-hosts
 
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
@@ -62,6 +66,16 @@
             ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
         }}
     when: groups[idr_environment | default('idr') + '-management-hosts'] is defined
+
+  - name: Get search engine server IP
+    set_fact:
+      searchengine_host_ansible: >-
+        {{
+          hostvars[groups[
+            idr_environment | default('idr') + '-searchengine-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+    when: groups[idr_environment | default('idr') + '-searchengine-hosts'] is defined
 
   roles:
   # Default to a self-signed certificate

@@ -100,11 +100,18 @@ _nginx_proxy_backends_prometheus_federate:
   server: "http://{{ management_host_ansible | default('localhost') }}:9090/federate"
   cache_validity: 15s
 
+_nginx_proxy_backends_searchengineapi:
+- name: searchengineapi
+  location: "^~ /searchengineapi"
+  server: "http://{{ searchengine_host_ansible | default('localhost') }}:5577/searchengineapi"
+  host_header: "$host/searchengine"
+
 nginx_proxy_backends: >
   {{ _nginx_proxy_backends_omero +
      _nginx_proxy_backends_omerowebsockets +
      _nginx_proxy_backends_grafana_render +
-     _nginx_proxy_backends_prometheus_federate
+     _nginx_proxy_backends_prometheus_federate +
+     _nginx_proxy_backends_searchengineapi
   }}
 
 

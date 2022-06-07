@@ -9,3 +9,6 @@
 
 ### Transfer services
 - include: idr-transfer.yml
+
+## Search services
+- include: idr-searchengine.yml

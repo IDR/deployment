@@ -8,7 +8,12 @@
   tasks:
   - name: Get database host
     set_fact:
-      database_server_url: "{{ hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']}}"
+      database_server_url: >-
+        {{
+          hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]
+          ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+        }}
+
   - name: Create app top level directory
     become: yes
     file:
@@ -17,6 +22,7 @@
       state: directory
       owner: root
       group: root
+      mode: 0755
 
   - name: Create searchengine folder directory
     become: yes
@@ -26,18 +32,21 @@
       state: directory
       owner: root
       group: root
-      
+      mode: 0755
+
   - name: Create searchengine logs directory
     become: yes
     file:
       path: "{{ apps_folder }}/searchengine/searchengine/logs"
       state: directory
+      mode: 0755
 
   - name: Create searchengine cached directory
     become: yes
     file:
       path: "{{ apps_folder }}/searchengine/searchengine/cacheddata"
       state: directory
+      mode: 0755
 
   - name: Create client  directory
     become: yes
@@ -47,6 +56,7 @@
       state: directory
       owner: root
       group: root
+      mode: 0755
 
   - name: Create client data directory
     become: yes
@@ -56,12 +66,14 @@
       state: directory
       owner: root
       group: root
+      mode: 0755
 
   - name: Create client logs directory
     become: yes
     file:
       path: "{{ apps_folder }}/searchengine/client/logs"
       state: directory
+      mode: 0755
 
   - name: Create elasticsearch directory
     become: yes
@@ -71,7 +83,8 @@
       # User id in elasticsearch Docker image
       owner: 1000
       group: root
-      
+      mode: 0755
+
   - name: Create elasticsearch logs directory
     become: yes
     file:
@@ -80,6 +93,7 @@
       # User id in elasticsearch Docker image
       owner: 1000
       group: root
+      mode: 0755
 
   - name: Create elasticsearch data directory
     become: yes
@@ -89,6 +103,7 @@
       # User id in elasticsearch Docker image
       owner: 1000
       group: root
+      mode: 0755
 
   - name: Create docker network
     become: yes
@@ -110,7 +125,7 @@
     docker_container:
       image: "{{ search_engineelasticsearch_docker_image }}"
       name: searchengineelasticsearch
-      cleanup: True      
+      cleanup: True
       env:
          discovery.type: single-node
          path.data: /var/lib/elasticsearch
@@ -119,7 +134,6 @@
          cluster.name: docker-cluster
          http.host: 0.0.0.0
          #http.port: 9200
-         discovery.type: single-node
          ES_JAVA_OPTS: "-Xmx4096m"
       networks:
       - name: searchengine-net
@@ -131,7 +145,7 @@
       volumes:
       - "{{ apps_folder }}/searchengine/elasticsearch{{ apps_folder }}:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/logs:/var/log/elasticsearch"
-      - 
+
   - name: configure elasticsearch  for docker searchengine
     become: yes
     docker_container:
@@ -148,7 +162,6 @@
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
- 
   - name: configure database for docker searchengine
     become: yes
     docker_container:
@@ -156,7 +169,9 @@
       name: searchengine_database
       cleanup: True
       #auto_remove: yes
-      command: "set_database_configuration -u {{ database_server_url }}  -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }}"
+      command: >
+        set_database_configuration -u {{ database_server_url }}
+        -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }}
       #networks:
       #- name: searchengine-net
       #published_ports:
@@ -164,7 +179,7 @@
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
- 
+
   - name: configure cache folder  for docker searchengine
     become: yes
     docker_container:
@@ -265,7 +280,7 @@
   - name: Run docker searchengine
     become: yes
     docker_container:
-      image: "{{ searchengine_docker_image}}"
+      image: "{{ searchengine_docker_image }}"
       name: searchengine
       cleanup: True
       command: "run_app {{ searchengineurlprefix }}"
@@ -286,7 +301,7 @@
     docker_container:
       image: "{{ searchengineclient_docker_image }}"
       name: searchengineclient
-      cleanup: True       
+      cleanup: True
       networks:
       - name: searchengine-net
       published_ports:

@@ -1,4 +1,4 @@
-# Search ngine + Search Engine Client + Elasticsearch
+# Search ngine +  Elasticsearch
 
 - hosts: "{{ idr_environment | default('idr') }}-database-hosts"
 
@@ -45,33 +45,6 @@
     become: yes
     file:
       path: "{{ apps_folder }}/searchengine/searchengine/cacheddata"
-      state: directory
-      mode: 0755
-
-  - name: Create client  directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/client"
-      recurse: yes
-      state: directory
-      owner: root
-      group: root
-      mode: 0755
-
-  - name: Create client data directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/client/app_data"
-      recurse: yes
-      state: directory
-      owner: root
-      group: root
-      mode: 0755
-
-  - name: Create client logs directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/client/logs"
       state: directory
       mode: 0755
 
@@ -236,47 +209,6 @@
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
-  - name: configure search engine url for search client
-    become: yes
-    docker_container:
-      image: "{{ searchengineclient_docker_image }}"
-      name: searchengineclient_search_uri
-      cleanup: True
-      #auto_remove: yes
-      command: "set_searchengine_url -u http://searchengine:5577/"# http://127.0.0.1:5556/"
-      #networks:
-      #- name: searchengine-net
-      #published_ports:
-      #- "5567:5567"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
-
-  - name: configure secret key for search client
-    become: yes
-    docker_container:
-      image: "{{ searchengineclient_docker_image }}"
-      name: searchengineclient_search_uri
-      cleanup: True
-      #auto_remove: yes
-      command: "set_client_secret_key -s {{ searchengineclient_secret_key }}"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
-
-  - name: configure app data folder for search client
-    become: yes
-    docker_container:
-      image: "{{ searchengineclient_docker_image }}"
-      name: searchengineclient_search_uri
-      cleanup: True
-      #auto_remove: yes
-      command: "set_app_data_folder -a /etc/searchengineclient/app_data"
-      state: started
-      volumes:
-        - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
-
-
   - name: Run docker searchengine
     become: yes
     docker_container:
@@ -294,21 +226,3 @@
       volumes:
         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
         - "{{ apps_folder }}/searchengine/searchengine/cachedata:/etc/searchengine/cachedata"
-
-
-  - name: Run docker searchengineclient
-    become: yes
-    docker_container:
-      image: "{{ searchengineclient_docker_image }}"
-      name: searchengineclient
-      cleanup: True
-      networks:
-      - name: searchengine-net
-      published_ports:
-      - "5567:5567"
-      #restart: "{{ searchengineclient_conf_status | changed }}"
-      state: started
-      restart_policy: always
-      volumes:
-        - "{{ apps_folder }}/searchengine/client:/etc/searchengineclient/"
-        - "{{ apps_folder }}/searchengine/client/app_data:/etc/searchengineclient/app_data"

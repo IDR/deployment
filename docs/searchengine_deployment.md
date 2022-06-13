@@ -13,7 +13,7 @@ search engine stack:
 
 To check that the apps have been installed and run, the user can use `wget` or `curl` to call:
 
-  * for the OMERO search engine, http://127.0.0.1:5577/searchengineapi/api/v1/resources/
+  * for the OMERO search engine, http://127.0.0.1:5577/searchengine/api/v1/resources/
   * for OMERO search engine client, http://127.0.0.1:5567
   * for Elasticsearch, http://127.0.0.1:9201  
 

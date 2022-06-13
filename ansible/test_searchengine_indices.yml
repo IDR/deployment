@@ -1,0 +1,19 @@
+- name: test search engine indexing, compare results come from searchengine and database server
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+
+  tasks:
+
+   - name: Get data from postgres database and insert  them to Elasticsearch index using docker searchengine
+     become: yes
+     docker_container:
+       image: "{{ searchengine_docker_image }}"
+       name: searchengine_index_test
+       cleanup: True
+       #auto_remove: yes
+       command: "test_indexing_search_query"
+       networks:
+         - name: searchengine-net
+           ipv4_address: 10.11.0.11
+       state: started
+       volumes:
+         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"

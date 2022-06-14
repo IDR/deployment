@@ -614,4 +614,4 @@ omero_web_apps_config_set:
   - key: "Name"
     regex: "^(.*?)-.*?(.)$"
     template: "$1$2"
-  omero.web.searchengine.url: "searchengineapi/api/v1"
+  omero.web.searchengine.url: "searchengineapi/v1"

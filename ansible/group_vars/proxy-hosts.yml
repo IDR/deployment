@@ -101,9 +101,9 @@ _nginx_proxy_backends_prometheus_federate:
   cache_validity: 15s
 
 _nginx_proxy_backends_searchengineapi:
-- name: searchengineapi
-  location: "^~ /searchengineapi"
-  server: "http://{{ searchengine_host_ansible | default('localhost') }}:5577/searchengineapi"
+- name: searchengine
+  location: "^~ /searchengine"
+  server: "http://{{ searchengine_host_ansible | default('localhost') }}:5577/searchengine"
   host_header: "$host/searchengine"
 
 nginx_proxy_backends: >

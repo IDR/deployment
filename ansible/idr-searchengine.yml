@@ -153,6 +153,18 @@
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
+  - name: configure IDR_TEST_FILE_URL item
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: searchengine_IDR_TEST_FILE
+      cleanup: True
+      command: "set_idr_test_file -i {{ IDR_TEST_FILE_URL }}"
+      state: started
+      volumes:
+      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
+
   - name: configure cache folder  for docker searchengine
     become: yes
     docker_container:

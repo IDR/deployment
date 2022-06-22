@@ -29,7 +29,7 @@
       when: idr_enable_pilotidr_omero | default(False)
 
     - role: ome.openstack_volume_storage
-      openstack_volume_size: 1200
+      openstack_volume_size: 1500
       openstack_volume_name: "{{ idr_environment_idr }}-omeroreadwrite-data"
       openstack_volume_source: "{{ idr_volume_omero_data_src }}"
       openstack_volume_wait: False

@@ -5,7 +5,6 @@
 
 omero_server_dbuser: omero
 omero_server_dbpassword: "{{ idr_secret_postgresql_password | default('omero') }}"
-omero_server_selfsigned_certificates: True
 
 idr_omero_web_timeout: 900
 

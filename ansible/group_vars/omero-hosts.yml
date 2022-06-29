@@ -110,6 +110,7 @@ omero_server_config_set:
   # Disable all components except Blitz and Tables
   omero.server.nodedescriptors: "master:Blitz-0,Tables-0"
 
+omero_server_selfsigned_certificates: True
 
 ######################################################################
 # Other dependent role vars

@@ -89,13 +89,10 @@
     become: yes
     copy:
       content: |
-        config set -- omero.data.dir /data/OMERO
         config set -- omero.cluster.read_only true
       dest: /opt/omero/server/config/omero-readonly-config.omero
       force: yes
       mode: 0644
-    notify:
-    - restart omero-server if installed
 
   # There are several bugs- read-only still needs write access to several
   # directories including ManagedRepository/.omero

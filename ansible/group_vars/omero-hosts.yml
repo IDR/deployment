@@ -239,7 +239,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - omero-mapr==0.5.0
 - omero-iviewer==0.11.3
-- idr-gallery==3.6.1
+- idr-gallery==3.6.2
 - omero-figure==4.4.3
 omero_web_apps_names:
 - omero_mapr

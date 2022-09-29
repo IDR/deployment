@@ -1,7 +1,7 @@
 # IDR post-installation playbooks
 # Some of this requires private configuration information
 
-- include: management.yml
-- include: management-prometheus.yml
-- include: management-grafana.yml
-- include: management-fluentd.yml
+- import_playbook: management.yml
+- import_playbook: management-prometheus.yml
+- import_playbook: management-grafana.yml
+- import_playbook: management-fluentd.yml

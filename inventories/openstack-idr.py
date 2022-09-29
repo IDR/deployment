@@ -66,7 +66,7 @@ import collections
 import os
 import sys
 import time
-from distutils.version import StrictVersion
+from packaging.version import Version
 
 try:
     import json
@@ -273,7 +273,7 @@ def get_host_groups_from_cloud(inventory):
     if hasattr(inventory, 'extra_config'):
         use_hostnames = inventory.extra_config['use_hostnames']
         list_args['expand'] = inventory.extra_config['expand_hostvars']
-        if StrictVersion(shade.__version__) >= StrictVersion("1.6.0"):
+        if Version(shade.__version__) >= Version("1.6.0"):
             list_args['fail_on_cloud_config'] = \
                 inventory.extra_config['fail_on_errors']
     else:

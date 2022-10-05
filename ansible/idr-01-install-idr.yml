@@ -2,20 +2,20 @@
 # environment. This does not run any storage/networking/cloud specific
 # tasks, nor does it run playbooks requiring private configuration
 
-- include: idr-hosts.yml
+- import_playbook: idr-hosts.yml
 
-- include: idr-firewall.yml
+- import_playbook: idr-firewall.yml
 
-- include: idr-omero.yml
-- include: idr-omero-web.yml
+- import_playbook: idr-omero.yml
+- import_playbook: idr-omero-web.yml
 
-- include: idr-omero-readonly.yml
+- import_playbook: idr-omero-readonly.yml
   tags:
   # Requires NFS shares which can't be configured in Docker
   - skip_if_molecule_docker
 
-- include: idr-docker.yml
+- import_playbook: idr-docker.yml
 
-- include: idr-proxy.yml
-- include: idr-proxy-about.yml
-- include: idr-haproxy.yml
+- import_playbook: idr-proxy.yml
+- import_playbook: idr-proxy-about.yml
+- import_playbook: idr-haproxy.yml

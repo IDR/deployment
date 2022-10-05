@@ -1,11 +1,15 @@
 ---
 
+collections:
+- name: openstack.cloud
+  version: 1.2.1
+
 ######################################################################
 # External Ansible roles required by this repository
 
 # TODO: check ordering of these dependencies to ensure nested dependencies
 # are managed by this file and not the role
-
+roles:
 - src: ome.analysis_tools
   version: 1.0.1
 
@@ -91,7 +95,8 @@
   version: 4.0.1
 
 - name: ome.openstack_volume_storage
-  version: 2.0.0
+  src: https://github.com/ome/ansible-role-openstack-volume-storage/archive/a0c9f89aed195be9beda5f76b818b1228c390ccc.tar.gz
+  version: 3.0.0
 
 - src: ome.postgresql
   version: 5.0.2
@@ -134,19 +139,24 @@
 # External IDR roles
 
 - name: idr.openstack_idr_instance
-  version: 3.1.2
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance/archive/f310a5d33c571e132d150a7029ce1b1d436a6d2c.tar.gz
+  version: 4.0.0
 
 - name: idr.openstack_idr_instance_network
-  version: 1.1.2
+  src: https://github.com/IDR/ansible-role-openstack-idr-instance-network/archive/626917bd0294b2f23cd40fb9166b4aaae1f6aeeb.tar.gz
+  version: 2.0.0
 
 - name: idr.openstack_idr_keypairs
-  version: 1.1.1
+  src: https://github.com/IDR/ansible-role-openstack-idr-keypairs/archive/82160b258477837d80e0a1c794a0fd9ca9d5099e.tar.gz
+  version: 2.0.0
 
 - name: idr.openstack_idr_network
-  version: 3.0.1
+  src: https://github.com/IDR/ansible-role-openstack-idr-network/archive/10e7f1f34e166b61368e3492e9f46e2f71db77f1.tar.gz
+  version: 4.0.0
 
 - name: idr.openstack_idr_security_groups
-  version: 2.0.0
+  src: https://github.com/IDR/ansible-role-openstack-idr-security-groups/archive/bfb3d2227388b9680b09bc7d805ac29bd72d38dd.tar.gz
+  version: 3.0.0
 
 
 ######################################################################

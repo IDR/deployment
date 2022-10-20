@@ -125,7 +125,7 @@
         node.name: searchengineelasticsearchnode1
         bootstrap.memory_lock: "true"
         network.host: 0.0.0.0
-        cluster.name: docker-cluster
+        cluster.name: searchengine-cluster
         cluster.initial_master_nodes: "{{ elasticsearchnodes | join(',') }}"
         http.host: 0.0.0.0
         #http.port: 9200
@@ -155,7 +155,7 @@
         node.name: "searchengineelasticsearchnode{{ item }}"
         bootstrap.memory_lock: "true"
         network.host: 0.0.0.0
-        cluster.name: "docker-cluster"
+        cluster.name: "searchengine-cluster"
         discovery.seed_hosts: "searchengineelasticsearchnode1"
         cluster.initial_master_nodes: "{{ elasticsearchnodes | join(',') }}"
         http.host: 0.0.0.0

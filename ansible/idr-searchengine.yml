@@ -4,6 +4,8 @@
 
 - name: Deploying search engine
   hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+  vars:
+    elasticsearchnodes: [ ]
 
   tasks:
   - name: Get database host
@@ -58,25 +60,44 @@
       group: root
       mode: 0755
 
-  - name: Create elasticsearch logs directory
+  - name: Create elasticsearch main nodes directories
     become: yes
     file:
-      path: "{{ apps_folder }}/searchengine/elasticsearch/logs"
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}"
       state: directory
       # User id in elasticsearch Docker image
       owner: 1000
       group: root
       mode: 0755
+    with_sequence: start=1 count={{ noelasticsearchnodes }}
+
+  - name: Create elasticsearch logs directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+    with_sequence: start=1 count={{ noelasticsearchnodes }}
 
   - name: Create elasticsearch data directory
     become: yes
     file:
-      path: "{{ apps_folder }}/searchengine/elasticsearch{{ apps_folder }}"
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data"
       state: directory
       # User id in elasticsearch Docker image
       owner: 1000
       group: root
       mode: 0755
+    with_sequence: start=1 count={{ noelasticsearchnodes }}
+
+  #Add all elasticsearch nodes
+  - name: Add elastic nodes to elasticsearchnodes
+    set_fact:
+      elasticsearchnodes: '{{ elasticsearchnodes + ["searchengineelasticsearchnode"+item] }}'
+    with_sequence: start=1 count={{ noelasticsearchnodes}}
 
   - name: Create docker network
     become: yes
@@ -84,40 +105,73 @@
       name: searchengine-net
       ipam_config:
         - subnet=10.11.0.0/16
-      #networks_cli_compatible: yes
-      #state: present
 
-  #- name: Pull search engine docker image
-  #  docker_image:
-  #      name: "{{ search_engineicsearch_docker_image }}"
-  #      tag: latest
-  #      source: pull
+  - name: set vm.max_map_count to 262144 in sysctl
+    sysctl: name={{ item.varname }} value={{ item.varvalue }}
+    with_items:
+      - { varname: "vm.max_map_count", varvalue: "262144" }
 
-  - name: Run docker elasticsearch
+  - name: Run main docker elasticsearch main node
     become: yes
     docker_container:
       image: "{{ search_engineelasticsearch_docker_image }}"
-      name: searchengineelasticsearch
+      name: "searchengineelasticsearchnode1"
       cleanup: True
+      ulimits:
+        - 'memlock:-1:-1'
       env:
-         discovery.type: single-node
-         path.data: /var/lib/elasticsearch
-         path.logs: /var/log/elasticsearch
-         network.host:  0.0.0.0
-         cluster.name: docker-cluster
-         http.host: 0.0.0.0
-         #http.port: 9200
-         ES_JAVA_OPTS: "-Xmx4096m"
+        path.data: "/var/lib/elasticsearch"
+        path.logs: "/var/log/elasticsearch"
+        node.name: searchengineelasticsearchnode1
+        bootstrap.memory_lock: "true"
+        network.host: 0.0.0.0
+        cluster.name: docker-cluster
+        cluster.initial_master_nodes: "{{ elasticsearchnodes | join(',') }}"
+        http.host: 0.0.0.0
+        #http.port: 9200
+        ES_JAVA_OPTS: "-Xms2g -Xmx2g"
       networks:
-      - name: searchengine-net
+      - name: "searchengine-net"
       published_ports:
-      - "9201:9200"
-      - "9301:9300"
+        - "9201:9200"
+        - "9301:9300"
       state: started
       restart_policy: always
       volumes:
-      - "{{ apps_folder }}/searchengine/elasticsearch{{ apps_folder }}:/var/lib/elasticsearch"
-      - "{{ apps_folder }}/searchengine/elasticsearch/logs:/var/log/elasticsearch"
+      - "{{ apps_folder }}/searchengine/elasticsearch/node1/data:/var/lib/elasticsearch"
+      - "{{ apps_folder }}/searchengine/elasticsearch/node1/logs:/var/log/elasticsearch"
+
+  - name: Run docker elasticsearch for the remaining nodes
+    become: yes
+    docker_container:
+      image: "{{ search_engineelasticsearch_docker_image }}"
+      name: "searchengineelasticsearchnode{{ item }}"
+      ulimits:
+        - 'memlock:-1:-1'
+      cleanup: True
+      env:
+        path.data: "/var/lib/elasticsearch"
+        path.logs: "/var/log/elasticsearch"
+        node.name: "searchengineelasticsearchnode{{ item }}"
+        bootstrap.memory_lock: "true"
+        network.host: 0.0.0.0
+        cluster.name: "docker-cluster"
+        discovery.seed_hosts: "searchengineelasticsearchnode1"
+        cluster.initial_master_nodes: "{{ elasticsearchnodes | join(',') }}"
+        http.host: 0.0.0.0
+        #http.port: 9200
+        ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      networks:
+      - name: "searchengine-net"
+      published_ports:
+        - "920{{ item }}:9200"
+        - "930{{ item }}:9300"
+      state: started
+      restart_policy: always
+      volumes:
+      - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data:/var/lib/elasticsearch"
+      - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs:/var/log/elasticsearch"
+    with_sequence: start=2 count={{ noelasticsearchnodes | int -1}}
 
   - name: configure elasticsearch  for docker searchengine
     become: yes
@@ -125,15 +179,11 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_elasticsearch
       cleanup: True
-      #auto_remove: yes
-      command: "set_elasticsearch_configuration -e searchengineelasticsearch"
-      #networks:
-      #- name: searchengine-net
-      #published_ports:
-      #- "5577:5577"
+      command: "set_elasticsearch_configuration -e {{ elasticsearchnodes | join(',') }}"
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
 
   - name: configure database for docker searchengine
     become: yes

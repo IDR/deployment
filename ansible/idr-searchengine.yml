@@ -122,6 +122,7 @@
       env:
         path.data: "/var/lib/elasticsearch"
         path.logs: "/var/log/elasticsearch"
+        path.repo: "{{ elasticsearch_backup_folder }}"
         node.name: searchengineelasticsearchnode1
         bootstrap.memory_lock: "true"
         network.host: 0.0.0.0
@@ -130,6 +131,7 @@
         http.host: 0.0.0.0
         #http.port: 9200
         ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+        ingest.geoip.downloader.enabled: "false"
       networks:
       - name: "searchengine-net"
       published_ports:
@@ -152,6 +154,7 @@
       env:
         path.data: "/var/lib/elasticsearch"
         path.logs: "/var/log/elasticsearch"
+        path.repo: "{{ elasticsearch_backup_folder }}"
         node.name: "searchengineelasticsearchnode{{ item }}"
         bootstrap.memory_lock: "true"
         network.host: 0.0.0.0
@@ -161,6 +164,8 @@
         http.host: 0.0.0.0
         #http.port: 9200
         ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+        ingest.geoip.downloader.enabled: "false"
+
       networks:
       - name: "searchengine-net"
       published_ports:
@@ -179,10 +184,21 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_elasticsearch
       cleanup: True
-      command: "set_elasticsearch_configuration -e {{ elasticsearchnodes | join(',') }}"
+      command: "set_elasticsearch_backup_folder -b {{ elasticsearch_backup_folder }}"
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+      -
+  - name: configure elasticsearch  for docker searchengine
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: searchengine_elasticsearch
+      cleanup: True
+      command: "set_elasticsearch_configuration -e {{ elasticsearchnodes | join(',') }}"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
 
   - name: configure database for docker searchengine

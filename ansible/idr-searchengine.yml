@@ -142,6 +142,7 @@
       volumes:
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/logs:/var/log/elasticsearch"
+      - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
 
   - name: Run docker elasticsearch for the remaining nodes
     become: yes
@@ -176,6 +177,7 @@
       volumes:
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs:/var/log/elasticsearch"
+      - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
     with_sequence: start=2 count={{ noelasticsearchnodes | int -1}}
 
   - name: configure elasticsearch  for docker searchengine

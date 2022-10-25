@@ -93,6 +93,16 @@
       mode: 0755
     with_sequence: start=1 count={{ elasticsearch_no_nodes }}
 
+  - name: Create ELasticsearch backup folder
+    become: yes
+    file:
+      path: "{{ elasticsearch_backup_folder }}"
+      recurse: yes
+      state: directory
+      owner: 1000
+      group: root
+      mode: 0755
+
   #Add all elasticsearch nodes
   - name: Add elastic nodes to elasticsearch_nodes
     set_fact:

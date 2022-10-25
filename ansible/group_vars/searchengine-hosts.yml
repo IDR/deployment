@@ -15,4 +15,4 @@ searchengine_secret_key: "fagfdssf3fgdnvhg56ghhgfhgfgh45f"
 searchengineurlprefix: "searchengine"
 IDR_TEST_FILE_URL: "https://raw.githubusercontent.com/IDR/idr.openmicroscopy.org/master/_data/studies.tsv"
 elasticsearch_no_nodes: 3
-elasticsearch_backup_folder: "path/to/elasticsearch/backup/folder"
+elasticsearch_backup_folder: "/searchengine_backup"

@@ -11,7 +11,7 @@ The production (public-facing) IDR (3 servers):
 
 ## Ansible prerequisites
 
-Almost all of the provisioning and deployment in the IDR is done using Ansible 2.1.
+All of the provisioning and deployment in the IDR is done using Ansible 2.10.
 All ansible commands should be run from a shell in the [`ansible`](../ansible) directory.
 
     cd ../ansible

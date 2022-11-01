@@ -107,7 +107,7 @@
   - name: Add elastic nodes to elasticsearch_nodes
     set_fact:
       elasticsearch_nodes: '{{ elasticsearch_nodes + ["searchengine_elasticsearch_node"+item] }}'
-    with_sequence: start=1 count={{ elasticsearch_no_nodes}}
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
 
   - name: Create docker network
     become: yes
@@ -191,7 +191,7 @@
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs:/var/log/elasticsearch"
       - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
-    with_sequence: start=2 count={{ elasticsearch_no_nodes | int -1}}
+    with_sequence: start=2 count={{ elasticsearch_no_nodes | int -1 }}
 
   - name: configure elasticsearch  for docker searchengine
     become: yes

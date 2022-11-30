@@ -120,6 +120,7 @@
   # increasing the mmap counts limits fix this issue
   #https://www.elastic.co/guide/en/elasticsearch/reference/7.16 /vm-max-map-count.html
   - name: set vm.max_map_count to 262144 in sysctl
+    become: yes
     sysctl: name={{ item.varname }} value={{ item.varvalue }}
     with_items:
       - { varname: "vm.max_map_count", varvalue: "262144" }

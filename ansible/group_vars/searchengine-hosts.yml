@@ -6,7 +6,7 @@ database_username: omeroreadonly
 database_user_password:  "{{ idr_secret_postgresql_password_ro | default('omero') }}"
 searchenginecache_folder: /data/searchengine/searchengine/cacheddata/
 search_engineelasticsearch_docker_image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
-searchengine_docker_image: openmicroscopy/omero-searchengine:0.3.1
+searchengine_docker_image: openmicroscopy/omero-searchengine:0.4.1
 #ansible_python_interpreter: path/to/bin/python
 searchengine_index: searchengine_index
 cache_rows: 100000
@@ -14,3 +14,5 @@ cache_rows: 100000
 searchengine_secret_key: "fagfdssf3fgdnvhg56ghhgfhgfgh45f"
 searchengineurlprefix: "searchengine"
 IDR_TEST_FILE_URL: "https://raw.githubusercontent.com/IDR/idr.openmicroscopy.org/master/_data/studies.tsv"
+elasticsearch_no_nodes: 3
+elasticsearch_backup_folder: "/searchengine_backup"

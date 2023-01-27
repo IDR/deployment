@@ -34,6 +34,12 @@
       dest: /usr/local/bin/deploy
       mode: 0555
 
+  - name: Run deployment script
+    become: yes
+    command: /usr/local/bin/deploy -f
+    args:
+      creates: /srv/www/html
+
   - name: Install Cron daemon
     become: yes
     yum:

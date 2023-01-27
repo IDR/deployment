@@ -73,11 +73,12 @@ def main(version, parent, dry_run):
             os.remove(sym)
     if dry_run:
         print('Would symlink {} to {}'.format(dst, sym))
+        sys.exit(1)
     else:
         # Mutator
         os.symlink(dst, sym)
         print('Symlinked {} to {}'.format(dst, sym))
-    sys.exit(1)
+        sys.exit(0)
 
 
 if __name__ == '__main__':

@@ -2,15 +2,37 @@
 
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 
-  roles:
-  - role: ome.deploy_archive
-    become: yes
-
   tasks:
+  - name: Install Python 3
+    become: true
+    yum:
+      name: python36
+      state: present
+
   - name: Set website displayed version
     become: yes
     copy:
-      content: "{{ idr_deployment_web_version_value }}"
-      dest: "{{ idr_deployment_web_version_file }}"
+      content: "{{ idr_environment | default('idr') }}"
+      dest: /srv/www/VERSION
       force: yes
       mode: 0644
+
+  - name: Install deployment script
+    become: yes
+    template:
+      src: files/deploy
+      dest: /usr/local/bin/deploy
+      mode: 0555
+
+  - name: Install Cron daemon
+    become: yes
+    yum:
+     name: cronie
+     state: installed
+
+  - name: Add cron job updating the website
+    become: yes
+    cron:
+      name: "Deploy the website"
+      special_time: hourly
+      job: "/usr/local/bin/deploy 2>&1 > /dev/null || /usr/local/bin/deploy -f"

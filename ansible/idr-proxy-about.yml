@@ -9,6 +9,13 @@
       name: python36
       state: present
 
+  - name: Create static directory
+    become: yes
+    file:
+      path: /srv/www
+      state: directory
+      mode: 0755
+
   - name: Set website displayed version
     become: yes
     copy:

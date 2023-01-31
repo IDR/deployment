@@ -12,3 +12,4 @@
 
 ## Search services
 - import_playbook: idr-searchengine.yml
+- import_playbook: idr-run-searchengine-container.yml

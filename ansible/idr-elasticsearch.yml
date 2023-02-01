@@ -1,7 +1,5 @@
 # configure and run Elasticsearch for the searchengine
 
-- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
-
 - name: Deploying search engine
   hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
   vars:

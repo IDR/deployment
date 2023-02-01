@@ -1,157 +1,22 @@
-# Configure and run Searchengine
-
-- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
-
-- name: Deploying search engine
+#Issue setup ip address inside the hpa config file for postgres to accept the connection from it
+- name: Deploying search engine cache and indexing
   hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
-  vars:
-    elasticsearch_nodes: [ ]
 
   tasks:
-  - name: Get database host
-    set_fact:
-      database_server_url: >-
-        {{
-          hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]
-          ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
-        }}
-  - name: Create searchengine folder directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/searchengine"
-      recurse: yes
-      state: directory
-      owner: root
-      group: root
-      mode: 0755
 
-  - name: Create searchengine logs directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/searchengine/logs"
-      state: directory
-      mode: 0755
-
-  - name: Create searchengine cached directory
-    become: yes
-    file:
-      path: "{{ apps_folder }}/searchengine/searchengine/cacheddata"
-      state: directory
-      mode: 0755
-
-  #Add all elasticsearch nodes
-  - name: Add elastic nodes to elasticsearch_nodes
-    set_fact:
-      elasticsearch_nodes: '{{ elasticsearch_nodes + ["searchengine_elasticsearch_node"+item] }}'
-    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
-
-  - name: configure elasticsearch  for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_elasticsearch
-      cleanup: True
-      command: "set_elasticsearch_backup_folder -b {{ elasticsearch_backup_folder }}"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-      -
-  - name: configure elasticsearch  for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_elasticsearch
-      cleanup: True
-      command: "set_elasticsearch_configuration -e {{ elasticsearch_nodes | join(',') }}"
-      state: started
-      volumes:
-        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-
-  - name: configure database for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_database
-      cleanup: True
-      #auto_remove: yes
-      command: >
-        set_database_configuration -u {{ database_server_url }}
-        -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }}
-      #networks:
-      #- name: searchengine-net
-      #published_ports:
-      #- "5577:5577"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-  - name: configure IDR_TEST_FILE_URL item
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_IDR_TEST_FILE
-      cleanup: True
-      command: "set_idr_test_file -i {{ IDR_TEST_FILE_URL }}"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-
-  - name: configure cache folder  for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_cache
-      cleanup: True
-      #auto_remove: yes
-      command: "set_cache_folder -c /etc/searchengine/cachedata"
-      #networks:
-      #- name: searchengine-net
-      #published_ports:
-      #- "5577:5577"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-  - name: configure number of cache rows for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_cache
-      cleanup: True
-      #auto_remove: yes
-      command: "set_cache_rows_number -n {{ cache_rows }}"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-  - name: configure secret key for docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine_cache
-      cleanup: True
-      #auto_remove: yes
-      command: "set_searchengine_secret_key -s {{ searchengine_secret_key }}"
-      state: started
-      volumes:
-      - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
-  - name: Run docker searchengine
-    become: yes
-    docker_container:
-      image: "{{ searchengine_docker_image }}"
-      name: searchengine
-      cleanup: True
-      command: "run_app {{ searchengineurlprefix }}"
-      networks:
-      - name: searchengine-net
-      published_ports:
-      - "5577:5577"
-      #restart: "{{ searchengine_conf_status | changed }}"
-      state: started
-      restart_policy: always
-      volumes:
-        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-        - "{{ apps_folder }}/searchengine/searchengine/cachedata:/etc/searchengine/cachedata"
+   - name: Get data from postgres database and insert  them to Elasticsearch index using docker searchengine
+     become: yes
+     docker_container:
+       image: "{{ searchengine_docker_image }}"
+       name: searchengine_index
+       cleanup: True
+       #auto_remove: yes
+       command: "get_index_data_from_database"
+       networks:
+         - name: searchengine-net
+           ipv4_address: 10.11.0.11
+       published_ports:
+         - "5571:5577"
+       state: started
+       volumes:
+         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"

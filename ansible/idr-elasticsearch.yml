@@ -1,0 +1,164 @@
+# configure and run Elasticsearch for the searchengine
+
+- hosts: "{{ idr_environment | default('idr') }}-database-hosts"
+
+- name: Deploying search engine
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+  vars:
+    elasticsearch_nodes: [ ]
+
+  tasks:
+
+  - name: Create app top level directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine"
+      recurse: yes
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Create elasticsearch directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+
+  - name: Create elasticsearch main nodes directories
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
+
+  - name: Create elasticsearch logs directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
+
+  - name: Create elasticsearch data directory
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
+
+  - name: Create ELasticsearch backup folder
+    become: yes
+    file:
+      path: "{{ elasticsearch_backup_folder }}"
+      recurse: yes
+      state: directory
+      owner: 1000
+      group: root
+      mode: 0755
+
+  #Add all elasticsearch nodes
+  - name: Add elastic nodes to elasticsearch_nodes
+    set_fact:
+      elasticsearch_nodes: '{{ elasticsearch_nodes + ["searchengine_elasticsearch_node"+item] }}'
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
+
+  - name: Create docker network
+    become: yes
+    docker_network:
+      name: searchengine-net
+      ipam_config:
+        - subnet=10.11.0.0/16
+
+  # I got some memory exceptions when start using elasticsearch cluster and
+  # increasing the mmap counts limits fix this issue
+  #https://www.elastic.co/guide/en/elasticsearch/reference/7.16 /vm-max-map-count.html
+  - name: set vm.max_map_count to 262144 in sysctl
+    become: yes
+    sysctl: name={{ item.varname }} value={{ item.varvalue }}
+    with_items:
+      - { varname: "vm.max_map_count", varvalue: "262144" }
+
+  - name: Run first docker elasticsearch main node
+    become: yes
+    docker_container:
+      image: "{{ search_engineelasticsearch_docker_image }}"
+      name: "searchengine_elasticsearch_node1"
+      cleanup: True
+      ulimits:
+        - 'memlock:-1:-1'
+      env:
+        path.data: "/var/lib/elasticsearch"
+        path.logs: "/var/log/elasticsearch"
+        path.repo: "{{ elasticsearch_backup_folder }}"
+        node.name: searchengine_elasticsearch_node1
+        bootstrap.memory_lock: "true"
+        network.host: 0.0.0.0
+        cluster.name: searchengine-cluster
+        cluster.initial_master_nodes: "{{ elasticsearch_nodes | join(',') }}"
+        http.host: 0.0.0.0
+        #http.port: 9200
+        ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+        ingest.geoip.downloader.enabled: "false"
+      networks:
+      - name: "searchengine-net"
+      published_ports:
+        - "9201:9200"
+        - "9301:9300"
+      state: started
+      restart_policy: always
+      volumes:
+      - "{{ apps_folder }}/searchengine/elasticsearch/node1/data:/var/lib/elasticsearch"
+      - "{{ apps_folder }}/searchengine/elasticsearch/node1/logs:/var/log/elasticsearch"
+      - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
+
+  - name: Run docker elasticsearch for the remaining nodes
+    become: yes
+    docker_container:
+      image: "{{ search_engineelasticsearch_docker_image }}"
+      name: "searchengine_elasticsearch_node{{ item }}"
+      ulimits:
+        - 'memlock:-1:-1'
+      cleanup: True
+      env:
+        path.data: "/var/lib/elasticsearch"
+        path.logs: "/var/log/elasticsearch"
+        path.repo: "{{ elasticsearch_backup_folder }}"
+        node.name: "searchengine_elasticsearch_node{{ item }}"
+        bootstrap.memory_lock: "true"
+        network.host: 0.0.0.0
+        cluster.name: "searchengine-cluster"
+        discovery.seed_hosts: "searchengine_elasticsearch_node1"
+        cluster.initial_master_nodes: "{{ elasticsearch_nodes | join(',') }}"
+        http.host: 0.0.0.0
+        #http.port: 9200
+        ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+        ingest.geoip.downloader.enabled: "false"
+
+      networks:
+      - name: "searchengine-net"
+      published_ports:
+        - "920{{ item }}:9200"
+        - "930{{ item }}:9300"
+      state: started
+      restart_policy: always
+      volumes:
+      - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data:/var/lib/elasticsearch"
+      - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs:/var/log/elasticsearch"
+      - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
+    with_sequence: start=2 count={{ elasticsearch_no_nodes | int -1 }}

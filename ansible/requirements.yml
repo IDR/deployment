@@ -82,7 +82,7 @@
   version: 3.0.1
 
 - src: ome.omero_server
-  version: 4.0.2
+  version: 4.1.0
 
 - name: ome.omero_user
   version: 0.3.1

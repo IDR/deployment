@@ -8,7 +8,7 @@
 
 # Force a downgrade from 5.6.1
 # https://github.com/ome/omero-server/issues/93
-idr_omero_server_release: 5.6.5
+idr_omero_server_release: 5.6.6
 omero_server_checkupgrade_comparator: '!='
 
 idr_omero_web_release: 5.14.0

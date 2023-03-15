@@ -7,9 +7,10 @@ dependency:
 driver:
   name: docker
 
-lint:
-  name: yamllint
-  enabled: False
+lint: |
+  yamllint .
+  ansible-lint
+  flake8
 
 platforms:
   - name: idr-database-docker
@@ -116,5 +117,3 @@ scenario:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8

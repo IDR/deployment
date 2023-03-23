@@ -1,10 +1,11 @@
+---
 # IDR anonymous FTP server
 
 - hosts: "{{ idr_environment | default('idr') }}-ftp-hosts"
 
   roles:
   - role: ome.docker
-    docker_use_ipv4_nic_mtu: True
+    docker_use_ipv4_nic_mtu: true
 
   - role: ome.anonymous_ftp
     anonymous_ftp_incoming_data_dir: /data/idrftp-incoming
@@ -17,18 +18,18 @@
   tasks:
 
   - name: ftp | create alternate upload group
-    become: yes
+    become: true
     group:
       gid: "{{ idrftp_alternate_user_id | default(omit) }}"
       name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       state: present
-      system: no
+      system: false
 
   - name: ftp | create alternate upload user
-    become: yes
+    become: true
     user:
-      append: no
-      createhome: yes
+      append: false
+      createhome: true
       group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
       groups: ""
       home: "/data/{{ idrftp_alternate_user_name | default('ftp-upload') }}"

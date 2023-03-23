@@ -12,7 +12,12 @@
     include_vars: vars/openstack-vars.yml
 
   roles:
+    ############################################################
+    # Keypairs
+    - role: idr.openstack_idr_keypairs
 
+    ############################################################
+    # IDR Instances
     - role: idr.openstack_idr_instance
       idr_environment: "{{ idr_environment_idr }}"
       idr_vm_name: "{{ idr_environment_idr }}-omeroreadwrite"

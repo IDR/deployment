@@ -68,6 +68,22 @@
   - role: ome.omero_common
 
   tasks:
+    - name: Override lib/server JARs
+      become: yes
+      get_url:
+        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.3.1/OMEZarrReader-0.3.1.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/OMEZarrReader.jar"
+        force: yes
+      notify: restart omero-server
+
+    - name: Override lib/client JARs
+      become: yes
+      get_url:
+        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.3.1/OMEZarrReader-0.3.1.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/OMEZarrReader.jar"
+        force: yes
+      notify: restart omero-server
+
     - name: Remove OMERO scripts
       become: yes
       file:

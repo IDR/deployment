@@ -21,6 +21,6 @@
       when: floating_ip == idr_prod_ip
 
 
-- include: archive-db.yml
-- include: archive-instance-services.yml
-- include: archive-logs.yml
+- import_playbook: archive-db.yml
+- import_playbook: archive-instance-services.yml
+- import_playbook: archive-logs.yml

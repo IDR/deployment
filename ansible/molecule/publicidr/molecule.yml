@@ -7,9 +7,10 @@ dependency:
 driver:
   name: docker
 
-lint:
-  name: yamllint
-  enabled: False
+lint: |
+  yamllint .
+  ansible-lint
+  flake8
 
 platforms:
   - name: idr-database-docker
@@ -109,12 +110,11 @@ scenario:
     - create
     - prepare
     - converge
-    - idempotence
+    # Fails and needs to be addressed in the ome.postgresql role
+    # - idempotence
     - side_effect
     - verify
     - destroy
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8

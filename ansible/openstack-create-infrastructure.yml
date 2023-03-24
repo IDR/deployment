@@ -1,23 +1,23 @@
 # Parent provisioning playbook
 
 # This manages the production IDR servers
-- include: openstack-create-publicidr.yml
+- import_playbook: openstack-create-publicidr.yml
   when: 'idr_enable_publicidr | default(True)'
 
 # Pilot IDR: Gateway proxy + network infrastructure for all OMERO servers
-- include: openstack-create-pilotidr.yml
+- import_playbook: openstack-create-pilotidr.yml
   when: 'idr_enable_pilotidr | default(False)'
 
-# Pilot IDR: various testing servers include single OMERO and dev docker
-- include: openstack-create-pilotidr-servers.yml
+# Pilot IDR: various testing servers import_playbook single OMERO and dev docker
+- import_playbook: openstack-create-pilotidr-servers.yml
   when: >-
     (idr_enable_pilotidr_omero | default(False)) or
     (idr_enable_pilotidr_devserver | default(False))
 
 # Independent anonymous FTP server
-- include: openstack-create-ftp.yml
+- import_playbook: openstack-create-ftp.yml
   when: 'idr_enable_ftp | default(True)'
 
 # Independent anonymous GHA server
-- include: openstack-create-gha.yml
+- import_playbook: openstack-create-gha.yml
   when: 'idr_enable_gha | default(False)'

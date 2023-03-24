@@ -12,6 +12,11 @@
         - net-tools
       state: present
 
+  - name: Upgrade ca-certificates
+    yum:
+      pkg:
+        - ca-certificates
+      state: latest
 
 # TODO: Refactor the openmicroscopy.haproxy role so that rsyslog is separate
 # syslog isn't included in the docker image

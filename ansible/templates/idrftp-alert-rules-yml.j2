@@ -7,15 +7,23 @@
 
 groups:
 
-- name: 10% disk space remaining
+- name: disk space
   rules:
 
-  - alert: HostOutOfDiskSpace
-    expr: (node_filesystem_avail_bytes{mountpoint="/data"} * 100) / node_filesystem_size_bytes{mountpoint="/data"} < 10
-    # for: 5m
-    for: 10s
+  - alert: DiskSpace20%Free
+    expr: (node_filesystem_avail_bytes{mountpoint="/data"} * 100) / node_filesystem_size_bytes{mountpoint="/data"} < 20
+    for: 2m
     labels:
       severity: warn
+    annotations:
+      summary: "Host out of disk space (instance {{ $labels.instance }})"
+      description: "Disk is almost full (< 20% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
+  - alert: DiskSpace10%Free
+    expr: (node_filesystem_avail_bytes{mountpoint="/data"} * 100) / node_filesystem_size_bytes{mountpoint="/data"} < 10
+    for: 2m
+    labels:
+      severity: error
     annotations:
       summary: "Host out of disk space (instance {{ $labels.instance }})"
       description: "Disk is almost full (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"

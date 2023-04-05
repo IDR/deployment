@@ -3,6 +3,7 @@
 - hosts: >
     {{ idr_environment | default('idr') }}-proxy-hosts
     {{ idr_environment | default('idr') }}-management-hosts
+    {{ idr_environment | default('idr') }}-searchengine-hosts
 
   tasks:
   - name: Get archive prefix

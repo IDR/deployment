@@ -6,7 +6,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_services_running_and_enabled(host):
-    service = host.service('postgresql-11')
+    service = host.service('postgresql-13')
     assert service.is_running
     assert service.is_enabled
 

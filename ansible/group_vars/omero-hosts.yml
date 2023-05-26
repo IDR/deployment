@@ -52,7 +52,7 @@ ice_install_python: false
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
 # This is needed to ensure the client version matches the server
-postgresql_version: "11"
+postgresql_version: "13"
 
 
 ######################################################################

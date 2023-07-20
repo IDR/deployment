@@ -139,6 +139,18 @@
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
+  - name: configure elastics search password
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: elastics_password
+      cleanup: True
+      #auto_remove: yes
+      command: "set_elasticsearch_password -e {{ ELASTIC_PASSWORD }}"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
   - name: Run docker searchengine
     become: yes
     docker_container:

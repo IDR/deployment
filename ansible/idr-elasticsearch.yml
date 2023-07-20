@@ -27,6 +27,17 @@
       group: root
       mode: 0755
 
+  - name: Create elasticsearch certs folder
+    become: yes
+    file:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/certs"
+      state: directory
+      # User id in elasticsearch Docker image
+      owner: 1000
+      group: root
+      mode: 0755
+
+
   - name: Create elasticsearch main nodes directories
     become: yes
     file:
@@ -70,6 +81,24 @@
       group: root
       mode: 0755
 
+
+
+  - name: Add elastic nodes to instances_nodes
+    set_fact:
+      instances_nodes: "{{instances_nodes + [( {'name' : 'searchengine_elasticsearch_node'+item, 'dns': ['searchengine_elasticsearch_node'+item,'localhost'],'ip': '127.0.0.1'})] }}"
+
+    with_sequence: start=1 count={{ elasticsearch_no_nodes }}
+
+
+  - name: Add elastic nodes to instances
+    set_fact:
+      instances: "{{instances | combine ( {'instances' : instances_nodes}) }}"
+
+
+  - name: Display the instances_nodes
+    debug: var=instances
+
+
   #Add all elasticsearch nodes
   - name: Add elastic nodes to elasticsearch_nodes
     set_fact:
@@ -92,6 +121,51 @@
     with_items:
       - { varname: "vm.max_map_count", varvalue: "262144" }
 
+  - name: create CA
+    become: yes
+    docker_container:
+      image: "{{ search_engineelasticsearch_docker_image }}"
+      name: "creat_ca_for_elasticsearch_cluster"
+      cleanup: True
+      command:  "bash -c '/usr/share/elasticsearch/bin/elasticsearch-certutil ca -s  -out /usr/share/elasticsearch/config/certificates/elastic-ca.p12 --pass {{ ca_password }}
+         '"
+          #fi;
+      state: started
+      volumes:
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
+
+
+
+  - copy:
+        dest: /tmp/instances.yaml
+        content: |
+          {{ instances   |to_nice_yaml }}
+
+
+
+  - name: Create nodes' cert
+    become: yes
+    docker_container:
+      image: "{{ search_engineelasticsearch_docker_image }}"
+      name: "creat_ca_for_elasticsearch_cluster"
+      cleanup: True
+      #command:  "bash -c '/usr/share/elasticsearch/bin/elasticsearch-certutil ca -s  -out /usr/share/elasticsearch/config/certificates/elastic-ca.p12 --pass {{ ca_password }}
+      command:  "bash -c 'bin/elasticsearch-certutil cert --ca /usr/share/elasticsearch/config/certificates/elastic-ca.p12 --ca-pass {{ ca_password }}  --pass {{ keystore_password }}  --in /tmp/instances.yaml -out /usr/share/elasticsearch/config/certificates/bundle.zip;
+      echo 'done';
+      unzip /usr/share/elasticsearch/config/certificates/bundle.zip -d /usr/share/elasticsearch/config/certificates/;
+
+
+         '"
+          #fi;
+      state: started
+      volumes:
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
+          - /tmp/instances.yaml:/tmp/instances.yaml
+
+
+
   - name: Run first docker elasticsearch main node
     become: yes
     docker_container:
@@ -107,12 +181,31 @@
         node.name: searchengine_elasticsearch_node1
         bootstrap.memory_lock: "true"
         network.host: 0.0.0.0
-        cluster.name: searchengine-cluster
+        cluster.name: "searchengine-cluster"
         cluster.initial_master_nodes: "{{ elasticsearch_nodes | join(',') }}"
         http.host: 0.0.0.0
         #http.port: 9200
         ES_JAVA_OPTS: "-Xms2g -Xmx2g"
         ingest.geoip.downloader.enabled: "false"
+        ########################################
+        es_api_basic_auth_username: "elastic"
+        ELASTIC_PASSWORD: "{{ ELASTIC_PASSWORD }}"
+        es_validate_certs: "no"
+        es_enable_http_ssl: "true"
+        xpack.security.http.ssl.enabled: "true"
+        xpack.security.enabled: "true"
+        xpack.security.authc.realms.file.file1.order: "0"
+        xpack.security.authc.realms.native.native1.order: "1"
+        xpack.security.http.ssl.keystore.path: "/usr/share/elasticsearch/config/certificates/elastic-ca.p12"
+        xpack.security.http.ssl.truststore.password: "{{ ca_password }}"
+        xpack.security.http.ssl.keystore.password: "{{ ca_password }}"
+        xpack.security.transport.ssl.enabled: "true"
+        xpack.security.transport.ssl.verification_mode: "certificate"
+        xpack.security.transport.ssl.keystore.path: "/usr/share/elasticsearch/config/certificates/searchengine_elasticsearch_node1/searchengine_elasticsearch_node1.p12"
+        xpack.security.transport.ssl.truststore.path: "/usr/share/elasticsearch/config/certificates/searchengine_elasticsearch_node1/searchengine_elasticsearch_node1.p12"
+        xpack.security.transport.ssl.keystore.password: "{{ keystore_password }}"
+        xpack.security.transport.ssl.truststore.password: "{{ keystore_password }}"
+      #########################################################################
       networks:
       - name: "searchengine-net"
       published_ports:
@@ -123,7 +216,10 @@
       volumes:
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/logs:/var/log/elasticsearch"
+      #- "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+      - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
       - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
+
 
   - name: Run docker elasticsearch for the remaining nodes
     become: yes
@@ -147,6 +243,25 @@
         #http.port: 9200
         ES_JAVA_OPTS: "-Xms1g -Xmx1g"
         ingest.geoip.downloader.enabled: "false"
+        ####################################################################
+        es_api_basic_auth_username: "elastic"
+        ELASTIC_PASSWORD: "{{ ELASTIC_PASSWORD }}"
+        es_validate_certs: "no"
+        es_enable_http_ssl: "true"
+        xpack.security.http.ssl.enabled: "true"
+        xpack.security.enabled: "true"
+        xpack.security.authc.realms.file.file1.order: "0"
+        xpack.security.authc.realms.native.native1.order: "1"
+        xpack.security.http.ssl.keystore.path: "/usr/share/elasticsearch/config/certificates/elastic-ca.p12"
+        xpack.security.http.ssl.truststore.password: "{{ ca_password }}"
+        xpack.security.http.ssl.keystore.password: "{{ ca_password }}"
+        xpack.security.transport.ssl.enabled: "true"
+        xpack.security.transport.ssl.verification_mode: "certificate"
+        xpack.security.transport.ssl.keystore.path: "/usr/share/elasticsearch/config/certificates/searchengine_elasticsearch_node{{ item }}/searchengine_elasticsearch_node{{ item }}.p12"
+        xpack.security.transport.ssl.truststore.path: "/usr/share/elasticsearch/config/certificates/searchengine_elasticsearch_node{{ item }}/searchengine_elasticsearch_node{{ item }}.p12"
+        xpack.security.transport.ssl.keystore.password: "{{ keystore_password }}"
+        xpack.security.transport.ssl.truststore.password: "{{ keystore_password }}"
+        ####################################################################
 
       networks:
       - name: "searchengine-net"
@@ -159,4 +274,5 @@
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node{{ item }}/logs:/var/log/elasticsearch"
       - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
+      - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
     with_sequence: start=2 count={{ elasticsearch_no_nodes | int -1 }}

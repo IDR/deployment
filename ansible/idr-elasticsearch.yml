@@ -208,6 +208,7 @@
       #########################################################################
       networks:
       - name: "searchengine-net"
+        ipv4_address: 10.11.0.2
       published_ports:
         - "9201:9200"
         - "9301:9300"
@@ -265,6 +266,7 @@
 
       networks:
       - name: "searchengine-net"
+        ipv4_address: 10.11.0.{{ item | int + 1 }}
       published_ports:
         - "920{{ item }}:9200"
         - "930{{ item }}:9300"

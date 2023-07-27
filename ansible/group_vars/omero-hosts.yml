@@ -514,6 +514,8 @@ omero_web_apps_config_set:
           href: "https://idr.openmicroscopy.org/about/index.html"
         - text: "Published studies"
           href: "https://idr.openmicroscopy.org/about/studies.html"
+        - text: "IDR images as OME-NGFF"
+          href: "https://idr.github.io/ome-ngff-samples/"
         - text: "Linked resources"
           href: "https://idr.openmicroscopy.org/about/linked-resources.html"
         - text: "API Access"

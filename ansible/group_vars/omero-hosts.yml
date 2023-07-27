@@ -524,7 +524,7 @@ omero_web_apps_config_set:
           href: "https://idr.openmicroscopy.org/about/faq/"
     - text: "Resources"
       submenu:
-        - text: "IDR images as OME-NGFF"
+        - text: "OME-NGFF examples"
           href: "https://idr.github.io/ome-ngff-samples/"
         - text: "Linked resources"
           href: "https://idr.openmicroscopy.org/about/linked-resources.html"

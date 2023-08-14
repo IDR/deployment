@@ -40,7 +40,7 @@
       state: directory
       mode: 0755
 
-  #Add all elasticsearch nodes:q!
+  #Add all elasticsearch nodes
   - name: Add elastic nodes to elasticsearch_nodes
     set_fact:
       elasticsearch_nodes: '{{ elasticsearch_nodes + ["https://10.11.0."+item+":9200"] }}'

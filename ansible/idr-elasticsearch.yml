@@ -95,10 +95,6 @@
       instances: "{{instances | combine ( {'instances' : instances_nodes}) }}"
 
 
-  - name: Display the instances_nodes
-    debug: var=instances
-
-
   #Add all elasticsearch nodes
   - name: Add elastic nodes to elasticsearch_nodes
     set_fact:
@@ -150,14 +146,11 @@
       image: "{{ search_engineelasticsearch_docker_image }}"
       name: "creat_ca_for_elasticsearch_cluster"
       cleanup: True
-      #command:  "bash -c '/usr/share/elasticsearch/bin/elasticsearch-certutil ca -s  -out /usr/share/elasticsearch/config/certificates/elastic-ca.p12 --pass {{ ca_password }}
       command:  "bash -c 'bin/elasticsearch-certutil cert --ca /usr/share/elasticsearch/config/certificates/elastic-ca.p12 --ca-pass {{ ca_password }}  --pass {{ keystore_password }}  --in /tmp/instances.yaml -out /usr/share/elasticsearch/config/certificates/bundle.zip;
       echo 'done';
       unzip /usr/share/elasticsearch/config/certificates/bundle.zip -d /usr/share/elasticsearch/config/certificates/;
-
-
          '"
-          #fi;
+
       state: started
       volumes:
           - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
@@ -217,7 +210,6 @@
       volumes:
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/data:/var/lib/elasticsearch"
       - "{{ apps_folder }}/searchengine/elasticsearch/node1/logs:/var/log/elasticsearch"
-      #- "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
       - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
       - "{{ elasticsearch_backup_folder }}:{{ elasticsearch_backup_folder }}"
 

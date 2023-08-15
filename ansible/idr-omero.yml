@@ -56,6 +56,14 @@
   # To be removed once omero-certificats is released with
   # https://github.com/ome/omero-certificates/pull/36
   pre_tasks:
+    - name: Create certs directory
+      become: true
+      file:
+        path: /data/OMERO/certs
+        owner: omero-server
+        group: omero-server
+        state: directory
+
     - name: Download ffdhe2048 group
       become: true
       get_url:

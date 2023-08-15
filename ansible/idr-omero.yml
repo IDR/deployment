@@ -56,6 +56,16 @@
   roles:
   - role: ome.omero_server
 
+  # To be removed once omero-certificats is released with
+  # https://github.com/ome/omero-certificates/pull/36
+  tasks:
+    - name: Download ffdhe2048 group
+      become: yes
+      get_url:
+        url: https://ssl-config.mozilla.org/ffdhe2048.txt
+        dest: "/data/OMERO/certs/ffdhe2048.pem"
+        force: yes
+
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"
 
 # There are two custom IDR modifications departing from a vanilla OMERO.server:

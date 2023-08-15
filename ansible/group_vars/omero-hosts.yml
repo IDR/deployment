@@ -109,6 +109,11 @@ omero_server_config_set:
   omero.client.icetransports: ssl,tcp,ws
   # Disable all components except Blitz and Tables
   omero.server.nodedescriptors: "master:Blitz-0,Tables-0"
+  # To be removed once omero-certificats is released with
+  # https://github.com/ome/omero-certificates/pull/36
+  omero.glacier2.IceSSL.DH.2048: "ffdhe2048.pem"
+  omero.glacier2.IceSSL.ProtocolVersionMax: "TLS1_2"
+  omero.glacier2.IceSSL.Protocols: "TLS1_2"
 
 omero_server_selfsigned_certificates: True
 

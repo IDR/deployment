@@ -75,7 +75,7 @@
 
     prometheus_alert_repeat_interval: 25m
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
-    prometheus_alertmanager_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
+    prometheus_alertmanager_slack_channel: "{{ idr_notify_slack_channel | default('#idr-notify') }}"
     # The defaults in the prometheus role are (30s 5m 3h)
     # When testing you may want to decrease these to make it easier
     #prometheus_alert_group_wait: 10s

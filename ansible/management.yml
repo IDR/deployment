@@ -24,4 +24,4 @@
   roles:
   - role: ome.omero_logmonitor
     omero_logmonitor_slack_token: "{{ idr_secret_omero_logmonitor_slack_token | default(None) }}"
-    omero_logmonitor_slack_channel: idr-logs-{{ idr_environment | default('idr') }}
+    omero_logmonitor_slack_channel: "{{ idr_logs_slack_channel | default('idr-logs') }}"

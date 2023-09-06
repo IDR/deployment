@@ -10,7 +10,7 @@
     prometheus_docker_network: monitoring
 
     prometheus_alertmanager_slack_webhook: "{{ idr_secret_management_slack_webhook }}"
-    prometheus_alertmanager_slack_channel: "#idr-notify-{{ idr_environment | default('idr') }}"
+    prometheus_alertmanager_slack_channel: "{{ idr_notify_slack_channel | default('#idr-notify') }}"
 
     prometheus_targets:
     - groupname: nodes

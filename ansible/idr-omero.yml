@@ -68,6 +68,14 @@
   - role: ome.omero_common
 
   tasks:
+    - name: Add OMERO Process Container Steward
+      become: yes
+      get_url:
+        url: https://github.com/glencoesoftware/omero-pc-steward/releases/download/v0.1.0/omero-pc-steward-0.1.0.jar
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/omero-pc-steward.jar"
+        force: yes
+      notify: restart omero-server
+
     - name: Override lib/server JARs
       become: yes
       get_url:

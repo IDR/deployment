@@ -18,7 +18,7 @@
     - redis
     - httpd
     - nginx
-    - postgresql-11
+    - postgresql-13
     - prometheus-node-exporter
     - prometheus-omero-py
     - docker

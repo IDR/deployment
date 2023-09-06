@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.7
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.18.0
+idr_omero_web_release: 5.21.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0
@@ -28,7 +28,7 @@ ice_install_python: false
 #idr_ANSIBLE_ENVIRONMENT_VARIABLES: { OMEGO_SSL_NO_VERIFY: 1 }
 
 # This is needed to ensure the client version matches the server
-postgresql_version: "11"
+postgresql_version: "13"
 
 
 ######################################################################
@@ -215,7 +215,7 @@ omero_web_config_set:
 omero_web_apps_packages:
 - omero-mapr==0.5.1
 - omero-iviewer==0.11.3
-- idr-gallery==3.9.2
+- idr-gallery==3.10.1
 - omero-figure==4.4.3
 omero_web_apps_names:
 - omero_mapr
@@ -490,20 +490,24 @@ omero_web_apps_config_set:
           href: "https://idr.openmicroscopy.org/about/index.html"
         - text: "Published studies"
           href: "https://idr.openmicroscopy.org/about/studies.html"
-        - text: "Linked resources"
-          href: "https://idr.openmicroscopy.org/about/linked-resources.html"
         - text: "API Access"
           href: "https://idr.openmicroscopy.org/about/api.html"
         - text: "Data download"
           href: "https://idr.openmicroscopy.org/about/download.html"
-        - text: "Image Tools Resource (ITR)"
-          href: "https://idr.openmicroscopy.org/about/itr.html"
-        - text: "Analysis Environments"
-          href: "https://idr.openmicroscopy.org/about/analysis-environments.html"
         - text: "Deployment"
           href: "https://idr.openmicroscopy.org/about/deployment.html"
         - text: "FAQ"
           href: "https://idr.openmicroscopy.org/about/faq/"
+    - text: "Resources"
+      submenu:
+        - text: "OME-NGFF examples"
+          href: "https://idr.github.io/ome-ngff-samples/"
+        - text: "Linked resources"
+          href: "https://idr.openmicroscopy.org/about/linked-resources.html"
+        - text: "Image Tools Resource (ITR)"
+          href: "https://idr.openmicroscopy.org/about/itr.html"
+        - text: "Analysis Environments"
+          href: "https://idr.openmicroscopy.org/about/analysis-environments.html"
     - text: "Submissions"
       href: "https://idr.openmicroscopy.org/about/submission.html"
       submenu:

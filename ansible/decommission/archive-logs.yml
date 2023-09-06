@@ -3,6 +3,7 @@
 - hosts: >
     {{ idr_environment | default('idr') }}-proxy-hosts
     {{ idr_environment | default('idr') }}-management-hosts
+    {{ idr_environment | default('idr') }}-searchengine-hosts
 
   tasks:
   - name: Get archive prefix
@@ -72,3 +73,34 @@
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
     with_items: "{{_decommission_archive_management.results}}"
+
+
+- hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+  vars:
+    logs:
+      - { name: 'searchengine', path: '/data/searchengine/searchengine/logs' }
+  tasks:
+
+  - name: Archive searchengine logs
+    become: yes
+    archive:
+      dest: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
+      format: gz
+      path: "{{ item.path }}"
+    register: _searchengine_archive
+    with_items: "{{ logs }}"
+
+  - name: Fetch searchengine logs archive
+    fetch:
+      dest: /tmp/
+      flat: yes
+      src: /tmp/{{ decommission_archive_prefix }}-{{ item.name }}.tar.gz
+    with_items: "{{ logs }}"
+    when: 'download_dump | default(False)'
+
+  - name: Print archive information
+    debug:
+      msg: >
+        Archived {{ item.archived | length }} files
+        from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
+    with_items: "{{_searchengine_archive.results}}"

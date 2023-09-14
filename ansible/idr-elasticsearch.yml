@@ -5,6 +5,7 @@
   vars:
     elasticsearch_nodes: [ ]
     instances_nodes: []
+    instances: {}
 
   tasks:
 

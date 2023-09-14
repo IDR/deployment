@@ -4,6 +4,7 @@
   hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
   vars:
     elasticsearch_nodes: [ ]
+    instances_nodes: []
 
   tasks:
 

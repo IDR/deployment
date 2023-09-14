@@ -133,9 +133,16 @@
           - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
 
-  - name: Pause for 1 minutes
-    ansible.builtin.pause:
-      minutes: 1
+  - name: Wait for CA file
+    ansible.builtin.wait_for:
+      path: "{{ apps_folder }}/searchengine/elasticsearch/certs/elastic-ca.p12"
+      state: present
+    register: check_ca_file_result
+
+  - name: Show wait CA file result
+    debug:
+      var: check_ca_file_result
+
   - copy:
         dest: /tmp/instances.yaml
         content: |

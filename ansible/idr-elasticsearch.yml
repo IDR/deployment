@@ -133,8 +133,9 @@
           - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
 
-
-
+  - name: Pause for 1 minutes
+    ansible.builtin.pause:
+      minutes: 1
   - copy:
         dest: /tmp/instances.yaml
         content: |

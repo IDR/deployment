@@ -5,7 +5,7 @@
 - name: Deploying search engine
   hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
   vars:
-    elasticsearch_nodes: [ ]
+    elasticsearch_nodes_urls: [ ]
 
   tasks:
   - name: Get database host
@@ -41,9 +41,9 @@
       mode: 0755
 
   #Add all elasticsearch nodes
-  - name: Add elastic nodes to elasticsearch_nodes
+  - name: Add elastic nodes to elasticsearch_nodes_urls
     set_fact:
-      elasticsearch_nodes: '{{ elasticsearch_nodes + ["https://10.11.0."+item+":9200"] }}'
+      elasticsearch_nodes_urls: '{{ elasticsearch_nodes_urls + ["https://10.11.0."+item+":9200"] }}'
     with_sequence: start=2 count={{ elasticsearch_no_nodes }}
 
   - name: configure elasticsearch backup folder for docker searchengine
@@ -63,7 +63,7 @@
       image: "{{ searchengine_docker_image }}"
       name: searchengine_elasticsearch
       cleanup: True
-      command: "set_elasticsearch_configuration -e {{ elasticsearch_nodes | join(',') }}"
+      command: "set_elasticsearch_configuration -e {{ elasticsearch_nodes_urls | join(',') }}"
       state: started
       volumes:
         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"

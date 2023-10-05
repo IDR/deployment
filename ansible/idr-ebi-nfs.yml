@@ -27,9 +27,9 @@
   - name: Mount S3 endpoints
     become: true
     mount:
-      fstype: "fuse"
+      fstype: fuse
       opts: "{{ item.opts }}"
       path: "{{ item.path }}"
       src: "{{ item.src }}"
-      state: "mounted"
+      state: present
     loop: "{{ ebi_s3_mounts }}"

@@ -17,6 +17,12 @@
       path: /uod/idr
       state: directory
 
+  - name: idr | install fuse
+    become: true
+    yum:
+      name: fuse
+      state: present
+
   - name: Install goofys
     become: true
     get_url:

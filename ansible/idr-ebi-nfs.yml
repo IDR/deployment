@@ -1,4 +1,4 @@
-# Setup Embassy IDR NFS shares
+# Setup Embassy IDR shares
 - hosts: >
     {{ idr_environment | default('idr') }}-ebi-nfs
 
@@ -16,3 +16,26 @@
     file:
       path: /uod/idr
       state: directory
+
+  - name: idr | install fuse
+    become: true
+    yum:
+      name: fuse
+      state: present
+
+  - name: Install goofys
+    become: true
+    get_url:
+      url: https://github.com/kahing/goofys/releases/latest/download/goofys
+      dest: /usr/bin/goofys
+      mode: 0755
+
+  - name: Mount S3 endpoints
+    become: true
+    mount:
+      fstype: fuse
+      opts: "{{ item.opts }}"
+      path: "{{ item.path }}"
+      src: "{{ item.src }}"
+      state: present
+    loop: "{{ ebi_s3_mounts }}"

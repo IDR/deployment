@@ -156,7 +156,7 @@
   version: 0.2.3
 
 - src: ome.omero_prometheus_exporter
-  version: 0.3.2
+  version: 0.3.6
 
 - src: ome.omero_web_django_prometheus
   version: 0.4.1

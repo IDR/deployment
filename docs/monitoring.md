@@ -22,20 +22,6 @@ If you want to query the raw metrics directly you can connect to prometheus:
 
 Open http://localhost:9090/ and you can interactively query the metrics using [PromQL (Prometheus Query Language)](https://prometheus.io/docs/prometheus/latest/querying/basics/).
 
-
-## Centralised logging
-
-The IDR has a experimental centralised logging collector using Fluentd, ElasticSearch and Kibana:
-
-    ssh idr-proxy -L 5601:management:5601
-
-Open http://localhost:5601/.
-Limitations:
-- An index pattern `logstash-*` may need to be create on the first access
-- The ElasticSearch server is not clustered and has limited querying capacity. It can be easily overloaded.
-- Logs are kept for two weeks.
-
-
 ## IDR Pilot Monitoring
 
 All IDR pilot test instances are currently monitored by a single monitoring server.
@@ -68,9 +54,3 @@ This playbook also deploys all the required [Prometheus exporters](https://prome
 
 Grafana runs in Docker and is [deployed by a playbook](../ansible/management-grafana.yml).
 The playbook automatically configures Grafana and uploads some pre-created dashboards using Grafana's REST API.
-
-
-### ElasticSearch, Kibana, Fluentd
-
-ElasticSearch, Kibana and the Fluentd server are run in Docker and [deployed by a playbook](../ansible/management-fluentd.yml).
-This playbook also deploys the Fluentd logging agents that collect the logs on the OMERO and proxy servers, and forward them to the central Fluentd server.

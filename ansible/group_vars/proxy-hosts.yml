@@ -357,9 +357,3 @@ idr_backend_reserved_offset: 2
 idr_haproxy_frontend_omero_offset: 14060
 idr_haproxy_frontend_omero_host: idr.openmicroscopy.org
 
-######################################################################
-# openmicroscopy.fluentd vars
-fluentd_groups:
-- adm
-fluentd_source_configs:
-- files/fluentd/nginx-proxy.conf

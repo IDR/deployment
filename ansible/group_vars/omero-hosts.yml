@@ -28,13 +28,6 @@ ice_install_python: false
 # This is needed to ensure the client version matches the server
 postgresql_version: "13"
 
-
-######################################################################
-# openmicroscopy.fluentd vars
-fluentd_source_configs:
-- files/fluentd/omero.conf
-
-
 ######################################################################
 # openmicroscopy.omero-server role vars
 

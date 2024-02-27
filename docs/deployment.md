@@ -27,7 +27,7 @@ This playbook is *not* idempotent.
 
 ### [`idr-09-monitoring.yml`](../ansible/idr-09-monitoring.yml)
 This is an optional playbook to set up monitoring of the IDR and OMERO.server.
-This includes configuring all servers with [Prometheus](hhttps://prometheus.io/), setting up centralised logging with [fluentd](https://www.fluentd.org/)/, and enabling Slack notifications errors.
+This includes configuring all servers with [Prometheus](hhttps://prometheus.io/), and enabling Slack notifications errors.
 You will need to provide a secret Slack token for Slack notifications.
 
 

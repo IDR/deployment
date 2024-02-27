@@ -4,4 +4,3 @@
 - import_playbook: management.yml
 - import_playbook: management-prometheus.yml
 - import_playbook: management-grafana.yml
-- import_playbook: management-fluentd.yml

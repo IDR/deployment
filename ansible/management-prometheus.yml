@@ -69,7 +69,7 @@
 
   - role: ome.docker
     docker_use_ipv4_nic_mtu: True
-
+    docker_version: 24.0.7
   - role: ome.prometheus
     prometheus_docker_network: monitoring
 

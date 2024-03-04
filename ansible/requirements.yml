@@ -18,8 +18,9 @@
 - src: ome.cadvisor
   version: 0.5.0
 
-- src: ome.cli_utils
-  version: 1.2.1
+- name: ome.cli_utils
+  src: https://github.com/ome/ansible-role-cli-utils/archive/0ec461e45cda300100500a8ff630d616b1f8d1bc.tar.gz
+  version: 1.2.2
 
 - src: ome.deploy_archive
   version: 0.2.0
@@ -93,8 +94,9 @@
 - src: ome.postgresql
   version: 5.4.0
 
-- src: ome.postgresql_client
-  version: 0.4.2
+- name: ome.postgresql_client
+  src: https://github.com/ome/ansible-role-postgresql-client/archive/327a9216c37f56eb5e6cc328ddbe6cca86a2564a.tar.gz
+  version: 0.4.3
 
 - src: ome.python3_virtualenv
   version: 0.2.0

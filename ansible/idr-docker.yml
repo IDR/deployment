@@ -8,8 +8,8 @@
       docker_use_ipv4_nic_mtu: True
       docker_version: 24.0.7
   tasks:
-  - name: install docker-python
+  - name: install python3-docker
     become: yes
     yum:
-      name: docker-python
+      name: python3-docker
       state: present

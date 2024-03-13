@@ -25,8 +25,9 @@
 - src: ome.deploy_archive
   version: 0.2.0
 
-- src: ome.docker
-  version: 3.2.1
+- name: ome.docker
+  src: https://github.com/ome/ansible-role-docker/archive/20a0c275dabc0873da9259881256abb5a417104a.tar.gz
+  version: 3.2.2
 
 - src: ome.docker_tools
   version: 1.0.1
@@ -37,8 +38,9 @@
 - src: ome.hosts_populate
   version: 0.3.0
 
-- src: ome.ice
-  version: 4.4.2
+- name: ome.ice
+  src: https://github.com/ome/ansible-role-ice/archive/e4b876d1445c9dd1e746002167b09bfed45101e4.tar.gz
+  version: 4.4.3
 
 - src: ome.iptables_raw
   version: 0.4.0
@@ -67,8 +69,9 @@
 - src: ome.nfs_share
   version: 1.1.0
 
-- src: ome.nginx
-  version: 2.2.0
+- name: ome.nginx
+  src: https://github.com/ome/ansible-role-nginx/archive/b07dc9f0c4ad2d5713c96136d41200bf5b2ef06a.tar.gz
+  version: 2.2.1
 
 - src: ome.nginx_proxy
   version: 1.16.0
@@ -85,8 +88,9 @@
 - name: ome.omero_user
   version: 0.4.0
 
-- src: ome.omero_web
-  version: 5.1.0
+- name: ome.omero_web
+  src: https://github.com/ome/ansible-role-omero-web/archive/1d62cd715ecba6bf9c83f851a610813d6906b1f7.tar.gz
+  version: 5.1.1
 
 - name: ome.openstack_volume_storage
   version: 2.0.0

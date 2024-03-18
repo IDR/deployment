@@ -159,7 +159,7 @@
   version: 0.4.0
 
 - src: ome.omero_web_django_prometheus
-  version: 0.4.1
+  version: 0.5.0
 
 - name: ome.prometheus
   src: https://github.com/ome/ansible-role-prometheus/archive/7f21fc1a286adce3cf87f0a269a38c4cdf2098f8.tar.gz

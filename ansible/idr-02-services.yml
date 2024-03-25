@@ -2,7 +2,6 @@
 
 ### Ingress services
 - import_playbook: idr-ftp.yml
-- import_playbook: idr-s3gateway.yml
 
 ### Export services
 - import_playbook: idr-export.yml

@@ -3,12 +3,6 @@
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
 
   tasks:
-  - name: Install Python 3
-    become: true
-    yum:
-      name: python36
-      state: present
-
   - name: Create static directory
     become: yes
     file:

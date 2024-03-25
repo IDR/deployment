@@ -12,7 +12,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     32222,
 ])
 def test_listening(host, port):
-    assert host.socket('tcp://%d' % port).is_listening
+    assert host.socket('tcp://0.0.0.0:%d' % port).is_listening
 
 
 def test_upload(host):

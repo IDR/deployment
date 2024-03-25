@@ -14,24 +14,30 @@ lint: |
 
 platforms:
   - name: idr-database-docker
-    image: centos/systemd:latest
+    image: eniocarboni/docker-rockylinux-systemd:9
     command: /sbin/init
-    privileged: True
+    privileged: true
+    cgroupns_mode: host
+    tmpfs:
+      - /sys/fs/cgroup
     groups:
-    - idr-database-hosts
-    - database-hosts
-    - idr-hosts
+      - idr-database-hosts
+      - database-hosts
+      - idr-hosts
 
   - name: idr-omeroreadwrite-docker
-    image: centos/systemd:latest
+    image: eniocarboni/docker-rockylinux-systemd:9
     command: /sbin/init
-    privileged: True
+    privileged: true
+    cgroupns_mode: host
+    tmpfs:
+      - /sys/fs/cgroup
     groups:
-    - idr-omero-hosts
-    - omero-hosts
-    - idr-omeroreadwrite-hosts
-    - omeroreadwrite-hosts
-    - idr-hosts
+      - idr-omero-hosts
+      - omero-hosts
+      - idr-omeroreadwrite-hosts
+      - omeroreadwrite-hosts
+      - idr-hosts
 
     ######################################################################
     # WARNING:
@@ -43,24 +49,30 @@ platforms:
     # TODO: Test idr-omero-readonly.yml
     ######################################################################
   - name: idr-omeroreadonly-docker
-    image: centos/systemd:latest
+    image: eniocarboni/docker-rockylinux-systemd:9
     command: /sbin/init
-    privileged: True
+    privileged: true
+    cgroupns_mode: host
+    tmpfs:
+      - /sys/fs/cgroup
     groups:
-    - idr-omero-hosts
-    - omero-hosts
-    - idr-omeroreadonly-hosts
-    - omeroreadonly-hosts
-    - idr-hosts
+      - idr-omero-hosts
+      - omero-hosts
+      - idr-omeroreadonly-hosts
+      - omeroreadonly-hosts
+      - idr-hosts
 
   - name: idr-proxy-docker
-    image: centos/systemd:latest
+    image: eniocarboni/docker-rockylinux-systemd:9
     command: /sbin/init
-    privileged: True
+    privileged: true
+    cgroupns_mode: host
+    tmpfs:
+      - /sys/fs/cgroup
     groups:
-    - idr-proxy-hosts
-    - proxy-hosts
-    - idr-hosts
+      - idr-proxy-hosts
+      - proxy-hosts
+      - idr-hosts
 
 provisioner:
   name: ansible

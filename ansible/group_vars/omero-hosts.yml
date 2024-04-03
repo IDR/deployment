@@ -84,7 +84,7 @@ omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
 - omero-cli-render==0.8.0
-- omero-metadata==0.11.0
+- omero-metadata==0.12.0
 - omero-upload==0.4.0
 - omero-rois==0.3.0
 

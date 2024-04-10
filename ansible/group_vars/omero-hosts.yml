@@ -11,7 +11,7 @@
 idr_omero_server_release: 5.6.0
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.21.0
+idr_omero_web_release: 5.25.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0
@@ -83,11 +83,10 @@ omero_server_datadir_bioformatscache: /data/BioFormatsCache
 omero_server_systemd_limit_nofile: 16384
 
 omero_server_python_addons:
-- omero-cli-render==0.7.0
-- omero-metadata==0.9.0
+- omero-cli-render==0.8.0
+- omero-metadata==0.12.0
 - omero-upload==0.4.0
 - omero-rois==0.3.0
-- pandas==1.1.0
 
 omero_server_config_set:
   omero.db.poolsize: 25
@@ -109,8 +108,6 @@ omero_server_config_set:
   omero.client.icetransports: ssl,tcp,ws
   # Disable all components except Blitz and Tables
   omero.server.nodedescriptors: "master:Blitz-0,Tables-0"
-
-omero_server_selfsigned_certificates: True
 
 ######################################################################
 # Other dependent role vars
@@ -162,6 +159,8 @@ idr_omero_web_public_url_filters:
 
 
 omero_web_release: "{{ idr_omero_web_release }}"
+
+omero_web_setup_redis_session: true
 
 omero_web_config_set:
   # web
@@ -237,10 +236,10 @@ omero_web_config_set:
 # Plugins and additional web configuration
 
 omero_web_apps_packages:
-- omero-mapr==0.5.1
-- omero-iviewer==0.11.3
+- omero-mapr==0.5.2
+- omero-iviewer==0.13.0
 - idr-gallery==3.11.0
-- omero-figure==4.4.3
+- omero-figure==6.2.0
 omero_web_apps_names:
 - omero_mapr
 - omero_iviewer

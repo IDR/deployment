@@ -14,9 +14,12 @@ lint: |
 
 platforms:
   - name: idr-ftp
-    image: centos/systemd:latest
+    image: eniocarboni/docker-rockylinux-systemd:9
     command: /sbin/init
-    privileged: True
+    privileged: true
+    cgroupns_mode: host
+    tmpfs:
+      - /sys/fs/cgroup
     groups:
     - idr-ftp-hosts
     - ftp-hosts

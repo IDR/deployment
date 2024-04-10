@@ -7,25 +7,25 @@
 # are managed by this file and not the role
 
 - src: ome.analysis_tools
-  version: 1.0.1
-
-- name: ome.anonymous_ftp
-  version: 0.1.4
-
-- src: ome.basedeps
   version: 1.1.0
 
-- src: ome.cadvisor
-  version: 0.3.3
+- name: ome.anonymous_ftp
+  version: 0.2.0
 
-- src: ome.cli_utils
-  version: 1.1.1
+- src: ome.basedeps
+  version: 1.3.1
+
+- src: ome.cadvisor
+  version: 0.5.0
+
+- name: ome.cli_utils
+  version: 1.2.5
 
 - src: ome.deploy_archive
-  version: 0.1.4
+  version: 0.2.0
 
-- src: ome.docker
-  version: 3.1.1
+- name: ome.docker
+  version: 3.2.2
 
 - src: ome.docker_tools
   version: 1.0.1
@@ -34,100 +34,94 @@
   version: 3.2.3
 
 - src: ome.hosts_populate
-  version: 0.2.3
+  version: 0.3.0
 
-- src: ome.ice
-  version: 4.3.0
+- name: ome.ice
+  version: 4.4.4
 
 - src: ome.iptables_raw
-  version: 0.3.1
+  version: 0.4.0
 
 - src: ome.java
-  version: 2.1.0
+  version: 2.2.0
 
 - src: ome.local_accounts
-  version: 1.1.0
+  version: 1.2.0
 
 - src: ome.logrotate
   version: 1.0.2
 
 - src: ome.lvm_partition
-  version: 1.1.1
-
-- src: ome.minio_s3_gateway
-  version: 0.1.1
+  version: 1.2.0
 
 - name: ome.network_cloud_interfaces
-  version: 1.2.4
-
-- src: ome.network
-  version: 1.1.4
-
-- src: ome.nfs_mount
   version: 1.3.0
 
-- src: ome.nfs_share
-  version: 1.0.4
+- src: ome.network
+  version: 1.2.0
 
-- src: ome.nginx
-  version: 2.1.2
+- src: ome.nfs_mount
+  version: 1.4.0
+
+- src: ome.nfs_share
+  version: 1.1.0
+
+- name: ome.nginx
+  version: 2.2.1
 
 - src: ome.nginx_proxy
-  version: 1.15.1
+  version: 1.16.0
 
 - src: ome.omero_common
-  version: 0.3.4
+  version: 0.4.0
 
 - src: ome.omero_logmonitor
-  version: 3.0.1
+  version: 3.1.0
 
 - src: ome.omero_server
-  version: 4.1.0
+  version: 6.0.0
 
 - name: ome.omero_user
-  version: 0.3.1
+  version: 0.4.0
 
-- src: ome.omero_web
-  version: 4.0.1
+- name: ome.omero_web
+  version: 5.1.1
 
 - name: ome.openstack_volume_storage
   version: 2.0.0
 
 - src: ome.postgresql
-  version: 5.2.0
+  version: 5.4.0
 
-- src: ome.postgresql_client
-  version: 0.2.0
+- name: ome.postgresql_client
+  version: 0.4.3
 
 - src: ome.python3_virtualenv
-  version: 0.1.2
-
-- src: ome.python_pydata
-  version: 1.1.1
+  version: 0.2.0
 
 - src: ome.reboot_server
-  version: 0.1.3
+  version: 0.2.0
 
 - src: ome.redis
-  version: 1.1.1
+  version: 1.3.0
 
 - src: ome.selinux_utils
-  version: 2.0.2
+  version: 2.1.1
 
 - src: ome.ssl_certificate
-  version: 0.3.3
+  version: 0.5.0
 
 - src: ome.storage_volume_initialise
-  version: 1.0.2
+  version: 1.1.0
 
 - src: ome.sudoers
-  version: 1.0.4
+  version: 1.1.0
 
 - src: ome.upgrade_distpackages
-  version: 1.1.3
+  version: 1.2.0
 
 - src: ome.versioncontrol_utils
-  version: 1.0.2
+  version: 1.1.0
 
 
 ######################################################################
@@ -153,22 +147,22 @@
 # External development roles
 
 - src: ome.fluentd
-  version: 0.2.3
+  version: 0.3.1
 
 - src: ome.omero_prometheus_exporter
-  version: 0.3.6
+  version: 0.4.0
 
 - src: ome.omero_web_django_prometheus
-  version: 0.4.1
+  version: 0.5.0
 
-- src: ome.prometheus
-  version: 0.5.1
+- name: ome.prometheus
+  version: 0.6.1
 
 - name: ome.prometheus_jmx
-  version: 0.3.1
+  version: 0.4.0
 
 - src: ome.prometheus_node
-  version: 0.3.1
+  version: 0.4.0
 
 - src: ome.prometheus_postgres
-  version: 0.4.2
+  version: 0.5.0

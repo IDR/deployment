@@ -1,6 +1,6 @@
 # Deploying the IDR
 
-The IDR runs on CentOS 7 64-bit servers only.
+The IDR runs on Rocky Linux 9 64-bit servers only.
 
 
 ## Overview of the playbooks
@@ -63,7 +63,7 @@ If you are using a static inventory run:
 
 If you provisioned your servers using the OpenStack playbook and are using the IDR dynamic inventory run:
 
-    ansible-playbook -i ../inventories/openstack-idr.py --diff -u centos idr-00-preinstall.yml idr-01-install-idr.yml idr-02-services.yml idr-03-postinstall.yml
+    ansible-playbook -i ../inventories/openstack-idr.py --diff -u rocky idr-00-preinstall.yml idr-01-install-idr.yml idr-02-services.yml idr-03-postinstall.yml
 
 If this completes successfully you should be able to access a public OMERO.web at the IP of the `idr-proxy` server.
 If an update requires a reboot of a server the Ansible connection will be interrupted.

@@ -59,7 +59,7 @@ In particular, you must define a list of SSH public key(s), for example:
 
     - idr_keypair_keys: ["ssh-rsa SSH_PUBLIC_KEY"]
 
-You must have a [CentOS 7 cloud image](https://cloud.centos.org/centos/7/images/) (or equivalent) available.
+You must have a [Rocky Linux 9 cloud image](https://rockylinux.org/cloud-images/) (or equivalent) available.
 
 Ensure you can login to OpenStack from the command line using [an OpenStack RC file](http://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html) or equivalent, and run:
 
@@ -82,7 +82,7 @@ This will be fixed when the `openstack` command-line client supports this featur
 ## Other platforms
 
 You should be able to install the IDR on other clouds or physical hardware by provisioning the resources yourself.
-All servers must be running CentOS 7.
+All servers must be running Rocky Linux 9.
 An example static inventory is included in [`inventories/ansible-hosts`](../inventories/ansible-hosts).
 
 For a minimal install you must have one host in each of:

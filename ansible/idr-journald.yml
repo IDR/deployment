@@ -1,17 +1,17 @@
-# Initialisation tasks for CentOS-7 VMs
+# Initialisation tasks for Rocky Linux 9 VMs
 # - Persistent journald logs https://unix.stackexchange.com/a/159390
 
 - hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   tasks:
-  - name: centos-init | Install locate
+  - name: journald | Install locate
     become: yes
     yum:
       name: mlocate
       state: present
     when: idr_debug | default(false) | bool
 
-  - name: centos-init | Create persistent journald directory
+  - name: journald | Create persistent journald directory
     become: yes
     file:
       path: /var/log/journal

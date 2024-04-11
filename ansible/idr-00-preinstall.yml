@@ -3,7 +3,7 @@
 
 - import_playbook: idr-networks.yml
 
-- import_playbook: idr-centos-init.yml
+- import_playbook: idr-journald.yml
 - import_playbook: idr-upgrade-dist.yml
 - import_playbook: os-idr-volumes.yml
 - import_playbook: idr-dundee-nfs.yml

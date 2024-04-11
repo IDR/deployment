@@ -5,11 +5,7 @@ import os
 import shutil
 import sys
 import tarfile
-# Python 2 and 3 compatible so this can be run on RHEL7 without a virtualenv
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from urllib.request import urlopen
 
 
 def main(version, parent, dry_run):

@@ -107,7 +107,7 @@ The following directories are not essential but you may wish to also back them u
 If you used the OpenStack provisioning playbook, these are all separate volumes that can be backed up using the OpenStack clients.
 
 ### Restoration
-If you need to restore the IDR, it is sufficient to restore these directories into a clean CentOS 7 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
+If you need to restore the IDR, it is sufficient to restore these directories into a clean Rocky Linux 9 server before running the deployment playbooks, which will take the existing data into account when installing the IDR.
 The OpenStack provisioning playbook includes optional parameters to specify existing volumes to be copied.
 
 ### New releases

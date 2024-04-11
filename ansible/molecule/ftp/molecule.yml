@@ -40,10 +40,6 @@ provisioner:
       docker-hosts:
         # This should allow docker-in-docker to work
         docker_storage_driver: vfs
-        # Versions 17.12.1.ce-1.el7.centos to latest (18.09.0-3.el7.x86_64)
-        # have a bug that prevents testing on travis:
-        # https://github.com/docker/for-linux/issues/219
-        docker_version: 17.09.1.ce-1.el7.centos
       idr-ftp-hosts:
         # Override configuration for testing
         anonymous_ftp_emails:

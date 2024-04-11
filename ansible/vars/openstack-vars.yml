@@ -5,7 +5,7 @@ idr_environment_idr: idr
 # REQUIRED: List of public SSH keys
 idr_keypair_keys:
 # Change these to match the image and flavours in your OpenStack cloud
-vm_image: CentOS 7
+vm_image: Rocky Linux 9
 vm_flavour: m1.large
 vm_flavour_large: m1.xlarge
 vm_flavour_medium: m1.medium

@@ -6,9 +6,6 @@
 ### Export services
 - import_playbook: idr-export.yml
 
-### Transfer services
-- import_playbook: idr-transfer.yml
-
 ## Search services
 - import_playbook: idr-elasticsearch.yml
 - import_playbook: idr-searchengine.yml

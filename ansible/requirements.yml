@@ -10,7 +10,6 @@
   version: 1.1.0
 
 - name: ome.anonymous_ftp
-  src: https://github.com/ome/ansible-role-anonymous-ftp/archive/627082ecbf54c86093f13194b654cb1873579aa1.tar.gz
   version: 0.2.1
 
 - src: ome.basedeps

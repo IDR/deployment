@@ -15,28 +15,3 @@
     anonymous_ftp_pasv_max_port: 32222
     # anonymous_ftp_image: openmicroscopy/vsftpd-anonymous-upload:0.2.3
 
-  tasks:
-
-  - name: ftp | create alternate upload group
-    become: true
-    group:
-      gid: "{{ idrftp_alternate_user_id | default(omit) }}"
-      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
-      state: present
-      system: false
-
-  - name: ftp | create alternate upload user
-    become: true
-    user:
-      append: false
-      createhome: true
-      group: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
-      groups: ""
-      home: "/data/{{ idrftp_alternate_user_name | default('ftp-upload') }}"
-      name: "{{ idrftp_alternate_user_name | default('ftp-upload') }}"
-      # Lock account, it will be manually enabled when needed
-      password: "!"
-      state: present
-      uid: "{{ idrftp_alternate_user_id | default(omit) }}"
-      # Change to always to always lock the account when this playbook is run
-      update_password: on_create

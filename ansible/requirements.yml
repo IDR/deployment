@@ -90,8 +90,9 @@
 - name: ome.openstack_volume_storage
   version: 2.0.0
 
-- src: ome.postgresql
-  version: 5.4.0
+- name: ome.postgresql
+  src: https://github.com/khaledk2/ansible-role-postgresql
+  version: using_the_orginal_postgres_config_file
 
 - name: ome.postgresql_client
   version: 0.4.3

@@ -36,6 +36,6 @@ jobs:
       - name: Install Ansible & Molecule
         # TODO: review upgrade to Molecule 5.x
         run: pip install "ansible<8" ansible-lint flake8 \
-          "molecule<5" "ansible-compat<4" molecule-plugins[docker] pytest-testinfra
+          "molecule<5" "requests < 2.32.0" "ansible-compat<4" molecule-plugins[docker] pytest-testinfra
       - name: Run Molecule
         run: cd ansible && molecule test -s "${{ matrix.scenario }}"

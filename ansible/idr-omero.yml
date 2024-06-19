@@ -78,7 +78,7 @@
     - name: Override lib/server JARs
       become: yes
       get_url:
-        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.4.0/OMEZarrReader-0.4.0.jar"
+        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.5.1/OMEZarrReader-0.5.1.jar"
         dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/OMEZarrReader.jar"
         force: yes
       notify: restart omero-server
@@ -86,7 +86,7 @@
     - name: Override lib/client JARs
       become: yes
       get_url:
-        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.4.0/OMEZarrReader-0.4.0.jar"
+        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.5.1/OMEZarrReader-0.5.1.jar"
         dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/OMEZarrReader.jar"
         force: yes
       notify: restart omero-server

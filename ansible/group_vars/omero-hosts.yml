@@ -19,6 +19,34 @@ idr_omero_web_release: 5.25.0
 # _omero_py_version: ==5.9.0
 
 artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
+maven_central_baseurl: "https://repo1.maven.org/maven2"
+
+# list from https://github.com/IDR/deployment/pull/420#issuecomment-2173437956
+omero_client_jars:
+  - name: aws-java-sdk-s3
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: aws-java-sdk-kms
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: jmespath-java
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: aws-java-sdk-core
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: commons-codec
+    group: commons-codec
+    version: "1.15"
+  - name: httpclient
+    group: org/apache/httpcomponents
+    version: "4.5.13"
+  - name: httpcore
+    group: org/apache/httpcomponents
+    version: "4.4.13"
+  - name: jackson-dataformat-cbor
+    group: com/fasterxml/jackson/dataformat
+    version: "2.12.6"
 
 ice_install_devel: false
 ice_install_python: false

@@ -19,10 +19,9 @@ idr_omero_web_release: 5.25.0
 # _omero_py_version: ==5.9.0
 
 artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
-maven_central_baseurl: "https://repo1.maven.org/maven2"
 
 # list from https://github.com/IDR/deployment/pull/420#issuecomment-2173437956
-omero_client_jars:
+zarrreader_jars:
   - name: aws-java-sdk-s3
     group: com/amazonaws
     version: "1.12.659"
@@ -47,6 +46,9 @@ omero_client_jars:
   - name: jackson-dataformat-cbor
     group: com/fasterxml/jackson/dataformat
     version: "2.12.6"
+  - name: OMEZarrReader
+    group: ome
+    version: "0.5.1"
 
 ice_install_devel: false
 ice_install_python: false

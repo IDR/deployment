@@ -78,17 +78,19 @@
     - name: Override lib/server JARs
       become: yes
       get_url:
-        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.5.1/OMEZarrReader-0.5.1.jar"
-        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/OMEZarrReader.jar"
+        url: "{{ artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/{{ item.name }}.jar"
         force: yes
+      with_items: "{{ zarrreader_jars }}"
       notify: restart omero-server
 
     - name: Override lib/client JARs
       become: yes
       get_url:
-        url: "{{ artifactory_baseurl }}/ome/OMEZarrReader/0.5.1/OMEZarrReader-0.5.1.jar"
-        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/OMEZarrReader.jar"
+        url: "{{ artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/{{ item.name }}.jar"
         force: yes
+      with_items: "{{ zarrreader_jars }}"
       notify: restart omero-server
 
     - name: Remove OMERO scripts

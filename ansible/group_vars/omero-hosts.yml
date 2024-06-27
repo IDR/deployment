@@ -6,9 +6,7 @@
 ######################################################################
 # Shared variables
 
-# Force a downgrade from 5.6.1
-# https://github.com/ome/omero-server/issues/93
-idr_omero_server_release: 5.6.0
+idr_omero_server_release: 5.6.11
 omero_server_checkupgrade_comparator: '!='
 
 idr_omero_web_release: 5.25.0
@@ -22,29 +20,35 @@ idr_omero_web_release: 5.25.0
 
 artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
 
-# Override the lib/client JARs on the omeroreadwrite server
-# Works around the OMERO.server 5.6.3 upgrade issue - to be reverted when
-# the server is upgraded
-# See https://github.com/IDR/deployment/issues/327
-omero_client_jars:
-  - name: omero-romio
-    group: org/openmicroscopy
-    version: "5.6.2"
-  - name: omero-blitz
-    group: org/openmicroscopy
-    version: "5.5.8"
-
-# The IDR OMERO server uses a custom IDR build
-idr_bf_jars:
-  - name: formats-api
-    group: idr
-    version: "0.6.10"
-  - name: formats-bsd
-    group: idr
-    version: "0.6.10"
-  - name: formats-gpl
-    group: idr
-    version: "0.6.10"
+# list from https://github.com/IDR/deployment/pull/420#issuecomment-2173437956
+zarrreader_jars:
+  - name: aws-java-sdk-s3
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: aws-java-sdk-kms
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: jmespath-java
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: aws-java-sdk-core
+    group: com/amazonaws
+    version: "1.12.659"
+  - name: commons-codec
+    group: commons-codec
+    version: "1.15"
+  - name: httpclient
+    group: org/apache/httpcomponents
+    version: "4.5.13"
+  - name: httpcore
+    group: org/apache/httpcomponents
+    version: "4.4.13"
+  - name: jackson-dataformat-cbor
+    group: com/fasterxml/jackson/dataformat
+    version: "2.12.6"
+  - name: OMEZarrReader
+    group: ome
+    version: "0.5.1"
 
 ice_install_devel: false
 ice_install_python: false

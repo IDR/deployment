@@ -1,0 +1,23 @@
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
+  become: true
+
+  tasks:
+    - name: get database host
+      set_fact:
+        database_server_url: >-
+          {{
+            hostvars[groups[idr_environment | default('idr') + '-database-hosts'][0]]
+            ['ansible_' + (idr_net_iface | default('eth0'))]['ipv4']['address']
+          }}
+    - name: get database password
+      set_fact: >-
+        database_user_password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
+  roles:
+    - role: ome.omero_ms_image_region
+      omero_ms_image_region_update_nginx: true
+      omero_ms_image_region_db_url: {{ datab  ase_server_url }}
+      omero_ms_image_region_db_name: idr
+      omero_ms_image_region_db_username: omeroreadonly
+      omero_ms_image_region_db_pass: {{ database_user_password }}
+      omero_data_dir: /data/OMERO
+      omero_ms_image_region_session_id: sessionid_{{ idr_environment | default('idr') }}

@@ -9,7 +9,7 @@
 idr_omero_server_release: 5.6.12
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.27.0
+idr_omero_web_release: 5.26.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0

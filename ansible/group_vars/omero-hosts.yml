@@ -6,10 +6,10 @@
 ######################################################################
 # Shared variables
 
-idr_omero_server_release: 5.6.11
+idr_omero_server_release: 5.6.12
 omero_server_checkupgrade_comparator: '!='
 
-idr_omero_web_release: 5.25.0
+idr_omero_web_release: 5.26.0
 # omero-web depends on omero-py but may not pin the latest release
 # omero_web_python_addons:
 #   - omero-py==5.9.0
@@ -48,7 +48,7 @@ zarrreader_jars:
     version: "2.12.6"
   - name: OMEZarrReader
     group: ome
-    version: "0.5.1"
+    version: "0.5.2"
 
 ice_install_devel: false
 ice_install_python: false

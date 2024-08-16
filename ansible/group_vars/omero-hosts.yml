@@ -6,7 +6,7 @@
 ######################################################################
 # Shared variables
 
-idr_omero_server_release: 5.6.12
+idr_omero_server_release: 5.6.13
 omero_server_checkupgrade_comparator: '!='
 
 idr_omero_web_release: 5.26.0

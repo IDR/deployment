@@ -229,3 +229,15 @@
         path: "{{ omero_common_basedir }}/server/OMERO.server/lib/scripts/omero"
         state: absent
       notify: restart omero-server
+
+# deploy ms
+# This will modify the omero web nginx configuration file
+# It should be executed after running idr-omero-web.yml
+# as it is in idr-01-install-idr.yml
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
+  become: true
+
+  roles:
+  - role: ome.omero_ms_image_region
+
+  environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

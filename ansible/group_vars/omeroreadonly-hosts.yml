@@ -15,9 +15,9 @@ idr_omero_web_user_dropdown: false
 # MS variables
 
 omero_ms_image_region_update_nginx: true
-omero_ms_image_region_db_url:  {{ omero_db_host_ansible }}
+omero_ms_image_region_db_url:  "{{ omero_db_host_ansible }}"
 omero_ms_image_region_db_name: idr
 omero_ms_image_region_db_username: omeroreadonly
-omero_ms_image_region_db_pass: {{ omero_server_dbpassword }}
+omero_ms_image_region_db_pass: "{{ omero_server_dbpassword }}"
 omero_data_dir: /data/OMERO
-omero_ms_image_region_session_id: sessionid_{{ idr_environment | default('idr') }}
+omero_ms_image_region_session_id: "sessionid_{{ idr_environment | default('idr') }}"

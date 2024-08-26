@@ -6,8 +6,10 @@
 # TODO: check ordering of these dependencies to ensure nested dependencies
 # are managed by this file and not the role
 
-- src: ome.analysis_tools
-  version: 1.1.0
+- name: ome.analysis_tools
+  src: https://github.com/khaledk2/ansible-role-analysis-tools/
+  version: fix_package_download_url
+
 
 - name: ome.anonymous_ftp
   version: 0.2.1
@@ -127,6 +129,7 @@
 - name: ome.omero_ms_image_region
   src: https://github.com/khaledk2/ansible-role-omero-ms-image-region/
   version: new_ms_release
+
 
 ######################################################################
 # External IDR roles

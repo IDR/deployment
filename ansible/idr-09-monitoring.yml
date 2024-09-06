@@ -5,3 +5,12 @@
 - import_playbook: management-prometheus.yml
 - import_playbook: management-grafana.yml
 - import_playbook: management-fluentd.yml
+
+- hosts: "{{ idr_environment | default('idr') }}-omeroreadonly-hosts"
+  Tasks:
+    name: restart the ms service
+    become: true
+    ansible.builtin.service:
+      state: restarted
+      daemon_reload: true
+      name: omero-ms-image-region.service

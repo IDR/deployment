@@ -306,8 +306,6 @@ _nginx_proxy_sites:
     nginx_proxy_additional_directives:
     - "add_header Access-Control-Allow-Origin $allow_origin"
     # Study redirects
-    - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr0)?138) {
-      return 302 /about/download.html;}"
     - "if ($request_uri ~ /search/\\?query=Name:(?<prefix>idr0)?158) {
       return 302 /about/download.html;}"
 

@@ -425,6 +425,7 @@ omero_web_apps_config_set:
       default:
         - "Antibody Identifier"
       all:
+        - "Antibody Name"
         - "Antibody Identifier"
       ns:
         - "openmicroscopy.org/mapr/antibody"

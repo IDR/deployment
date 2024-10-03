@@ -372,6 +372,15 @@ omero_web_apps_config_set:
       ns:
         - "openmicroscopy.org/mapr/sirna"
       label: "siRNA"
+  - menu: "omap"
+    config:
+      default:
+        - "OMAP Number"
+      all:
+        - "OMAP Number"
+      ns:
+        - "openmicroscopy.org/mapr/OMAP"
+      label: "OMAP"
   - menu: "sirnasupplementary"
     config:
       label: "siRNA supplementary"

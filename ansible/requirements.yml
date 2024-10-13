@@ -39,8 +39,9 @@
 - name: ome.ice
   version: 4.4.4
 
-- src: ome.iptables_raw
-  version: 0.4.0
+- name: ome.iptables_raw
+  src: https://github.com/khaledk2/ansible-role-iptables-raw
+  version: upgrade_package_name
 
 - src: ome.java
   version: 2.2.0

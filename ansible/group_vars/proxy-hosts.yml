@@ -249,6 +249,9 @@ nginx_proxy_redirect_map_locations:
 - location: "~ ^/(mito|tara|pgpc|study)($|/)"
   code: 302
 
+- location: "~ ^/mapr/api/(antibody|gene|compound|sirna|omap|phenotype|organism|orf|cellline|protein)($|/)"
+  code: 410
+
 # "= /" has higher priority than "/" in the proxy config
 nginx_proxy_direct_locations:
 # TODO: change to 301 when we're happy

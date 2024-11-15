@@ -245,10 +245,10 @@ omero_web_apps_packages:
 - idr-gallery==3.11.0
 - omero-figure==6.2.0
 omero_web_apps_names:
-- omero_mapr
 - omero_iviewer
 - idr_gallery
 - omero_figure
+- omero_mapr
 
 omero_web_apps_top_links:
 - label: Studies

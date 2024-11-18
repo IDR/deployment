@@ -250,7 +250,7 @@ nginx_proxy_redirect_map_locations:
   code: 302
 
 - location: "~ ^/mapr/api/(?!config).*($|/)"
-  code: 410
+  redirect302: /searchengine/apidocs/
 
 # "= /" has higher priority than "/" in the proxy config
 nginx_proxy_direct_locations:

@@ -249,7 +249,7 @@ nginx_proxy_redirect_map_locations:
 - location: "~ ^/(mito|tara|pgpc|study)($|/)"
   code: 302
 
-- location: "~ ^/mapr/api/(antibody|gene|compound|sirna|omap|phenotype|organism|orf|cellline|protein)($|/)"
+- location: "~ ^/mapr/api/(?!config).*($|/)"
   code: 410
 
 # "= /" has higher priority than "/" in the proxy config

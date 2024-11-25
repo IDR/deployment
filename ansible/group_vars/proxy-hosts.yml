@@ -145,7 +145,7 @@ nginx_proxy_cache_match_uri:
 - '"~web(client|gateway)/get_thumbnail*"'
 - '"~(webclient/)?api/*"'
 - '"~static/*"'
-- '"~mapr/*"'
+# - '"~mapr/*"'
 - '"~gallery-api/*"'
 - '"~webclient/img_detail/*"'
 - '"~iviewer/*"'
@@ -192,12 +192,6 @@ nginx_proxy_caches:
   inactive: 180d
   match:
   - '"~(webclient/)?api/*"'
-- name: omeromapr
-  maxsize: 5g
-  keysize: 100m
-  inactive: 180d
-  match:
-  - '"~mapr/*"'
 - name: omeroviewers  # Metadata for viewers and related UI
   maxsize: 1g
   keysize: 1m
@@ -277,6 +271,8 @@ nginx_proxy_direct_locations:
   alias: /srv/www/letsencrypt/challenge
 - location: "= /submitter-survey"
   redirect302: https://forms.gle/beR4vqLrgLgRzgSX9
+- location: "~ ^/mapr/api/(?!config).*($|/)"
+  redirect302: /searchengine/apidocs/
 
 
 # CORS: basically allow any cross-site since this is public read-only

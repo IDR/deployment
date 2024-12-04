@@ -64,12 +64,6 @@ _nginx_proxy_backends_omero:
   cache_validity: 1d
   maintenance_flag: "{{ omero_maintenance_flag }}"
   maintenance_uri: "{{ omero_maintenance_uri }}"
-- name: omeromapr
-  location: ~ /mapr/*
-  server: http://omeroreadonly
-  cache_validity: 180d
-  maintenance_flag: "{{ omero_maintenance_flag }}"
-  maintenance_uri: "{{ omero_maintenance_uri }}"
 - name: omerostatic
   location: ~ /static/*
   server: http://omeroreadonly

@@ -124,7 +124,7 @@
   version: 1.1.0
 
 - name: ome.omero_ms_image_region
-  version: 1.0.0
+  version: 1.1.0
 
 ######################################################################
 # External IDR roles

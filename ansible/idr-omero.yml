@@ -75,7 +75,7 @@
         force: yes
       notify: restart omero-server
 
-    - name: Override lib/server JARs
+    - name: Override lib/server JARs (OMEZarrReader)
       become: yes
       get_url:
         url: "{{ artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
@@ -84,13 +84,30 @@
       with_items: "{{ zarrreader_jars }}"
       notify: restart omero-server
 
-    - name: Override lib/client JARs
+    - name: Override lib/client JARs (OMEZarrReader)
       become: yes
       get_url:
         url: "{{ artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
         dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/client/{{ item.name }}.jar"
         force: yes
       with_items: "{{ zarrreader_jars }}"
+      notify: restart omero-server
+
+    - name: Override lib/server JARs (omero-zarr-pixel-buffer)
+      become: yes
+      get_url:
+        url: "{{ glencoe_artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/{{ item.name }}.jar"
+        force: yes
+      with_items: "{{ zarrpixelbuffer_jars }}"
+
+    - name: Override lib/server JARs (dependencies of omero-zarr-pixel-buffer)
+      become: yes
+      get_url:
+        url: "{{ maven_artifactory_url }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_common_basedir }}/server/OMERO.server/lib/server/{{ item.name }}.jar"
+        force: yes
+      with_items: "{{ zarrpixelbuffer_dep_jars }}"
       notify: restart omero-server
 
     - name: Remove OMERO scripts

@@ -59,7 +59,7 @@ zarrpixelbuffer_jars:
 
 zarrpixelbuffer_dep_jars:
   - name: caffeine
-    group: com/github/ben-manes
+    group: github/ben-manes/caffeine
     version: "3.1.8"
   - name: jzarr
     group: dev/zarr

@@ -19,7 +19,7 @@ idr_omero_web_release: 5.26.0
 # _omero_py_version: ==5.9.0
 
 artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
-glencoe_artifactory_baseurl: "https://artifacts.glencoesoftware.com/artifactory"
+glencoe_artifactory_baseurl: "https://artifacts.glencoesoftware.com/artifactory/gs-omero-snapshots-local"
 maven_artifactory_url: "https://repo1.maven.org/maven2"
 
 # list from https://github.com/IDR/deployment/pull/420#issuecomment-2173437956

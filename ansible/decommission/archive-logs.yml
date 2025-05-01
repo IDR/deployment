@@ -10,7 +10,6 @@
     set_fact:
       decommission_archive_prefix: "{{ ansible_hostname }}-{{ ansible_date_time.date | replace('-', '') }}"
 
-
 - hosts: "{{ idr_environment | default('idr') }}-proxy-hosts"
   vars:
     logs:
@@ -41,7 +40,6 @@
         Archived {{ item.archived | length }} files
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
     with_items: "{{_decommission_archive_proxy.results}}"
-
 
 - hosts: "{{ idr_environment | default('idr') }}-management-hosts"
   vars:
@@ -74,11 +72,11 @@
         from {{ ansible_hostname }}:{{ item.expanded_paths | join(',') }}
     with_items: "{{_decommission_archive_management.results}}"
 
-
 - hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
   vars:
     logs:
       - { name: 'searchengine', path: '/data/searchengine/searchengine/logs' }
+      - {"name": "searchengine_backup_data/", path: "/searchengine_backup/backup_data"}
   tasks:
 
   - name: Archive searchengine logs

@@ -68,7 +68,6 @@
       volumes:
         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
-
   - name: configure database for docker searchengine
     become: yes
     docker_container:
@@ -77,15 +76,27 @@
       cleanup: True
       #auto_remove: yes
       command: >
-        set_database_configuration -u {{ database_server_url }}
-        -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }}
-      #networks:
+        set_database_configuration -d {{ database_name }} -s {{ database_port }} -n {{ database_username }} -p {{ database_user_password }} -b {{ apps_folder }} -w {{ default_datasource }} -u {{ database_server_url }}
+      #networks::
       #- name: searchengine-net
       #published_ports:
       #- "5577:5577"
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
+  - name: set default data source
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: searchengine_database
+      cleanup: True
+      #auto_remove: yes
+      command: >
+        set_default_datasource -d  {{ default_datasource }}
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
   - name: configure IDR_TEST_FILE_URL item
     become: yes
@@ -97,7 +108,6 @@
       state: started
       volumes:
       - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
-
 
   - name: configure cache folder  for docker searchengine
     become: yes
@@ -150,6 +160,34 @@
       state: started
       volumes:
         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
+# automatic refreshing  when configuration change is detected
+
+  - name: Set automatic refreshing the configuration
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: elastics_password
+      cleanup: True
+      #auto_remove: yes
+      command: "set_automatic_refresh -a {{ automatic_refresh }}"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+
+# restore the elastic indexed data from the backup
+
+  - name: Restore the backup elastic search indexed data
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: elastics_password
+      cleanup: True
+      #auto_remove: yes
+      command: "restore_elasticsearch_data"
+      state: started
+      volumes:
+        \q- "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
   - name: Run docker searchengine
     become: yes

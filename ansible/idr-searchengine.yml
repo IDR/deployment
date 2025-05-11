@@ -176,7 +176,8 @@
         - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
 # restore the elastic indexed data from the backup
-
+  # This required that the  indexed data snapshot be copied to the
+  # backup folder before running the  elasticsearch deployment playbook
   - name: Restore the backup elastic search indexed data
     become: yes
     docker_container:
@@ -187,7 +188,7 @@
       command: "restore_elasticsearch_data"
       state: started
       volumes:
-        \q- "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
 
   - name: Run docker searchengine
     become: yes

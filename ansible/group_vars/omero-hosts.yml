@@ -19,6 +19,8 @@ idr_omero_web_release: 5.26.0
 # _omero_py_version: ==5.9.0
 
 artifactory_baseurl: "https://artifacts.openmicroscopy.org/artifactory/maven"
+glencoe_artifactory_baseurl: "https://artifacts.glencoesoftware.com/artifactory/gs-omero-snapshots-local"
+maven_artifactory_url: "https://repo1.maven.org/maven2"
 
 # list from https://github.com/IDR/deployment/pull/420#issuecomment-2173437956
 zarrreader_jars:
@@ -49,6 +51,25 @@ zarrreader_jars:
   - name: OMEZarrReader
     group: ome
     version: "0.5.2"
+
+zarrpixelbuffer_jars:
+  - name: omero-zarr-pixel-buffer
+    group: com/glencoesoftware/omero
+    version: "0.4.1"
+
+zarrpixelbuffer_dep_jars:
+  - name: caffeine
+    group: com/github/ben-manes/caffeine
+    version: "3.1.8"
+  - name: jzarr
+    group: dev/zarr
+    version: "0.4.2"
+  - name: s3fs
+    group: org/lasersonlab
+    version: "2.2.3"
+  - name: aws-java-sdk-s3
+    group: com/amazonaws
+    version: "1.12.659"
 
 ice_install_devel: false
 ice_install_python: false

@@ -77,7 +77,7 @@
     logs:
       - { name: 'searchengine', path: '/data/searchengine/searchengine/logs' }
       # We may move archive the searchengine indexed data snapshot to a separate playbook
-      - {"name": "searchengine_backup_data/", path: "/searchengine_backup"}
+      - {"name": "searchengine_backup_data", path: "/searchengine_backup"}
   tasks:
 
   - name: Archive searchengine logs

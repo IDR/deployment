@@ -18,6 +18,7 @@ searchengine_secret_key: "{{ idr_searchengine_secret_key | default('secret_key')
 searchengineurlprefix: "searchengine"
 IDR_TEST_FILE_URL: "https://raw.githubusercontent.com/IDR/idr.openmicroscopy.org/master/_data/studies.tsv"
 elasticsearch_no_nodes: 3
+# This should be a separate volume, cloned as part of the routine deployment process.
 elasticsearch_backup_folder: "/searchengine_backup"
 ca_password: "{{ idr_secret_elastic_ca_password | default('ca_password') }}"
 keystore_password: "{{ idr_secret_elastic_keystore_password | default('keystore_password') }}"

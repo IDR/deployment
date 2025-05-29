@@ -175,6 +175,7 @@ idr_omero_web_public_url_filters:
 - search/
 - search/cell/
 - search/tissue/
+- study/
 - gallery-api/
 - gallery_settings/
 - cell/

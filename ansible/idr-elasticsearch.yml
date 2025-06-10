@@ -118,7 +118,7 @@
           #fi;
       state: started
       volumes:
-          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
 
   - name: Wait for CA file
@@ -151,7 +151,7 @@
 
       state: started
       volumes:
-          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
           - /tmp/instances.yaml:/tmp/instances.yaml
 

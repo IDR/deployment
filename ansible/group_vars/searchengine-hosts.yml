@@ -2,19 +2,22 @@ apps_folder: /data
 #database_server_url: "{{ omero_db_host_ansible }}"
 database_port: 5432
 database_name: idr
+default_datasource: idr
 database_username: omeroreadonly
 database_user_password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
 searchenginecache_folder: /data/searchengine/searchengine/cacheddata/
 search_engineelasticsearch_docker_image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
-searchengine_docker_image: openmicroscopy/omero-searchengine:0.6.0
-#ansible_python_interpreter: path/to/bin/python
+searchengine_docker_image: openmicroscopy/omero-searchengine:0.7
+# ansible_python_interpreter: path/to/bin/python
 searchengine_index: searchengine_index
+automatic_refresh: true
 cache_rows: 100000
 # I think that the following two variables should be in secret
 searchengine_secret_key: "{{ idr_searchengine_secret_key | default('secret_key') }}"
 searchengineurlprefix: "searchengine"
 IDR_TEST_FILE_URL: "https://raw.githubusercontent.com/IDR/idr.openmicroscopy.org/master/_data/studies.tsv"
 elasticsearch_no_nodes: 3
+# This should be a separate volume, cloned as part of the routine deployment process.
 elasticsearch_backup_folder: "/searchengine_backup"
 ca_password: "{{ idr_secret_elastic_ca_password | default('ca_password') }}"
 keystore_password: "{{ idr_secret_elastic_keystore_password | default('keystore_password') }}"

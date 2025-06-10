@@ -73,18 +73,6 @@
       mode: 0755
     with_sequence: start=1 count={{ elasticsearch_no_nodes }}
 
-  - name: Create ELasticsearch backup folder
-    become: yes
-    file:
-      path: "{{ elasticsearch_backup_folder }}"
-      recurse: yes
-      state: directory
-      owner: 1000
-      group: root
-      mode: 0755
-
-
-
   - name: Add elastic nodes to instances_nodes
     set_fact:
       instances_nodes: "{{instances_nodes + [( {'name' : 'searchengine_elasticsearch_node'+item, 'dns': ['searchengine_elasticsearch_node'+item,'localhost'],'ip': '127.0.0.1'})] }}"
@@ -130,7 +118,7 @@
           #fi;
       state: started
       volumes:
-          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
 
   - name: Wait for CA file
@@ -163,7 +151,7 @@
 
       state: started
       volumes:
-          - "{{ apps_folder }}/searchengine/elasticsearch/certs: /certs"
+          - "{{ apps_folder }}/searchengine/elasticsearch/certs:/certs"
           - "{{ apps_folder }}/searchengine/elasticsearch/certs:/usr/share/elasticsearch/config/certificates"
           - /tmp/instances.yaml:/tmp/instances.yaml
 

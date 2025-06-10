@@ -1,0 +1,18 @@
+- name: Backup searchengine data
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+
+  tasks:
+  # Backup the elastic indexed data
+  - name: backup elastic search indexed data
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: restore_elasticsearch_data
+      cleanup: True
+      #auto_remove: yes
+      networks:
+        - name: searchengine-net
+      command: "backup_elasticsearch_data"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"

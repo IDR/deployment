@@ -18,6 +18,7 @@ for vol in \
         database-db \
         omeroreadwrite-data \
         proxy-nginxcache \
+        searchengine_backup \
         ; do
     volume="$vm_prefix-$vol"
     echo "Snapshotting volume $volume"

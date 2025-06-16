@@ -9,3 +9,6 @@
 ## Search services
 - import_playbook: idr-elasticsearch.yml
 - import_playbook: idr-searchengine.yml
+
+## Restore searchengine data if existence
+- import_playbook: restore_searchengine_data.yml

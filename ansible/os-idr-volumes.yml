@@ -30,7 +30,7 @@
     storage_volume_initialise_mount: /data
 
 - hosts: >
-     "{{ idr_environment | default('idr') }}-searchengine-hosts"
+     {{ idr_environment | default('idr') }}-searchengine-hosts
   roles:
   - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ elasticsearch_backup_folder_vol_dev | default('/dev/vdb') }}"

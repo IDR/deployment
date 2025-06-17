@@ -34,4 +34,4 @@
   roles:
   - role: ome.storage_volume_initialise
     storage_volume_initialise_device: "{{ elasticsearch_backup_folder_vol_dev | default('/dev/vdb') }}"
-    storage_volume_initialise_mount: /elasticsearch_backup_folder
+    storage_volume_initialise_mount: {{ elasticsearch_backup_folder }}

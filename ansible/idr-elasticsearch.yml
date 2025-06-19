@@ -9,6 +9,14 @@
 
   tasks:
 
+  - name: Change the ownership of the Elatsicsearch backup
+    become: yes
+    file:
+      path: "{{ elasticsearch_backup_folder }}"
+      owner: 1000
+      group: root
+      state: directory
+
   - name: Create app top level directory
     become: yes
     file:

@@ -15,6 +15,7 @@
       path: "{{ elasticsearch_backup_folder }}"
       owner: 1000
       group: root
+      recurse: yes
       state: directory
 
   - name: Create app top level directory

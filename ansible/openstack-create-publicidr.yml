@@ -169,3 +169,11 @@
       openstack_volume_name: "{{ idr_environment_idr }}-searchengine-data"
       openstack_volume_device: /dev/vdb
       openstack_volume_type: "{{ idr_volume_searchengine_data_type | default(omit) }}"
+
+    #searchengine searchengine_backup volume
+    - role: ome.openstack_volume_storage
+      openstack_volume_size: 25
+      openstack_volume_vmname: "{{ idr_environment_idr }}-searchengine"
+      openstack_volume_name: "{{ idr_environment_idr }}-searchengine-searchengine_backup"
+      openstack_volume_device: /dev/vdc
+      openstack_volume_type: "{{ idr_volume_searchengine_data_type | default(omit) }}"

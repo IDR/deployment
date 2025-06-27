@@ -1,0 +1,24 @@
+- name: Restore searchengine data
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+
+  tasks:
+  - name: Verify whether the snapshot exists
+    stat:
+      path: "{{ elasticsearch_backup_folder }}/backup_data"
+    register: snapshot
+
+  # restore the elastic indexed data from the backup
+  - name: Restore the backup elastic search indexed data
+    become: yes
+    docker_container:
+      image: "{{ searchengine_docker_image }}"
+      name: restore_elasticsearch_data
+      cleanup: True
+      #auto_remove: yes
+      networks:
+        - name: searchengine-net
+      command: "restore_elasticsearch_data"
+      state: started
+      volumes:
+        - "{{ apps_folder }}/searchengine/searchengine/:/etc/searchengine/"
+    when: snapshot.stat.exists == True

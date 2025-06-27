@@ -266,8 +266,6 @@ nginx_proxy_direct_locations:
   redirect302: /about/curation-workflow.html
 - location: "^~ /connection"
   alias: /srv/www/connection
-- location: "^~ /.well-known/acme-challenge"
-  alias: /srv/www/letsencrypt/challenge
 - location: "= /submitter-survey"
   redirect302: https://forms.gle/beR4vqLrgLgRzgSX9
 - location: "~ ^/mapr/api/(?!config).*($|/)"

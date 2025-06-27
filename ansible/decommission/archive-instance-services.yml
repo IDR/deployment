@@ -1,6 +1,6 @@
 # Shutdown services on a production instance
 
-- hosts: "{{ idr_environment }}-hosts"
+- hosts: "{{ idr_environment | default('idr') }}-hosts"
 
   gather_facts: False
 

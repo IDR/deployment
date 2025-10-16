@@ -239,7 +239,24 @@
         force: yes
       with_items: "{{ zarrpixelbuffer_dep_jars }}"
       notify: restart omero-server
+    
+    - name: Override microservice JARs (omero-zarr-pixel-buffer)
+      become: yes
+      get_url:
+        url: "{{ glencoe_artifactory_baseurl }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_ms_image_region_folder }}/lib/{{ item.name }}.jar"
+        force: yes
+      with_items: "{{ zarrpixelbuffer_jars }}"
 
+    - name: Override microservice JARs (dependencies of omero-zarr-pixel-buffer)
+      become: yes
+      get_url:
+        url: "{{ maven_artifactory_url }}/{{ item.group }}/{{ item.name }}/{{ item.version }}/{{ item.name }}-{{ item.version }}.jar"
+        dest: "{{ omero_ms_image_region_folder }}/lib/{{ item.name }}.jar"
+        force: yes
+      with_items: "{{ zarrpixelbuffer_dep_jars }}"
+      notify: restart omero-server
+    
     - name: Remove OMERO scripts
       become: yes
       file:

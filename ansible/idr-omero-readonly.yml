@@ -256,5 +256,7 @@
 
   roles:
   - role: ome.omero_ms_image_region
+    omero_ms_image_region_download_URL: 'https://github.com/ome/omero-ms-image-region/releases/download/v2025.11.05/omero-ms-image-region-0.10.0_21.zip'
+    omero_ms_image_region_package_sha256: 128c1d27059c748a828908d60619814ace65376bc3040b5d8146154579a13003
 
   environment: "{{ idr_ANSIBLE_ENVIRONMENT_VARIABLES | default({}) }}"

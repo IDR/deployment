@@ -115,6 +115,7 @@ omero_server_python_addons:
 - omero-metadata==0.13.0
 - omero-upload==0.4.0
 - omero-rois==0.3.0
+- ome-zarr-py==0.11.0
 
 omero_server_config_set:
   omero.db.poolsize: 25

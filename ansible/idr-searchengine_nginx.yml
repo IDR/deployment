@@ -1,0 +1,19 @@
+- name: Deploying nginx for search engine
+  hosts: "{{ idr_environment | default('idr') }}-searchengine-hosts"
+
+  tasks:
+  - name: Include ome.nginx role
+    ansible.builtin.include_role:
+      name: ome.nginx
+
+  - name:  write nginx config
+    become: true
+    ansible.builtin.template:
+      dest: /etc/nginx/conf.d/searchengine.conf
+      src: searchengine.conf.j2
+      mode: 0644
+
+  - name: Restart nginx
+    service:
+      name: nginx
+      state: restarted

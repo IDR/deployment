@@ -1,0 +1,16 @@
+
+server {
+    listen 8080;
+
+     location /searchengine {
+
+        proxy_pass http://127.0.0.1:5577/searchengine;
+        proxy_redirect http://127.0.0.1:5577/searchengine $scheme://$server_name;
+        proxy_set_header Host $host/searchengine;
+    }
+
+    location /send_file/ {
+    internal;
+    alias /{{ apps_folder }}/data_dump/;   # real file storage
+}
+}

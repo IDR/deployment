@@ -6,7 +6,7 @@ default_datasource: idr
 database_username: omeroreadonly
 database_user_password: "{{ idr_secret_postgresql_password_ro | default('omero') }}"
 searchenginecache_folder: /data/searchengine/searchengine/cacheddata/
-search_engineelasticsearch_docker_image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
+search_engineelasticsearch_docker_image: docker.elastic.co/elasticsearch/elasticsearch:9.1.3
 searchengine_docker_image: openmicroscopy/omero-searchengine:0.7
 # ansible_python_interpreter: path/to/bin/python
 searchengine_index: searchengine_index
